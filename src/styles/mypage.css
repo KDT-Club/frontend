@@ -1,0 +1,72 @@
+.Mypage {
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 130px;
+}
+
+.propyl {
+    height: 150px;
+    margin-bottom: 10px;
+}
+
+.title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+
+}
+
+.title p {
+    text-align: left;
+    font-size: 20px;
+    font-weight: bold;
+    width: 100px;
+    float: left;
+    margin-left: 27px;
+}
+
+.title button {
+    float: right;
+    width: 90px;
+    height: 30px;
+    background-color: #597CA5;
+    opacity: 0.8;
+    color: white;
+    border-radius: 10px;
+    padding-bottom: 1px;
+    margin-right: 20px;
+}
+
+.content {
+    margin-top: 30px;
+}
+
+.propyl img {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    float: left;
+    margin-left: 35px;
+}
+
+.info {
+    float: left;
+    margin-left: 25px;
+    margin-bottom: 25px;
+    height: 70px;
+    text-align: left;
+}
+
+.join_club {
+    height: 65px;
+    font-size: 20px;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    padding-left: 30px;
+    border-top: 1px solid #ddd;
+}
+
+.join_club p {
+    margin-left: 20px;
+}
