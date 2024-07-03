@@ -1,7 +1,6 @@
 .Header_center {
     margin-bottom: auto;
     background-color: white;
-    height: 72.5px;
     font-size: 25px;
 }
 
@@ -9,8 +8,9 @@
     width: 185px;
     height: 50px;
     margin-top: 12px;
+    margin-bottom: 30px;
     padding-top: 5px;
-    margin-left: 93px;
+    margin-left: 150px;
     color: #597CA5;
     font-weight: 900;
     font-style: italic;
