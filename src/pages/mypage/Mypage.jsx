@@ -4,7 +4,7 @@ import { CiViewList } from "react-icons/ci";
 import { TbUserEdit } from "react-icons/tb";
 import { FiUserPlus, FiUserX } from "react-icons/fi";
 
-function Mypage() ㅇ
+function Mypage() {
     let list = ["가입한 동아리", "작성한 글 보기", "정보 수정", "동아리 만들기", "회원 탈퇴"];
     let icon = [<CiViewList />, <CiViewList />, <TbUserEdit />, <FiUserPlus />, <FiUserX />];
     return (
