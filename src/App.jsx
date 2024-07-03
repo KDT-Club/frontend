@@ -1,15 +1,15 @@
 import React from 'react';
 import './styles/App.css';
-import Header_center from "./components/header_center.jsx";
-import Header_left from "./components/header_left.jsx";
-import Footer from './components/footer.jsx';
+import Header_center from "./components/Header_center.jsx";
+import Header_left from "./components/Header_left.jsx";
+import Footer from './components/Footer.jsx';
+import Mypage from "./pages/mypage/Mypage.jsx";
 
 function App() {
     return (
         <div className="App">
             <Header_center />
-            <h1>Hello</h1>
-            <h2>hello</h2>
+            <Mypage />
             <Footer/>
         </div>
     );

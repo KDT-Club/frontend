@@ -1,10 +1,8 @@
-/* src/styles/footer.css */
-
 .Footer {
     margin-top: auto;
     height: 72.5px;
-    background-color: #f8f8f8; /* 배경색 추가 */
-    border-top: 1px solid #ddd; /* 상단 경계선 추가 */
+    background-color: #f8f8f8;
+    border-top: 1px solid #ddd;
     display: flex;
 }
 
