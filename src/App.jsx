@@ -1,17 +1,26 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import './styles/App.css';
-import Header_center from "./components/header_center.jsx";
-import Header_left from "./components/header_left.jsx";
-import Footer from './components/footer.jsx';
+import Logo from './pages/login/start_logo.jsx'
+import Login from './pages/login/login.jsx'
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 function App() {
+    const [showLogo, setShowLogo] = React.useState(true);
+
+    useEffect(() => {
+        const timer = setTimeout(() =>{
+            setShowLogo(false);
+        }, 3000);
+
+        return () => clearTimeout(timer);
+    }, []);
+
     return (
+        <GoogleOAuthProvider clientId="">
         <div className="App">
-            <Header_center />
-            <h1>Hello</h1>
-            <h2>hello</h2>
-            <Footer/>
+            {showLogo ? <Logo /> : <Login />}
         </div>
+        </GoogleOAuthProvider>
     );
 }
 

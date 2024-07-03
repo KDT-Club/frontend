@@ -1,7 +1,13 @@
 .App {
-    width: 360px;
-    height: 800px;
+    width: 100%;
+    min-height: 100vh;
     text-align: center;
-    display : flex;
+    display: flex;
     flex-direction: column;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+    padding: 10px;
 }
