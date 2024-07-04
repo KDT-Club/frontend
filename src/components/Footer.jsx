@@ -1,31 +1,66 @@
-import React from "react";
+import React, { useState } from "react";
 import '../styles/footer.css';
 import { FaRegBookmark } from 'react-icons/fa';
 import { PiUsersThree } from "react-icons/pi";
 import { IoHomeOutline } from "react-icons/io5";
 import { LuUserSquare } from "react-icons/lu";
+import { Link, useLocation } from 'react-router-dom';
 
 function Footer() {
-    let list = ["가입한 동아리", "작성한 글 보기", "정보 수정", "회원 탈퇴"];
+    const location = useLocation();
+    const [activeMenu, setActiveMenu] = useState(location.pathname);
 
     return (
         <div className="Footer">
-            <div className="menu">
-                <IoHomeOutline style={{fontSize:"30px", marginTop:"2px"}} />
-                <p style={{marginTop:"2px"}}>홈</p>
-            </div>
-            <div className="menu">
-                <PiUsersThree style={{fontSize:"33px"}} />
-                <p style={{marginTop:"2px"}}>커뮤니티</p>
-            </div>
-            <div className="menu">
-                <FaRegBookmark style={{fontSize:"27px", marginTop:"1px"}} />
-                <p style={{marginTop:"6px"}}>내 동아리</p>
-            </div>
-            <div className="menu">
-                <LuUserSquare style={{fontSize:"30px"}} />
-                <p style={{marginTop:"5px"}}>마이페이지</p>
-            </div>
+            <Menu
+                to="/home"
+                Icon={IoHomeOutline}
+                title="홈"
+                iconStyle={{fontSize:"30px", marginTop:"2px"}}
+                textStyle={{marginTop:"2px"}}
+                isActive={activeMenu === "/home"}
+                onClick={() => setActiveMenu("/home")}
+            />
+            <Menu
+                to="/community"
+                Icon={PiUsersThree}
+                title="커뮤니티"
+                iconStyle={{fontSize:"33px", marginLeft:"6px"}}
+                textStyle={{marginTop:"2px"}}
+                isActive={activeMenu === "/community"}
+                onClick={() => setActiveMenu("/community")}
+            />
+            <Menu
+                to="/myclub"
+                Icon={FaRegBookmark}
+                title="내 동아리"
+                iconStyle={{fontSize:"27px", marginTop:"1px", marginLeft:"12px"}}
+                textStyle={{marginTop:"6px"}}
+                isActive={activeMenu === "/myclub"}
+                onClick={() => setActiveMenu("/myclub")}
+            />
+            <Menu
+                to="/mypage"
+                Icon={LuUserSquare}
+                title="마이페이지"
+                iconStyle={{fontSize:"30px", marginLeft:"15px"}}
+                textStyle={{marginTop:"5px"}}
+                isActive={activeMenu === "/mypage"}
+                onClick={() => setActiveMenu("/mypage")}
+            />
+        </div>
+    )
+}
+
+function Menu({ to, Icon, iconStyle, title, textStyle, isActive, onClick }) {
+    const activeStyle = isActive ? { color: '#597CA5' } : { color: 'darkgray' };
+
+    return (
+        <div className="menu">
+            <Link to={to} style={activeStyle} onClick={onClick}>
+                <Icon style={{ ...iconStyle, ...activeStyle }} />
+                <p style={{ ...textStyle, ...activeStyle }}>{title}</p>
+            </Link>
         </div>
     )
 }
