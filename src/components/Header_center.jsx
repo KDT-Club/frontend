@@ -3,7 +3,7 @@ import '../styles/header_center.css';
 
 function Header_center() {
     return (
-        <div className="Header_center">
+        <div className="header_container">
             <p>CLUB HUB</p>
         </div>
     )
