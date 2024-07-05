@@ -1,8 +1,10 @@
 import React, {useEffect} from 'react';
 import './styles/App.css';
+import {Route, BrowserRouter as Router, Routes} from 'react-router-dom';
 import Logo from './pages/login/start_logo.jsx'
 import Login from './pages/login/login.jsx'
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import SignUp from './pages/login/signup.jsx'
 
 function App() {
     const [showLogo, setShowLogo] = React.useState(true);
@@ -31,11 +33,17 @@ function App() {
     }, []);
 
     return (
-        <GoogleOAuthProvider clientId="">
-            <div className="App">
-                {showLogo ? <Logo /> : <Login />}
-            </div>
-        </GoogleOAuthProvider>
+        <Router>
+            <GoogleOAuthProvider clientId="YOUR_CLIENT_ID">
+                <div className="App">
+                    <Routes>
+                        <Route path="/" element={showLogo ? <Logo /> : <Login/>} />
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/signup" element={<SignUp />} />
+                    </Routes>
+                </div>
+            </GoogleOAuthProvider>
+        </Router>
     );
 }
 

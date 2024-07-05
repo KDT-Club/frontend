@@ -53,6 +53,7 @@ button, .social-login {
     font-size: 14px;
     color: #1877f2;
     text-decoration: none;
+    cursor: pointer;
 }
 
 .signup-text {
