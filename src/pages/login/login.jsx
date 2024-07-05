@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
+import {useNavigate} from 'react-router-dom'
 import '../../styles/login.css';
+import '../../styles/App.css';
 import Header_center from '../../components/Header_center.jsx'
 import kakao from '../../images/kakao_login.png'
 import {GoogleLogin} from '@react-oauth/google'
@@ -7,15 +9,17 @@ import {GoogleLogin} from '@react-oauth/google'
 function Login() {
     const [id, setId] = useState('');
     const [password, setPassword] = useState('');
+    const navigate = useNavigate();
 
     const handleLogin = (e) => {
         e.preventDefault();
         console.log('Login attempt with:', id, password);
     };
 
-    const handleGoogleLogin = () => {
-        console.log('Google login');
-    };
+    const handleSignup = (e) => {
+        e.preventDefault();
+        navigate('/signup')
+    }
 
     const handleKakaoLogin = () => {
         console.log('KakaoTalk login');
@@ -56,7 +60,7 @@ function Login() {
                     />
                 </div>
                 <p className="signup-text">
-                    계정이 없으신가요? <a href="#" className="signup-link">회원가입</a>
+                    계정이 없으신가요? <span className="signup-link" onClick={handleSignup}>회원가입</span>
                 </p>
             </form>
             <div className="social-login-container">
