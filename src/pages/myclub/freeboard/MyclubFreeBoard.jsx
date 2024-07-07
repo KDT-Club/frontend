@@ -2,10 +2,10 @@
 import React, {useState} from 'react';
 import '../DetailHeader/myclubheader.css'
 import '../notice/notice.css';
-import freeboardListData from "../data/freeboardListData.jsx";
 import { FaArrowLeft } from "react-icons/fa6";
 import { FiEdit } from "react-icons/fi";
 import {Link, useNavigate, useParams} from "react-router-dom";
+import postData from "../data/postData.jsx";
 
 function formatDate(dateString) {
     const date = new Date(dateString);
@@ -18,7 +18,10 @@ function MyclubFreeBoard({ clubs }){
     let { id } = useParams();
     const club = clubs.find(club => club.clubId === parseInt(id));
     const navigate = useNavigate();
-    let [list] = useState(freeboardListData);
+
+    const [list] = useState(
+        postData.filter((post) => post.boardId === 4)
+    );
 
     const handleWriteClick = () => {
         navigate(`/clubs/${id}/board/4/freeboardwrite`);

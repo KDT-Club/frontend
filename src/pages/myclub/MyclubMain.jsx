@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import '../../styles/App.css'
 import './myclubmain.css';
 import Header_left from "../../components/Header_left.jsx";
@@ -29,6 +29,10 @@ const MyclubMain = () => {
         navigate(`/clubs/${id}`);
     };
 
+    const handleBoardClick = (id, boardId) => {
+        navigate(`/clubs/${id}/board/${boardId}`);
+    };
+
     return (
         <Routes>
             <Route path="/clubs" element={
@@ -50,11 +54,11 @@ const MyclubMain = () => {
             }/>
             <Route path="/clubs/:id" element={<MyclubDetail clubs={clubs}/>}/>
             <Route path="/clubs/:id/board/2" element={<Notice clubs={clubs}/>}/>
+            <Route path="/clubs/:clubId/board/2/posts/:postId" element={<NoticeDetail />} />
             <Route path="/clubs/:id/board/2/noticewrite" element={<NoticeWrite clubs={clubs}/>}/>
             <Route path="/clubs/:id/board/4" element={<MyclubFreeBoard clubs={clubs}/>}/>
-            <Route path="/clubs/:id/board/4/freeboardwrite" element={<BoardWrite clubs={clubs}/>}/>
-            <Route path="/clubs/:clubId/board/2/posts/:postId" element={<NoticeDetail />} />
             <Route path="/clubs/:clubId/board/4/posts/:postId" element={<BoardDetail />} />
+            <Route path="/clubs/:id/board/4/freeboardwrite" element={<BoardWrite clubs={clubs}/>}/>
             <Route path="/clubs/etc1" element={<Etc1 />} />
             <Route path="/clubs/etc2" element={<Etc2 />} />
             <Route path="/clubs/etc3" element={<Etc3 />} />

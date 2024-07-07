@@ -54,7 +54,7 @@ function Etc2() {
             </div>
             <div className="aaa" style={{display: "flex", flexDirection: "column"}}>
                 {Object.keys(initialSettlement).map((item) => (
-                    <div className="etc2-container" key={item} style={{ display: 'flex', alignItems: 'center', justifyContent: "space-evenly", marginBottom: '10px'}}>
+                    <div className="etc2-container" key={item} style={{ display: 'flex', alignItems: 'center', justifyContent: "center", marginBottom: '10px'}}>
                         <div style={{alignItems: "flex-start", marginRight: '10px'}}>
                             <div style={{ fontSize: "20px", fontWeight: "bold", marginBottom: "10px" }}>{item}</div>
                             <div style={{fontSize: "18px", marginBottom: "15px"}}>
@@ -63,7 +63,7 @@ function Etc2() {
                                 {item === "MT 참가비" && "인원: 25명 | 비용: 800,000원 | 1인: 32,000원"}
                             </div>
                         </div>
-                        <div style={{marginLeft: "30px"}} onClick={() => toggleSettlement(item)}>
+                        <div style={{marginLeft: "50px"}} onClick={() => toggleSettlement(item)}>
                             {settlement[item] ? (
                                 <RiCheckboxCircleLine style={{ fontSize: '28px', cursor: 'pointer' }} />
                             ) : (

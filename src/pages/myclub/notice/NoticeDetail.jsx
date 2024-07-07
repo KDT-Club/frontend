@@ -1,7 +1,8 @@
 //동아리 공지사항 -  글 상세
 import React from 'react';
 import {useParams, useNavigate} from 'react-router-dom';
-import noticeListData from '../data/noticeListData.jsx';
+import postData from '../data/postData.jsx';
+import memberInfo from '../data/memberData.jsx';
 import {FaArrowLeft} from 'react-icons/fa6';
 import { FiMoreVertical } from "react-icons/fi";
 
@@ -12,10 +13,15 @@ function formatDate(dateString) {
     return `${month}/${day}`;
 }
 
+function getMemberName(memberId) {
+    const member = memberInfo.find(member => member.memberId === memberId);
+    return member ? member.name : 'Unknown';
+}
+
 function NoticeDetail() {
     let {clubId, postId} = useParams();
     const navigate = useNavigate();
-    const post = noticeListData.find(post => post.postId === parseInt(postId));
+    const post = postData.find(post => post.postId === parseInt(postId) && post.boardId === 2);
 
     const handleBackClick = () => {
         navigate(`/clubs/${clubId}/board/2`);
@@ -53,7 +59,7 @@ function NoticeDetail() {
                         color: "darkgray",
                         fontWeight: "bold"
                     }}
-                    >{formatDate(post.createdAt)}</p>
+                    >{getMemberName(post.memberId)} | {formatDate(post.createdAt)}</p>
                 <p
                     style={{
                         fontSize: "25px",

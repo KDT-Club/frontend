@@ -1,12 +1,16 @@
-let freeboardListData = [
-    //자유게시판 목록 데이터
+let freeboardPostData = [
     {
+        //boardId  4: 동아리 내부 자유게시판
         postId: 5,
         title: "안녕하세요 네오입니다~~~",
         content: "친하게 지내요~~",
         createdAt: "2024-07-20T10:00:00",
         memberId : 105,
-        link: ""
+        updateDate : "",
+        attachmentFlag : "",
+        postType : "",
+        clubName : "",
+        boardId : 4,
     },
     {
         postId: 4,
@@ -14,7 +18,11 @@ let freeboardListData = [
         content: "친하게 지내요~~",
         createdAt: "2024-07-19T10:00:00",
         memberId : 104,
-        link: ""
+        updateDate : "",
+        attachmentFlag : "",
+        postType : "",
+        clubName : "",
+        boardId : 4,
     },
     {
         postId: 3,
@@ -22,7 +30,11 @@ let freeboardListData = [
         content: "친하게 지내요~~",
         createdAt: "2024-07-18T10:00:00",
         memberId : 103,
-        link: ""
+        updateDate : "",
+        attachmentFlag : "",
+        postType : "",
+        clubName : "",
+        boardId : 4,
     },
     {
         postId: 2,
@@ -30,7 +42,11 @@ let freeboardListData = [
         content: "친하게 지내요~~",
         createdAt: "2024-06-01T10:00:00",
         memberId : 102,
-        link: ""
+        updateDate : "",
+        attachmentFlag : "",
+        postType : "",
+        clubName : "",
+        boardId : 4,
     },
     {
         postId: 1,
@@ -38,8 +54,12 @@ let freeboardListData = [
         content: "친하게 지내요~~",
         createdAt: "2024-05-01T10:00:00",
         memberId : 101,
-        link: ""
+        updateDate : "",
+        attachmentFlag : "",
+        postType : "",
+        clubName : "",
+        boardId : 4,
     }
 ];
 
-export default freeboardListData;
+export default freeboardPostData;

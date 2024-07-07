@@ -2,7 +2,7 @@
 
 let memberInfo = [
     {
-        "memberId": "101",
+        "memberId": 101,
         "name" : "홍길동",
         "department" : "",
         "studentId" : "",
@@ -12,7 +12,7 @@ let memberInfo = [
         "phone": ""
     },
     {
-        "memberId": "102",
+        "memberId": 102,
         "name" : "김진구",
         "department" : "",
         "studentId" : "",
@@ -22,7 +22,7 @@ let memberInfo = [
         "phone": ""
     },
     {
-        "memberId": "103",
+        "memberId": 103,
         "name" : "프로도",
         "department" : "",
         "studentId" : "",
@@ -32,7 +32,7 @@ let memberInfo = [
         "phone": ""
     },
     {
-        "memberId": "104",
+        "memberId": 104,
         "name" : "최자두",
         "department" : "",
         "studentId" : "",
@@ -42,7 +42,7 @@ let memberInfo = [
         "phone": ""
     },
     {
-        "memberId": "105",
+        "memberId": 105,
         "name" : "김네오",
         "department" : "",
         "studentId" : "",
@@ -52,7 +52,7 @@ let memberInfo = [
         "phone": ""
     },
     {
-        "memberId": "106",
+        "memberId": 106,
         "name" : "어피치",
         "department" : "",
         "studentId" : "",

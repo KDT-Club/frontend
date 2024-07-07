@@ -2,11 +2,13 @@
 import React, {useState} from 'react';
 import '../DetailHeader/myclubheader.css'
 import './notice.css';
-import noticeListData from "../data/noticeListData.jsx";
 import { FaArrowLeft } from "react-icons/fa6";
 import { FiEdit } from "react-icons/fi";
 import {Link, useNavigate, useParams} from "react-router-dom";
 import clubData from '../data/clubData.jsx';
+//import noticeListData from "../data/noticeListData.jsx";
+//ㄴnoticeListData에서 말고 postData에서 글 필터링해서 가져오도록 수정함
+import postData from "../data/postData.jsx";
 
 function formatDate(dateString) {
     const date = new Date(dateString);
@@ -25,7 +27,9 @@ function Notice({ clubs }){
     let { id } = useParams();
     const club = clubs.find(club => club.clubId === parseInt(id));
     const navigate = useNavigate();
-    const [list] = useState(noticeListData);
+    const [list] = useState(
+        postData.filter((post) => post.boardId === 2)
+    );
 
     //공지사항 글쓰기 회장 권한 받는 건 추후에 수정!!!
     const handleWriteClick = () => {
@@ -39,7 +43,6 @@ function Notice({ clubs }){
     const handleBackClick = () => {
         navigate(`/clubs/${id}`);
     };
-
 
     return (
         <div className="whole">

@@ -56,13 +56,17 @@ function Etc1() {
             </div>
             <div className="aaa">
                 {Object.keys(attendance).map((date) => (
-                    <span className="bbb" key={date} onClick={() => toggleAttendance(date)}>
-                        <div className="ccc">{date}</div>
-                        {attendance[date] ? (
-                            <RiCheckboxCircleLine style={{ fontSize: '28px', cursor: 'pointer' }} />
-                        ) : (
-                            <RiCheckboxBlankCircleLine style={{ fontSize: '28px', cursor: 'pointer' }} />
-                        )}
+                    <span key={date} onClick={() => toggleAttendance(date)}>
+                        <div className="ddd">
+                            <div className="ccc">{date}</div>
+                        </div>
+                        <div>
+                            {attendance[date] ? (
+                                <RiCheckboxCircleLine style={{fontSize: '28px', cursor: 'pointer'}}/>
+                            ) : (
+                                <RiCheckboxBlankCircleLine style={{fontSize: '28px', cursor: 'pointer'}}/>
+                            )}
+                        </div>
                     </span>
                 ))}
             </div>

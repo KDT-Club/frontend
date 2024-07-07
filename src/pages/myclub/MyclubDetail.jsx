@@ -3,25 +3,20 @@ import "./myclubdetail.css";
 import Footer from '../../components/Footer.jsx';
 import { useParams, useNavigate } from "react-router-dom";
 import MyclubHeader from "./DetailHeader/MyclubHeader.jsx";
-import noticeListData from './data/noticeListData.jsx';
-import freeboardListData from "./data/freeboardListData.jsx";
+import postData from "./data/postData.jsx";
 
 function MyclubDetail({clubs}) {
     let { id } = useParams();
-    const club = clubs.find(club => club.clubId === parseInt(id));
+    // const club = clubs.find(club => club.clubId === parseInt(id));
     const navigate = useNavigate();
 
-    if (!club) {
-        return <div>클럽을 찾을 수 없습니다.</div>;
-    }
+    const handleMoreClick = (boardId) => {
+        navigate(`/clubs/${id}/board/${boardId}`);
+    };
 
-    const NoticehandleMoreClick = () => {
-        navigate(`/clubs/${id}/board/2`);
-    }; //공지사항 목록 화면으로 이동
-
-    const BoardhandleMoreClick = () => {
-        navigate(`/clubs/${id}/board/4`);
-    }; //자유게시판 목록 화면으로 이동
+    // postData에서 필터링
+    const noticePosts = postData.filter(post => post.boardId === 2);
+    const freeboardPosts = postData.filter(post => post.boardId === 4);
 
     const etc1handleMoreClick = () => {
         navigate(`/clubs/etc1`);
@@ -42,10 +37,10 @@ function MyclubDetail({clubs}) {
                 <div className="item-container">
                     <div className="header-container">
                         <h2>공지사항</h2>
-                        <p onClick={() => NoticehandleMoreClick(club.id)}>더보기</p>
+                        <p onClick={() => handleMoreClick(2)}>더보기</p>
                     </div>
                     <section className="box-section">
-                        {noticeListData.map((item, index) => (
+                        {noticePosts.map((item, index) => (
                             <div className="box-item" key={index}>
                                 <h3>{item.title}</h3>
                                 <p>{item.content}</p>
@@ -56,10 +51,10 @@ function MyclubDetail({clubs}) {
                 <div className="item-container">
                     <div className="header-container">
                         <h2>자유게시판</h2>
-                        <p onClick={() => BoardhandleMoreClick(club.id)}>더보기</p>
+                        <p onClick={() => handleMoreClick(4)}>더보기</p>
                     </div>
                     <section className="box-section">
-                        {freeboardListData.map((item, index) => (
+                        {freeboardPosts.map((item, index) => (
                             <div className="box-item" key={index}>
                                 <h3>{item.title}</h3>
                                 <p>{item.content}</p>

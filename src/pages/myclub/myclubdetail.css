@@ -2,7 +2,6 @@
     position: fixed;
     width: calc(var(--vw, 1vw) * 100);
     height: calc(var(--vh,1vh)* 100);
-    /*위에거 추가*/
     display: flex;
     flex-direction: column;
     height: 100vh;

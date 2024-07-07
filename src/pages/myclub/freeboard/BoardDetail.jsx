@@ -1,7 +1,7 @@
 //내 동아리 자유게시판 - 글 상세
 import React from 'react';
 import {useParams, useNavigate} from 'react-router-dom';
-import freeboardListData from '../data/freeboardListData.jsx';
+import postData from "../data/postData.jsx";
 import memberInfo from "../data/memberData.jsx";
 import {FaArrowLeft} from 'react-icons/fa6';
 import { FiMoreVertical } from "react-icons/fi";
@@ -21,7 +21,7 @@ function getMemberName(memberId) {
 function BoardDetail() {
     let {clubId, postId} = useParams();
     const navigate = useNavigate();
-    const post = freeboardListData.find(post => post.postId === parseInt(postId));
+    const post = postData.find(post => post.postId === parseInt(postId) && post.boardId === 4);
 
     const handleBackClick = () => {
         navigate(`/clubs/${clubId}/board/4`);
