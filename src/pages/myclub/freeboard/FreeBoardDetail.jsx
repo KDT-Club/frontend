@@ -3,6 +3,7 @@ import React from 'react';
 import {useParams, useNavigate} from 'react-router-dom';
 import postData from "../data/postData.jsx";
 import memberInfo from "../data/memberData.jsx";
+import commentData from '../data/commentData.jsx';
 import {FaArrowLeft} from 'react-icons/fa6';
 import { FiMoreVertical } from "react-icons/fi";
 
@@ -18,10 +19,11 @@ function getMemberName(memberId) {
     return member ? member.name : 'Unknown';
 }
 
-function BoardDetail() {
+function FreeBoardDetail() {
     let {clubId, postId} = useParams();
     const navigate = useNavigate();
     const post = postData.find(post => post.postId === parseInt(postId) && post.boardId === 4);
+    const comments = commentData.filter(comment => comment.postId === parseInt(postId));
 
     const handleBackClick = () => {
         navigate(`/clubs/${clubId}/board/4`);
@@ -55,9 +57,10 @@ function BoardDetail() {
             >
                 <p
                     style={{
-                        fontSize: "18px",
-                        color: "darkgray",
-                        fontWeight: "bold"
+                        fontSize: "20px",
+                        color: "gray",
+                        fontWeight: "bold",
+                        marginBottom: "5px"
                     }}
                 >{getMemberName(post.memberId)} | {formatDate(post.createdAt)}</p>
                 <p
@@ -71,15 +74,34 @@ function BoardDetail() {
                 >{post.title}</p>
                 <p
                     style={{
-                        fontSize: "18px",
+                        fontSize: "21px",
                         marginTop: "20px",
                         textAlign: "start"
                     }}
                 >{post.content}</p>
             </div>
-            <div style={{borderBottom: "1px solid gray", marginTop: "50px"}}></div>
+            <div style={{borderBottom: "1.5px solid dimgrey", marginTop: "40px"}}></div>
+            <div className="comment-container">
+                {comments.length > 0 ? (
+                    comments.map(comment => (
+                        <div key={comment.commentId} className="comment-oneline">
+                            <p style={{fontSize: '19px', color: 'gray', marginLeft: "30px", marginBottom: "5px"}}>
+                                {getMemberName(comment.memberId)} | {formatDate(comment.createdAt)}
+                            </p>
+                            <p style={{
+                                fontSize: '21px',
+                                marginLeft: "30px",
+                                marginBottom: "16px"
+                            }}>{comment.content}</p>
+                            <div style={{borderBottom: '1px solid gray', width: '100%'}}></div>
+                        </div>
+                    ))
+                ) : (
+                    <p style={{fontSize: '18px'}}>댓글이 없습니다.</p>
+                )}
+            </div>
         </div>
     );
 }
 
-export default BoardDetail;
+export default FreeBoardDetail;

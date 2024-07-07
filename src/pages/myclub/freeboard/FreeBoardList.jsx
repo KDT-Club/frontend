@@ -14,7 +14,7 @@ function formatDate(dateString) {
     return `${month}/${day}`;
 }
 
-function MyclubFreeBoard({ clubs }){
+function FreeBoardList({ clubs }){
     let { id } = useParams();
     const club = clubs.find(club => club.clubId === parseInt(id));
     const navigate = useNavigate();
@@ -73,4 +73,4 @@ function List({title, content, createdAt, link}) {
 }
 
 
-export default MyclubFreeBoard;
+export default FreeBoardList;

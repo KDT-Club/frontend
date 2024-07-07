@@ -7,10 +7,10 @@ import Footer from '../../components/Footer.jsx';
 import MyclubDetail from "./MyclubDetail.jsx";
 import Notice from "./notice/Notice.jsx";
 import NoticeWrite from './notice/WriteAndEdit/NoticeWrite.jsx'
-import MyclubFreeBoard from "./freeboard/MyclubFreeBoard.jsx";
+import FreeBoardList from "./freeboard/FreeBoardList.jsx";
 import BoardWrite from "./freeboard/WriteAndEdit/BoardWrite.jsx";
 import NoticeDetail from "./notice/NoticeDetail.jsx";
-import BoardDetail from "./freeboard/BoardDetail.jsx";
+import FreeBoardDetail from "./freeboard/FreeBoardDetail.jsx";
 import clubData from "./data/clubData.jsx";
 import Etc1 from "./etc/Etc1.jsx";
 import Etc2 from "./etc/Etc2.jsx";
@@ -56,8 +56,8 @@ const MyclubMain = () => {
             <Route path="/clubs/:id/board/2" element={<Notice clubs={clubs}/>}/>
             <Route path="/clubs/:clubId/board/2/posts/:postId" element={<NoticeDetail />} />
             <Route path="/clubs/:id/board/2/noticewrite" element={<NoticeWrite clubs={clubs}/>}/>
-            <Route path="/clubs/:id/board/4" element={<MyclubFreeBoard clubs={clubs}/>}/>
-            <Route path="/clubs/:clubId/board/4/posts/:postId" element={<BoardDetail />} />
+            <Route path="/clubs/:id/board/4" element={<FreeBoardList clubs={clubs}/>}/>
+            <Route path="/clubs/:clubId/board/4/posts/:postId" element={<FreeBoardDetail />} />
             <Route path="/clubs/:id/board/4/freeboardwrite" element={<BoardWrite clubs={clubs}/>}/>
             <Route path="/clubs/etc1" element={<Etc1 />} />
             <Route path="/clubs/etc2" element={<Etc2 />} />
