@@ -7,20 +7,19 @@ import {useNavigate, useParams} from "react-router-dom";
 function MyclubHeader({clubs}) {
     let { id } = useParams();
     const navigate = useNavigate();
-    const club = clubs.find(club => club.id === parseInt(id));
+    const club = clubs.find(club => club.clubId === parseInt(id));
 
     const handleBackClick = () => {
-        navigate('/myclub');
+        navigate('/clubs');
     };
-
 
     return (
         <div className="header_container">
             <FaArrowLeft
-                style={{ fontSize: '27px', strokeWidth: '0.1', cursor: 'pointer' }}
+                style={{ fontSize: '26px', cursor: 'pointer' }}
                 onClick={handleBackClick}
             />
-            <div style={{fontSize: '24px', fontWeight: "bold"}}>{club.name}</div>
+            <div style={{fontSize: '26px', fontWeight: "bold"}}>{club.name}</div>
             <RxHamburgerMenu style={{fontSize: '27px', strokeWidth: '0.3'}}/>
         </div>
     );
