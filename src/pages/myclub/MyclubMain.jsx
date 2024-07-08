@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import { Routes, Route, useNavigate, useParams } from 'react-router-dom';
 import '../../styles/App.css'
 import './myclubmain.css';
 import Header_left from "../../components/Header_left.jsx";
 import Footer from '../../components/Footer.jsx';
 import MyclubDetail from "./MyclubDetail.jsx";
-import Notice from "./notice/Notice.jsx";
+import NoticeList from "./notice/NoticeList.jsx";
 import NoticeWrite from './notice/WriteAndEdit/NoticeWrite.jsx'
 import FreeBoardList from "./freeboard/FreeBoardList.jsx";
 import BoardWrite from "./freeboard/WriteAndEdit/BoardWrite.jsx";
 import NoticeDetail from "./notice/NoticeDetail.jsx";
 import FreeBoardDetail from "./freeboard/FreeBoardDetail.jsx";
 import clubData from "./data/clubData.jsx";
+import postData from "./data/postData.jsx";
 import Etc1 from "./etc/Etc1.jsx";
 import Etc2 from "./etc/Etc2.jsx";
 import Etc3 from "./etc/Etc3.jsx";
@@ -29,9 +30,9 @@ const MyclubMain = () => {
         navigate(`/clubs/${id}`);
     };
 
-    const handleBoardClick = (id, boardId) => {
-        navigate(`/clubs/${id}/board/${boardId}`);
-    };
+    // const handleBoardClick = (id, boardId) => {
+    //     navigate(`/clubs/${id}/board/${boardId}`);
+    // };
 
     return (
         <Routes>
@@ -53,17 +54,61 @@ const MyclubMain = () => {
                 </div>
             }/>
             <Route path="/clubs/:id" element={<MyclubDetail clubs={clubs}/>}/>
-            <Route path="/clubs/:id/board/2" element={<Notice clubs={clubs}/>}/>
-            <Route path="/clubs/:clubId/board/2/posts/:postId" element={<NoticeDetail />} />
+
+            {/*<Route path="/clubs/:id/board/2" element={<NoticeList clubs={clubs}/>}/>*/}
+            {/*<Route path="/clubs/:id/board/4" element={<FreeBoardList clubs={clubs}/>}/>*/}
+            <Route path="/clubs/:id/board/:boardId" element={<BoardList clubs={clubs} />} />
+
+            {/*<Route path="/clubs/:clubId/board/2/posts/:postId" element={<NoticeDetail />} />*/}
+            {/*<Route path="/clubs/:clubId/board/4/posts/:postId" element={<FreeBoardDetail />} />*/}
+            <Route path="/clubs/:clubId/board/:boardId/posts/:postId" element={<BoardDetail clubs={clubs} posts={postData} />} />
+
             <Route path="/clubs/:id/board/2/noticewrite" element={<NoticeWrite clubs={clubs}/>}/>
-            <Route path="/clubs/:id/board/4" element={<FreeBoardList clubs={clubs}/>}/>
-            <Route path="/clubs/:clubId/board/4/posts/:postId" element={<FreeBoardDetail />} />
             <Route path="/clubs/:id/board/4/freeboardwrite" element={<BoardWrite clubs={clubs}/>}/>
             <Route path="/clubs/etc1" element={<Etc1 />} />
             <Route path="/clubs/etc2" element={<Etc2 />} />
             <Route path="/clubs/etc3" element={<Etc3 />} />
         </Routes>
     );
+}
+
+const BoardList = ({ clubs }) => {
+    const { boardId, id} = useParams();
+    const club = clubs.find(club => club.clubId === parseInt(id));
+
+    if (!club) {
+        return <div>Club not found</div>;
+    }
+
+    if (boardId === '2') {
+        return <NoticeList club={club} />;
+    } else if (boardId === '4') {
+        return <FreeBoardList club={club} />;
+    } else {
+        return <div>Board not found</div>;
+    }
+}
+
+const BoardDetail = ({ clubs, posts }) => {
+    const { boardId, clubId, postId } = useParams();
+    const club = clubs.find(club => club.clubId === parseInt(clubId));
+    const post = posts.find(post => post.postId === parseInt(postId) && post.boardId === parseInt(boardId));
+
+    if (!club) {
+        return <div>Club not found</div>;
+    }
+
+    if (!post) {
+        return <div>Post not found</div>;
+    }
+
+    if (boardId === '2') {
+        return <NoticeDetail club={club} post={post} />;
+    } else if (boardId === '4') {
+        return <FreeBoardDetail club={club} post={post} />;
+    } else {
+        return <div>Board not found</div>;
+    }
 }
 
 export default MyclubMain;

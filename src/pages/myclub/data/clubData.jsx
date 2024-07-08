@@ -37,7 +37,7 @@ let clubData = [
     },
     {    "clubId": 5,
         "name": "GDSC",
-        "description": "코딩하는 입니다.",
+        "description": "코딩하는 동아리입니다.",
         "category": "학술",
         "memberId": 105,
         "createdAt": "2024-01-01T10:00:00",

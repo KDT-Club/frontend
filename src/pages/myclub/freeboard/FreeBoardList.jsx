@@ -16,9 +16,7 @@ function formatDate(dateString) {
 
 function FreeBoardList({ clubs }){
     let { id } = useParams();
-    const club = clubs.find(club => club.clubId === parseInt(id));
     const navigate = useNavigate();
-
     const [list] = useState(
         postData.filter((post) => post.boardId === 4)
     );
@@ -36,7 +34,7 @@ function FreeBoardList({ clubs }){
             <div className="header_container">
                 <FaArrowLeft
                     style={{fontSize: '26px', cursor: 'pointer'}}
-                    onClick={()=>handleBackClick(club.clubId)}
+                    onClick={handleBackClick}
                 />
                 <div style={{fontSize: '22px', fontWeight: "bold"}}>자유게시판</div>
                 <FiEdit

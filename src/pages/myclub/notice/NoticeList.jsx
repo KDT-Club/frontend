@@ -6,8 +6,6 @@ import { FaArrowLeft } from "react-icons/fa6";
 import { FiEdit } from "react-icons/fi";
 import {Link, useNavigate, useParams} from "react-router-dom";
 import clubData from '../data/clubData.jsx';
-//import noticeListData from "../data/noticeListData.jsx";
-//ㄴnoticeListData에서 말고 postData에서 글 필터링해서 가져오도록 수정함
 import postData from "../data/postData.jsx";
 
 function formatDate(dateString) {
@@ -23,9 +21,9 @@ function isClubPresident(memberId, clubId) {
     return club && club.memberId === memberId;
 }
 
-function Notice({ clubs }){
+function NoticeList({ clubs }){
     let { id } = useParams();
-    const club = clubs.find(club => club.clubId === parseInt(id));
+    const club = clubs?.find(club => club.clubId === parseInt(id));
     const navigate = useNavigate();
     const [list] = useState(
         postData.filter((post) => post.boardId === 2)
@@ -49,7 +47,7 @@ function Notice({ clubs }){
             <div className="header_container">
                 <FaArrowLeft
                     style={{fontSize: '26px', cursor: 'pointer'}}
-                    onClick={()=>handleBackClick(club.clubId)}
+                    onClick={handleBackClick}
                 />
                 <div style={{fontSize: '22px', fontWeight: "bold"}}>공지사항</div>
                 <FiEdit
@@ -85,4 +83,4 @@ function List({title, content, createdAt, link}) {
     )
 }
 
-export default Notice;
+export default NoticeList;
