@@ -1,0 +1,15 @@
+.member_manage_item {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 13px;
+    display: flex; /* Flexbox 사용 */
+    justify-content: center; /* 수평 중앙 정렬 */
+    align-items: center; /* 수직 중앙 정렬 */
+}
+
+.member_manage_item p {
+    font-size: 16px;
+    margin-left: 25px;
+    margin-top: 13px;
+    margin-bottom: 0px;
+    text-align: center;
+}
