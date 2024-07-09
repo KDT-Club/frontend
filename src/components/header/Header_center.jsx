@@ -1,5 +1,5 @@
 import React from 'react';
-import '../styles/header_center.css';
+import './header_center.css';
 
 function Header_center() {
     return (

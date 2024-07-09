@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import '../styles/footer.css';
+import './footer.css';
 import { FaRegBookmark } from 'react-icons/fa';
 import { PiUsersThree } from "react-icons/pi";
 import { IoHomeOutline } from "react-icons/io5";
@@ -40,13 +40,13 @@ function Footer() {
                 onClick={() => setActiveMenu("/myclub")}
             />
             <Menu
-                to="/mypage"
+                to="/members"
                 Icon={LuUserSquare}
                 title="마이페이지"
                 iconStyle={{fontSize:"30px", marginLeft:"15px"}}
                 textStyle={{marginTop:"5px"}}
-                isActive={activeMenu === "/mypage"}
-                onClick={() => setActiveMenu("/mypage")}
+                isActive={activeMenu === "/members"}
+                onClick={() => setActiveMenu("/members")}
             />
         </div>
     )

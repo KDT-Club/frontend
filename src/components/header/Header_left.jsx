@@ -1,5 +1,5 @@
 import React from 'react';
-import '../styles/header_left.css';
+import './header_left.css';
 
 function Header_left() {
     return (
