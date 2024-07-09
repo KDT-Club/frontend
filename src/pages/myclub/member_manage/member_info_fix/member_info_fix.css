@@ -1,0 +1,69 @@
+.member_info_detail {
+    margin-left: 20px;
+    margin-top: 30px;
+    text-align: left;
+}
+
+.member_info_detail img {
+    float: left;
+    width: 55px;
+    margin-right: 17px;
+}
+
+.member_info_detail .name {
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.member_info_detail .studentNum {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: gray;
+}
+
+.member_info_detail .role, .member_info_detail .phone, .member_info_detail .major {
+    margin-top: 20px;
+    margin-bottom: 35px;
+    margin-left: 3px;
+    font-weight: bold;
+}
+
+.member_info_detail .role button {
+    width: auto;
+    height: 33px;
+    margin-top: 6px;
+    margin-right: 10px;
+    padding-top: 6px;
+    background-color: rgba(0, 0, 0, 0.05);
+    font-weight: normal;
+    font-size: 15px;
+}
+
+.member_info_detail .phoneNum {
+    background-color: rgba(0, 0, 0, 0.05);
+    width: 125px;
+    height: 33px;
+    padding-left: 10px;
+    margin-top: 6px;
+    margin-left: 0px;
+    border-radius: 5px;
+    padding-top: 4px;
+    font-size: 16px;
+    font-weight: normal;
+}
+
+.member_info_detail .majorName {
+    background-color: rgba(0, 0, 0, 0.05);
+    width: 120px;
+    height: 33px;
+    padding-left: 12px;
+    margin-top: 6px;
+    margin-left: 0px;
+    border-radius: 5px;
+    padding-top: 4px;
+    font-size: 16px;
+    font-weight: normal;
+}

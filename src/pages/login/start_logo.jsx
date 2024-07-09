@@ -1,6 +1,6 @@
 import React from 'react';
 import logo from '../../images/logo_text.png'
-import './login_styles/logo.css'
+import '../../styles/logo.css'
 
 
 function StartLogo() {

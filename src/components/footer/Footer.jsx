@@ -13,13 +13,13 @@ function Footer() {
     return (
         <div className="Footer">
             <Menu
-                to="/main"
+                to="/home"
                 Icon={IoHomeOutline}
                 title="홈"
                 iconStyle={{fontSize:"30px", marginTop:"2px"}}
                 textStyle={{marginTop:"2px"}}
-                isActive={activeMenu === "/main"}
-                onClick={() => setActiveMenu("/main")}
+                isActive={activeMenu === "/home"}
+                onClick={() => setActiveMenu("/home")}
             />
             <Menu
                 to="/community"
@@ -40,12 +40,12 @@ function Footer() {
                 onClick={() => setActiveMenu("/myclub")}
             />
             <Menu
-                to="/mypage"
+                to="/members"
                 Icon={LuUserSquare}
                 title="마이페이지"
                 iconStyle={{fontSize:"30px", marginLeft:"15px"}}
                 textStyle={{marginTop:"5px"}}
-                isActive={activeMenu === "/mypage"}
+                isActive={activeMenu === "/members"}
                 onClick={() => setActiveMenu("/members")}
             />
         </div>
