@@ -36,6 +36,10 @@ let clubmemberData = [
         "memberId": 101,
         "clubId": 2
     },
+    {
+        "memberId": 106,
+        "clubId": 2
+    },
     //
     {
         "memberId": 103,

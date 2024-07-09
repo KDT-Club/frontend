@@ -12,6 +12,8 @@
     overflow-y: auto;
     margin-top: 25px;
     margin-left: 10px;
+    scrollbar-width: thin;
+    scrollbar-color: darkgray white;
 }
 
 .item-container {
@@ -47,6 +49,8 @@
     padding: 10px;
     gap: 10px;
     margin-bottom: 20px;
+    scrollbar-width: thin;
+    scrollbar-color: darkgray white;
 }
 
 .box-item {

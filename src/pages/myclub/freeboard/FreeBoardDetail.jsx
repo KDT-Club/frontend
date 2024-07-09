@@ -2,7 +2,7 @@
 import React from 'react';
 import {useParams, useNavigate} from 'react-router-dom';
 import postData from "../data/postData.jsx";
-import memberInfo from "../data/memberData.jsx";
+import memberInfo from "../data/memberInfo.jsx";
 import commentData from '../data/commentData.jsx';
 import {FaArrowLeft} from 'react-icons/fa6';
 import { FiMoreVertical } from "react-icons/fi";
