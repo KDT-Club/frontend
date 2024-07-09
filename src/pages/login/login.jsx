@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {useNavigate} from 'react-router-dom'
 import '../../styles/login.css';
 import '../../styles/App.css';
-import Header_center from '../../components/Header_center.jsx'
+import Header_center from '../../components/header/Header_center.jsx'
 import kakao from '../../images/kakao_login.png'
 import {GoogleLogin} from '@react-oauth/google'
 
