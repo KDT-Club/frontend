@@ -12,6 +12,10 @@ import Create_club from "./pages/mypage/create_club/Create_club.jsx";
 import Member_manage_main from "./pages/myclub/member_manage/main/Member_manage_main.jsx";
 import Member_info_fix_list from "./pages/myclub/member_manage/member_info_fix_list/Member_info_fix_list.jsx";
 import Member_info_fix from "./pages/myclub/member_manage/member_info_fix/Member_info_fix.jsx";
+import MainPage from './pages/main/MainPage.jsx'
+import ClubDetailPage from "./pages/main/ClubDetailPage.jsx";
+import Community_Main from "./pages/community/Community_Main.js";
+import PostDetail from "./pages/community/PostDetail.jsx";
 
 function App() {
     const [showLogo, setShowLogo] = React.useState(true);
@@ -54,6 +58,11 @@ function App() {
                         <Route path="/clubMemberManage" element={<Member_manage_main />} />
                         <Route path="/memberInfoFixList" element={<Member_info_fix_list />} />
                         <Route path="/memberInfoFix/:memberId" element={<Member_info_fix />} />
+                        <Route path="/main" element={<MainPage />} />
+                        <Route path="members" element={<Mypage />} />
+                        <Route path="/club/:clubId" element={<ClubDetailPage />} />
+                        <Route path="/community" element={<Community_Main/>} />
+                        <Route path="/post/:postId" element={<PostDetail/>}/>
                     </Routes>
                 </div>
             </GoogleOAuthProvider>
