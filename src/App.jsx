@@ -5,6 +5,11 @@ import Logo from './pages/login/start_logo.jsx'
 import Login from './pages/login/login.jsx'
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import SignUp from './pages/login/signup.jsx'
+import MainPage from './pages/main/MainPage.jsx'
+import MyPage from './pages/mypage/Mypage.jsx'
+import ClubDetailPage from "./pages/main/ClubDetailPage.jsx";
+import Community_Main from "./pages/community/Community_Main.js";
+import PostDetail from "./pages/community/PostDetail.jsx";
 
 function App() {
     const [showLogo, setShowLogo] = React.useState(true);
@@ -40,6 +45,11 @@ function App() {
                         <Route path="/" element={showLogo ? <Logo /> : <Login/>} />
                         <Route path="/login" element={<Login />} />
                         <Route path="/signup" element={<SignUp />} />
+                        <Route path="/main" element={<MainPage />} />
+                        <Route path="/mypage" element={<MyPage />} />
+                        <Route path="/club/:clubId" element={<ClubDetailPage />} />
+                        <Route path="/community" element={<Community_Main/>} />
+                        <Route path="/post/:postId" element={<PostDetail/>}/>
                     </Routes>
                 </div>
             </GoogleOAuthProvider>

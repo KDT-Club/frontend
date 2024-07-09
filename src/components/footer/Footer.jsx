@@ -13,7 +13,7 @@ function Footer() {
     return (
         <div className="Footer">
             <Menu
-                to="/home"
+                to="/main"
                 Icon={IoHomeOutline}
                 title="홈"
                 iconStyle={{fontSize:"30px", marginTop:"2px"}}

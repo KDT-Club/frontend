@@ -3,6 +3,7 @@ import '../../styles/mypage.css';
 import { CiViewList } from "react-icons/ci";
 import { TbUserEdit } from "react-icons/tb";
 import { FiUserPlus, FiUserX } from "react-icons/fi";
+import Footer from "../../components/Footer.jsx";
 
 function Mypage() {
     let list = ["가입한 동아리", "작성한 글 보기", "정보 수정", "동아리 만들기", "회원 탈퇴"];
@@ -29,6 +30,7 @@ function Mypage() {
                     })
                 }
             </div>
+        <Footer/>
         </div>
     )
 }
