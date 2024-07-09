@@ -1,10 +1,11 @@
 //내 동아리 자유게시판 - 글 목록
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import '../DetailHeader/myclubheader.css'
 import '../notice/notice.css';
 import { FaArrowLeft } from "react-icons/fa6";
 import { FiEdit } from "react-icons/fi";
 import {Link, useNavigate, useParams} from "react-router-dom";
+import clubData from '../data/clubData.jsx';
 import postData from "../data/postData.jsx";
 
 function formatDate(dateString) {
@@ -17,9 +18,18 @@ function formatDate(dateString) {
 function FreeBoardList({ clubs }){
     let { id } = useParams();
     const navigate = useNavigate();
-    const [list] = useState(
-        postData.filter((post) => post.boardId === 4)
-    );
+    const [list, setList] = useState([]);
+
+    useEffect(() => {
+        const clubId = parseInt(id);
+        const club = clubData.find(c => c.clubId === clubId);
+        if(club) {
+            const filteredPosts = postData.filter(
+                post => post.boardId === 4 && post.clubName === club.name
+            );
+            setList(filteredPosts);
+        }
+    }, [id]);
 
     const handleWriteClick = () => {
         navigate(`/clubs/${id}/board/4/freeboardwrite`);
@@ -44,13 +54,13 @@ function FreeBoardList({ clubs }){
             </div>
             <div className="scroll-container">
                 <div className="notice_list">
-                    {
-                        list.map((a, i) => {
-                            return (
-                                <List key={i} title={a.title} content={a.content} createdAt={a.createdAt} link={`/clubs/${id}/board/4/posts/${a.postId}`} />
-                            )
-                        })
-                    }
+                    {list.length > 0 ? (
+                        list.map((a,i) => (
+                            <List key={i} title={a.title} content={a.content} createdAt={a.createdAt} link={`/clubs/${id}/board/4/posts/${a.postId}`} />
+                        ))
+                    ) : (
+                        <p>작성된 글이 없습니다.</p>
+                    )}
                 </div>
             </div>
         </div>

@@ -40,7 +40,6 @@ let clubmemberData = [
         "memberId": 106,
         "clubId": 2
     },
-    //
     {
         "memberId": 103,
         "clubId": 3

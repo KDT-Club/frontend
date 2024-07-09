@@ -1,6 +1,30 @@
 let postData = [
     {
-        //boardId  2: 동아리  공지사항 게시판
+        //boardId  2: 동아리 내부 공지사항 게시판
+        postId: 29,
+        title: "신입 회원 OT",
+        content: "필참입니다.",
+        createdAt: "2024-07-30T10:00:00",
+        memberId : 104,
+        updateDate : "",
+        attachmentFlag : "",
+        postType : "",
+        clubName : "주식 동아리",
+        boardId : 2,
+    },
+    {
+        postId: 28,
+        title: "신입 회원 OT",
+        content: "필참입니다.",
+        createdAt: "2024-07-30T10:00:00",
+        memberId : 101,
+        updateDate : "",
+        attachmentFlag : "",
+        postType : "",
+        clubName : "독서 동아리",
+        boardId : 2,
+    },
+    {
         postId: 27,
         title: "이번주 일요일 7시 영문이랑 축구",
         content: "필참입니다.",
@@ -9,7 +33,7 @@ let postData = [
         updateDate : "",
         attachmentFlag : "",
         postType : "",
-        clubName : "",
+        clubName : "INTEL",
         boardId : 2,
     },
     {
@@ -21,7 +45,7 @@ let postData = [
         updateDate : "",
         attachmentFlag : "",
         postType : "",
-        clubName : "",
+        clubName : "INTEL",
         boardId : 2,
     },
     {
@@ -33,7 +57,7 @@ let postData = [
         updateDate : "",
         attachmentFlag : "",
         postType : "",
-        clubName : "",
+        clubName : "INTEL",
         boardId : 2,
     },
     {
@@ -45,7 +69,7 @@ let postData = [
         updateDate : "",
         attachmentFlag : "",
         postType : "",
-        clubName : "",
+        clubName : "INTEL",
         boardId : 2,
     },
     {
@@ -57,7 +81,7 @@ let postData = [
         updateDate : "",
         attachmentFlag : "",
         postType : "",
-        clubName : "",
+        clubName : "INTEL",
         boardId : 2,
     },
     {
@@ -69,7 +93,7 @@ let postData = [
         updateDate : "",
         attachmentFlag : "",
         postType : "",
-        clubName : "",
+        clubName : "INTEL",
         boardId : 2,
     },
     {
@@ -81,11 +105,35 @@ let postData = [
         updateDate : "",
         attachmentFlag : "",
         postType : "",
-        clubName : "",
+        clubName : "INTEL",
         boardId : 2,
     },
     {
         //boardId  4: 동아리 내부 자유게시판
+        postId: 7,
+        title: "OT 어디서 하나요?",
+        content: "알려주세요",
+        createdAt: "2024-07-30T10:00:00",
+        memberId : 103,
+        updateDate : "",
+        attachmentFlag : "",
+        postType : "",
+        clubName : "주식 동아리",
+        boardId : 4,
+    },
+    {
+        postId: 6,
+        title: "OT 어디서 하나요?",
+        content: "알려주세요",
+        createdAt: "2024-07-30T10:00:00",
+        memberId : 106,
+        updateDate : "",
+        attachmentFlag : "",
+        postType : "",
+        clubName : "독서 동아리",
+        boardId : 4,
+    },
+    {
         postId: 5,
         title: "안녕하세요 네오입니다~~~",
         content: "친하게 지내요~~",
@@ -94,7 +142,7 @@ let postData = [
         updateDate : "",
         attachmentFlag : "",
         postType : "",
-        clubName : "",
+        clubName : "INTEL",
         boardId : 4,
     },
     {
@@ -106,7 +154,7 @@ let postData = [
         updateDate : "",
         attachmentFlag : "",
         postType : "",
-        clubName : "",
+        clubName : "INTEL",
         boardId : 4,
     },
     {
@@ -118,7 +166,7 @@ let postData = [
         updateDate : "",
         attachmentFlag : "",
         postType : "",
-        clubName : "",
+        clubName : "INTEL",
         boardId : 4,
     },
     {
@@ -130,7 +178,7 @@ let postData = [
         updateDate : "",
         attachmentFlag : "",
         postType : "",
-        clubName : "",
+        clubName : "INTEL",
         boardId : 4,
     },
     {
@@ -142,7 +190,7 @@ let postData = [
         updateDate : "",
         attachmentFlag : "",
         postType : "",
-        clubName : "",
+        clubName : "INTEL",
         boardId : 4,
     }
 ];

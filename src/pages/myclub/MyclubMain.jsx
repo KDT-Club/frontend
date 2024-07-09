@@ -25,14 +25,9 @@ const MyclubMain = () => {
         setClubs(clubData);
     }, []);
 
-
     const handleClubClick = (id) => {
         navigate(`/clubs/${id}`);
     };
-
-    // const handleBoardClick = (id, boardId) => {
-    //     navigate(`/clubs/${id}/board/${boardId}`);
-    // };
 
     return (
         <Routes>
@@ -55,16 +50,13 @@ const MyclubMain = () => {
             }/>
             <Route path="/clubs/:id" element={<MyclubDetail clubs={clubs}/>}/>
 
-            {/*<Route path="/clubs/:id/board/2" element={<NoticeList clubs={clubs}/>}/>*/}
-            {/*<Route path="/clubs/:id/board/4" element={<FreeBoardList clubs={clubs}/>}/>*/}
             <Route path="/clubs/:id/board/:boardId" element={<BoardList clubs={clubs} />} />
-
-            {/*<Route path="/clubs/:clubId/board/2/posts/:postId" element={<NoticeDetail />} />*/}
-            {/*<Route path="/clubs/:clubId/board/4/posts/:postId" element={<FreeBoardDetail />} />*/}
             <Route path="/clubs/:clubId/board/:boardId/posts/:postId" element={<BoardDetail clubs={clubs} posts={postData} />} />
 
+            //글쓰기 화면 라우팅 수정 필요.
             <Route path="/clubs/:id/board/2/noticewrite" element={<NoticeWrite clubs={clubs}/>}/>
             <Route path="/clubs/:id/board/4/freeboardwrite" element={<BoardWrite clubs={clubs}/>}/>
+
             <Route path="/clubs/etc1" element={<Etc1 />} />
             <Route path="/clubs/etc2" element={<Etc2 />} />
             <Route path="/clubs/etc3" element={<Etc3 />} />

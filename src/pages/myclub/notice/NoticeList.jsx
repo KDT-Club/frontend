@@ -1,5 +1,5 @@
 //동아리 공지사항 - 글 목록
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import '../DetailHeader/myclubheader.css'
 import './notice.css';
 import { FaArrowLeft } from "react-icons/fa6";
@@ -23,15 +23,24 @@ function isClubPresident(memberId, clubId) {
 
 function NoticeList({ clubs }){
     let { id } = useParams();
-    const club = clubs?.find(club => club.clubId === parseInt(id));
     const navigate = useNavigate();
-    const [list] = useState(
-        postData.filter((post) => post.boardId === 2)
-    );
+    const [list, setList] = useState([]);
 
-    //공지사항 글쓰기 회장 권한 받는 건 추후에 수정!!!
+    useEffect(() => {
+        const clubId = parseInt(id);
+        const club = clubData.find(c => c.clubId === clubId);
+        if(club) {
+            const filteredPosts = postData.filter(
+                post => post.boardId === 2 && post.clubName === club.name
+            );
+            setList(filteredPosts);
+        }
+    }, [id]);
+
+    //공지사항 글쓰기 회장 권한 받는 건 추후에 수정!!! 라우팅도 수정해야됨.
     const handleWriteClick = () => {
-        if (isClubPresident(club.memberId, id)) {
+        const club = clubData.find(c => c.clubId === parseInt(id));
+        if (club && isClubPresident(club.memberId, id)) {
             navigate(`/clubs/${id}/board/2/noticewrite`);
         } else {
             alert('권한이 없습니다.');
@@ -57,13 +66,13 @@ function NoticeList({ clubs }){
             </div>
             <div className="scroll-container">
                 <div className="notice_list">
-                    {
-                        list.map((a, i) => {
-                            return (
-                                <List key={i} title={a.title} content={a.content} createdAt={a.createdAt} link={`/clubs/${id}/board/2/posts/${a.postId}`} />
-                            )
-                        })
-                    }
+                    {list.length > 0 ? (
+                        list.map((a,i) => (
+                            <List key={i} title={a.title} content={a.content} createdAt={a.createdAt} link={`/clubs/${id}/board/2/posts/${a.postId}`} />
+                        ))
+                    ) : (
+                        <p>공지사항이 없습니다.</p>
+                    )}
                 </div>
             </div>
         </div>

@@ -4,19 +4,26 @@ import Footer from '../../components/Footer.jsx';
 import { useParams, useNavigate } from "react-router-dom";
 import MyclubHeader from "./DetailHeader/MyclubHeader.jsx";
 import postData from "./data/postData.jsx";
+import clubData from "./data/clubData.jsx";
 
 function MyclubDetail({clubs}) {
     let { id } = useParams();
-    // const club = clubs.find(club => club.clubId === parseInt(id));
     const navigate = useNavigate();
 
     const handleMoreClick = (boardId) => {
         navigate(`/clubs/${id}/board/${boardId}`);
     };
 
-    // postData에서 필터링
-    const noticePosts = postData.filter(post => post.boardId === 2);
-    const freeboardPosts = postData.filter(post => post.boardId === 4);
+    const currentClub = clubData.find(club => club.clubId === parseInt(id));
+    const currentClubName = currentClub? currentClub.name : ""; //현재 동아리의 이름 get
+
+    const noticePosts = postData.filter(post =>
+        post.boardId === 2 && post.clubName === currentClubName
+    );
+
+    const freeboardPosts = postData.filter(post =>
+        post.boardId === 4 && post.clubName === currentClubName
+    );
 
     const etc1handleMoreClick = () => {
         navigate(`/clubs/etc1`);
