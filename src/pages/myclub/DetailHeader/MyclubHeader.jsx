@@ -104,11 +104,9 @@ function MyclubHeader({clubs}) {
                         </div>
                     </div>
                     <div className="leave-club">
-                        <div className="li-container">
-                            <div className="li-container-left">
-                                <li style={{marginRight: "10px", fontSize: "16px"}}>동아리 탈퇴하기</li>
-                                <TbDoorExit style={{fontSize: "27px"}}/>
-                            </div>
+                        <div className="leave-club-line">
+                            <li style={{marginRight: "10px", fontSize: "15px", te: "center"}}>동아리 탈퇴하기</li>
+                            <TbDoorExit style={{fontSize: "25px"}}/>
                         </div>
                     </div>
                 </div>
