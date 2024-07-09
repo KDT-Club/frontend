@@ -18,8 +18,8 @@ function Footer() {
                 title="홈"
                 iconStyle={{fontSize:"30px", marginTop:"2px"}}
                 textStyle={{marginTop:"2px"}}
-                isActive={activeMenu === "/home"}
-                onClick={() => setActiveMenu("/home")}
+                isActive={activeMenu === "/main"}
+                onClick={() => setActiveMenu("/main")}
             />
             <Menu
                 to="/community"
@@ -40,12 +40,12 @@ function Footer() {
                 onClick={() => setActiveMenu("/myclub")}
             />
             <Menu
-                to="/members"
+                to="/mypage"
                 Icon={LuUserSquare}
                 title="마이페이지"
                 iconStyle={{fontSize:"30px", marginLeft:"15px"}}
                 textStyle={{marginTop:"5px"}}
-                isActive={activeMenu === "/members"}
+                isActive={activeMenu === "/mypage"}
                 onClick={() => setActiveMenu("/members")}
             />
         </div>
