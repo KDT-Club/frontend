@@ -4,6 +4,10 @@
     background-color: #f8f8f8;
     border-top: 1px solid #ddd;
     display: flex;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
 }
 
 .menu {

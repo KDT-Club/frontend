@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {useNavigate} from 'react-router-dom'
-import '../../styles/login.css';
+import './login_styles/login.css';
 import '../../styles/App.css';
 import Header_center from '../../components/Header_center.jsx'
 import kakao from '../../images/kakao_login.png'
@@ -13,7 +13,7 @@ function Login() {
 
     const handleLogin = (e) => {
         e.preventDefault();
-        console.log('Login attempt with:', id, password);
+        navigate('/main');
     };
 
     const handleSignup = (e) => {
@@ -78,7 +78,7 @@ function Login() {
             <button onClick={handleKakaoLogin} className="social-login kakao-btn">
                 <img src={kakao} alt="KakaoTalk"/>
             </button>
-            <button type="submit" className="login-btn">Login</button>
+            <button type="submit" className="login-btn" onClick={handleLogin}>Login</button>
         </div>
     );
 }
