@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import Header_center from "../../components/Header_center.jsx";
-import Footer from "../../components/Footer.jsx";
+import Header_center from "../../components/header/Header_center.jsx";
+import Footer from "../../components/footer/Footer.jsx";
 import { useNavigate } from "react-router-dom";
 import "./community_styles/community.css";
 
