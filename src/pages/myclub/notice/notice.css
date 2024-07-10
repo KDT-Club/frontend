@@ -1,0 +1,63 @@
+.whole {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.scroll-container {
+    flex: 1;
+    overflow-y: auto;
+    margin-top: 12px;
+}
+
+.notice_list {
+    margin-top: 10px;
+}
+
+.post {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    border-bottom: 1px solid #ddd;
+}
+
+.post .title {
+    font-weight: bold;
+    font-size: 20px;
+    margin-top: 17px;
+    margin-bottom: 0px;
+    margin-left: 35px;
+    text-align: left;
+}
+
+.post .content {
+    margin-top: 4px;
+    font-size: 18px;
+    color: dimgrey;
+    text-align: left;
+    margin-left: 35px;
+}
+
+.post .createdAt {
+    margin-top: 2px;
+    margin-bottom: 13px;
+    font-size: 17px;
+    color: gray;
+    text-align: left;
+    margin-left: 35px;
+}
+
+.comment-container {
+    display: flex;
+    flex-direction: column;
+    margin-top: 25px;
+}
+
+.comment-oneline {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}

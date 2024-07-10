@@ -31,13 +31,13 @@ function Footer() {
                 onClick={() => setActiveMenu("/community")}
             />
             <Menu
-                to="/myclub"
+                to="/clubs"
                 Icon={FaRegBookmark}
                 title="내 동아리"
                 iconStyle={{fontSize:"27px", marginTop:"1px", marginLeft:"12px"}}
                 textStyle={{marginTop:"6px"}}
                 isActive={activeMenu === "/myclub"}
-                onClick={() => setActiveMenu("/myclub")}
+                onClick={() => setActiveMenu("/clubs")}
             />
             <Menu
                 to="/members"
