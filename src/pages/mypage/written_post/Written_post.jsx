@@ -1,17 +1,20 @@
 import React, {useState} from "react";
 import './written_post.css'
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa6";
 import written_post_data from "./written_post_data.jsx";
 
 function Written_post() {
+    const navigate = useNavigate();
     let [list] = useState(written_post_data);
+
     return (
         <div className="Written_post">
             <div className="header">
-                <Link to="/members">
-                    <FaArrowLeft style={{ fontSize: '25px', strokeWidth: '0.1', cursor: 'pointer' }} />
-                </Link>
+                <FaArrowLeft
+                    style={{ fontSize: '25px', strokeWidth: '0.1', cursor: 'pointer' }}
+                    onClick={() => navigate(-1)}
+                />
                 <p>작성한 글 보기</p>
             </div>
             <div className="written_post_list">

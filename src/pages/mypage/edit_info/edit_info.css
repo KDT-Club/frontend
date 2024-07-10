@@ -3,21 +3,16 @@
 }
 
 .edit {
-    width: 80%;
+    display: flex;
     justify-content: center;
-    align-items: center;
-    margin-top: 45px;
-    margin-left: auto;
-    margin-right: auto;
+    width: 80%;
+    margin: 45px auto 0 auto;
     position: relative;
-    bottom: 0;
-    right: 0;
 }
 
 .edit img {
     width: 75px;
     height: 75px;
-    margin-left: 165px;
     border-radius: 50%;
     object-fit: cover;
     position: absolute;
@@ -27,20 +22,19 @@
 }
 
 .camera_icon {
-    margin-left: 165px;
     font-size: 40px;
     width: 75px;
     height: 75px;
     padding-top: 20px;
     padding-bottom: 20px;
     color: gray;
-    position: relative;
+    position: absolute;
     top: 5px;
     z-index: 2;
 }
 
 .information {
-    margin-top: 80px;
+    margin-top: 130px;
 }
 
 .information .name, .information .major, .information .password {
@@ -52,23 +46,20 @@
     width: 100%;
 }
 
+.name, .major, .password {
+    display: flex;
+    align-items: center;
+}
+
 .name p, .major p, .password p {
     font-size: 15px;
     font-weight: bold;
     width: 180px;
     margin-left: 5px;
+    margin-right: 0; /* 오른쪽 마진 제거 */
 }
 
-.name input, .major input {
-    font-size: 13px;
-    flex-grow: 1;
-    padding-left: 10px;
-    padding-bottom: 5px;
-    border: none;
-    outline: none;
-}
-
-.password input {
+.name input, .major input, .password input {
     font-size: 13px;
     flex-grow: 1;
     padding-left: 10px;
@@ -76,6 +67,10 @@
     margin-left: 5px;
     border: none;
     outline: none;
+}
+
+.password {
+    position: relative;
 }
 
 .password .check-icon {
@@ -88,7 +83,7 @@
     width: 80%;
     height: 40px;
     font-size: 17px;
-    margin-top: 236px;
+    margin-top: 150px;
     padding-top: 8px;
     padding-bottom: 10px;
     background-color: #597CA5;

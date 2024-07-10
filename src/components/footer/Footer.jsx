@@ -10,6 +10,8 @@ function Footer() {
     const location = useLocation();
     const [activeMenu, setActiveMenu] = useState(location.pathname);
 
+    const memberId = 1;
+
     return (
         <div className="Footer">
             <Menu
@@ -39,15 +41,17 @@ function Footer() {
                 isActive={activeMenu === "/myclub"}
                 onClick={() => setActiveMenu("/myclub")}
             />
-            <Menu
-                to="/members"
-                Icon={LuUserSquare}
-                title="마이페이지"
-                iconStyle={{fontSize:"30px", marginLeft:"15px"}}
-                textStyle={{marginTop:"5px"}}
-                isActive={activeMenu === "/members"}
-                onClick={() => setActiveMenu("/members")}
-            />
+            {memberId && (
+                <Menu
+                    to={`/members/${memberId}`}
+                    Icon={LuUserSquare}
+                    title="마이페이지"
+                    iconStyle={{fontSize:"30px", marginLeft:"15px"}}
+                    textStyle={{marginTop:"5px"}}
+                    isActive={activeMenu === `/members/${memberId}`}
+                    onClick={() => setActiveMenu(`/members/${memberId}`)}
+                />
+            )}
         </div>
     )
 }
