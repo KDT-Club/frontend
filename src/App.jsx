@@ -51,7 +51,7 @@ function App() {
                         <Route path="/" element={showLogo ? <Logo /> : <Login/>} />
                         <Route path="/login" element={<Login />} />
                         <Route path="/signup" element={<SignUp />} />
-                        <Route path="/mypage" element={<Mypage />} />
+                        <Route path="/memebers" element={<Mypage />} />
                         <Route path="/posts" element={<Written_post />} />
                         <Route path="/edit_info" element={<Edit_info />} />
                         <Route path="/create_club" element={<Create_club />} />
