@@ -8,7 +8,7 @@ import { TbDoorExit } from "react-icons/tb";
 import { MdKeyboardArrowRight, MdKeyboardArrowDown } from "react-icons/md";
 import clubmemberData from '../data/clubmemberData.jsx';
 import memberInfo from "../data/memberInfo.jsx";
-// MdOutlineKeyboardDoubleArrowRight
+//햄버거탭을 여기에 설정해놔서 코드가 복잡해졌음....
 
 function MyclubHeader({clubs}) {
     let { id } = useParams();
