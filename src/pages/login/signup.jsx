@@ -1,6 +1,6 @@
 import React from 'react';
 import {useNavigate} from 'react-router-dom';
-import Header_center from '../../components/header/Header_center.jsx'
+import Header_center from "../../components/header/Header_center.jsx";
 import './login_styles/signup.css'
 import '../../styles/App.css'
 import back from '../../images/shape.png'

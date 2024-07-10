@@ -14,7 +14,7 @@ import Member_info_fix_list from "./pages/myclub/member_manage/member_info_fix_l
 import Member_info_fix from "./pages/myclub/member_manage/member_info_fix/Member_info_fix.jsx";
 import MainPage from './pages/main/MainPage.jsx'
 import ClubDetailPage from "./pages/main/ClubDetailPage.jsx";
-import Community_Main from "./pages/community/Community_Main.js";
+import Community_Main from "./pages/community/Community_Main.jsx";
 import PostDetail from "./pages/community/PostDetail.jsx";
 
 function App() {
@@ -51,7 +51,7 @@ function App() {
                         <Route path="/" element={showLogo ? <Logo /> : <Login/>} />
                         <Route path="/login" element={<Login />} />
                         <Route path="/signup" element={<SignUp />} />
-                        <Route path="/members" element={<Mypage />} />
+                        <Route path="/memebers" element={<Mypage />} />
                         <Route path="/posts" element={<Written_post />} />
                         <Route path="/edit_info" element={<Edit_info />} />
                         <Route path="/create_club" element={<Create_club />} />

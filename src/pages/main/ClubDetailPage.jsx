@@ -61,15 +61,15 @@ const ClubDetailPage = () => {
                 <div className="user-info">
                     <img src={profile} alt="profile" />
                     <div className="profile-info">
-                    <p style={{
-                        fontWeight: 'bold',
-                        fontSize: '20px',
-                        marginLeft: '-60px'
-                    }}>이정훈</p>
-                    <p style={{
-                        marginLeft: '15px',
-                        color: 'gray'
-                    }}>학번: 2020101460</p>
+                        <p style={{
+                            fontWeight: 'bold',
+                            fontSize: '20px',
+                            marginLeft: '-60px'
+                        }}>이정훈</p>
+                        <p style={{
+                            marginLeft: '15px',
+                            color: 'gray'
+                        }}>학번: 2020101460</p>
                     </div>
                 </div>
                 <div className="reason-input">
@@ -94,10 +94,10 @@ const ClubDetailPage = () => {
                     <h3>{club.name}</h3>
                     <p className="info-des">{club.description}</p>
                     <div className="club-info-center">
-                    <p>{club.location}</p>
-                    {club.activities.map((activity, index) => (
-                        <p key={index}>{activity}</p>
-                    ))}
+                        <p>{club.location}</p>
+                        {club.activities.map((activity, index) => (
+                            <p key={index}>{activity}</p>
+                        ))}
                     </div>
                 </div>
             </div>
@@ -115,13 +115,13 @@ const ClubDetailPage = () => {
                 <div className="leader-info-text">
                     <img src={dm} alt="dm"/>
                     <div className="leader-info-name">
-                    <p style={{
-                        fontSize: "20px"
-                    }}>회장</p>
-                    <p style={{
-                        color: "gray",
-                    }
-                    }>{club.leader.name}</p>
+                        <p style={{
+                            fontSize: "20px"
+                        }}>회장</p>
+                        <p style={{
+                            color: "gray",
+                        }
+                        }>{club.leader.name}</p>
                     </div>
                     <div className="leader-info-phone">
                         <p>{club.leader.phone}</p>

@@ -200,7 +200,7 @@ function PostDetail() {
                         style={{
                             marginRight: '10px',
                             padding: '10px'
-                    }}
+                        }}
                     />
                     <button type="submit" style={{
                         position: 'relative',

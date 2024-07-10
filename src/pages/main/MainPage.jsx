@@ -5,7 +5,7 @@ import '../../styles/App.css';
 import './main_styles/main.css';
 import Search from "../../images/search.png";
 import dm from "../../images/DM.png"
-import axios from "axios";
+import axios from 'axios';
 import {useNavigate} from "react-router-dom";
 
 function MainPage() {
@@ -40,11 +40,11 @@ function MainPage() {
 
     const handleMenuClick = (index, clubName) => {
         setActiveIndex(index);
-    //     if(clubName === '전체'){
-    //         fetchAllClubs();
-    //     } else {
-    //         fetchClubsByNames(clubName);
-    //     }
+        //     if(clubName === '전체'){
+        //         fetchAllClubs();
+        //     } else {
+        //         fetchClubsByNames(clubName);
+        //     }
     };
 
     const handleClubClick = (clubId) => {
@@ -91,7 +91,7 @@ function MainPage() {
             </div>
             <div className="clubs-container">
                 <div className="clubs-pt" onClick={() => handleClubClick(1)}>
-                <img src={dm} alt="dm" className="clubs-logo"/>
+                    <img src={dm} alt="dm" className="clubs-logo"/>
                     <div className="clubs-it">
                         <p className="clubs-title">D.M</p>
                         <p className="clubs-sm">삼육대학교 중앙 댄스 동아리 D.M입니다.</p>
