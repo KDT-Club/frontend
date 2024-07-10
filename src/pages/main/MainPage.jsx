@@ -91,7 +91,7 @@ function MainPage() {
             </div>
             <div className="clubs-container">
                 <div className="clubs-pt" onClick={() => handleClubClick(1)}>
-                    <img src={dm} alt="dm" className="clubs-logo"/>
+                    <img src={dm} alt="dm" className="clubs-logos"/>
                     <div className="clubs-it">
                         <p className="clubs-title">D.M</p>
                         <p className="clubs-sm">삼육대학교 중앙 댄스 동아리 D.M입니다.</p>

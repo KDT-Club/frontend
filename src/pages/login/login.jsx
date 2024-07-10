@@ -7,13 +7,40 @@ import kakao from '../../images/kakao_login.png'
 import {GoogleLogin} from '@react-oauth/google'
 
 function Login() {
-    const [id, setId] = useState('');
+    const [username, setUserName] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
 
+
+    // 로그인 API 개발 !
+    // const handleLogin = async () => {
+    //     try{
+    //         const response = await fetch('http://login', {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //             },
+    //             body: new URLSearchParams({
+    //                 studentId: username,
+    //                 password: password,
+    //             }),
+    //         });
+    //
+    //         if(response.ok){
+    //             const data = await response.json();
+    //             localStorage.setItem('token', data.access_token);
+    //             navigate('/main');
+    //         } else {
+    //             alert('로그인에 실패했습니다.');
+    //         }
+    //     } catch (error) {
+    //         console.error('로그인 중 에러 발생:', error);
+    //     }
+    // }
+
     const handleLogin = (e) => {
         e.preventDefault();
-        console.log('Login attempt with:', id, password);
+        navigate('/main')
     };
 
     const handleSignup = (e) => {
@@ -45,8 +72,8 @@ function Login() {
                         id="student-id"
                         type="text"
                         placeholder="Your ID"
-                        value={id}
-                        onChange={(e) => setId(e.target.value)}
+                        value={name}
+                        onChange={(e) => setUserName(e.target.value)}
                     />
                 </div>
                 <div className="input-group">
@@ -78,7 +105,7 @@ function Login() {
             <button onClick={handleKakaoLogin} className="social-login kakao-btn">
                 <img src={kakao} alt="KakaoTalk"/>
             </button>
-            <button type="submit" className="login-btn">Login</button>
+            <button type="submit" className="login-btn" onClick={handleLogin}>Login</button>
         </div>
     );
 }

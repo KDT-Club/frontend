@@ -1,0 +1,92 @@
+.myclub-detail-container {
+    position: fixed;
+    width: calc(var(--vw, 1vw) * 100);
+    height: calc(var(--vh,1vh)* 100);
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.scroll-container {
+    flex: 1;
+    overflow-y: auto;
+    margin-top: 25px;
+    margin-left: 10px;
+    scrollbar-width: thin;
+    scrollbar-color: darkgray white;
+}
+
+.item-container {
+    margin-top: 10px;
+    margin-bottom: 50px;
+}
+
+.header-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 25px 20px 0 10px;
+}
+
+.header-container h2 {
+    font-size: 23px;
+    font-weight: bold;
+    margin-left: 3px;
+}
+
+.header-container p {
+    font-size: 17px;
+    cursor: pointer;
+    line-height: 35px;
+    margin-right: 5px;
+    color: gray;
+    font-weight: bold;
+}
+
+.box-section {
+    display: flex;
+    overflow-x: auto;
+    padding: 10px;
+    gap: 10px;
+    margin-bottom: 20px;
+    scrollbar-width: thin;
+    scrollbar-color: darkgray white;
+}
+
+.box-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 240px;
+    max-width: 240px;
+    padding: 15px;
+    border: 1.5px solid #597CA5;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.box-item h3 {
+    text-overflow: ellipsis;
+    white-space: wrap;
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0 0 10px;
+}
+
+.box-item p {
+    white-space: wrap;
+    font-size: 14px;
+    margin: 0;
+}
+
+.section {
+    padding: 15px;
+    margin-bottom: 30px;
+    border: 1px solid #ccc;
+}
+
+.section div {
+    font-size: 16px;
+}
