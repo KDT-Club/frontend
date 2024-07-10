@@ -11,7 +11,7 @@ function Member_info_fix_list() {
     return (
         <div className="Member_info_fix">
             <div className="header">
-                <Link to="/clubMemberManage">
+                <Link to="#">
                     <FaArrowLeft style={{fontSize: '20px', strokeWidth: '0.1', cursor: 'pointer'}}/>
                 </Link>
                 <p>회원 정보 수정</p>
