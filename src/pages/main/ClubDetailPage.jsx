@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { FaArrowLeft } from "react-icons/fa6";
 import '../../styles/App.css';
 import './main_styles/main.css';
-import '../main/main_styles/club_detail.css';
+import './main_styles/club_detail.css';
 import dm from '../../images/DM.png'
 import uno from '../../images/uno.png'
 import profile from '../../images/profile.jpeg'

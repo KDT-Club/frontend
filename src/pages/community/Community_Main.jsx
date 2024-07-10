@@ -3,9 +3,11 @@ import Header_center from "../../components/header/Header_center.jsx";
 import Footer from "../../components/footer/Footer.jsx";
 import { useNavigate } from "react-router-dom";
 import "./community_styles/community.css";
+import Calendar from "./Calendar.jsx";
 
 function CommunityMain() {
     const [activeIndex, setActiveIndex] = useState(null);
+    const [expandedPosts, setExpandedPosts] = useState({});
     const navigate = useNavigate();
 
     const handleMenuClick = (index) => {
@@ -21,6 +23,76 @@ function CommunityMain() {
     ];
 
     const maxContentLength = 30;
+
+    const toggleContent = (postId) => {
+        setExpandedPosts(prev => ({...prev, [postId]: !prev[postId]}));
+    };
+
+    const renderContent = () => {
+        switch(activeIndex) {
+            case 0:
+                return (
+                    <div className="posts-container">
+                        {posts.map((post) => {
+                            const isLongContent = post.content.length > maxContentLength;
+                            const showFullContent = expandedPosts[post.id];
+
+                            return (
+                                <div key={post.id} className="post-item" onClick={() => navigate(`/post/${post.id}`)}>
+                                    <h3 style={{
+                                        textAlign: "left",
+                                        marginLeft: "10px",
+                                        marginBottom: "-5px",
+                                        fontWeight: "bold",
+                                        fontSize: "20px"
+                                    }}>{post.title}</h3>
+                                    <div style={{display: "flex", alignItems: "center", marginLeft: "10px"}}>
+                                        <p style={{
+                                            overflow: "hidden",
+                                            textOverflow: "ellipsis",
+                                            whiteSpace: showFullContent ? "normal" : "nowrap",
+                                            maxWidth: showFullContent ? "none" : "450px"
+                                        }}>
+                                            {post.content}
+                                        </p>
+                                        {isLongContent && (
+                                            <button
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    toggleContent(post.id);
+                                                }}
+                                                style={{
+                                                    color: "gray",
+                                                    cursor: "pointer",
+                                                    border: "none",
+                                                    background: "none",
+                                                    marginLeft: "-20px",
+                                                    padding: "0",
+                                                }}
+                                            >
+                                                {showFullContent ? "간략히" : "더 보기"}
+                                            </button>
+                                        )}
+                                    </div>
+                                    <p style={{
+                                        textAlign: "left",
+                                        marginLeft: "10px",
+                                        marginTop: "-5px",
+                                        color: "gray",
+                                    }}>{post.date}</p>
+                                </div>
+                            );
+                        })}
+                    </div>
+                );
+            case 1:
+                return <Calendar/>
+            case 2:
+                return <div>활동내용 컴포넌트</div>;
+            default:
+                return null;
+        }
+    };
 
     return (
         <div>
@@ -39,59 +111,7 @@ function CommunityMain() {
                     ))}
                 </div>
             </div>
-            <div className="posts-container">
-                {posts.map((post) => {
-                    const isLongContent = post.content.length > maxContentLength;
-                    // eslint-disable-next-line react-hooks/rules-of-hooks
-                    const [showFullContent, setShowFullContent] = useState(false);
-
-                    return (
-                        <div key={post.id} className="post-item" onClick={() => navigate(`/post/${post.id}`)}>
-                            <h3 style={{
-                                textAlign: "left",
-                                marginLeft: "10px",
-                                marginBottom: "-5px",
-                                fontWeight: "bold",
-                                fontSize: "20px"
-                            }}>{post.title}</h3>
-                            <div style={{ display: "flex", alignItems: "center", marginLeft: "10px" }}>
-                                <p style={{
-                                    overflow: "hidden",
-                                    textOverflow: "ellipsis",
-                                    whiteSpace: showFullContent ? "normal" : "nowrap",
-                                    maxWidth: showFullContent ? "none" : "450px"
-                                }}>
-                                    {post.content}
-                                </p>
-                                {isLongContent && (
-                                    <button
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            setShowFullContent(!showFullContent);
-                                        }}
-                                        style={{
-                                            color: "gray",
-                                            cursor: "pointer",
-                                            border: "none",
-                                            background: "none",
-                                            marginLeft: "-20px",
-                                            padding: "0",
-                                        }}
-                                    >
-                                        {showFullContent ? "간략히" : "더 보기"}
-                                    </button>
-                                )}
-                            </div>
-                            <p style={{
-                                textAlign: "left",
-                                marginLeft: "10px",
-                                marginTop: "-5px",
-                                color: "gray",
-                            }}>{post.date}</p>
-                        </div>
-                    );
-                })}
-            </div>
+            {renderContent()}
             <Footer />
         </div>
     );
