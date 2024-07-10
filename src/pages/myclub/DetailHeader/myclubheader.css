@@ -64,7 +64,7 @@
     justify-content: space-between;
     align-items: center;
     font-size: 18px;
-    border-bottom: 1px solid ghostwhite;
+    border-bottom: 1px solid #f7f7f7;
     color: #474747;
     cursor: pointer;
 }
@@ -85,10 +85,6 @@
     font-size: 16px;
 }
 
-/*
-아래부터 회원리스트 출력
- */
-
 .leave-club {
     width: 100%;
     margin-top: auto;
@@ -108,8 +104,12 @@
     cursor: pointer;
 }
 
+/*
+아래부터 회원리스트 출력
+ */
+
 .member-list {
-    background-color: #f5f5f5;
+    background-color: #f9f9f9;
     overflow-y: auto;
     max-height: 400px;
     scrollbar-width: thin;
@@ -123,5 +123,25 @@
 }
 
 .member-item:last-child {
+    border-bottom: none;
+}
+
+/* 회원관리, 동아리관리 */
+.member-manage-list, .club-manage-list {
+    background-color: #f9f9f9;
+    overflow-y: auto;
+    max-height: 400px;
+    scrollbar-width: thin;
+    scrollbar-color: darkgray #f1f1f1;
+}
+
+.manage-item {
+    padding: 10px 30px;
+    border-bottom: 1px solid #e0e0e0;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.manage-item:last-child {
     border-bottom: none;
 }

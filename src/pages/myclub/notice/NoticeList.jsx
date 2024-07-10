@@ -21,7 +21,7 @@ function isClubPresident(memberId, clubId) {
     return club && club.memberId === memberId;
 }
 
-function NoticeList({ clubs }){
+function NoticeList(){
     let { id } = useParams();
     const navigate = useNavigate();
     const [list, setList] = useState([]);
