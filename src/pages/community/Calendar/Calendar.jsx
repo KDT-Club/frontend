@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './community_styles/calendar.css'; // 이 파일에 스타일을 정의해야 합니다
+import './calendar.css'; // 이 파일에 스타일을 정의해야 합니다
 
 const Calendar = () => {
     const [currentMonth, setCurrentMonth] = useState(5); // 6월부터 시작 (0-indexed)
