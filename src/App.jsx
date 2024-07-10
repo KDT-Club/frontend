@@ -1,22 +1,14 @@
 import React, {useEffect} from 'react';
 import './styles/App.css';
 import {Route, BrowserRouter as Router, Routes} from 'react-router-dom';
-import Logo from './pages/login/start_logo.jsx'
-import Login from './pages/login/login.jsx'
-import { GoogleOAuthProvider } from '@react-oauth/google';
-import SignUp from './pages/login/signup.jsx'
+// import Logo from './pages/login/start_logo.jsx'
+// import Login from './pages/login/login.jsx'
+// import { GoogleOAuthProvider } from '@react-oauth/google';
+// import SignUp from './pages/login/signup.jsx'
+import "./styles/App.css";
+import MyclubMain from "./pages/myclub/MyclubMain.jsx";
 
 function App() {
-    const [showLogo, setShowLogo] = React.useState(true);
-
-    useEffect(() => {
-        const timer = setTimeout(() =>{
-            setShowLogo(false);
-        }, 3000);
-
-        return () => clearTimeout(timer);
-    }, []);
-
     function setScreenSize() {
         let vh = window.innerHeight * 0.01;
         let vw = window.innerWidth * 0.01;
@@ -34,15 +26,11 @@ function App() {
 
     return (
         <Router>
-            <GoogleOAuthProvider clientId="YOUR_CLIENT_ID">
-                <div className="App">
-                    <Routes>
-                        <Route path="/" element={showLogo ? <Logo /> : <Login/>} />
-                        <Route path="/login" element={<Login />} />
-                        <Route path="/signup" element={<SignUp />} />
-                    </Routes>
-                </div>
-            </GoogleOAuthProvider>
+            <div className="App">
+                <Routes>
+                    <Route path="/*" element={<MyclubMain />} />
+                </Routes>
+            </div>
         </Router>
     );
 }
