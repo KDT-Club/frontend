@@ -12,7 +12,7 @@ function Written_post() {
         <div className="Written_post">
             <div className="header">
                 <FaArrowLeft
-                    style={{ fontSize: '25px', strokeWidth: '0.1', cursor: 'pointer', marginLeft: '15px' }}
+                    style={{ fontSize: '25px', strokeWidth: '0.1', cursor: 'pointer' }}
                     onClick={() => navigate(-1)}
                 />
                 <p>작성한 글 보기</p>
