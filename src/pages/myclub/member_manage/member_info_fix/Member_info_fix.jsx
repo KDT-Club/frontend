@@ -1,11 +1,12 @@
 import React, {useState} from "react";
 import "./member_info_fix.css";
-import {Link, useParams} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import {FaArrowLeft} from "react-icons/fa6";
 import member_info_data from "../../../../data/member_info_data.jsx";
 import Modal_confirm from "../../../../components/modal/Modal_confirm.jsx";
 
 function Member_info_fix() {
+    const navigate = useNavigate();
     const { memberId } = useParams();
     const member = member_info_data.find(m => m.memberId === parseInt(memberId));
 
@@ -26,9 +27,10 @@ function Member_info_fix() {
     return (
         <div className="Member_info_fix">
             <div className="header">
-                <Link to="/memberInfoFixList">
-                    <FaArrowLeft style={{fontSize: '20px', strokeWidth: '0.1', cursor: 'pointer'}}/>
-                </Link>
+                <FaArrowLeft
+                    style={{ fontSize: '25px', strokeWidth: '0.1', cursor: 'pointer', marginLeft: '15px' }}
+                    onClick={() => navigate(-1)}
+                />
                 <p>회원 정보 수정</p>
             </div>
             {member && (
