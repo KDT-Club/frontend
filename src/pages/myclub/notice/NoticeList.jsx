@@ -26,7 +26,7 @@ function NoticeList(){
     const navigate = useNavigate();
     const [list, setList] = useState([]);
 
-    useEffect(() => {
+    useEffect(() => { //UI전용, API 구현 시 지워도 됨
         const clubId = parseInt(id);
         const club = clubData.find(c => c.clubId === clubId);
         if(club) {
@@ -37,7 +37,25 @@ function NoticeList(){
         }
     }, [id]);
 
-    //공지사항 글쓰기 회장 권한 받는 건 추후에 수정!!! 라우팅도 수정해야됨.
+    //공지사항 리스트 API 조회
+    useEffect(() => {
+        const fetchNotices = async () => {
+            try {
+                const response = await fetch(`/clubs/${id}/board/2/posts`);
+                if (response.ok) {
+                    const data = await response.json();
+                    setList(data);
+                } else {
+                    console.error("Failed to fetch notices:", response.status);
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        fetchNotices();
+    }, [id]);
+
+    //공지사항 글쓰기 회장 권한 받는 건 추후에 수정!!!
     const handleWriteClick = () => {
         const club = clubData.find(c => c.clubId === parseInt(id));
         if (club && isClubPresident(club.memberId, id)) {
@@ -67,11 +85,17 @@ function NoticeList(){
             <div className="scroll-container">
                 <div className="notice_list">
                     {list.length > 0 ? (
-                        list.map((a,i) => (
-                            <List key={i} title={a.title} content={a.content} createdAt={a.createdAt} link={`/clubs/${id}/board/2/posts/${a.postId}`} />
+                        list.map((notice, index) => (
+                            <div key={index} className="post">
+                                <Link to={`/clubs/${id}/board/2/posts/${notice.postId}`}>
+                                    <p className="title">{notice.title}</p>
+                                    <p className="content">{notice.content}</p>
+                                    <p className="createdAt">{formatDate(notice.createdAt)}</p>
+                                </Link>
+                            </div>
                         ))
                     ) : (
-                        <p>공지사항이 없습니다.</p>
+                        <p>작성된 공지사항이 없습니다.</p>
                     )}
                 </div>
             </div>
@@ -79,17 +103,17 @@ function NoticeList(){
     )
 }
 
-function List({title, content, createdAt, link}) {
-    const formattedDate = formatDate(createdAt);
-    return (
-        <div className="post">
-            <Link to={link}>
-                <p className="title">{title}</p>
-                <p className="content">{content}</p>
-                <p className="createdAt">{formattedDate}</p>
-            </Link>
-        </div>
-    )
-}
+// function List({title, content, createdAt, link}) {
+//     const formattedDate = formatDate(createdAt);
+//     return (
+//         <div className="post">
+//             <Link to={link}>
+//                 <p className="title">{title}</p>
+//                 <p className="content">{content}</p>
+//                 <p className="createdAt">{formattedDate}</p>
+//             </Link>
+//         </div>
+//     )
+// }
 
 export default NoticeList;

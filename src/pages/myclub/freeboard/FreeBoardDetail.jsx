@@ -1,5 +1,5 @@
 //내 동아리 자유게시판 - 글 상세
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {useParams, useNavigate} from 'react-router-dom';
 import postData from "../data/postData.jsx";
 import memberInfo from "../data/memberInfo.jsx";
@@ -14,7 +14,7 @@ function formatDate(dateString) {
     return `${month}/${day}`;
 }
 
-function getMemberName(memberId) {
+function getMemberName(memberId) { //로컬 멤버ID 조회 -> 나중에 지움!
     const member = memberInfo.find(member => member.memberId === memberId);
     return member ? member.name : 'Unknown';
 }
@@ -22,11 +22,48 @@ function getMemberName(memberId) {
 function FreeBoardDetail() {
     let {clubId, postId} = useParams();
     const navigate = useNavigate();
-    const post = postData.find(post => post.postId === parseInt(postId) && post.boardId === 4);
-    const comments = commentData.filter(comment => comment.postId === parseInt(postId));
+
+    const post = postData.find(post => post.postId === parseInt(postId) && post.boardId === 4); //로컬 게시글 조회
+    const comments = commentData.filter(comment => comment.postId === parseInt(postId));//로컬 댓글 조회
+
+    //API 게시글, 댓글 조회
+    // const [post, setPost] = useState(null);
+    // const [comments, setComments] = useState([]);
+    useEffect(() => {
+        const fetchPost = async () => {
+            try {
+                const response = await fetch(`/clubs/${clubId}/board/4/posts/${postId}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    //setPost(data);
+                } else {
+                    console.error("Failed to fetch post:", response.status);
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        const fetchComments = async () => {
+            try {
+                const response = await fetch(`/clubs/${clubId}/board/4/posts/${postId}/comments`);//댓글조회 수정 필요
+                if (response.ok) {
+                    const data = await response.json();
+                    //setComments(data);
+                } else {
+                    console.error("Failed to fetch comments:", response.status);
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        if (clubId && postId) {
+            fetchPost();
+            fetchComments();
+        }
+    }, [clubId, postId]);
 
     const handleBackClick = () => {
-        navigate(`/clubs/${clubId}/board/4`);
+        navigate(`/clubs/${clubId}/freeboardlist`);
     };
 
     const handleDotClick = () => {
@@ -34,7 +71,7 @@ function FreeBoardDetail() {
     }
 
     return (
-        <div className="whole">
+        <div>
             <div className="header_container">
                 <FaArrowLeft
                     style={{fontSize: '26px', cursor: 'pointer'}}

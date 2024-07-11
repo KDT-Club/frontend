@@ -26,6 +26,8 @@ import Etc2 from "./pages/myclub/etc/Etc2.jsx";
 import Etc3 from "./pages/myclub/etc/Etc3.jsx";
 import NoticeList from "./pages/myclub/notice/NoticeList.jsx";
 import FreeBoardList from "./pages/myclub/freeboard/FreeBoardList.jsx";
+import NoticeDetail from "./pages/myclub/notice/NoticeDetail.jsx";
+import FreeBoardDetail from "./pages/myclub/freeboard/FreeBoardDetail.jsx";
 
 function App() {
     const [showLogo, setShowLogo] = React.useState(true);
@@ -78,9 +80,10 @@ function App() {
                         //내동아리 라우팅
                         <Route path="/clubs" element={<MyclubMain />} />
                         <Route path="/clubs/:id" element={<MyclubDetail />} />
-                        {/*<Route path="/clubs/:id/board/:boardId/posts" element={< />} />*/}
                         <Route path="/clubs/:id/noticelist" element={<NoticeList />} />
                         <Route path="/clubs/:id/freeboardlist" element={<FreeBoardList />} />
+                        <Route path="/clubs/:clubId/board/2/posts/:postId" element={<NoticeDetail />} />
+                        <Route path="/clubs/:clubId/board/4/posts/:postId" element={<FreeBoardDetail />} />
 
                         <Route path="/clubs/etc1" element={<Etc1 />} />
                         <Route path="/clubs/etc1/atd" element={<Atd />} />

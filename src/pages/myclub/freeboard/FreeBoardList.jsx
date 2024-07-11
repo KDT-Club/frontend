@@ -15,12 +15,12 @@ function formatDate(dateString) {
     return `${month}/${day}`;
 }
 
-function FreeBoardList({ clubs }){
+function FreeBoardList(){
     let { id } = useParams();
     const navigate = useNavigate();
     const [list, setList] = useState([]);
 
-    useEffect(() => {
+    useEffect(() => { //UI전용, API 구현 시 지워도 됨
         const clubId = parseInt(id);
         const club = clubData.find(c => c.clubId === clubId);
         if(club) {
@@ -29,6 +29,24 @@ function FreeBoardList({ clubs }){
             );
             setList(filteredPosts);
         }
+    }, [id]);
+
+    //자유게시판 리스트 API 조회
+    useEffect(() => {
+        const fetchPosts = async () => {
+            try {
+                const response = await fetch(`/clubs/${id}/board/4/posts`);
+                if (response.ok) {
+                    const data = await response.json();
+                    setList(data);
+                } else {
+                    console.error("Failed to fetch posts:", response.status);
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        fetchPosts();
     }, [id]);
 
     const handleWriteClick = () => {
@@ -55,8 +73,14 @@ function FreeBoardList({ clubs }){
             <div className="scroll-container">
                 <div className="notice_list">
                     {list.length > 0 ? (
-                        list.map((a,i) => (
-                            <List key={i} title={a.title} content={a.content} createdAt={a.createdAt} link={`/clubs/${id}/board/4/posts/${a.postId}`} />
+                        list.map((post, index) => (
+                            <div key={index} className="post">
+                                <Link to={`/clubs/${id}/board/4/posts/${post.postId}`}>
+                                    <p className="title">{post.title}</p>
+                                    <p className="content">{post.content}</p>
+                                    <p className="createdAt">{post.createdAt}</p>
+                                </Link>
+                            </div>
                         ))
                     ) : (
                         <p>작성된 글이 없습니다.</p>
@@ -67,18 +91,18 @@ function FreeBoardList({ clubs }){
     )
 }
 
-function List({title, content, createdAt, link}) {
-    const formattedDate = formatDate(createdAt);
-    return (
-        <div className="post">
-            <Link to={link}>
-                <p className="title">{title}</p>
-                <p className="content">{content}</p>
-                <p className="createdAt">{formattedDate}</p>
-            </Link>
-        </div>
-    )
-}
+// function List({title, content, createdAt, link}) {
+//     const formattedDate = formatDate(createdAt);
+//     return (
+//         <div className="post">
+//             <Link to={link}>
+//                 <p className="title">{title}</p>
+//                 <p className="content">{content}</p>
+//                 <p className="createdAt">{formattedDate}</p>
+//             </Link>
+//         </div>
+//     )
+// }
 
 
 export default FreeBoardList;

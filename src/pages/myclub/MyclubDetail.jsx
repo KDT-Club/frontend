@@ -13,16 +13,26 @@ function MyclubDetail({clubs}) {
     //공지사항,자유게시판 글 API 조회
     // const [noticePosts, setNoticePosts] = useState([]);
     // const [freeboardPosts, setFreeboardPosts] = useState([]);
-    //
+
+    const boardType = {
+        "notice": 2,
+        "internal": 4
+    } //boardId 타입 지정 -> 하드코딩해놓음
+
+    // 이후 boardType 구현용 예제
+    // const boardType = useEffect(
+    //   -> 백엔드에서 게시판 종류와 번호를 반환해주는 API 호출
+    // )
+
     // useEffect(() => {
     //     // 공지사항 게시글 가져오기
-    //     fetch(`/clubs/${id}/board/2/posts`)
+    //     fetch(`/clubs/${id}/board/${boardType['notice']}/posts`)
     //         .then(response => response.json())
     //         .then(data => setNoticePosts(data))
     //         .catch(error => console.error(error));
     //
     //     // 자유게시판 게시글 가져오기
-    //     fetch(`/clubs/${id}/board/4/posts`)
+    //     fetch(`/clubs/${id}/board/${boardType['internal']}/posts`)
     //         .then(response => response.json())
     //         .then(data => setFreeboardPosts(data))
     //         .catch(error => console.error(error));
@@ -30,7 +40,6 @@ function MyclubDetail({clubs}) {
 
     const handleNoticeClick = () => {
         navigate(`/clubs/${id}/noticelist`);
-
     };
 
     const handleFreeboardClick = () => {
@@ -39,11 +48,11 @@ function MyclubDetail({clubs}) {
 
     const currentClub = clubData.find(club => club.clubId === parseInt(id));
     const currentClubName = currentClub? currentClub.name : ""; //현재 동아리의 이름 get
-
+    
+    //UI보기용 post 불러오기 -> 나중에 삭제
     const noticePosts = postData.filter(post =>
         post.boardId === 2 && post.clubName === currentClubName
     );
-
     const freeboardPosts = postData.filter(post =>
         post.boardId === 4 && post.clubName === currentClubName
     );
