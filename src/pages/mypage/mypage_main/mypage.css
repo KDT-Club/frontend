@@ -18,7 +18,7 @@
     justify-content: space-between;
     align-items: center;
     margin-top: 3px;
-    margin-bottom: 18px;
+    margin-bottom: 21px;
 }
 
 .title p {
@@ -56,13 +56,13 @@
     height: 60px;
     border-radius: 50%;
     float: left;
-    margin-left: 25px;
+    margin-left: 35px;
     position: relative;
 }
 
 .info {
     float: left;
-    margin-left: 19px;
+    margin-left: 25px;
     height: 70px;
     text-align: left;
 }
