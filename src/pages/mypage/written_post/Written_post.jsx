@@ -12,7 +12,7 @@ function Written_post() {
         <div className="Written_post">
             <div className="header">
                 <FaArrowLeft
-                    style={{ fontSize: '25px', strokeWidth: '0.1', cursor: 'pointer' }}
+                    style={{ fontSize: '25px', strokeWidth: '0.1', cursor: 'pointer', marginLeft: '15px' }}
                     onClick={() => navigate(-1)}
                 />
                 <p>작성한 글 보기</p>
@@ -32,7 +32,7 @@ function Written_post() {
 
 function List({title, content, date, link}) {
     return (
-        <div className="post">
+        <div className="post_list">
             <Link to={link}>
                 <p className="title">{title}</p>
                 <p className="content">{content}</p>

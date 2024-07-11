@@ -19,11 +19,11 @@
     margin-top: 10px;
 }
 
-.post {
+.post_list {
     border-bottom: 1px solid #ddd;
 }
 
-.post .title {
+.post_list .title {
     font-weight: bold;
     font-size: 16px;
     margin-left: 25px;
@@ -31,7 +31,7 @@
     margin-bottom: 0px;
 }
 
-.post .content {
+.post_list .content {
     margin-top: 3px;
     margin-left: 25px;
     font-size: 13px;
@@ -39,7 +39,7 @@
     text-align: left;
 }
 
-.post .date {
+.post_list .date {
     margin-top: 0px;
     margin-left: 26px;
     margin-bottom: 13px;

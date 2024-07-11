@@ -34,7 +34,7 @@ function Edit_info() {
         <div className="Edit_info">
             <div className="header">
                 <FaArrowLeft
-                    style={{ fontSize: '25px', strokeWidth: '0.1', cursor: 'pointer' }}
+                    style={{ fontSize: '25px', strokeWidth: '0.1', cursor: 'pointer', marginLeft: '15px' }}
                     onClick={() => navigate(-1)}
                 />
                 <p>정보 수정</p>

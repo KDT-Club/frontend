@@ -18,7 +18,7 @@ function Create_club() {
         <div className="Create_club">
             <div className="header">
                 <FaArrowLeft
-                    style={{ fontSize: '20px', strokeWidth: '0.1', cursor: 'pointer' }}
+                    style={{ fontSize: '25px', strokeWidth: '0.1', cursor: 'pointer', marginLeft: '15px' }}
                     onClick={() => navigate(-1)}
                 />
                 <p>동아리 만들기</p>
