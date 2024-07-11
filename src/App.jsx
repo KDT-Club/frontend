@@ -17,6 +17,7 @@ import Community_Main from "./pages/community/Community_Main.jsx";
 import PostDetail from "./pages/community/PostDetail.jsx";
 import ActivityPage from "./pages/community/activity/ActivityPage.jsx";
 import ActivityDetailPage from "./pages/community/activity/ActivityDetailPage.jsx";
+import Member_request from "./pages/myclub/member_manage/member_request/Member_request.jsx";
 
 function App() {
     const [showLogo, setShowLogo] = React.useState(true);
@@ -63,7 +64,8 @@ function App() {
                         <Route path="/community" element={<Community_Main/>} />
                         <Route path="/post/:postId" element={<PostDetail/>}/>
                         <Route path="/activity" element={<ActivityPage />} />
-                        <Route path="/activity_detail" element={<ActivityDetailPage />}/>
+                        <Route path="/activity_detail" element={<ActivityDetailPage />} />
+                        <Route path="/member_request" element={<Member_request />} />
                     </Routes>
                 </div>
             </GoogleOAuthProvider>
