@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import {useNavigate} from 'react-router-dom'
 import './login_styles/login.css';
 import '../../styles/App.css';
-import Header_center from '../../components/header/Header_center.jsx'
-import kakao from '../../images/kakao_login.png'
-import {GoogleLogin} from '@react-oauth/google'
+import Header_center from '../../components/header/Header_center.jsx';
+import kakao from '../../images/kakao_login.png';
+import {GoogleLogin} from '@react-oauth/google';
 
 function Login() {
     const [username, setUserName] = useState('');

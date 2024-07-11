@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import './written_post.css'
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa6";
 import written_post_data from "./written_post_data.jsx";
 
@@ -12,7 +12,7 @@ function Written_post() {
         <div className="Written_post">
             <div className="header">
                 <FaArrowLeft
-                    style={{ fontSize: '25px', strokeWidth: '0.1', cursor: 'pointer' }}
+                    style={{ fontSize: '25px', strokeWidth: '0.1', cursor: 'pointer', marginLeft: '15px' }}
                     onClick={() => navigate(-1)}
                 />
                 <p>작성한 글 보기</p>
@@ -31,12 +31,13 @@ function Written_post() {
 }
 
 function List({title, content, date, link}) {
-    const navigate = useNavigate();
     return (
-        <div className="post_list" onClick={() => navigate(link)}>
-            <p className="title">{title}</p>
-            <p className="content">{content}</p>
-            <p className="date">{date}</p>
+        <div className="post_list">
+            <Link to={link}>
+                <p className="title">{title}</p>
+                <p className="content">{content}</p>
+                <p className="date">{date}</p>
+            </Link>
         </div>
     )
 }

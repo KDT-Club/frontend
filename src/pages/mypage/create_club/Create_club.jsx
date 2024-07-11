@@ -1,6 +1,6 @@
 import React from "react";
 import './create_club.css';
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa6";
 import { CiCirclePlus } from "react-icons/ci";
 
@@ -18,7 +18,7 @@ function Create_club() {
         <div className="Create_club">
             <div className="header">
                 <FaArrowLeft
-                    style={{ fontSize: '25px', strokeWidth: '0.1', cursor: 'pointer' }}
+                    style={{ fontSize: '25px', strokeWidth: '0.1', cursor: 'pointer', marginLeft: '15px' }}
                     onClick={() => navigate(-1)}
                 />
                 <p>동아리 만들기</p>

@@ -11,12 +11,12 @@ let list_data = [
     {
         name: "정보 수정",
         icon: <TbUserEdit />,
-        link: "/edit_info"
+        link: "/edit_info/:memberId"
     },
     {
         name: "동아리 만들기",
         icon: <FiUserPlus />,
-        link: "/create_club"
+        link: "/clubs/:memberId"
     },
     {
         name: "회원 탈퇴",

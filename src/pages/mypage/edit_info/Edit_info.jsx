@@ -1,9 +1,10 @@
 import React, {useState} from "react";
 import './edit_info.css';
-import {useNavigate, useParams} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import { FaArrowLeft, FaCheck } from "react-icons/fa6";
 import { MdOutlineCameraAlt } from "react-icons/md";
 import member_info_data from "../../../data/member_info_data.jsx";
+import propyl from "../../../images/propyl.png";
 
 function Edit_info() {
     const navigate = useNavigate();
@@ -33,7 +34,7 @@ function Edit_info() {
         <div className="Edit_info">
             <div className="header">
                 <FaArrowLeft
-                    style={{ fontSize: '25px', strokeWidth: '0.1', cursor: 'pointer' }}
+                    style={{ fontSize: '25px', strokeWidth: '0.1', cursor: 'pointer', marginLeft: '15px' }}
                     onClick={() => navigate(-1)}
                 />
                 <p>정보 수정</p>
