@@ -1,6 +1,6 @@
 import React from 'react';
 import "./myclubdetail.css";
-import Footer from '../../components/Footer.jsx';
+import Footer from '../../components/footer/Footer.jsx';
 import { useParams, useNavigate } from "react-router-dom";
 import MyclubHeader from "./DetailHeader/MyclubHeader.jsx";
 import postData from "./data/postData.jsx";

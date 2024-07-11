@@ -2,7 +2,7 @@ const images = require.context("../images", false, /\.(png|jpe?g|svg)$/);
 
 let member_info_data = [
     {
-        memberId: 1,
+        memberId: 101,
         img: images("./member1.png"),
         name: "도라에몽",
         studentNum: 2021000001,
@@ -12,7 +12,7 @@ let member_info_data = [
         password: 1234
     },
     {
-        memberId: 2,
+        memberId: 102,
         img: images("./member2.png"),
         name: "진구",
         studentNum: 2021000002,
@@ -22,7 +22,7 @@ let member_info_data = [
         password: 1234
     },
     {
-        memberId: 3,
+        memberId: 103,
         img: images("./member3.png"),
         name: "퉁퉁이",
         studentNum: 2021100003,
@@ -32,7 +32,7 @@ let member_info_data = [
         password: 1234
     },
     {
-        memberId: 4,
+        memberId: 104,
         img: images("./member4.png"),
         name: "비실이",
         studentNum: 2021100004,

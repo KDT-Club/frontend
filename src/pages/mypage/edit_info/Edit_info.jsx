@@ -1,15 +1,21 @@
 import React, {useState} from "react";
 import './edit_info.css';
-import {Link} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import { FaArrowLeft, FaCheck } from "react-icons/fa6";
 import { MdOutlineCameraAlt } from "react-icons/md";
+import member_info_data from "../../../data/member_info_data.jsx";
 import propyl from "../../../images/propyl.png";
 
 function Edit_info() {
+    const navigate = useNavigate();
+    const { memberId } = useParams();
+    const member = member_info_data.find(m => m.memberId === parseInt(memberId, 10));
     const [data, setData] = useState({
-        name: "도라에몽",
-        major: "컴퓨터공학부",
-        password: "1234"
+        img: member.img,
+        name: member.name,
+        memberId: member.memberId,
+        major: member.major,
+        password: member.password
     });
 
     const Change = (e) => {
@@ -20,19 +26,22 @@ function Edit_info() {
         }));
     };
 
+    const handleSave = () => {
+        navigate(`/members/${data.memberId}`);
+    };
+
     return (
         <div className="Edit_info">
             <div className="header">
-                <Link to="/members">
-                    <FaArrowLeft style={{ fontSize: '25px', strokeWidth: '0.1', cursor: 'pointer' }} />
-                </Link>
+                <FaArrowLeft
+                    style={{ fontSize: '25px', strokeWidth: '0.1', cursor: 'pointer', marginLeft: '15px' }}
+                    onClick={() => navigate(-1)}
+                />
                 <p>정보 수정</p>
             </div>
             <div className="edit">
-                <Link to="#">
-                    <img src={propyl} />
-                    <MdOutlineCameraAlt className="camera_icon" />
-                </Link>
+                <img src={data.img} />
+                <MdOutlineCameraAlt className="camera_icon" />
                 <div className="information">
                     <div className="name">
                         <p>이름</p>
@@ -51,9 +60,7 @@ function Edit_info() {
                     </div>
                 </div>
             </div>
-            <Link to="/members">
-                <button>수정하기</button>
-            </Link>
+            <button onClick={handleSave}>수정하기</button>
         </div>
     )
 }

@@ -47,7 +47,7 @@
     padding-right: 1px;
     font-size: 13px;
     width: 400px;
-    min-height: 129px;
+    min-height: 128px;
     overflow: auto;
     border: 1px solid #ddd;
     border-radius: 5px;
@@ -84,7 +84,7 @@ textarea::-webkit-scrollbar-thumb {
 .content_picture {
     background-color: rgba(211, 211, 211, 0.5);
     height: 100px;
-    margin-bottom: 15px;
+    margin-bottom: 70px;
     border-radius: 5px;
     display: flex;
     align-items: center;

@@ -2,11 +2,11 @@ import React from "react";
 import './modal_confirm.css';
 import { useNavigate } from "react-router-dom";
 
-const Modal_confirm = ({onClose, message}) => {
+const Modal_confirm = ({onClose, message, link}) => {
     const navigate = useNavigate();
 
     const handleConfirm = () => {
-        navigate("/");
+        navigate(link);
     };
 
     return (
