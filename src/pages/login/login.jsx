@@ -72,7 +72,7 @@ function Login() {
                         id="student-id"
                         type="text"
                         placeholder="Your ID"
-                        value={name}
+                        //value={name}
                         onChange={(e) => setUserName(e.target.value)}
                     />
                 </div>

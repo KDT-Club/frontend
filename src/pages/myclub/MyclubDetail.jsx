@@ -1,6 +1,6 @@
 import React from 'react';
 import "./myclubdetail.css";
-import Footer from '../../components/Footer.jsx';
+import Footer from '../../components/footer/Footer.jsx';
 import { useParams, useNavigate } from "react-router-dom";
 import MyclubHeader from "./DetailHeader/MyclubHeader.jsx";
 import postData from "./data/postData.jsx";
@@ -42,7 +42,7 @@ function MyclubDetail({clubs}) {
             <MyclubHeader clubs={clubs}/>
             <div className="scroll-container">
                 <div className="item-container">
-                    <div className="header-container">
+                    <div className="headerrcontainer">
                         <h2>공지사항</h2>
                         <p onClick={() => handleMoreClick(2)}>더보기</p>
                     </div>
@@ -56,7 +56,7 @@ function MyclubDetail({clubs}) {
                     </section>
                 </div>
                 <div className="item-container">
-                    <div className="header-container">
+                    <div className="headerrcontainer">
                         <h2>자유게시판</h2>
                         <p onClick={() => handleMoreClick(4)}>더보기</p>
                     </div>
@@ -70,7 +70,7 @@ function MyclubDetail({clubs}) {
                     </section>
                 </div>
                 <div className="item-container">
-                    <div className="header-container">
+                    <div className="headerrcontainer">
                         <h2>출석</h2>
                         <p onClick={etc1handleMoreClick}>더보기</p>
                     </div>
@@ -113,7 +113,7 @@ function MyclubDetail({clubs}) {
                     </section>
                 </div>
                 <div className="item-container">
-                    <div className="header-container">
+                    <div className="headerrcontainer">
                         <h2>정산</h2>
                         <p onClick={etc2handleMoreClick}>더보기</p>
                     </div>
@@ -142,7 +142,7 @@ function MyclubDetail({clubs}) {
                     </section>
                 </div>
                 <div className="item-container">
-                    <div className="header-container">
+                    <div className="headerrcontainer">
                         <h2>투표</h2>
                         <p onClick={etc3handleMoreClick}>더보기</p>
                     </div>
@@ -164,7 +164,7 @@ function MyclubDetail({clubs}) {
                     </section>
                 </div>
             </div>
-            <Footer/>
+            <Footer />
         </div>
     );
 }

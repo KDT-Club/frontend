@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa6";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { FaRegCalendarPlus } from "react-icons/fa";
-//import { RiCheckboxBlankCircleLine, RiCheckboxCircleLine } from "react-icons/ri";
 import './etc.css';
 
 function Etc1() {
@@ -15,7 +14,7 @@ function Etc1() {
     };
 
     const handleDateClick = (date) => {
-        navigate('/atd', { state: { date } });
+        navigate('/clubs/etc1/atd', { state: { date } });
     };
 
     const dates = [
@@ -27,7 +26,7 @@ function Etc1() {
     ];
 
     return (
-        <div className="whole">
+        <div>
             <div className="header_container">
                 <FaArrowLeft
                     style={{ fontSize: '26px', cursor: 'pointer' }}

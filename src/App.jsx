@@ -18,6 +18,12 @@ import Community_Main from "./pages/community/Community_Main.jsx";
 import PostDetail from "./pages/community/PostDetail.jsx";
 import ActivityPage from "./pages/community/activity/ActivityPage.jsx";
 import ActivityDetailPage from "./pages/community/activity/ActivityDetailPage.jsx";
+import MyclubMain from "./pages/myclub/MyclubMain.jsx";
+import MyclubDetail from "./pages/myclub/MyclubDetail.jsx";
+import Etc1 from "./pages/myclub/etc/Etc1.jsx";
+import Atd from "./pages/myclub/etc/Atd.jsx";
+import Etc2 from "./pages/myclub/etc/Etc2.jsx";
+import Etc3 from "./pages/myclub/etc/Etc3.jsx";
 
 function App() {
     const [showLogo, setShowLogo] = React.useState(true);
@@ -67,6 +73,14 @@ function App() {
                         <Route path="/post/:postId" element={<PostDetail/>}/>
                         <Route path="/activity" element={<ActivityPage />} />
                         <Route path="/activity_detail" element={<ActivityDetailPage />}/>
+                        
+                        //내동아리 라우팅
+                        <Route path="/clubs" element={<MyclubMain />} />
+                        <Route path="/clubs/:id" element={<MyclubDetail />} />
+                        <Route path="/clubs/etc1" element={<Etc1 />} />
+                        <Route path="/clubs/etc1/atd" element={<Atd />} />
+                        <Route path="/clubs/etc2" element={<Etc2 />} />
+                        <Route path="/clubs/etc3" element={<Etc3 />} />
                     </Routes>
                 </div>
             </GoogleOAuthProvider>
