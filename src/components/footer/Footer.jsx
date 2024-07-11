@@ -38,7 +38,7 @@ function Footer() {
                 title="내 동아리"
                 iconStyle={{fontSize:"27px", marginTop:"1px", marginLeft:"12px"}}
                 textStyle={{marginTop:"6px"}}
-                isActive={activeMenu === "/myclub"}
+                isActive={activeMenu === "/clubs"}
                 onClick={() => setActiveMenu("/clubs")}
             />
             {memberId && (
