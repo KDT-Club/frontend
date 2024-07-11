@@ -1,16 +1,18 @@
 .myclub-detail-container {
     position: fixed;
     width: calc(var(--vw, 1vw) * 100);
-    height: calc(var(--vh,1vh)* 100);
+    /*height: calc(var(--vh,1vh)* 100);*/
     display: flex;
     flex-direction: column;
+    flex: 1;
     height: 100vh;
+    padding-bottom: 70px;
 }
 
 .scroll-container {
     flex: 1;
     overflow-y: auto;
-    margin-top: 25px;
+    /*margin-top: 0px;*/
     margin-left: 10px;
     scrollbar-width: thin;
     scrollbar-color: darkgray white;
@@ -21,20 +23,20 @@
     margin-bottom: 50px;
 }
 
-.header-container {
+.headerrcontainer {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     margin: 25px 20px 0 10px;
 }
 
-.header-container h2 {
+.headerrcontainer h2 {
     font-size: 23px;
     font-weight: bold;
     margin-left: 3px;
 }
 
-.header-container p {
+.headerrcontainer p {
     font-size: 17px;
     cursor: pointer;
     line-height: 35px;

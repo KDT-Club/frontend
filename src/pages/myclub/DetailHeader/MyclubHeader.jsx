@@ -3,24 +3,34 @@ import './myclubheader.css'
 import { FaArrowLeft } from "react-icons/fa6";
 import { RxHamburgerMenu } from "react-icons/rx";
 import {useNavigate, useParams, useLocation} from "react-router-dom";
-import { MdOutlineManageAccounts, MdOutlinePerson, MdOutlineSettings } from "react-icons/md";
+import { MdOutlineManageAccounts, MdOutlinePerson, MdOutlineSettings, MdKeyboardArrowRight, MdKeyboardArrowDown } from "react-icons/md";
 import { TbDoorExit } from "react-icons/tb";
-import { MdKeyboardArrowRight, MdKeyboardArrowDown } from "react-icons/md";
 import clubmemberData from '../data/clubmemberData.jsx';
 import memberInfo from "../data/memberInfo.jsx";
+import clubData from "../data/clubData.jsx";
 //햄버거탭을 여기에 설정해놔서 코드가 복잡해졌음....
 
-function MyclubHeader({clubs}) {
+function MyclubHeader() {
     let { id } = useParams();
     const navigate = useNavigate();
     const location = useLocation();
     const [clubMembers, setClubMembers] = useState([]);
-    const club = clubs.find(club => club.clubId === parseInt(id));
+
+    const [clubs, setClubs] = useState([]);
+    // const club = clubs.find(club => club.clubId === parseInt(id)) ?? {};
+
     const [isMenuOpen, setIsMenuOpen] = useState(location.state?.isMenuOpen || false); //햄버거탭 슬라이드
     const [isMemberListOpen, setIsMemberListOpen] = useState(false); //회원리스트
     const [isMemberManageOpen, setIsMemberManageOpen] = useState(false); //회원관리
     const [isClubManageOpen, setIsClubManageOpen] = useState(false); //동아리 관리
 
+    // club 데이터를 불러와서 상태 설정
+    useEffect(() => {
+        setClubs(clubData);
+    }, []);
+
+    // clubId로 해당 클럽 찾기
+    const club = clubs.find(club => club.clubId === parseInt(id)) ?? {};
 
     useEffect(() => {
         //clubmemberData.jsx에서 회원 memberId get

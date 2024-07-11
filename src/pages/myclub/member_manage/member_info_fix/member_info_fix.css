@@ -40,13 +40,6 @@
     background-color: rgba(0, 0, 0, 0.05);
     font-weight: normal;
     font-size: 15px;
-    border: none;
-    cursor: pointer;
-}
-
-.member_info_detail .role .role-president, .member_info_detail .role .role-vice-president, .member_info_detail .role .role-general {
-    background-color: #D4F2FF;
-    color: #000000;
 }
 
 .member_info_detail .phoneNum {
@@ -73,33 +66,4 @@
     padding-top: 4px;
     font-size: 16px;
     font-weight: normal;
-}
-
-.buttons {
-    display: flex;
-    justify-content: center;
-    gap: 30px;
-    margin-top: 90px;
-}
-
-.buttons .out {
-    width: 211px;
-    height: 40px;
-    background-color: lightgrey;
-    color: white;
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: bold;
-    padding-top: 8px;
-}
-
-.buttons .fix {
-    width: 211px;
-    height: 40px;
-    background-color: #597CA5;
-    color: white;
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: bold;
-    padding-top: 8px;
 }

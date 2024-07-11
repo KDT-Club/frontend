@@ -46,8 +46,8 @@ function Atd() {
     };
 
     return (
-        <div className="whole">
-            <div className="header_container">
+        <div>
+            <div className="header_container" style={{display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px"}}>
                 <FaArrowLeft
                     style={{fontSize: '26px', cursor: 'pointer'}}
                     onClick={handleBackClick}

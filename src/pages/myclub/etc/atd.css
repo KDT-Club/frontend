@@ -1,13 +1,6 @@
-cssCopy.whole {
+.whole {
     padding: 20px;
     font-family: Arial, sans-serif;
-}
-
-.header_container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
 }
 
 .date-display {

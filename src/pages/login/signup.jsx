@@ -10,8 +10,8 @@ function Modal({onClose}) {
         <div className="modal-overlay">
             <div className="modal-content">
                 <div className="modal-header">
-                    <p>가입이 완료되었습니다!</p>
-                    <p>로그인 화면으로 돌아갑니다.</p>
+                <p>가입이 완료되었습니다!</p>
+                <p>로그인 화면으로 돌아갑니다.</p>
                 </div>
                 <hr/>
                 <button onClick={onClose}>OK</button>
@@ -93,7 +93,7 @@ function signup () {
                     <img src={back} alt="back"/>
                 </button>
                 <div className="signup-header-center">
-                    <Header_center/>
+                <Header_center/>
                 </div>
             </div>
             <div className="signup-title">

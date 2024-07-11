@@ -33,7 +33,7 @@ function Etc3() {
     };
 
     return (
-        <div className="whole">
+        <div>
             <div className="header_container">
                 <FaArrowLeft
                     style={{fontSize: '26px', cursor: 'pointer'}}
