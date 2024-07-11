@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import './mypage.css';
-import { Link, useParams } from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import list_data from "./mypage_list_data.jsx";
 import Header_center from "../../../components/header/Header_center.jsx";
 import Footer from "../../../components/footer/Footer.jsx";
@@ -74,12 +74,11 @@ function Mypage() {
 }
 
 function List({ name, icon, link, iconStyle }) {
+    const navigate = useNavigate();
     return (
-        <div className="mypage_list">
-            <Link to={link} className="link">
-                <div style={iconStyle} className="icon">{icon}</div>
-                <p>{name}</p>
-            </Link>
+        <div className="mypage_list" onClick={() => navigate(link)}>
+            <div style={iconStyle} className="icon">{icon}</div>
+            <p>{name}</p>
         </div>
     );
 }

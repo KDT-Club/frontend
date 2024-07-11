@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import "./member_info_fix.css";
-import {Link, useNavigate, useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {FaArrowLeft} from "react-icons/fa6";
 import member_info_data from "../../../../data/member_info_data.jsx";
 import Modal_confirm from "../../../../components/modal/Modal_confirm.jsx";
@@ -28,7 +28,7 @@ function Member_info_fix() {
         <div className="Member_info_fix">
             <div className="header">
                 <FaArrowLeft
-                    style={{ fontSize: '25px', strokeWidth: '0.1', cursor: 'pointer', marginLeft: '15px' }}
+                    style={{ fontSize: '25px', strokeWidth: '0.1', cursor: 'pointer' }}
                     onClick={() => navigate(-1)}
                 />
                 <p>회원 정보 수정</p>
@@ -68,9 +68,7 @@ function Member_info_fix() {
             )}
             <div className="buttons">
                 <button className="out" onClick={() => handleOpenModal("동아리에서 탈퇴시키겠습니까?")}>회원 탈퇴</button>
-                <Link to="/memberInfoFixList">
-                    <button className="fix">수정하기</button>
-                </Link>
+                <button className="fix" onClick={() => navigate("/memberInfoFixList")}>수정하기</button>
             </div>
             {showDeleteModal && <Modal_confirm onClose={handleCloseModal} message={modalMessage} link="/memberInfoFixList" />}
         </div>

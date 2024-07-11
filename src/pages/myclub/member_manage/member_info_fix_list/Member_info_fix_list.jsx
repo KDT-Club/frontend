@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import './member_info_fix_list.css';
-import {Link, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {FaArrowLeft} from "react-icons/fa6";
 import member_info_data from "../../../../data/member_info_data.jsx";
 import { FaPlus } from "react-icons/fa6";
@@ -13,7 +13,7 @@ function Member_info_fix_list() {
         <div className="Member_info_fix">
             <div className="header">
                 <FaArrowLeft
-                    style={{fontSize: '25px', strokeWidth: '0.1', cursor: 'pointer', marginLeft: '15px'}}
+                    style={{fontSize: '25px', strokeWidth: '0.1', cursor: 'pointer'}}
                     onClick={() => navigate(-1)}
                 />
                 <p>회원 정보 수정</p>
@@ -33,6 +33,7 @@ function Member_info_fix_list() {
 }
 
 function List({ img, name, role, memberId }) {
+    const navigate = useNavigate();
     return (
         <div className="member_info_item">
             <img src={img} alt={name} />
@@ -40,9 +41,7 @@ function List({ img, name, role, memberId }) {
                 <p className="name">{name}</p>
                 <p className="role">{role}</p>
             </div>
-            <Link to={`/memberInfoFix/${memberId}`}>
-                <FaPlus className="plus_icon" />
-            </Link>
+                <FaPlus className="plus_icon" onClick={() => navigate(`/memberInfoFix/${memberId}`)}/>
         </div>
     );
 }

@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import './written_post.css'
-import {Link, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa6";
 import written_post_data from "./written_post_data.jsx";
 
@@ -31,13 +31,12 @@ function Written_post() {
 }
 
 function List({title, content, date, link}) {
+    const navigate = useNavigate();
     return (
-        <div className="post_list">
-            <Link to={link}>
-                <p className="title">{title}</p>
-                <p className="content">{content}</p>
-                <p className="date">{date}</p>
-            </Link>
+        <div className="post_list" onClick={() => navigate(link)}>
+            <p className="title">{title}</p>
+            <p className="content">{content}</p>
+            <p className="date">{date}</p>
         </div>
     )
 }
