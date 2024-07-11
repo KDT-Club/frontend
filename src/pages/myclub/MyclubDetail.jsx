@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import "./myclubdetail.css";
 import Footer from '../../components/footer/Footer.jsx';
 import { useParams, useNavigate } from "react-router-dom";
@@ -10,8 +10,31 @@ function MyclubDetail({clubs}) {
     let { id } = useParams();
     const navigate = useNavigate();
 
-    const handleMoreClick = (boardId) => {
-        navigate(`/clubs/${id}/board/${boardId}`);
+    //공지사항,자유게시판 글 API 조회
+    // const [noticePosts, setNoticePosts] = useState([]);
+    // const [freeboardPosts, setFreeboardPosts] = useState([]);
+    //
+    // useEffect(() => {
+    //     // 공지사항 게시글 가져오기
+    //     fetch(`/clubs/${id}/board/2/posts`)
+    //         .then(response => response.json())
+    //         .then(data => setNoticePosts(data))
+    //         .catch(error => console.error(error));
+    //
+    //     // 자유게시판 게시글 가져오기
+    //     fetch(`/clubs/${id}/board/4/posts`)
+    //         .then(response => response.json())
+    //         .then(data => setFreeboardPosts(data))
+    //         .catch(error => console.error(error));
+    // }, [id]);
+
+    const handleNoticeClick = () => {
+        navigate(`/clubs/${id}/noticelist`);
+
+    };
+
+    const handleFreeboardClick = () => {
+        navigate(`/clubs/${id}/freeboardlist`);
     };
 
     const currentClub = clubData.find(club => club.clubId === parseInt(id));
@@ -44,7 +67,7 @@ function MyclubDetail({clubs}) {
                 <div className="item-container">
                     <div className="headerrcontainer">
                         <h2>공지사항</h2>
-                        <p onClick={() => handleMoreClick(2)}>더보기</p>
+                        <p onClick={() => handleNoticeClick()}>더보기</p>
                     </div>
                     <section className="box-section">
                         {noticePosts.map((item, index) => (
@@ -58,7 +81,7 @@ function MyclubDetail({clubs}) {
                 <div className="item-container">
                     <div className="headerrcontainer">
                         <h2>자유게시판</h2>
-                        <p onClick={() => handleMoreClick(4)}>더보기</p>
+                        <p onClick={() => handleFreeboardClick()}>더보기</p>
                     </div>
                     <section className="box-section">
                         {freeboardPosts.map((item, index) => (
