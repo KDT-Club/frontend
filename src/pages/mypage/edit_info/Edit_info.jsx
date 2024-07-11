@@ -4,7 +4,6 @@ import {useNavigate, useParams} from "react-router-dom";
 import { FaArrowLeft, FaCheck } from "react-icons/fa6";
 import { MdOutlineCameraAlt } from "react-icons/md";
 import member_info_data from "../../../data/member_info_data.jsx";
-import propyl from "../../../images/propyl.png";
 
 function Edit_info() {
     const navigate = useNavigate();
