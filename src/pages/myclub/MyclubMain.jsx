@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Routes, Route, useNavigate, useParams } from 'react-router-dom';
 import '../../styles/App.css'
 import './myclubmain.css';
-import Header_left from "../../components/header/Header_left.jsx";
+import Header_left from "../../components/header/header_left.css";
 import Footer from '../../components/footer/Footer.jsx';
 import MyclubDetail from "./MyclubDetail.jsx";
 import NoticeList from "./notice/NoticeList.jsx";
