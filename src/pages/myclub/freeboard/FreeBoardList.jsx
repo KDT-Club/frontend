@@ -40,10 +40,10 @@ function FreeBoardList(){
                     const data = await response.json();
                     setList(data);
                 } else {
-                    console.error("Failed to fetch posts:", response.status);
+                    console.error("자유게시판 리스트 조회 실패", response.status);
                 }
             } catch (error) {
-                console.error(error);
+                console.error('자유게시판 리스트 가져오는 중 에러 발생', error);
             }
         };
         fetchPosts();
@@ -78,7 +78,7 @@ function FreeBoardList(){
                                 <Link to={`/clubs/${id}/board/4/posts/${post.postId}`}>
                                     <p className="title">{post.title}</p>
                                     <p className="content">{post.content}</p>
-                                    <p className="createdAt">{post.createdAt}</p>
+                                    <p className="createdAt">{formatDate(post.createdAt)}</p>
                                 </Link>
                             </div>
                         ))

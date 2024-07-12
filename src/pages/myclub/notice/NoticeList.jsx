@@ -46,10 +46,10 @@ function NoticeList(){
                     const data = await response.json();
                     setList(data);
                 } else {
-                    console.error("Failed to fetch notices:", response.status);
+                    console.error("공지사항 리스트 조회 실패", response.status);
                 }
             } catch (error) {
-                console.error(error);
+                console.error('공지사항 리스트 가져오는 중 에러 발생', error);
             }
         };
         fetchNotices();

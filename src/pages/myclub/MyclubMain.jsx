@@ -16,10 +16,13 @@ const MyclubMain = () => {
         const fetchClubs = async () => {
             try {
                 const response = await fetch(`/clubs?memberId=${memberId}`);
+                if (!response.ok) {
+                    throw new Error('동아리 목록 조회 실패');
+                }
                 const data = await response.json();
                 setClubs(data);
             } catch (error) {
-                console.error("Error fetching clubs:", error);
+                console.error('동아리 목록을 가져오는 중 에러 발생', error);
             }
         };
         fetchClubs();

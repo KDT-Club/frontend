@@ -29,13 +29,13 @@ function MyclubDetail({clubs}) {
     //     fetch(`/clubs/${id}/board/${boardType['notice']}/posts`)
     //         .then(response => response.json())
     //         .then(data => setNoticePosts(data))
-    //         .catch(error => console.error(error));
+    //         .catch(error => console.error('공지사항 게시글 조회 실패', error));
     //
     //     // 자유게시판 게시글 가져오기
     //     fetch(`/clubs/${id}/board/${boardType['internal']}/posts`)
     //         .then(response => response.json())
     //         .then(data => setFreeboardPosts(data))
-    //         .catch(error => console.error(error));
+    //         .catch(error => console.error('자유게시판 게시글 조회 실패', error));
     // }, [id]);
 
     const handleNoticeClick = () => {
@@ -46,10 +46,9 @@ function MyclubDetail({clubs}) {
         navigate(`/clubs/${id}/freeboardlist`);
     };
 
+    //UI보기용 동아리id,동아리 이름,post 불러오기 -> 나중에 삭제
     const currentClub = clubData.find(club => club.clubId === parseInt(id));
-    const currentClubName = currentClub? currentClub.name : ""; //현재 동아리의 이름 get
-    
-    //UI보기용 post 불러오기 -> 나중에 삭제
+    const currentClubName = currentClub? currentClub.name : "";
     const noticePosts = postData.filter(post =>
         post.boardId === 2 && post.clubName === currentClubName
     );

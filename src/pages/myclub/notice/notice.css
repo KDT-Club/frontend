@@ -52,6 +52,7 @@
     display: flex;
     flex-direction: column;
     margin-top: 25px;
+    padding-bottom: 60px; /* input을 위해 하단 여백 추가 */
 }
 
 .comment-oneline {
@@ -60,4 +61,41 @@
     flex-direction: column;
     align-items: flex-start;
     margin-bottom: 20px;
+}
+
+.submit-comment-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 10px;
+    background-color: white;
+}
+
+.submit-comment-container input {
+    width: 85%;
+    flex: 1;
+    font-size: 18px;
+    text-align: center;
+    border-radius: 7px;
+    border: 1.5px solid darkgray;
+    height: 50px;
+}
+
+.submit-comment-container input:focus {
+    outline: none;
+    border: 1.5px solid #597CA5;
+}
+
+.submit-comment-container button {
+    width: 10%; /* 너비 조정 */
+    text-align: center;
+    cursor: pointer;
+    color: #5c5c5c;
+    margin-right: 2px;
 }
