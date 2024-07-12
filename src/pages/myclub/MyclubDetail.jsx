@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import "./myclubdetail.css";
 import Footer from '../../components/footer/Footer.jsx';
 import { useParams, useNavigate } from "react-router-dom";
@@ -10,17 +10,48 @@ function MyclubDetail({clubs}) {
     let { id } = useParams();
     const navigate = useNavigate();
 
-    const handleMoreClick = (boardId) => {
-        navigate(`/clubs/${id}/board/${boardId}`);
+    //공지사항,자유게시판 글 API 조회
+    // const [noticePosts, setNoticePosts] = useState([]);
+    // const [freeboardPosts, setFreeboardPosts] = useState([]);
+
+    const boardType = {
+        "notice": 2,
+        "internal": 4
+    } //boardId 타입 지정 -> 하드코딩해놓음
+
+    // 이후 boardType 구현용 예제
+    // const boardType = useEffect(
+    //   -> 백엔드에서 게시판 종류와 번호를 반환해주는 API 호출
+    // )
+
+    // useEffect(() => {
+    //     // 공지사항 게시글 가져오기
+    //     fetch(`/clubs/${id}/board/${boardType['notice']}/posts`)
+    //         .then(response => response.json())
+    //         .then(data => setNoticePosts(data))
+    //         .catch(error => console.error('공지사항 게시글 조회 실패', error));
+    //
+    //     // 자유게시판 게시글 가져오기
+    //     fetch(`/clubs/${id}/board/${boardType['internal']}/posts`)
+    //         .then(response => response.json())
+    //         .then(data => setFreeboardPosts(data))
+    //         .catch(error => console.error('자유게시판 게시글 조회 실패', error));
+    // }, [id]);
+
+    const handleNoticeClick = () => {
+        navigate(`/clubs/${id}/noticelist`);
     };
 
-    const currentClub = clubData.find(club => club.clubId === parseInt(id));
-    const currentClubName = currentClub? currentClub.name : ""; //현재 동아리의 이름 get
+    const handleFreeboardClick = () => {
+        navigate(`/clubs/${id}/freeboardlist`);
+    };
 
+    //UI보기용 동아리id,동아리 이름,post 불러오기 -> 나중에 삭제
+    const currentClub = clubData.find(club => club.clubId === parseInt(id));
+    const currentClubName = currentClub? currentClub.name : "";
     const noticePosts = postData.filter(post =>
         post.boardId === 2 && post.clubName === currentClubName
     );
-
     const freeboardPosts = postData.filter(post =>
         post.boardId === 4 && post.clubName === currentClubName
     );
@@ -44,7 +75,7 @@ function MyclubDetail({clubs}) {
                 <div className="item-container">
                     <div className="headerrcontainer">
                         <h2>공지사항</h2>
-                        <p onClick={() => handleMoreClick(2)}>더보기</p>
+                        <p onClick={() => handleNoticeClick()}>더보기</p>
                     </div>
                     <section className="box-section">
                         {noticePosts.map((item, index) => (
@@ -58,7 +89,7 @@ function MyclubDetail({clubs}) {
                 <div className="item-container">
                     <div className="headerrcontainer">
                         <h2>자유게시판</h2>
-                        <p onClick={() => handleMoreClick(4)}>더보기</p>
+                        <p onClick={() => handleFreeboardClick()}>더보기</p>
                     </div>
                     <section className="box-section">
                         {freeboardPosts.map((item, index) => (

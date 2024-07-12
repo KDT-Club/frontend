@@ -18,11 +18,10 @@ function MyclubHeader() {
     const member = memberInfo.find(m => m.memberId === parseInt(memberId, 10));
     const navigate = useNavigate();
     const location = useLocation();
-    const [clubMembers, setClubMembers] = useState([]);
 
     const [clubs, setClubs] = useState([]);
-    // const club = clubs.find(club => club.clubId === parseInt(id)) ?? {};
-
+    //const [club, setClub] = useState([]); 나중에 위 코드를 이거로 변경
+    const [clubMembers, setClubMembers] = useState([]);
     const [isMenuOpen, setIsMenuOpen] = useState(location.state?.isMenuOpen || false); //햄버거탭 슬라이드
     const [isMemberListOpen, setIsMemberListOpen] = useState(false); //회원리스트
     const [isMemberManageOpen, setIsMemberManageOpen] = useState(false); //회원관리
@@ -33,15 +32,13 @@ function MyclubHeader() {
     const [modalMessage, setModalMessage] = useState("");   // 모달 메세지
 
     // club 데이터를 불러와서 상태 설정
+    //여기부터.......
     useEffect(() => {
         setClubs(clubData);
     }, []);
-
-    // clubId로 해당 클럽 찾기
     const club = clubs.find(club => club.clubId === parseInt(id)) ?? {};
-
     useEffect(() => {
-        //clubmemberData.jsx에서 회원 memberId get
+        //memberId get
         const getMemberId = clubmemberData.filter(member => member.clubId === parseInt(id));
         //회원 이름 get
         const getMemberName = getMemberId.map(clubMember => {
@@ -50,6 +47,41 @@ function MyclubHeader() {
         })
         setClubMembers(getMemberName);
     }, [id]);
+    //여기까지 UI보기용 데이터 조회. 나중에 삭제
+
+    //동아리 정보 API 조회; 헤더에 동아리 이름 띄워야됨
+    // useEffect(() => {
+    //     const fetchClub = async() => {
+    //         try {
+    //             const response = await fetch(`/clubs/${id}`);
+    //             if (!response.ok) {
+    //                 throw new Error('동아리 정보 조회 실패');
+    //             }
+    //             const data = await response.json();
+    //             setClub(data);
+    //         } catch (error) {
+    //             console.error('동아리 정보 조회 중 에러 발생', error);
+    //         }
+    //     };
+    //     fetchClub();
+    // }, [id]);
+
+    //햄버거탭에서 회원리스트 조회
+    // useEffect(() => {
+    //     const fetchClubMembers = async () => {
+    //         try {
+    //             const response = await fetch(`/clubs/${id}/clubMember`);
+    //             if (!response.ok) {
+    //                 throw new Error('동아리 회원 리스트 조회 실패');
+    //             }
+    //             const data = await response.json();
+    //             setClubMembers(data);
+    //         } catch (error) {
+    //             console.error('동아리 회원 리스트 조회 중 에러 발생', error);
+    //         }
+    //     };
+    //     fetchClubMembers();
+    // }, [id]);
 
     const handleBackClick = () => {
         navigate('/clubs');
@@ -135,6 +167,12 @@ function MyclubHeader() {
                                 {clubMembers.map((memberName, index) => (
                                     <div key={index} className="member-item">{memberName}</div>
                                 ))}
+                                {/*API로부터 회원 이름, 학번 조회: 아래 코드임*/}
+                                {/*{clubMembers.map((member, index) => (*/}
+                                {/*    <div key={index} className="member-item">*/}
+                                {/*        <div>{member.name} ({member.studentId})</div>*/}
+                                {/*    </div>*/}
+                                {/*))}*/}
                             </div>
                         )}
                         <div className="li-container" onClick={toggleMemberManage}>
