@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useCallback, useState} from "react";
 import './mypage.css';
 import { Link, useParams } from 'react-router-dom';
 import list_data from "./mypage_list_data.jsx";
@@ -16,10 +16,11 @@ function Mypage() {
     const [modalMessage, setModelMessage] = useState("");
     const iconStyle = { fontSize: "27px" };
 
-    const handleOpenModal = (message) => {
+    const handleOpenModal = useCallback((message) => {
         setModelMessage(message);
         setShowDeleteModel(true);
-    }
+    }, []);
+
     const handleCloseModal = () => setShowDeleteModel(false);
 
     return (

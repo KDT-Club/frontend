@@ -18,6 +18,7 @@ import PostDetail from "./pages/community/PostDetail.jsx";
 import ActivityPage from "./pages/community/activity/ActivityPage.jsx";
 import ActivityDetailPage from "./pages/community/activity/ActivityDetailPage.jsx";
 import Member_request from "./pages/myclub/member_manage/member_request/Member_request.jsx";
+import Member_request_detail from "./pages/myclub/member_manage/member_request/Member_request_detail.jsx";
 import MyclubMain from "./pages/myclub/MyclubMain.jsx";
 import MyclubDetail from "./pages/myclub/MyclubDetail.jsx";
 import Etc1 from "./pages/myclub/etc/Etc1.jsx";
@@ -62,7 +63,7 @@ function App() {
                         <Route path="/members/:memberId" element={<Mypage />} />
                         <Route path="/posts" element={<Written_post />} />
                         <Route path="/edit_info/:memberId" element={<Edit_info />} />
-                        {/*<Route path="/clubs/:memberId" element={<Create_club />} />*/}
+                        <Route path="/clubs/create/:memberId" element={<Create_club />} />
                         <Route path="/memberInfoFixList" element={<Member_info_fix_list />} />
                         <Route path="/memberInfoFix/:memberId" element={<Member_info_fix />} />
                         <Route path="/main" element={<MainPage />} />
@@ -71,7 +72,8 @@ function App() {
                         <Route path="/post/:postId" element={<PostDetail/>}/>
                         <Route path="/activity" element={<ActivityPage />} />
                         <Route path="/activity_detail" element={<ActivityDetailPage />} />
-                        <Route path="/member_request" element={<Member_request />} />
+                        <Route path="/clubs/:id/joinRequest" element={<Member_request />} />
+                        <Route path="/clubs/:id/joinRequest/:memberId" element={<Member_request_detail />} />
                         <Route path="/activity_detail" element={<ActivityDetailPage />}/>
 
                         //내동아리 라우팅

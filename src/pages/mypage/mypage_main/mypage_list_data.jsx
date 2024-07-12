@@ -16,7 +16,7 @@ let list_data = [
     {
         name: "동아리 만들기",
         icon: <FiUserPlus />,
-        link: "/clubs/:memberId"
+        link: "/clubs/create/:memberId"
     },
     {
         name: "회원 탈퇴",

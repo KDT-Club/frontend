@@ -1,10 +1,10 @@
 import React, {useState} from "react";
 import './edit_info.css';
-import {Link, useNavigate, useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import { FaArrowLeft, FaCheck } from "react-icons/fa6";
 import { MdOutlineCameraAlt } from "react-icons/md";
 import member_info_data from "../../../data/member_info_data.jsx";
-import propyl from "../../../images/propyl.png";
+import Modal_ok from "../../../components/modal/Modal_ok.jsx";
 
 function Edit_info() {
     const navigate = useNavigate();
@@ -18,6 +18,9 @@ function Edit_info() {
         password: member.password
     });
 
+    const [showOkModal, setShowOkModel] = useState(false);
+    const [modalMessage, setModalMessage] = useState("");
+
     const Change = (e) => {
         const {name, value} = e.target;
         setData(prevData => ({
@@ -26,9 +29,14 @@ function Edit_info() {
         }));
     };
 
-    const handleSave = () => {
-        navigate(`/members/${data.memberId}`);
+    const handleOpenOkModal = (message) => {
+        setModalMessage(message);
+        setShowOkModel(true);
     };
+
+    const handleCloseOkModal = () =>{
+        setShowOkModel(false);
+    }
 
     return (
         <div className="Edit_info">
@@ -55,12 +63,13 @@ function Edit_info() {
                         <p>비밀번호 변경</p>
                         <input type="password" name="password" value={data.password} onChange={Change}/>
                         <div className="check-icon">
-                            <FaCheck/>
+                            <FaCheck onClick={() => handleOpenOkModal("비밀번호 수정이 완료되었습니다.<br/>다시 로그인 해주세요.", "/")}/>
                         </div>
                     </div>
                 </div>
             </div>
-            <button onClick={handleSave}>수정하기</button>
+            <button onClick={()=> handleOpenOkModal("수정이 완료되었습니다.")}>수정하기</button>
+            {showOkModal && <Modal_ok onClose={handleCloseOkModal} message={modalMessage} />}
         </div>
     )
 }

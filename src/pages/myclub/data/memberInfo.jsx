@@ -9,7 +9,8 @@ let memberInfo = [
         "password" : "",
         "status" : "",
         "memberImgFilename": "",
-        "phone": ""
+        "phone": "",
+        "role": "회장"
     },
     {
         "memberId": 102,
@@ -19,7 +20,8 @@ let memberInfo = [
         "password" : "",
         "status" : "",
         "memberImgFilename": "",
-        "phone": ""
+        "phone": "",
+        "role": "부회장"
     },
     {
         "memberId": 103,
@@ -29,7 +31,8 @@ let memberInfo = [
         "password" : "",
         "status" : "",
         "memberImgFilename": "",
-        "phone": ""
+        "phone": "",
+        "role": "일반"
     },
     {
         "memberId": 104,
@@ -39,7 +42,8 @@ let memberInfo = [
         "password" : "",
         "status" : "",
         "memberImgFilename": "",
-        "phone": ""
+        "phone": "",
+        "role": "일반"
     },
     {
         "memberId": 105,
@@ -49,7 +53,8 @@ let memberInfo = [
         "password" : "",
         "status" : "",
         "memberImgFilename": "",
-        "phone": ""
+        "phone": "",
+        "role": "일반"
     },
     {
         "memberId": 106,
@@ -59,7 +64,8 @@ let memberInfo = [
         "password" : "",
         "status" : "",
         "memberImgFilename": "",
-        "phone": ""
+        "phone": "",
+        "role": "일반"
     },
 ];
 

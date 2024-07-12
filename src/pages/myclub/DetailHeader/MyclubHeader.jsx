@@ -5,6 +5,8 @@ import { RxHamburgerMenu } from "react-icons/rx";
 import {useNavigate, useParams, useLocation} from "react-router-dom";
 import { MdOutlineManageAccounts, MdOutlinePerson, MdOutlineSettings, MdKeyboardArrowRight, MdKeyboardArrowDown } from "react-icons/md";
 import { TbDoorExit } from "react-icons/tb";
+import Modal_confirm from "../../../components/modal/Modal_confirm.jsx";
+import Modal_ok from "../../../components/modal/Modal_ok.jsx";
 import clubmemberData from '../data/clubmemberData.jsx';
 import memberInfo from "../data/memberInfo.jsx";
 import clubData from "../data/clubData.jsx";
@@ -12,6 +14,8 @@ import clubData from "../data/clubData.jsx";
 
 function MyclubHeader() {
     let { id } = useParams();
+    let memberId = 104;
+    const member = memberInfo.find(m => m.memberId === parseInt(memberId, 10));
     const navigate = useNavigate();
     const location = useLocation();
     const [clubMembers, setClubMembers] = useState([]);
@@ -23,6 +27,10 @@ function MyclubHeader() {
     const [isMemberListOpen, setIsMemberListOpen] = useState(false); //회원리스트
     const [isMemberManageOpen, setIsMemberManageOpen] = useState(false); //회원관리
     const [isClubManageOpen, setIsClubManageOpen] = useState(false); //동아리 관리
+
+    const [showDeleteModal, setShowDeleteModel] = useState(false);  // 네,아니오 모달창 띄우기
+    const [showOkModal, setShowOkModel] = useState(false);  // OK 모달창 띄우기
+    const [modalMessage, setModalMessage] = useState("");   // 모달 메세지
 
     // club 데이터를 불러와서 상태 설정
     useEffect(() => {
@@ -76,6 +84,20 @@ function MyclubHeader() {
         navigate(`/clubs/${id}/changeClubInfo`, { state: { isMenuOpen: true } }); // 햄버거탭 오픈 상태 전달;
     };
 
+    const handleOpenDeleteModal = (message) => {
+        setModalMessage(message);
+        setShowDeleteModel(true);
+    };
+
+    const handleCloseDeleteModal = () => setShowDeleteModel(false);
+
+    const handleOpenOkModal = (message) => {
+        setModalMessage(message);
+        setShowOkModel(true);
+    };
+
+    const handleCloseOkModal = () => setShowOkModel(false);
+
     return (
         <>
             <div className="header_container">
@@ -93,7 +115,7 @@ function MyclubHeader() {
             <div className={`slide-menu ${isMenuOpen ? 'open' : ''}`}>
                 <div className="slide-menu-content">
                     <div className="member-info">
-                        <h2>최자두</h2>
+                        <h2>{member.name}</h2>
                         <p>2020101460</p>
                     </div>
                     <div className="menu-items">
@@ -128,9 +150,9 @@ function MyclubHeader() {
                         </div>
                         {isMemberManageOpen && (
                             <div className="member-manage-list">
-                                <div className="manage-item">회원정보 수정</div>
+                                <div className="manage-item" onClick={() => navigate("/memberInfoFixList")}>회원정보 수정</div>
                                 <div className="manage-item">회원출석 관리</div>
-                                <div className="manage-item">가입 신청 현황</div>
+                                <div className="manage-item" onClick={() => navigate("/clubs/:id/joinRequest")}>가입 신청 현황</div>
                             </div>
                         )}
                         <div className="li-container" onClick={toggleClubManage}>
@@ -151,13 +173,15 @@ function MyclubHeader() {
                             </div>
                         )}
                     </div>
-                    <div className="leave-club">
+                    <div className="leave-club" onClick={() => handleOpenDeleteModal("동아리에서 탈퇴하시겠습니까?")}>
                         <div className="leave-club-line">
                             <li style={{marginRight: "10px", fontSize: "15px", te: "center"}}>동아리 탈퇴하기</li>
                             <TbDoorExit style={{fontSize: "25px"}}/>
                         </div>
                     </div>
                 </div>
+                {showDeleteModal && <Modal_confirm onClose={handleCloseDeleteModal} message={modalMessage} link="/" />}
+                {showOkModal && <Modal_ok onClose={handleCloseOkModal} message={modalMessage} />}
             </div>
         </>
     );

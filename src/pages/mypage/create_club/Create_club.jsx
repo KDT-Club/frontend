@@ -6,7 +6,8 @@ import { CiCirclePlus } from "react-icons/ci";
 
 function Create_club() {
     const navigate = useNavigate();
-    const { memberId } = useParams();
+    const  memberId  = 101
+    console.log(memberId);
     let category_id = ["sport", "scholarship", "literature", "service", "entertain", "new"];
     let category_list = ["체육", "학술", "문학", "봉사", "예체능", "신설"];
 

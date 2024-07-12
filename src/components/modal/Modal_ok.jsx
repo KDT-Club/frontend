@@ -1,20 +1,13 @@
 import React from "react";
-import './modal_confirm.css';
-import { useNavigate } from "react-router-dom";
+import './modal_ok.css';
 
-const Modal_ok = ({onClose, message}) => {
-    const navigate = useNavigate();
-
-    const handleConfirm = () => {
-        navigate("/");
-    };
-
+const Modal_ok = ({message, onClose}) => {
     return (
         <div className="Modal_ok">
             <div className="modal_ok_content">
                 <p dangerouslySetInnerHTML={{__html: message}}></p>
                 <div className="modal_ok_button">
-                    <button onClick={handleConfirm} className="ok_button">OK</button>
+                    <button onClick={onClose} className="ok_button">OK</button>
                 </div>
             </div>
         </div>

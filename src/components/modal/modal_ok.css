@@ -35,16 +35,17 @@
     width: 100%;
 }
 
-.ok_button {
+.modal_ok_button .ok_button {
     border: none;
     border-right: 1px solid #C4C4C4;
-    border-radius: 0 0 0 25px;
-    padding: 10px 0;
+    border-radius: 0 0 25px 25px;
+    padding: 6px 0 10px 0;
     margin: 0;
     cursor: pointer;
     flex: 1;
     text-align: center;
     background-color: #EFEFEF;
+    color: black;
     box-sizing: border-box;
 }
 
