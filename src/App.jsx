@@ -24,6 +24,10 @@ import Etc1 from "./pages/myclub/etc/Etc1.jsx";
 import Atd from "./pages/myclub/etc/Atd.jsx";
 import Etc2 from "./pages/myclub/etc/Etc2.jsx";
 import Etc3 from "./pages/myclub/etc/Etc3.jsx";
+import NoticeList from "./pages/myclub/notice/NoticeList.jsx";
+import FreeBoardList from "./pages/myclub/freeboard/FreeBoardList.jsx";
+import NoticeDetail from "./pages/myclub/notice/NoticeDetail.jsx";
+import FreeBoardDetail from "./pages/myclub/freeboard/FreeBoardDetail.jsx";
 
 function App() {
     const [showLogo, setShowLogo] = React.useState(true);
@@ -62,7 +66,6 @@ function App() {
                         <Route path="/members/:memberId" element={<Mypage />} />
                         <Route path="/posts" element={<Written_post />} />
                         <Route path="/edit_info/:memberId" element={<Edit_info />} />
-                        {/*<Route path="/clubs/:memberId" element={<Create_club />} />*/}
                         <Route path="/memberInfoFixList" element={<Member_info_fix_list />} />
                         <Route path="/memberInfoFix/:memberId" element={<Member_info_fix />} />
                         <Route path="/main" element={<MainPage />} />
@@ -77,6 +80,11 @@ function App() {
                         //내동아리 라우팅
                         <Route path="/clubs" element={<MyclubMain />} />
                         <Route path="/clubs/:id" element={<MyclubDetail />} />
+                        <Route path="/clubs/:id/noticelist" element={<NoticeList />} />
+                        <Route path="/clubs/:id/freeboardlist" element={<FreeBoardList />} />
+                        <Route path="/clubs/:clubId/board/2/posts/:postId" element={<NoticeDetail />} />
+                        <Route path="/clubs/:clubId/board/4/posts/:postId" element={<FreeBoardDetail />} />
+
                         <Route path="/clubs/etc1" element={<Etc1 />} />
                         <Route path="/clubs/etc1/atd" element={<Atd />} />
                         <Route path="/clubs/etc2" element={<Etc2 />} />

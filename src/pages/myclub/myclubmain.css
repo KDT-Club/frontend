@@ -18,7 +18,7 @@
     width: 100%;
     list-style: none;
     padding: 0;
-    margin: 20px;
+    margin-top: 24px;
 }
 
 .club-item {
@@ -35,6 +35,7 @@
     background-color: #e0e0e0;
     margin-right: 20px;
     flex-shrink: 0;
+    margin-left: 20px;
 }
 
 .club-name {
