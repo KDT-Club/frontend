@@ -15,12 +15,6 @@ function formatDate(dateString) {
     return `${month}/${day}`;
 }
 
-// 클럽 회장인지 확인
-function isClubPresident(memberId, clubId) {
-    const club = clubData.find(club => club.clubId === parseInt(clubId));
-    return club && club.memberId === memberId;
-}
-
 function NoticeList(){
     let { id } = useParams();
     const navigate = useNavigate();
@@ -55,14 +49,8 @@ function NoticeList(){
         fetchNotices();
     }, [id]);
 
-    //공지사항 글쓰기 회장 권한 받는 건 추후에 수정!!!
     const handleWriteClick = () => {
-        const club = clubData.find(c => c.clubId === parseInt(id));
-        if (club && isClubPresident(club.memberId, id)) {
-            navigate(`/clubs/${id}/board/2/noticewrite`);
-        } else {
-            alert('권한이 없습니다.');
-        }
+        navigate(`/clubs/${id}/noticelist/noticewrite`);
     };
 
     const handleBackClick = () => {
@@ -78,8 +66,8 @@ function NoticeList(){
                 />
                 <div style={{fontSize: '22px', fontWeight: "bold"}}>공지사항</div>
                 <FiEdit
-                    style={{fontSize: '26px', cursor: 'pointer'}}
                     onClick={handleWriteClick}
+                    style={{ fontSize: '26px', cursor: 'pointer' }}
                 />
             </div>
             <div className="scroll-container">
@@ -102,18 +90,5 @@ function NoticeList(){
         </div>
     )
 }
-
-// function List({title, content, createdAt, link}) {
-//     const formattedDate = formatDate(createdAt);
-//     return (
-//         <div className="post">
-//             <Link to={link}>
-//                 <p className="title">{title}</p>
-//                 <p className="content">{content}</p>
-//                 <p className="createdAt">{formattedDate}</p>
-//             </Link>
-//         </div>
-//     )
-// }
 
 export default NoticeList;

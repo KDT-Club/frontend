@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import axios from "axios";
+import React, {useEffect, useState} from 'react';
+import axios from 'axios';
 import '../../DetailHeader/myclubheader.css'
-import './noticewrite.css';
+import '../../notice/WriteAndEdit/noticewrite.css';
 import {useNavigate, useParams} from "react-router-dom";
 import { FiX, FiCheck } from "react-icons/fi";
 import { LuImagePlus } from "react-icons/lu";
 
-function NoticeWrite() {
-    let { id } = useParams();
+function FreeBoardWrite() {
+    let {id} = useParams();
     const navigate = useNavigate();
 
     const [title, setTitle] = useState('');
@@ -86,7 +86,7 @@ function NoticeWrite() {
             return;
         }
         try {
-            const response = await axios.post(`/club${id}/board/2/posts`, {
+            const response = await axios.post(`/club${id}/board/4/posts`, {
                 title,
                 content,
                 attachment_flag: attachmentNames.length > 0 ? 'Y' : 'N',
@@ -94,17 +94,17 @@ function NoticeWrite() {
                 club_name: clubName,
             });
             if (response.status === 200 || response.status === 201) {
-                alert('공지사항 작성 완료');
-                navigate(`/clubs/${id}/board/2`);
+                alert('게시글 작성 완료');
+                navigate(`/clubs/${id}/board/4`);
             }
         } catch (error) {
-            console.error('공지사항 작성 중 오류 발생:', error);
+            console.error('게시글 작성 중 오류 발생:', error);
             alert('글 작성 중 오류가 발생했습니다. 다시 시도해주세요.');
         }
     };
 
     const handleBackClick = () => {
-        navigate(`/clubs/${id}/noticelist`);
+        navigate(`/clubs/${id}/freeboardlist`);
     };
 
     return (
@@ -114,7 +114,7 @@ function NoticeWrite() {
                     style={{fontSize: '27px', cursor: 'pointer'}}
                     onClick={handleBackClick}
                 />
-                <div style={{fontSize: '22px', fontWeight: "bold"}}>공지사항 작성</div>
+                <div style={{fontSize: '22px', fontWeight: "bold"}}>자유게시판 글쓰기</div>
                 <FiCheck
                     style={{fontSize: '27px', cursor: 'pointer'}}
                     onClick={handleSubmit}
@@ -161,4 +161,4 @@ function NoticeWrite() {
     )
 }
 
-export default NoticeWrite;
+export default FreeBoardWrite;

@@ -24,19 +24,20 @@
 
 .post .title {
     font-weight: bold;
-    font-size: 20px;
+    font-size: 19.2px;
     margin-top: 17px;
     margin-bottom: 0px;
-    margin-left: 35px;
+    margin-left: 20px;
     text-align: left;
 }
 
 .post .content {
     margin-top: 4px;
-    font-size: 18px;
+    font-size: 17.7px;
     color: dimgrey;
     text-align: left;
-    margin-left: 35px;
+    margin-left: 20px;
+    padding-right: 10px;
 }
 
 .post .createdAt {
@@ -45,13 +46,13 @@
     font-size: 17px;
     color: gray;
     text-align: left;
-    margin-left: 35px;
+    margin-left: 20px;
 }
 
 .comment-container {
     display: flex;
     flex-direction: column;
-    margin-top: 25px;
+    margin-top: 20px;
     padding-bottom: 60px; /* input을 위해 하단 여백 추가 */
 }
 
@@ -60,7 +61,7 @@
     width: 100%;
     flex-direction: column;
     align-items: flex-start;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .submit-comment-container {
@@ -74,17 +75,17 @@
     justify-content: center;
     width: 100%;
     padding: 10px;
-    background-color: white;
 }
 
 .submit-comment-container input {
-    width: 85%;
+    width: 80%;
     flex: 1;
     font-size: 18px;
     text-align: center;
     border-radius: 7px;
     border: 1.5px solid darkgray;
     height: 50px;
+    margin-left: 10px;
 }
 
 .submit-comment-container input:focus {
@@ -93,9 +94,10 @@
 }
 
 .submit-comment-container button {
-    width: 10%; /* 너비 조정 */
+    width: 2%; /* 너비 조정 */
     text-align: center;
     cursor: pointer;
     color: #5c5c5c;
-    margin-right: 2px;
+    margin-right: 15px;
+    margin-left: 1px;
 }

@@ -1,3 +1,8 @@
+.write_container {
+    display: flex;
+    flex-direction: column;
+}
+
 .notice_title {
     width: 100%;
     height: 50px;
@@ -5,6 +10,9 @@
     font-size: 20px;
     margin-top: 35px;
     margin-bottom: 20px;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
     border-bottom: 1.5px solid #ccc;
 }
 
@@ -21,9 +29,4 @@
 .notice_title:focus {
     outline: none;
     border-color: #597CA5;
-}
-
-.write_container {
-    display: flex;
-    flex-direction: column;
 }
