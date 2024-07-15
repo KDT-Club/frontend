@@ -35,8 +35,8 @@ function FreeBoardWrite() {
                     throw new Error('해당 동아리를 찾을 수 없습니다.');
                 }
             } catch (error) {
-                console.error('동아리 정보를 가져오는 중 오류 발생:', error);
-                alert('동아리 정보를 불러오는 데 실패했습니다.');
+                console.error('정보를 가져오는 중 오류 발생:', error);
+                alert('정보를 불러오는 데 실패했습니다.');
             }
         };
         fetchClubInfo();
@@ -95,7 +95,7 @@ function FreeBoardWrite() {
             });
             if (response.status === 200 || response.status === 201) {
                 alert('게시글 작성 완료');
-                navigate(`/clubs/${id}/board/4`);
+                navigate(`/clubs/${id}/freeboardlist`);
             }
         } catch (error) {
             console.error('게시글 작성 중 오류 발생:', error);

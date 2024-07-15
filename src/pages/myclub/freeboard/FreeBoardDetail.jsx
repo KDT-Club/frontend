@@ -28,10 +28,26 @@ function FreeBoardDetail() {
     const post = postData.find(post => post.postId === parseInt(postId) && post.boardId === 4); //로컬 게시글 조회
     const comments = commentData.filter(comment => comment.postId === parseInt(postId));//로컬 댓글 조회
 
-    const [showPostModal, setShowPostModal] = useState(false);  // 글 수정/삭제 모달창 띄우기
+    const [showPostModal, setShowPostModal] = useState(false);  // 글 수정or삭제 모달창 띄우기
+
+    const handleBackClick = () => {
+        navigate(`/clubs/${clubId}/freeboardlist`);
+    };
+
+    const handleDotClick = () => {
+        setShowPostModal(true);
+    }
+
+    const handleEditClick = () => {
+        navigate(`/clubs/${clubId}/board/4/posts/${postId}/edit`);
+    };
+
+    const closeModal = () => {
+        setShowPostModal(false);
+    }
 
     //게시글, 댓글 API 조회-----------------------------------------------------------------------------
-    //const [post, setPost] = useState(null);
+    //const [post, setPost] = useState('');
     //const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState(''); //댓글 입력
     const [memberId, setMemberId] = useState(null);
@@ -75,18 +91,6 @@ function FreeBoardDetail() {
         fetchComments();
         fetchClubInfo();
     }, [memberId, clubId, postId]);
-
-    const handleBackClick = () => {
-        navigate(`/clubs/${clubId}/freeboardlist`);
-    };
-
-    const handleDotClick = () => {
-        setShowPostModal(true);
-    }
-
-    const closeModal = () => {
-        setShowPostModal(false);
-    }
 
     //댓글 POST
     const handleCommentChange = (e) => {
@@ -167,14 +171,19 @@ function FreeBoardDetail() {
                     }}
                 >{post.content}</p>
             </div>
-            <div style={{borderBottom: "1.5px solid dimgrey", marginTop: "24px"}}></div>
+            <div style={{ borderBottom: '1.5px solid dimgrey', marginTop: '24px' }}></div>
             <div className="comment-container">
                 {comments.length > 0 ? (
                     comments.map(comment => (
                         <div key={comment.commentId} className="comment-oneline">
-                            <p style={{fontSize: '17px', color: 'gray', marginLeft: "30px", marginBottom: "2px"}}>
-                                {getMemberName(comment.memberId)} | {formatDate(comment.createdAt)}
-                            </p>
+                            <div style={{display: 'flex', justifyContent: 'space-between', width: '100%'}}>
+                                <p style={{fontSize: '17px', color: 'gray', marginLeft: "30px", marginBottom: "2px"}}>
+                                    {getMemberName(comment.memberId)} | {formatDate(comment.createdAt)}
+                                </p>
+                                <FiMoreVertical
+                                    style={{fontSize: '20px', cursor: 'pointer', marginRight: '20px'}}
+                                />
+                            </div>
                             <p style={{
                                 fontSize: '19px',
                                 marginLeft: "30px",
@@ -199,7 +208,7 @@ function FreeBoardDetail() {
                         <FiSend style={{textAlign: "center", fontSize: "27px"}}/></button>
                 </div>
             </form>
-            {showPostModal && <Modal_post onClose={closeModal}/>}
+            {showPostModal && <Modal_post onClose={closeModal} onEdit={handleEditClick}/>}
         </div>
     );
 }
