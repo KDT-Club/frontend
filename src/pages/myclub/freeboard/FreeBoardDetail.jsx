@@ -7,6 +7,7 @@ import commentData from '../data/commentData.jsx';
 import {FaArrowLeft} from 'react-icons/fa6';
 import { FiMoreVertical, FiSend } from "react-icons/fi";
 import axios from "axios";
+import Modal_post from "../../../components/modal/Modal_post.jsx";
 
 function formatDate(dateString) {
     const date = new Date(dateString);
@@ -26,6 +27,8 @@ function FreeBoardDetail() {
 
     const post = postData.find(post => post.postId === parseInt(postId) && post.boardId === 4); //로컬 게시글 조회
     const comments = commentData.filter(comment => comment.postId === parseInt(postId));//로컬 댓글 조회
+
+    const [showPostModal, setShowPostModal] = useState(false);  // 글 수정/삭제 모달창 띄우기
 
     //게시글, 댓글 API 조회-----------------------------------------------------------------------------
     //const [post, setPost] = useState(null);
@@ -78,7 +81,11 @@ function FreeBoardDetail() {
     };
 
     const handleDotClick = () => {
-        //클릭 시 작성자 본인이면 글수정or글삭제 팝업이 뜨도록.
+        setShowPostModal(true);
+    }
+
+    const closeModal = () => {
+        setShowPostModal(false);
     }
 
     //댓글 POST
@@ -192,6 +199,7 @@ function FreeBoardDetail() {
                         <FiSend style={{textAlign: "center", fontSize: "27px"}}/></button>
                 </div>
             </form>
+            {showPostModal && <Modal_post onClose={closeModal}/>}
         </div>
     );
 }

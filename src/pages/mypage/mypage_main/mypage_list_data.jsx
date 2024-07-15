@@ -6,7 +6,7 @@ let list_data = [
     {
         name: "작성한 글 보기",
         icon: <CiViewList />,
-        link: "/posts"
+        link: "/posts/:memberId"
     },
     {
         name: "정보 수정",
@@ -16,7 +16,7 @@ let list_data = [
     {
         name: "동아리 만들기",
         icon: <FiUserPlus />,
-        link: "/clubs/:memberId"
+        link: "/clubs/create/:memberId"
     },
     {
         name: "회원 탈퇴",

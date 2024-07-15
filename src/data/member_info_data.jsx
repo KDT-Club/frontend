@@ -9,7 +9,9 @@ let member_info_data = [
         major: "컴퓨터공학부",
         role: "회장",
         phone: "010-0000-0001",
-        password: 1234
+        password: 1234,
+        content: "지원 동기 1",
+        link: "/clubs/:id/joinRequest/101"
     },
     {
         memberId: 102,
@@ -19,7 +21,9 @@ let member_info_data = [
         major: "컴퓨터공학부",
         role: "부회장",
         phone: "010-0000-0002",
-        password: 1234
+        password: 1234,
+        content: "지원 동기 2",
+        link: "/clubs/:id/joinRequest/102"
     },
     {
         memberId: 103,
@@ -29,7 +33,9 @@ let member_info_data = [
         major: "컴퓨터공학부",
         role: "일반",
         phone: "010-0000-0003",
-        password: 1234
+        password: 1234,
+        content: "지원 동기 3",
+        link: "/clubs/:id/joinRequest/103"
     },
     {
         memberId: 104,
@@ -39,7 +45,9 @@ let member_info_data = [
         major: "컴퓨터공학부",
         role: "일반",
         phone: "010-0000-0004",
-        password: 1234
+        password: 1234,
+        content: "지원 동기 4",
+        link: "/clubs/:id/joinRequest/104"
     }
 ];
 

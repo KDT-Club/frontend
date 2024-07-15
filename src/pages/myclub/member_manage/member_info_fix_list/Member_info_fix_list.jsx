@@ -1,9 +1,10 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import './member_info_fix_list.css';
 import {Link, useNavigate} from "react-router-dom";
 import {FaArrowLeft} from "react-icons/fa6";
 import member_info_data from "../../../../data/member_info_data.jsx";
 import { FaPlus } from "react-icons/fa6";
+import memberInfo from "../../data/memberInfo.jsx";
 
 function Member_info_fix_list() {
     const navigate = useNavigate();
