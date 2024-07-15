@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import './mypage.css';
 import { Link, useParams } from 'react-router-dom';
 import list_data from "./mypage_list_data.jsx";
@@ -6,16 +6,30 @@ import Header_center from "../../../components/header/Header_center.jsx";
 import Footer from "../../../components/footer/Footer.jsx";
 import Modal_confirm from "../../../components/modal/Modal_confirm.jsx";
 import member_info_data from "../../../data/member_info_data.jsx";
+import axios from "axios";
 
 function Mypage() {
-    // memberId 임의로 설정
     const { memberId } = useParams();
+
+    // 임의로 설정한 memberId의 member 조회 -> 나중에 삭제
     const member = member_info_data.find(m => m.memberId === parseInt(memberId, 10));
 
-    let [list] = useState(list_data);
+//    const [member, setMember] = useState(null); //  member 데이터 관리 -> 백엔드랑 연결 시 주석 해제
+    let [list] = useState(list_data);   // 마이페이지 목록 (작성 글 조회, 정보 수정 등)
     const [showDeleteModal, setShowDeleteModal] = useState(false);  // 네/아니오 모달창 띄우기
     const [modalMessage, setModalMessage] = useState("");   // 모달창에 띄울 메세지 전달
     const iconStyle = { fontSize: "27px" };
+
+    // 회원 정보를 조회하는 API 호출
+//    useEffect(() => {
+//        axios.get(`/members/${memberId}`)
+//            .then(response => {
+//                setMember(response.data);
+//            })
+//            .catch(error => {
+//                console.error('Error fetching member data:', error);
+//            });
+//    }, [memberId]);
 
     const handleOpenModal = useCallback((message) => {
         setModalMessage(message);

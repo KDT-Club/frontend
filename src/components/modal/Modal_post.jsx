@@ -1,7 +1,7 @@
 import React from "react";
 import './modal_post.css';
 
-const Modal_ok = ({onClose}) => {
+const Modal_post = ({onClose}) => {
     const handleOverlayClick = (e) => {
         if (e.target === e.currentTarget) {
             onClose();
@@ -17,4 +17,4 @@ const Modal_ok = ({onClose}) => {
     );
 };
 
-export default Modal_ok;
+export default Modal_post;
