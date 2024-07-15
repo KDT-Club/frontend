@@ -8,6 +8,7 @@ import {FaArrowLeft} from 'react-icons/fa6';
 import { FiMoreVertical, FiSend } from "react-icons/fi";
 import axios from "axios";
 import Modal_post from "../../../components/modal/Modal_post.jsx";
+import Modal_comment from "../../../components/modal/Modal_comment.jsx";
 
 function formatDate(dateString) {
     const date = new Date(dateString);
@@ -29,22 +30,33 @@ function FreeBoardDetail() {
     const comments = commentData.filter(comment => comment.postId === parseInt(postId));//로컬 댓글 조회
 
     const [showPostModal, setShowPostModal] = useState(false);  // 글 수정or삭제 모달창 띄우기
+    const [showCommentModal, setShowCommentModal] = useState(false);  // 댓글 수정or삭제 모달창 띄우기
+    const [modalPosition, setModalPosition] = useState({ top: '0px', left: '0px' });
 
     const handleBackClick = () => {
         navigate(`/clubs/${clubId}/freeboardlist`);
     };
 
-    const handleDotClick = () => {
+    const handlePostDotClick = () => {
         setShowPostModal(true);
+    };
+
+    const handleCommentDotClick = (e) => {
+        // 모달 위치 설정: 클릭한 위치 + 10px 여백
+        setModalPosition({
+            top: e.clientY + 3 + 'px'
+        });
+        setShowCommentModal(true);
+    };
+
+    const closeModal = () => {
+        setShowPostModal(false);
+        setShowCommentModal(false);
     }
 
     const handleEditClick = () => {
         navigate(`/clubs/${clubId}/board/4/posts/${postId}/edit`);
     };
-
-    const closeModal = () => {
-        setShowPostModal(false);
-    }
 
     //게시글, 댓글 API 조회-----------------------------------------------------------------------------
     //const [post, setPost] = useState('');
@@ -133,7 +145,7 @@ function FreeBoardDetail() {
                 <div style={{fontSize: '22px', fontWeight: "bold"}}>자유게시판</div>
                 <FiMoreVertical
                     style={{fontSize: '26px', cursor: 'pointer'}}
-                    onClick={handleDotClick}
+                    onClick={handlePostDotClick}
                 />
             </div>
             <div
@@ -182,6 +194,7 @@ function FreeBoardDetail() {
                                 </p>
                                 <FiMoreVertical
                                     style={{fontSize: '20px', cursor: 'pointer', marginRight: '20px'}}
+                                    onClick={handleCommentDotClick}
                                 />
                             </div>
                             <p style={{
@@ -209,6 +222,7 @@ function FreeBoardDetail() {
                 </div>
             </form>
             {showPostModal && <Modal_post onClose={closeModal} onEdit={handleEditClick}/>}
+            {showCommentModal && <Modal_comment onClose={closeModal} position={modalPosition} />}
         </div>
     );
 }

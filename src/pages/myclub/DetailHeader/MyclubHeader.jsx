@@ -115,11 +115,13 @@ function MyclubHeader() {
         navigate(`/clubs/${id}/changeClubInfo`, { state: { isMenuOpen: true } }); // 햄버거탭 오픈 상태 전달;
     };
 
+    // 네/아니오 모달창 open
     const handleOpenDeleteModal = useCallback((message) => {
         setModalMessage(message);
         setShowDeleteModel(true);
     }, []);
 
+    // 네/아니오 모달창 close
     const handleCloseDeleteModal = () => setShowDeleteModel(false);
 
     return (
