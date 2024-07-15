@@ -30,7 +30,6 @@ function MyclubHeader() {
     const [showDeleteModal, setShowDeleteModel] = useState(false);  // 네,아니오 모달창 띄우기
     const [modalMessage, setModalMessage] = useState("");   // 모달 메세지
 
-    // club 데이터를 불러와서 상태 설정
     //여기부터.......
     useEffect(() => {
         setClubs(clubData);
@@ -142,6 +141,7 @@ function MyclubHeader() {
                     <div className="member-info">
                         <h2>{member.name}</h2>
                         <p>2020101460</p>
+                        {/*API수정 필요!*/}
                     </div>
                     <div className="menu-items">
                         <div className="li-container" onClick={toggleMemberList}>
