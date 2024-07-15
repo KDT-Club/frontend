@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useState} from "react";
 import './mypage.css';
-import { Link, useParams } from 'react-router-dom';
+import {Link, useNavigate, useParams} from 'react-router-dom';
 import list_data from "./mypage_list_data.jsx";
 import Header_center from "../../../components/header/Header_center.jsx";
 import Footer from "../../../components/footer/Footer.jsx";
@@ -9,6 +9,7 @@ import member_info_data from "../../../data/member_info_data.jsx";
 import axios from "axios";
 
 function Mypage() {
+    const navigate = useNavigate();
     const { memberId } = useParams();
 
     // 임의로 설정한 memberId의 member 조회 -> 나중에 삭제
@@ -18,6 +19,7 @@ function Mypage() {
     let [list] = useState(list_data);   // 마이페이지 목록 (작성 글 조회, 정보 수정 등)
     const [showDeleteModal, setShowDeleteModal] = useState(false);  // 네/아니오 모달창 띄우기
     const [modalMessage, setModalMessage] = useState("");   // 모달창에 띄울 메세지 전달
+    const [onConfirm, setOnConfirm] = useState(() => () => {});
     const iconStyle = { fontSize: "27px" };
 
     // 회원 정보를 조회하는 API 호출
@@ -31,8 +33,9 @@ function Mypage() {
 //            });
 //    }, [memberId]);
 
-    const handleOpenModal = useCallback((message) => {
+    const handleOpenModal = useCallback((message, confirmCallback) => {
         setModalMessage(message);
+        setOnConfirm(() => confirmCallback);
         setShowDeleteModal(true);
     }, []);
 
@@ -45,7 +48,7 @@ function Mypage() {
                 <div className="propyl">
                     <div className="title">
                         <p>내 프로필</p>
-                        <button onClick={() => handleOpenModal("로그아웃 하시겠습니까?")}>로그아웃</button>
+                        <button onClick={() => handleOpenModal("로그아웃 하시겠습니까?", () => navigate("/"))}>로그아웃</button>
                     </div>
                     <img
                         src={member.img}
@@ -63,7 +66,7 @@ function Mypage() {
                         if (a.isDelete) {
                             return (
                                 <div className="mypage_list" key={i}>
-                                    <div className="link" onClick={() => handleOpenModal(a.message)}>
+                                    <div className="link" onClick={() => handleOpenModal(a.message, () => navigate("/"))}>
                                         <div style={iconStyle} className="icon">{a.icon}</div>
                                         <p>{a.name}</p>
                                     </div>
@@ -84,7 +87,7 @@ function Mypage() {
                 }
             </div>
             <Footer />
-            {showDeleteModal && <Modal_confirm onClose={handleCloseModal} message={modalMessage} link="/" />}
+            {showDeleteModal && <Modal_confirm onClose={handleCloseModal} message={modalMessage} onConfirm={onConfirm} />}
         </div>
     );
 }
