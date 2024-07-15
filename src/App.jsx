@@ -65,9 +65,9 @@ function App() {
                         <Route path="/login" element={<Login />} />
                         <Route path="/signup" element={<SignUp />} />
                         <Route path="/members/:memberId" element={<Mypage />} />
-                        <Route path="/posts" element={<Written_post />} />
+                        <Route path="/posts/:memberId" element={<Written_post />} />
                         <Route path="/edit_info/:memberId" element={<Edit_info />} />
-                        {/*<Route path="/clubs/:memberId" element={<Create_club />} />*/}
+                        <Route path="/clubs/create/:memberId" element={<Create_club />} />
                         <Route path="/memberInfoFixList" element={<Member_info_fix_list />} />
                         <Route path="/memberInfoFix/:memberId" element={<Member_info_fix />} />
                         <Route path="/main" element={<MainPage />} />
