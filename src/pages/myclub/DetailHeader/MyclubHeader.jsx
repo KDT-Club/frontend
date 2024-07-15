@@ -150,9 +150,9 @@ function MyclubHeader() {
                                 <li>회원</li>
                             </div>
                             {isMemberListOpen ? (
-                                <MdKeyboardArrowDown style={{marginRight: "20px", fontSize: "28px"}} />
+                                <MdKeyboardArrowDown style={{marginRight: "17px", fontSize: "28px"}} />
                             ) : (
-                                <MdKeyboardArrowRight style={{marginRight: "20px", fontSize: "28px"}} />
+                                <MdKeyboardArrowRight style={{marginRight: "17px", fontSize: "28px"}} />
                             )}
                         </div>
                         {isMemberListOpen && (
@@ -174,9 +174,9 @@ function MyclubHeader() {
                                 <li>회원 관리</li>
                             </div>
                             {isMemberManageOpen ? (
-                                <MdKeyboardArrowDown style={{marginRight: "20px", fontSize: "28px"}} />
+                                <MdKeyboardArrowDown style={{marginRight: "17px", fontSize: "28px"}} />
                             ) : (
-                                <MdKeyboardArrowRight style={{marginRight: "20px", fontSize: "28px"}} />
+                                <MdKeyboardArrowRight style={{marginRight: "17px", fontSize: "28px"}} />
                             )}
                         </div>
                         {isMemberManageOpen && (
@@ -192,9 +192,9 @@ function MyclubHeader() {
                                 <li>동아리 관리</li>
                             </div>
                             {isClubManageOpen ? (
-                                <MdKeyboardArrowDown style={{marginRight: "20px", fontSize: "28px"}} />
+                                <MdKeyboardArrowDown style={{marginRight: "17px", fontSize: "28px"}} />
                             ) : (
-                                <MdKeyboardArrowRight style={{marginRight: "20px", fontSize: "28px"}} />
+                                <MdKeyboardArrowRight style={{marginRight: "17px", fontSize: "28px"}} />
                             )}
                         </div>
                         {isClubManageOpen && (
@@ -206,8 +206,8 @@ function MyclubHeader() {
                     </div>
                     <div className="leave-club" onClick={() => handleOpenDeleteModal("동아리에서 탈퇴하시겠습니까?")}>
                         <div className="leave-club-line">
-                            <li style={{marginRight: "10px", fontSize: "15px", te: "center"}}>동아리 탈퇴하기</li>
-                            <TbDoorExit style={{fontSize: "25px"}}/>
+                            <li style={{marginRight: "10px", fontSize: "14px", te: "center"}}>동아리 탈퇴하기</li>
+                            <TbDoorExit style={{fontSize: "23px"}}/>
                         </div>
                     </div>
                 </div>

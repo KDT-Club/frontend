@@ -4,11 +4,11 @@ import {Route, BrowserRouter as Router, Routes} from 'react-router-dom';
 import Logo from './pages/login/start_logo.jsx';
 import Login from './pages/login/login.jsx';
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import Create_club from "./pages/mypage/create_club/Create_club.jsx";
 import SignUp from './pages/login/signup.jsx';
 import Mypage from './pages/mypage/mypage_main/Mypage.jsx';
 import Written_post from "./pages/mypage/written_post/Written_post.jsx";
 import Edit_info from "./pages/mypage/edit_info/Edit_info.jsx";
-import Create_club from "./pages/mypage/create_club/Create_club.jsx";
 import Member_info_fix_list from "./pages/myclub/member_manage/member_info_fix_list/Member_info_fix_list.jsx";
 import Member_info_fix from "./pages/myclub/member_manage/member_info_fix/Member_info_fix.jsx";
 import MainPage from './pages/main/MainPage.jsx'
@@ -26,9 +26,11 @@ import Atd from "./pages/myclub/etc/Atd.jsx";
 import Etc2 from "./pages/myclub/etc/Etc2.jsx";
 import Etc3 from "./pages/myclub/etc/Etc3.jsx";
 import NoticeList from "./pages/myclub/notice/NoticeList.jsx";
+import NoticeWrite from "./pages/myclub/notice/WriteAndEdit/NoticeWrite.jsx";
 import FreeBoardList from "./pages/myclub/freeboard/FreeBoardList.jsx";
 import NoticeDetail from "./pages/myclub/notice/NoticeDetail.jsx";
 import FreeBoardDetail from "./pages/myclub/freeboard/FreeBoardDetail.jsx";
+import FreeBoardWrite from "./pages/myclub/freeboard/WriteAndEdit/FreeBoardWrite.jsx";
 
 function App() {
     const [showLogo, setShowLogo] = React.useState(true);
@@ -84,10 +86,11 @@ function App() {
                         <Route path="/clubs" element={<MyclubMain />} />
                         <Route path="/clubs/:id" element={<MyclubDetail />} />
                         <Route path="/clubs/:id/noticelist" element={<NoticeList />} />
-                        <Route path="/clubs/:id/freeboardlist" element={<FreeBoardList />} />
+                        <Route path="/clubs/:id/noticelist/noticewrite" element={<NoticeWrite />} />
                         <Route path="/clubs/:clubId/board/2/posts/:postId" element={<NoticeDetail />} />
+                        <Route path="/clubs/:id/freeboardlist" element={<FreeBoardList />} />
+                        <Route path="/clubs/:id/freeboardlist/freeboardwrite" element={<FreeBoardWrite />} />
                         <Route path="/clubs/:clubId/board/4/posts/:postId" element={<FreeBoardDetail />} />
-
                         <Route path="/clubs/etc1" element={<Etc1 />} />
                         <Route path="/clubs/etc1/atd" element={<Atd />} />
                         <Route path="/clubs/etc2" element={<Etc2 />} />

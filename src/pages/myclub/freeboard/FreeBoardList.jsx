@@ -50,7 +50,7 @@ function FreeBoardList(){
     }, [id]);
 
     const handleWriteClick = () => {
-        navigate(`/clubs/${id}/board/4/freeboardwrite`);
+        navigate(`/clubs/${id}/freeboardlist/freeboardwrite`);
     };
 
     const handleBackClick = () => {
@@ -90,19 +90,5 @@ function FreeBoardList(){
         </div>
     )
 }
-
-// function List({title, content, createdAt, link}) {
-//     const formattedDate = formatDate(createdAt);
-//     return (
-//         <div className="post">
-//             <Link to={link}>
-//                 <p className="title">{title}</p>
-//                 <p className="content">{content}</p>
-//                 <p className="createdAt">{formattedDate}</p>
-//             </Link>
-//         </div>
-//     )
-// }
-
 
 export default FreeBoardList;
