@@ -34,7 +34,7 @@
 }
 
 .information {
-    margin-top: 130px;
+    margin-top: 180px;
 }
 
 .information .name, .information .major, .information .password {
@@ -83,7 +83,7 @@
     width: 80%;
     height: 40px;
     font-size: 17px;
-    margin-top: 150px;
+    margin-top: 50px;
     padding-top: 8px;
     padding-bottom: 10px;
     background-color: #597CA5;
