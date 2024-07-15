@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import './myclubheader.css'
 import { FaArrowLeft } from "react-icons/fa6";
 import { RxHamburgerMenu } from "react-icons/rx";
@@ -28,7 +28,6 @@ function MyclubHeader() {
     const [isClubManageOpen, setIsClubManageOpen] = useState(false); //동아리 관리
 
     const [showDeleteModal, setShowDeleteModel] = useState(false);  // 네,아니오 모달창 띄우기
-    const [showOkModal, setShowOkModel] = useState(false);  // OK 모달창 띄우기
     const [modalMessage, setModalMessage] = useState("");   // 모달 메세지
 
     // club 데이터를 불러와서 상태 설정
@@ -37,6 +36,7 @@ function MyclubHeader() {
         setClubs(clubData);
     }, []);
     const club = clubs.find(club => club.clubId === parseInt(id)) ?? {};
+
     useEffect(() => {
         //memberId get
         const getMemberId = clubmemberData.filter(member => member.clubId === parseInt(id));
@@ -116,19 +116,12 @@ function MyclubHeader() {
         navigate(`/clubs/${id}/changeClubInfo`, { state: { isMenuOpen: true } }); // 햄버거탭 오픈 상태 전달;
     };
 
-    const handleOpenDeleteModal = (message) => {
+    const handleOpenDeleteModal = useCallback((message) => {
         setModalMessage(message);
         setShowDeleteModel(true);
-    };
+    }, []);
 
     const handleCloseDeleteModal = () => setShowDeleteModel(false);
-
-    const handleOpenOkModal = (message) => {
-        setModalMessage(message);
-        setShowOkModel(true);
-    };
-
-    const handleCloseOkModal = () => setShowOkModel(false);
 
     return (
         <>
@@ -219,7 +212,6 @@ function MyclubHeader() {
                     </div>
                 </div>
                 {showDeleteModal && <Modal_confirm onClose={handleCloseDeleteModal} message={modalMessage} link="/" />}
-                {showOkModal && <Modal_ok onClose={handleCloseOkModal} message={modalMessage} />}
             </div>
         </>
     );
