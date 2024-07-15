@@ -5,9 +5,9 @@ import { FaArrowLeft } from "react-icons/fa6";
 import { CiCirclePlus } from "react-icons/ci";
 
 function Create_club() {
+    // memberId 가정
     const navigate = useNavigate();
-    const  memberId  = 101
-    console.log(memberId);
+    const { memberId } = useParams();
     let category_id = ["sport", "scholarship", "literature", "service", "entertain", "new"];
     let category_list = ["체육", "학술", "문학", "봉사", "예체능", "신설"];
 

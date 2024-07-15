@@ -8,20 +8,21 @@ import Modal_confirm from "../../../components/modal/Modal_confirm.jsx";
 import member_info_data from "../../../data/member_info_data.jsx";
 
 function Mypage() {
+    // memberId 임의로 설정
     const { memberId } = useParams();
     const member = member_info_data.find(m => m.memberId === parseInt(memberId, 10));
 
     let [list] = useState(list_data);
-    const [showDeleteModal, setShowDeleteModel] = useState(false);
-    const [modalMessage, setModelMessage] = useState("");
+    const [showDeleteModal, setShowDeleteModal] = useState(false);  // 네/아니오 모달창 띄우기
+    const [modalMessage, setModalMessage] = useState("");   // 모달창에 띄울 메세지 전달
     const iconStyle = { fontSize: "27px" };
 
     const handleOpenModal = useCallback((message) => {
-        setModelMessage(message);
-        setShowDeleteModel(true);
+        setModalMessage(message);
+        setShowDeleteModal(true);
     }, []);
 
-    const handleCloseModal = () => setShowDeleteModel(false);
+    const handleCloseModal = () => setShowDeleteModal(false);
 
     return (
         <div className="Mypage">
