@@ -6,41 +6,30 @@ import {useNavigate, useParams} from "react-router-dom";
 import { FiX, FiCheck } from "react-icons/fi";
 import { LuImagePlus } from "react-icons/lu";
 
-function NoticeWrite() {
-    let { id } = useParams();
+function NoticeEdit() {
+    let { id, postId } = useParams();
     const navigate = useNavigate();
 
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [attachmentNames, setAttachmentNames] = useState([]);
 
-    const [clubName, setClubName] = useState('');
-
     useEffect(() => {
-        const fetchClubInfo = async () => {
+        const fetchPostData = async () => {
             try {
-                // 1. 현재 로그인한 사용자 정보 가져오기
-                const userResponse = await axios.get(''); //로그인 정보 받을 수 있는 url
-                const memberId = userResponse.data.memberId;
-
-                // 2. 해당 사용자의 동아리 목록 가져오기
-                const clubsResponse = await axios.get(`/clubs?memberId=${memberId}`);
-                const clubs = clubsResponse.data;
-
-                // 3. 현재 페이지의 id와 일치하는 동아리 찾고 clubName 얻기
-                const club = clubs.find(club => club.clubId === parseInt(id));
-                if (club) {
-                    setClubName(club.clubName);
-                } else {
-                    throw new Error('해당 동아리를 찾을 수 없습니다.');
-                }
+                //게시글 정보 가져오기
+                const response = await axios.get(`/club${id}/board/2/posts/${postId}`);
+                const post = response.data;
+                setTitle(post.title);
+                setContent(post.content);
+                setAttachmentNames(post.attachmentNames || []);
             } catch (error) {
-                console.error('정보를 가져오는 중 오류 발생:', error);
-                alert('정보를 불러오는 데 실패했습니다.');
+                console.error('게시글 정보 가져오는 중 오류 발생:', error);
+                alert('게시글 정보를 불러오는 데 실패했습니다.');
             }
         };
-        fetchClubInfo();
-    }, [id]);
+        fetchPostData();
+    }, [id, postId]);
 
     // 제목 입력
     const handleTitleChange = (e) => {
@@ -75,36 +64,32 @@ function NoticeWrite() {
     const handleFileChange = async (e) => {
         const selectedFiles = Array.from(e.target.files);
         const urls = await Promise.all(selectedFiles.map(file => getPresignedUrl(file)));
-        setAttachmentNames(urls);
+        setAttachmentNames([...attachmentNames, ...urls]);
     };
 
     // 글쓰기 폼 제출
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!clubName) {
-            alert('동아리 정보를 불러오는 중 오류가 발생했습니다. 페이지를 새로고침 후 다시 시도해주세요.');
-            return;
-        }
         try {
-            const response = await axios.post(`/club${id}/board/2/posts`, {
+            const response = await axios.put(`/posts/${postId}`, {
+                postId,
                 title,
                 content,
                 attachment_flag: attachmentNames.length > 0 ? 'Y' : 'N',
-                attachment_names: attachmentNames,
-                club_name: clubName,
+                attachment_names: attachmentNames, //attachment_name: 첨부파일 이름 -> ???
             });
             if (response.status === 200 || response.status === 201) {
-                alert('공지사항 작성 완료');
-                navigate(`/clubs/${id}/noticelist`);
+                alert('수정 완료');
+                navigate(`/clubs/${id}/board/2/posts/${postId}`);
             }
         } catch (error) {
-            console.error('공지사항 작성 중 오류 발생:', error);
-            alert('글 작성 중 오류가 발생했습니다. 다시 시도해주세요.');
+            console.error('수정 중 오류 발생:', error);
+            alert('글 수정 중 오류가 발생했습니다. 다시 시도해주세요.');
         }
     };
 
     const handleBackClick = () => {
-        navigate(`/clubs/${id}/noticelist`);
+        navigate(-1);
     };
 
     return (
@@ -114,7 +99,7 @@ function NoticeWrite() {
                     style={{fontSize: '27px', cursor: 'pointer'}}
                     onClick={handleBackClick}
                 />
-                <div style={{fontSize: '22px', fontWeight: "bold"}}>공지사항 작성</div>
+                <div style={{fontSize: '22px', fontWeight: "bold"}}>글 수정</div>
                 <FiCheck
                     style={{fontSize: '27px', cursor: 'pointer'}}
                     onClick={handleSubmit}
@@ -161,4 +146,4 @@ function NoticeWrite() {
     )
 }
 
-export default NoticeWrite;
+export default NoticeEdit;

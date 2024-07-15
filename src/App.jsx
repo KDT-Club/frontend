@@ -31,6 +31,8 @@ import FreeBoardList from "./pages/myclub/freeboard/FreeBoardList.jsx";
 import NoticeDetail from "./pages/myclub/notice/NoticeDetail.jsx";
 import FreeBoardDetail from "./pages/myclub/freeboard/FreeBoardDetail.jsx";
 import FreeBoardWrite from "./pages/myclub/freeboard/WriteAndEdit/FreeBoardWrite.jsx";
+import NoticeEdit from "./pages/myclub/notice/WriteAndEdit/NoticeEdit.jsx";
+import FreeBoardEdit from "./pages/myclub/freeboard/WriteAndEdit/FreeBoardEdit.jsx"
 
 function App() {
     const [showLogo, setShowLogo] = React.useState(true);
@@ -88,9 +90,11 @@ function App() {
                         <Route path="/clubs/:id/noticelist" element={<NoticeList />} />
                         <Route path="/clubs/:id/noticelist/noticewrite" element={<NoticeWrite />} />
                         <Route path="/clubs/:clubId/board/2/posts/:postId" element={<NoticeDetail />} />
+                        <Route path="/clubs/:clubId/board/2/posts/:postId/edit" element={<NoticeEdit />} />
                         <Route path="/clubs/:id/freeboardlist" element={<FreeBoardList />} />
                         <Route path="/clubs/:id/freeboardlist/freeboardwrite" element={<FreeBoardWrite />} />
                         <Route path="/clubs/:clubId/board/4/posts/:postId" element={<FreeBoardDetail />} />
+                        <Route path="/clubs/:clubId/board/4/posts/:postId/edit" element={<FreeBoardEdit />} />
                         <Route path="/clubs/etc1" element={<Etc1 />} />
                         <Route path="/clubs/etc1/atd" element={<Atd />} />
                         <Route path="/clubs/etc2" element={<Etc2 />} />
