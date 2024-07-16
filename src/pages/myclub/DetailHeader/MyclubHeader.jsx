@@ -112,7 +112,7 @@ function MyclubHeader() {
         setIsClubManageOpen(!isClubManageOpen);
     };
     const handleClubInfoEdit = () => { //동아리 정보 수정
-        navigate(`/clubs/${id}/changeClubInfo`, { state: { isMenuOpen: true } }); // 햄버거탭 오픈 상태 전달;
+        navigate(`/clubs/${id}/changeclubinfo`, { state: { isMenuOpen: true } }); // 햄버거탭 오픈 상태 전달;
     };
 
     // 네/아니오 모달창 open
@@ -128,12 +128,12 @@ function MyclubHeader() {
         <>
             <div className="header_container">
                 <FaArrowLeft
-                    style={{fontSize: '26px', cursor: 'pointer'}}
+                    style={{fontSize: '24px', cursor: 'pointer'}}
                     onClick={handleBackClick}
                 />
-                <div style={{fontSize: '26px', fontWeight: "bold"}}>{club.name}</div>
+                <div style={{fontSize: '24px', fontWeight: "bold"}}>{club.name}</div>
                 <RxHamburgerMenu
-                    style={{fontSize: '27px', strokeWidth: '0.3', cursor: 'pointer'}}
+                    style={{fontSize: '24px', strokeWidth: '0.3', cursor: 'pointer'}}
                     onClick={toggleMenu}
                 />
             </div>

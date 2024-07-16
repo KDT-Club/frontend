@@ -34,6 +34,7 @@ import FreeBoardDetail from "./pages/myclub/freeboard/FreeBoardDetail.jsx";
 import FreeBoardWrite from "./pages/myclub/freeboard/WriteAndEdit/FreeBoardWrite.jsx";
 import NoticeEdit from "./pages/myclub/notice/WriteAndEdit/NoticeEdit.jsx";
 import FreeBoardEdit from "./pages/myclub/freeboard/WriteAndEdit/FreeBoardEdit.jsx"
+import ClubInfoEdit from "./pages/myclub/DetailHeader/club_manage/ClubInfoEdit.jsx";
 
 function App() {
     const [showLogo, setShowLogo] = React.useState(true);
@@ -102,6 +103,7 @@ function App() {
                         <Route path="/clubs/etc1/atd" element={<Atd />} />
                         <Route path="/clubs/etc2" element={<Etc2 />} />
                         <Route path="/clubs/etc3" element={<Etc3 />} />
+                        <Route path="/clubs/:id/changeclubinfo" element={<ClubInfoEdit />} />
                     </Routes>
                 </div>
             </GoogleOAuthProvider>

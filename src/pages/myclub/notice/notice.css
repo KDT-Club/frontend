@@ -4,7 +4,7 @@
     flex-direction: column;
 }
 
-.scroll-container {
+.scrolll-container {
     flex: 1;
     overflow-y: auto;
     margin-top: 2px;
@@ -24,7 +24,7 @@
 
 .post .title {
     font-weight: bold;
-    font-size: 19.2px;
+    font-size: 18px;
     margin-top: 17px;
     margin-bottom: 0px;
     margin-left: 20px;
@@ -33,7 +33,7 @@
 
 .post .content {
     margin-top: 4px;
-    font-size: 17.7px;
+    font-size: 17px;
     color: dimgrey;
     text-align: left;
     margin-left: 20px;
@@ -43,7 +43,7 @@
 .post .createdAt {
     margin-top: 2px;
     margin-bottom: 13px;
-    font-size: 17px;
+    font-size: 16px;
     color: gray;
     text-align: left;
     margin-left: 20px;
@@ -52,7 +52,7 @@
 .comment-container {
     display: flex;
     flex-direction: column;
-    margin-top: 20px;
+    margin-top: 12px;
     padding-bottom: 60px; /* input을 위해 하단 여백 추가 */
 }
 
@@ -80,11 +80,11 @@
 .submit-comment-container input {
     width: 80%;
     flex: 1;
-    font-size: 18px;
+    font-size: 16.5px;
     text-align: center;
     border-radius: 7px;
     border: 1.5px solid darkgray;
-    height: 50px;
+    height: 47px;
     margin-left: 10px;
 }
 

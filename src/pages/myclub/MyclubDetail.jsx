@@ -195,7 +195,7 @@ function MyclubDetail({clubs}) {
                     </section>
                 </div>
             </div>
-            <Footer />
+            <Footer style={{height: "72.5px", marginTop: "0"}}/>
         </div>
     );
 }
