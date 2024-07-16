@@ -35,9 +35,9 @@ function Member_info_fix() {
             </div>
             {member && (
                 <div className="member_info_detail">
-                    <img src={member.img} alt={member.name}/>
+                    <img src={member.memberImageURL} alt={member.name}/>
                     <p className="name">{member.name}</p>
-                    <p className="studentNum">학번: {member.studentNum}</p><br/>
+                    <p className="studentNum">학번: {member.studentId}</p><br/>
                     <div className="role">직책<br/>
                         <button
                             className={`role-button ${role === '회장' ? 'role-president' : ''}`}
@@ -62,7 +62,7 @@ function Member_info_fix() {
                         <p className="phoneNum">{member.phone}</p>
                     </div>
                     <div className="major">전공<br/>
-                        <p className="majorName">{member.major}</p>
+                        <p className="majorName">{member.department}</p>
                     </div>
                 </div>
             )}

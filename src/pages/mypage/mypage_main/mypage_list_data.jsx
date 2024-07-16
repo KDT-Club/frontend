@@ -6,7 +6,7 @@ let list_data = [
     {
         name: "작성한 글 보기",
         icon: <CiViewList />,
-        link: "/posts/:memberId"
+        link: "/post_list/:memberId"
     },
     {
         name: "정보 수정",

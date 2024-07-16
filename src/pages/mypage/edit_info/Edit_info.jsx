@@ -14,10 +14,10 @@ function Edit_info() {
     // 여기부터
     const member = member_info_data.find(m => m.memberId === parseInt(memberId, 10));
     const [data, setData] = useState({
-        img: member.img,
+        memberImageURL: member.memberImageURL,
         name: member.name,
         memberId: member.memberId,
-        major: member.major,
+        department: member.department,
         phone: member.phone,
         password: member.password
     });
@@ -25,11 +25,13 @@ function Edit_info() {
 
     // member 데이터 관리
 //    const [data, setData] = useState({
-//        img: "",
+//        id: "",
 //        name: "",
-//        memberId: "",
-//        major: "",
-//        password: ""
+//        department: "",
+//        studentId: "",
+//        password: "",
+//        memberImageURL: "",
+//        phone: ""
 //    });
 
     const [showOkModal, setShowOkModel] = useState(false);
@@ -42,15 +44,17 @@ function Edit_info() {
 //        axios.get(`/members/${memberId}`)
 //            .then(response => {
 //                setData({
-//                    img: response.data.img,
+//                    id: response.data.id,
 //                    name: response.data.name,
-//                    memberId: response.data.memberId,
-//                    major: response.data.major,
+//                    department: response.data.department,
+//                    studentId: response.data.studentId,
 //                    password: response.data.password
+//                    memberImageURL: response.data.memberImageURL,
+//                    phone: response.data.phone
 //                });
 //            })
 //            .catch(error => {
-//                console.error('Error fetching member data:', error);
+//                console.error('회원 정보 조회 중 오류 발생:', error);
 //            });
 //    }, [memberId]);
 
@@ -73,12 +77,21 @@ function Edit_info() {
     };
 
 //    const handleUpdateInfo = () => {
-//        axios.put(`/members/${memberId}`, data)
+//        const requestBody = {
+//            id: data.id,
+//            name: data.name,
+//            department: data.department,
+//            studentId: data.studentId,
+//            password: data.password,
+//            memberImageURL: data.memberImageURL,
+//            phone: data.phone
+//        }
+//        axios.put(`/members/${memberId}`, requestBody)
 //            .then(response => {
 //                handleOpenOkModal("수정이 완료되었습니다.", () => navigate(-1));
 //            })
 //            .catch(error => {
-//                console.error('Error updating member data:', error);
+//                console.error('회원 정보 수정 중 오류 발생:', error);
 //                handleOpenOkModal("수정에 실패했습니다. 다시 시도해주세요.", () => {});
 //            });
 //    };
@@ -93,7 +106,7 @@ function Edit_info() {
                 <p>정보 수정</p>
             </div>
             <div className="edit">
-                <img src={data.img} />
+                <img src={data.memberImageURL} />
                 <MdOutlineCameraAlt className="camera_icon" />
                 <div className="information">
                     <div className="name">
@@ -102,7 +115,7 @@ function Edit_info() {
                     </div>
                     <div className="major">
                         <p>학과</p>
-                        <input type="text" name="major" value={data.major} onChange={Change}/>
+                        <input type="text" name="major" value={data.department} onChange={Change}/>
                     </div>
                     <div className="phone">
                         <p>전화번호</p>

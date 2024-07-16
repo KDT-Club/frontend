@@ -33,6 +33,18 @@ function Mypage() {
 //            });
 //    }, [memberId]);
 
+    // 회원 탈퇴
+    const handleDeleteAccount = () => {
+        axios.delete(`/members/${memberId}`)
+            .then(() => {
+                // 탈퇴 성공 시 홈으로 이동
+                navigate('/');
+            })
+            .catch(error => {
+                console.error('회원 탈퇴 중 오류 발생:', error);
+            });
+    };
+
     const handleOpenModal = useCallback((message, confirmCallback) => {
         setModalMessage(message);
         setOnConfirm(() => confirmCallback);
@@ -51,12 +63,12 @@ function Mypage() {
                         <button onClick={() => handleOpenModal("로그아웃 하시겠습니까?", () => navigate("/"))}>로그아웃</button>
                     </div>
                     <img
-                        src={member.img}
+                        src={member.memberImageURL}
                         alt="Profile"
                     />
                     <div className="info">
                         <p style={{ paddingTop: "5px", fontSize: "18px" }}>{member.name}</p>
-                        <p style={{ fontSize: "15px", marginLeft: "2px" }}>{member.studentNum}</p>
+                        <p style={{ fontSize: "15px", marginLeft: "2px" }}>{member.studentId}</p>
                     </div>
                 </div>
             )}
@@ -66,7 +78,7 @@ function Mypage() {
                         if (a.isDelete) {
                             return (
                                 <div className="mypage_list" key={i}>
-                                    <div className="link" onClick={() => handleOpenModal(a.message, () => navigate("/"))}>
+                                    <div className="link" onClick={() => handleOpenModal(a.message, handleDeleteAccount)}>
                                         <div style={iconStyle} className="icon">{a.icon}</div>
                                         <p>{a.name}</p>
                                     </div>

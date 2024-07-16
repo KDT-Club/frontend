@@ -24,7 +24,7 @@ function Member_info_fix_list() {
                 {
                     list.map((a, i) => {
                         return (
-                            <List key={i} img={a.img} name={a.name} role={a.role} memberId={a.memberId}/>
+                            <List key={i} memberImageURL={a.memberImageURL} name={a.name} role={a.role} memberId={a.memberId}/>
                         )
                     })
                 }
@@ -33,10 +33,10 @@ function Member_info_fix_list() {
     )
 }
 
-function List({ img, name, role, memberId }) {
+function List({ memberImageURL, name, role, memberId }) {
     return (
         <div className="member_info_item">
-            <img src={img} alt={name} />
+            <img src={memberImageURL} alt={name} />
             <div className="member_info">
                 <p className="name">{name}</p>
                 <p className="role">{role}</p>
