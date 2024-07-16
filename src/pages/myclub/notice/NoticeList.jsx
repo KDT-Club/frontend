@@ -61,16 +61,16 @@ function NoticeList(){
         <div>
             <div className="header_container">
                 <FaArrowLeft
-                    style={{fontSize: '26px', cursor: 'pointer'}}
+                    style={{fontSize: '24px', cursor: 'pointer'}}
                     onClick={handleBackClick}
                 />
-                <div style={{fontSize: '22px', fontWeight: "bold"}}>공지사항</div>
+                <div style={{fontSize: '20px', fontWeight: "bold"}}>공지사항</div>
                 <FiEdit
                     onClick={handleWriteClick}
-                    style={{ fontSize: '26px', cursor: 'pointer' }}
+                    style={{ fontSize: '24px', cursor: 'pointer' }}
                 />
             </div>
-            <div className="scroll-container">
+            <div className="scrolll-container">
                 <div className="notice_list">
                     {list.length > 0 ? (
                         list.map((notice, index) => (

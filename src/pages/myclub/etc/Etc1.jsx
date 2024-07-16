@@ -29,15 +29,15 @@ function Etc1() {
         <div>
             <div className="header_container">
                 <FaArrowLeft
-                    style={{ fontSize: '26px', cursor: 'pointer' }}
+                    style={{ fontSize: '24px', cursor: 'pointer' }}
                     onClick={handleBackClick}
                 />
-                <div style={{ fontSize: '22px', fontWeight: "bold", marginRight: "10px" }}>출석 관리</div>
+                <div style={{ fontSize: '20px', fontWeight: "bold", marginRight: "10px" }}>출석 관리</div>
                 <FaRegCalendarPlus
-                    style={{ fontSize: '26px', cursor: 'pointer' }}
+                    style={{ fontSize: '24px', cursor: 'pointer' }}
                 />
             </div>
-            <div className="aaa" style={{fontSize: '20px', cursor: 'pointer'}}>
+            <div className="aaa" style={{fontSize: '18px', cursor: 'pointer'}}>
                 {dates.map((item, index) => (
                     <div key={index} className="bbb" style={{justifyContent: "center"}} onClick={() => handleDateClick(`${item.date} - ${item.event}`)}>
                         <div>{item.date} - {item.event}</div>

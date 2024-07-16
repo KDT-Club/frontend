@@ -96,12 +96,12 @@ function FreeBoardEdit() {
         <div>
             <div className="header_container">
                 <FiX
-                    style={{fontSize: '27px', cursor: 'pointer'}}
+                    style={{fontSize: '24px', cursor: 'pointer'}}
                     onClick={handleBackClick}
                 />
-                <div style={{fontSize: '22px', fontWeight: "bold"}}>글 수정</div>
+                <div style={{fontSize: '19px', fontWeight: "bold"}}>글 수정</div>
                 <FiCheck
-                    style={{fontSize: '27px', cursor: 'pointer'}}
+                    style={{fontSize: '24px', cursor: 'pointer'}}
                     onClick={handleSubmit}
                 />
             </div>

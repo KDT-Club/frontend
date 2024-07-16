@@ -36,21 +36,21 @@ function Etc3() {
         <div>
             <div className="header_container">
                 <FaArrowLeft
-                    style={{fontSize: '26px', cursor: 'pointer'}}
+                    style={{fontSize: '24px', cursor: 'pointer'}}
                     onClick={handleBackClick}
                 />
-                <div style={{ fontSize: '22px', fontWeight: "bold", marginRight: "10px" }}>투표</div>
+                <div style={{ fontSize: '20px', fontWeight: "bold", marginRight: "10px" }}>투표</div>
                 <FaRegPlusSquare
-                    style={{ fontSize: '26px', cursor: 'pointer' }}
+                    style={{ fontSize: '24px', cursor: 'pointer' }}
                 />
             </div>
             <div className="scroll-container">
                 <div className="aaa">
                     <div className="bbb" style={{ flexDirection: "column", alignItems: "center" }}>
-                        <div style={{ fontSize: "22.5px", fontWeight: "bold", marginBottom: "20px"}}>7월 19일 회식 장소</div>
+                        <div style={{ fontSize: "21px", fontWeight: "bold", marginBottom: "20px"}}>7월 19일 회식 장소</div>
                         {['포차천국', '파파존스', '피자스쿨'].map((item, index) => (
                             <div key={index} style={{ display: 'flex', alignItems: 'center', marginBottom: '5px' }}>
-                                <div style={{ fontSize: "18px", marginRight: '10px', marginBottom: "10px" }}>{index + 1}. {item}</div>
+                                <div style={{ fontSize: "17px", marginRight: '10px', marginBottom: "10px" }}>{index + 1}. {item}</div>
                                 <div style={{marginLeft: "35px", marginBottom: '6.5px'}} onClick={() => toggleVote('dinner', index)}>
                                     {votes.dinner[index] ? (
                                         <RiCheckboxCircleLine style={{ fontSize: '28px', cursor: 'pointer' }} />
@@ -62,10 +62,10 @@ function Etc3() {
                         ))}
                     </div>
                     <div className="bbb" style={{flexDirection: "column", alignItems: "center"}}>
-                        <div style={{fontSize: "22.5px", fontWeight: "bold", marginBottom: "20px"}}>MT 날짜</div>
+                        <div style={{fontSize: "21px", fontWeight: "bold", marginBottom: "20px"}}>MT 날짜</div>
                         {['07/19 (금)', '07/11 (목)', '07/06 (토)', '06/26 (수)', '06/20 (목)'].map((item, index) => (
                             <div key={index} style={{display: 'flex', alignItems: 'center', marginBottom: '5px'}}>
-                                <div style={{fontSize: "18px", marginRight: '10px', marginBottom: "10px"}}>{index + 1}. {item}</div>
+                                <div style={{fontSize: "17px", marginRight: '10px', marginBottom: "10px"}}>{index + 1}. {item}</div>
                                 <div style={{marginLeft: "35px", marginBottom: '6.5px'}} onClick={() => toggleVote('mtDate', index)}>
                                     {votes.mtDate[index] ? (
                                         <RiCheckboxCircleLine style={{fontSize: '28px', cursor: 'pointer'}}/>
