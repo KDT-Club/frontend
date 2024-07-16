@@ -97,7 +97,7 @@ textarea::-webkit-scrollbar-thumb {
     color: black;
 }
 
-.Create_club button {
+.form button {
     display: flex;
     align-items: center;
     justify-content: center;

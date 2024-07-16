@@ -37,7 +37,7 @@
     margin-top: 180px;
 }
 
-.information .name, .information .major, .information .password {
+.information .name, .information .major, .information .phone, .information .password {
     padding-top: 2px;
     display: flex;
     align-items: center;
@@ -46,12 +46,12 @@
     width: 100%;
 }
 
-.name, .major, .password {
+.name, .major, .phone, .password {
     display: flex;
     align-items: center;
 }
 
-.name p, .major p, .password p {
+.name p, .major p, .phone p, .password p {
     font-size: 15px;
     font-weight: bold;
     width: 180px;
@@ -59,7 +59,7 @@
     margin-right: 0; /* 오른쪽 마진 제거 */
 }
 
-.name input, .major input, .password input {
+.name input, .major input, .phone input, .password input {
     font-size: 13px;
     flex-grow: 1;
     padding-left: 10px;
@@ -67,16 +67,6 @@
     margin-left: 5px;
     border: none;
     outline: none;
-}
-
-.password {
-    position: relative;
-}
-
-.password .check-icon {
-    position: absolute;
-    right: 5px;
-    font-size: 20px;
 }
 
 .Edit_info button {

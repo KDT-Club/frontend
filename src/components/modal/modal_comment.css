@@ -1,4 +1,4 @@
-.Modal_post {
+.Modal_comment {
     position: fixed;
     top: 0;
     right: 0;
@@ -6,30 +6,29 @@
     height: 100%;
     background: rgba(0, 0, 0, 0.5);
     display: flex;
-    align-items: flex-start;
-    justify-content: flex-end;
     z-index: 1;
-    padding: 35px
+    padding-top: 30px;
+    padding-left: 200px;
 }
 
-.modal_post_content {
+.modal_comment_content {
     background-color: #EFEFEF;
-    width: 50%;
+    width: 40%;
     max-width: 250px;
     border-radius: 25px;
     text-align: center;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    position: relative;
+    position: absolute;
     display: flex;
     flex-direction: column;
     min-height: 80px;
 }
 
-.modal_post_content button {
+.modal_comment_content button {
     width: 100%;
     margin-bottom: 0px;
 }
 
-.modal_post_content .post_delete {
-    border-bottom: 1px solid black;
+.modal_comment_content .comment_delete {
+    border-bottom: 1px solid black; /* 버튼 구분선 */
 }
