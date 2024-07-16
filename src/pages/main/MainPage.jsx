@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import Header_center from "../../components/header/Header_center.jsx";
 import Footer from "../../components/footer/Footer.jsx";
 import '../../styles/App.css';
@@ -12,18 +12,19 @@ function MainPage() {
     const [findClub, setFindClub] = useState('');
     const [clubs, setClubs] = useState([]);
     const [activeIndex, setActiveIndex] = useState(null);
+    const [showClubs, setShowClubs] = useState(false);
     const navigate = useNavigate();
 
     // 나중에 API 전체 불러오는거 연결할 때 쓸게요!
-    // const fetchAllClubs = async () => {
-    //     try {
-    //         const response = await axios.get("/getClub");
-    //         setClubs(response.data);
-    //     } catch (error) {
-    //         console.error("에러발생:", error);
-    //     }
-    // }
-    //
+    const fetchAllClubs = async () => {
+        try {
+            const response = await axios.get("http://3.36.56.20:8080/clubs");
+            setClubs(response.data);
+        } catch (error) {
+            console.error("에러발생:", error);
+        }
+    }
+
     // const fetchClubsByNames = async (clubName) => {
     //     try {
     //         const response = await axios.get("/getClubByName/{clubName}");
@@ -33,19 +34,19 @@ function MainPage() {
     //     }
     // }
 
-    //
-    // useEffect(() => {
-    //     fetchAllClubs();
-    // }, [])
-
-    const handleMenuClick = (index, clubName) => {
+    const handleMenuClick = (index, item) => {
         setActiveIndex(index);
-        //     if(clubName === '전체'){
-        //         fetchAllClubs();
-        //     } else {
-        //         fetchClubsByNames(clubName);
-        //     }
-    };
+            if(item === '전체') {
+                fetchAllClubs();
+                setShowClubs(true);
+                //         } else {
+                //             fetchClubsByNames(clubName);
+                //         }
+            } else {
+                setClubs([]);
+                setShowClubs(false);
+            }
+    }
 
     const handleClubClick = (clubId) => {
         navigate(`/club/${clubId}`);
@@ -81,7 +82,7 @@ function MainPage() {
                         <div
                             key={index}
                             className={`menu-all ${activeIndex === index ? 'active' : ''}`}
-                            onClick={() => handleMenuClick(index)}
+                            onClick={() => handleMenuClick(index, item)}
                             style={{border: activeIndex === index ? '2px solid black' : '0.5px solid gray'}}
                         >
                             <p>{item}</p>
@@ -89,25 +90,29 @@ function MainPage() {
                     ))}
                 </div>
             </div>
-            <div className="clubs-container">
-                <div className="clubs-pt" onClick={() => handleClubClick(1)}>
-                    <img src={dm} alt="dm" className="clubs-logos"/>
-                    <div className="clubs-it">
-                        <p className="clubs-title">D.M</p>
-                        <p className="clubs-sm">삼육대학교 중앙 댄스 동아리 D.M입니다.</p>
-                    </div>
-                </div>
-            </div>
-            {/*이 부분도 나중에 불러오면 이걸로 수정할게요*/}
             {/*<div className="clubs-container">*/}
-            {/*    {clubs.map((club) => (*/}
-            {/*        <div key={club.clubId} className="club-card">*/}
-            {/*            <img src={club.clubImgUrl} alt={club.name}/>*/}
-            {/*            <h3>{club.name}</h3>*/}
-            {/*            <p>{club.description}</p>*/}
+            {/*    <div className="clubs-pt" onClick={() => handleClubClick(1)}>*/}
+            {/*        <img src={dm} alt="dm" className="clubs-logos"/>*/}
+            {/*        <div className="clubs-it">*/}
+            {/*            <p className="clubs-title">D.M</p>*/}
+            {/*            <p className="clubs-sm">삼육대학교 중앙 댄스 동아리 D.M입니다.</p>*/}
             {/*        </div>*/}
-            {/*    ))}*/}
+            {/*    </div>*/}
             {/*</div>*/}
+            {/*이 부분도 나중에 불러오면 이걸로 수정할게요*/}
+            {showClubs && (
+                <div className="clubs-container-wrapper">
+                    {clubs.map((club) => (
+                        <div key={club.clubId} className="clubs-container">
+                            <img src={club.clubImgUrl} alt={club.clubName} className="clubs-logos"/>
+                            <div className="clubs-it">
+                                <p className="clubs-title">{club.clubName}</p>
+                                <p className="clubs-sm">{club.description}</p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
             <Footer/>
         </div>
     );
