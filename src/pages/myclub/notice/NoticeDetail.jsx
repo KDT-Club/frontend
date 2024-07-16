@@ -72,7 +72,7 @@ function NoticeDetail() {
                 setMemberId(memberId);
             } catch (error) {
                 console.error('회원 정보 가져오는 중 오류 발생:', error);
-                alert('회원 정보를 불러오는 데 실패했습니다.');
+                //alert('회원 정보를 불러오는 데 실패했습니다.');
             }
         };
 
@@ -139,12 +139,12 @@ function NoticeDetail() {
         <div>
             <div className="header_container">
                 <FaArrowLeft
-                    style={{fontSize: '26px', cursor: 'pointer'}}
+                    style={{fontSize: '24px', cursor: 'pointer'}}
                     onClick={handleBackClick}
                 />
-                <div style={{fontSize: '22px', fontWeight: "bold"}}>공지사항</div>
+                <div style={{fontSize: '20px', fontWeight: "bold"}}>공지사항</div>
                 <FiMoreVertical
-                    style={{fontSize: '26px', cursor: 'pointer'}}
+                    style={{fontSize: '24px', cursor: 'pointer'}}
                     onClick={handlePostDotClick}
                 />
             </div>
@@ -160,7 +160,7 @@ function NoticeDetail() {
             >
                 <p
                     style={{
-                        fontSize: "18px",
+                        fontSize: "16.6px",
                         color: "gray",
                         fontWeight: "bold",
                         marginBottom: "5px"
@@ -168,7 +168,7 @@ function NoticeDetail() {
                 >{getMemberName(post.memberId)} | {formatDate(post.createdAt)}</p>
                 <p
                     style={{
-                        fontSize: "22px",
+                        fontSize: "20px",
                         fontWeight: "bold",
                         paddingBottom: "12px",
                         textAlign: "start",
@@ -177,7 +177,7 @@ function NoticeDetail() {
                 >{post.title}</p>
                 <p
                     style={{
-                        fontSize: "20.5px",
+                        fontSize: "17.8px",
                         marginTop: "10px",
                         textAlign: "start"
                     }}
@@ -189,7 +189,7 @@ function NoticeDetail() {
                     comments.map(comment => (
                         <div key={comment.commentId} className="comment-oneline">
                             <div style={{display: 'flex', justifyContent: 'space-between', width: '100%'}}>
-                                <p style={{fontSize: '17px', color: 'gray', marginLeft: "30px", marginBottom: "2px"}}>
+                                <p style={{fontSize: '16.5px', color: 'gray', marginLeft: "30px", marginBottom: "2px"}}>
                                     {getMemberName(comment.memberId)} | {formatDate(comment.createdAt)}
                                 </p>
                                 <FiMoreVertical
@@ -198,9 +198,9 @@ function NoticeDetail() {
                                 />
                             </div>
                             <p style={{
-                                fontSize: '19px',
+                                fontSize: '17px',
                                 marginLeft: "30px",
-                                marginBottom: "16px"
+                                marginBottom: "12px"
                             }}>{comment.content}</p>
                             <div style={{borderBottom: '1px solid gray', width: '100%'}}></div>
                         </div>

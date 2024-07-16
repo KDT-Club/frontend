@@ -111,12 +111,12 @@ function NoticeWrite() {
         <div>
             <div className="header_container">
                 <FiX
-                    style={{fontSize: '27px', cursor: 'pointer'}}
+                    style={{fontSize: '24px', cursor: 'pointer'}}
                     onClick={handleBackClick}
                 />
-                <div style={{fontSize: '22px', fontWeight: "bold"}}>공지사항 작성</div>
+                <div style={{fontSize: '19px', fontWeight: "bold"}}>공지사항 작성</div>
                 <FiCheck
-                    style={{fontSize: '27px', cursor: 'pointer'}}
+                    style={{fontSize: '24px', cursor: 'pointer'}}
                     onClick={handleSubmit}
                 />
             </div>

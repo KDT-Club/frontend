@@ -49,10 +49,10 @@ function Atd() {
         <div>
             <div className="header_container" style={{display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px"}}>
                 <FaArrowLeft
-                    style={{fontSize: '26px', cursor: 'pointer'}}
+                    style={{fontSize: '24px', cursor: 'pointer'}}
                     onClick={handleBackClick}
                 />
-                <div style={{fontSize: '22px', fontWeight: "bold", marginRight: "21px"}}>회원 출석 관리</div>
+                <div style={{fontSize: '20px', fontWeight: "bold", marginRight: "21px"}}>회원 출석 관리</div>
                 <div></div>
             </div>
             {date && <div className="date-display">{date}</div>}

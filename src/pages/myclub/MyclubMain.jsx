@@ -16,6 +16,7 @@ const MyclubMain = () => {
         const fetchClubs = async () => {
             try {
                 const response = await fetch(`/clubs?memberId=${memberId}`);
+                // const response = await fetch(`http://3.36.56.20:8080/clubs`);
                 if (!response.ok) {
                     throw new Error('동아리 목록 조회 실패');
                 }

@@ -44,20 +44,20 @@ function Etc2() {
         <div>
             <div className="header_container">
                 <FaArrowLeft
-                    style={{ fontSize: '26px', cursor: 'pointer' }}
+                    style={{ fontSize: '24px', cursor: 'pointer' }}
                     onClick={handleBackClick}
                 />
-                <div style={{ fontSize: '22px', fontWeight: "bold", marginRight: "10px" }}>정산</div>
+                <div style={{ fontSize: '20px', fontWeight: "bold", marginRight: "10px" }}>정산</div>
                 <FaRegPlusSquare
-                    style={{ fontSize: '26px', cursor: 'pointer' }}
+                    style={{ fontSize: '24px', cursor: 'pointer' }}
                 />
             </div>
             <div className="aaa" style={{display: "flex", flexDirection: "column"}}>
                 {Object.keys(initialSettlement).map((item) => (
                     <div className="etc2-container" key={item} style={{ display: 'flex', alignItems: 'center', justifyContent: "center", marginBottom: '10px'}}>
                         <div style={{alignItems: "flex-start", marginRight: '10px'}}>
-                            <div style={{ fontSize: "20px", fontWeight: "bold", marginBottom: "10px" }}>{item}</div>
-                            <div style={{fontSize: "18px", marginBottom: "15px"}}>
+                            <div style={{ fontSize: "18.5px", fontWeight: "bold", marginBottom: "10px" }}>{item}</div>
+                            <div style={{fontSize: "17px", marginBottom: "15px"}}>
                                 {item === "7월 19일 회식" && "인원: 30명 | 비용: 900,000원 | 1인: 31,666원"}
                                 {item === "유니폼 구입" && "인원: 20명 | 비용: 500,000원 | 1인: 25,000원"}
                                 {item === "MT 참가비" && "인원: 25명 | 비용: 800,000원 | 1인: 32,000원"}
