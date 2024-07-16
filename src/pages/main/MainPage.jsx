@@ -60,7 +60,7 @@ function MainPage() {
     //
 
     return (
-        <div>
+        <div className="main-container">
             <Header_center/>
             <div className="find-club-container">
                 <div className="find-club">

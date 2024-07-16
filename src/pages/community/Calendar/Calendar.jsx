@@ -62,7 +62,7 @@ const Calendar = () => {
             <div className="calendar-header">
                 <button onClick={() => changeMonth(-1)}>&lt;</button>
                 <h2 style={{
-                    width: '100%'
+                    width: '120%'
                 }}>{currentYear}년 {monthNames[currentMonth]}</h2>
                 <button onClick={() => changeMonth(1)}>&gt;</button>
                 <button className="add-event">+</button>
