@@ -61,12 +61,12 @@ function FreeBoardList(){
         <div>
             <div className="header_container">
                 <FaArrowLeft
-                    style={{fontSize: '26px', cursor: 'pointer'}}
+                    style={{fontSize: '24px', cursor: 'pointer'}}
                     onClick={handleBackClick}
                 />
-                <div style={{fontSize: '22px', fontWeight: "bold"}}>자유게시판</div>
+                <div style={{fontSize: '20px', fontWeight: "bold"}}>자유게시판</div>
                 <FiEdit
-                    style={{fontSize: '26px', cursor: 'pointer'}}
+                    style={{fontSize: '24px', cursor: 'pointer'}}
                     onClick={handleWriteClick}
                 />
             </div>
