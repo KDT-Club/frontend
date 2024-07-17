@@ -3,14 +3,15 @@
     margin-left: 10px;
     position: relative;
     padding: 10px;
+    display: flex;
+    align-items: center;
 }
 
 .add_club_picture {
-    float: left;
-    margin-left: 15px;
+    margin-left: 20px;
     height: 70px;
     text-align: left;
-    padding-top: 6px;
+    padding-top: 14px;
 }
 
 .image::after {
@@ -21,8 +22,9 @@
 
 .add_club_info {
     float: left;
+    width: 91%;
     text-align: left;
-    padding-top: 6px;
+    padding-top: 15px;
     margin-left: 20px;
 }
 
@@ -47,7 +49,7 @@
     padding-right: 1px;
     font-size: 13px;
     width: 99%;
-    min-height: 200px;
+    min-height: 300px;
     overflow: auto;
     border: 1px solid #ddd;
     border-radius: 5px;

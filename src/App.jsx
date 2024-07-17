@@ -8,6 +8,7 @@ import Create_club from "./pages/mypage/create_club/Create_club.jsx";
 import SignUp from './pages/login/signup.jsx';
 import Mypage from './pages/mypage/mypage_main/Mypage.jsx';
 import Written_post from "./pages/mypage/written_post/Written_post.jsx";
+import Written_post_detail from "./pages/mypage/written_post/Written_post_detail.jsx";
 import Edit_info from "./pages/mypage/edit_info/Edit_info.jsx";
 import Member_info_fix_list from "./pages/myclub/member_manage/member_info_fix_list/Member_info_fix_list.jsx";
 import Member_info_fix from "./pages/myclub/member_manage/member_info_fix/Member_info_fix.jsx";
@@ -74,11 +75,13 @@ function App() {
                         <Route path="/login" element={<Login />} />
                         <Route path="/signup" element={<SignUp />} />
                         <Route path="/members/:memberId" element={<Mypage />} />
-                        <Route path="/posts/:memberId" element={<Written_post />} />
+                        <Route path="/post_list/:memberId" element={<Written_post />} />
+                        <Route path="/posts/:postId" element={<Written_post_detail />} />
+                        <Route path="/posts_edit/:postId/" element={<NoticeEdit />} />
                         <Route path="/edit_info/:memberId" element={<Edit_info />} />
                         <Route path="/clubs/create/:memberId" element={<Create_club />} />
-                        <Route path="/memberInfoFixList" element={<Member_info_fix_list />} />
-                        <Route path="/memberInfoFix/:memberId" element={<Member_info_fix />} />
+                        <Route path="/clubs/:id/memberInfoFixList" element={<Member_info_fix_list />} />
+                        <Route path="/clubs/:id/memberInfoFix/:memberId" element={<Member_info_fix />} />
                         <Route path="/main" element={<MainPage />} />
                         <Route path="/clubs/:clubName" element={<ClubDetailPage />} />
                         <Route path="/community" element={<Community_Main/>} />

@@ -31,12 +31,12 @@
     font-weight: bold;
 }
 
-.member_info_detail .role button {
+.member_info_detail .role-button {
     width: auto;
     height: 33px;
     margin-top: 6px;
     margin-right: 10px;
-    padding-top: 6px;
+    padding-top: 5px;
     background-color: rgba(0, 0, 0, 0.05);
     font-weight: normal;
     font-size: 15px;
@@ -44,12 +44,18 @@
     cursor: pointer;
 }
 
-.member_info_detail .role .role-president, .member_info_detail .role .role-vice-president, .member_info_detail .role .role-general {
+.member_info_detail .role .role-president, .member_info_detail .role .role-general {
     background-color: #D4F2FF;
     color: #000000;
 }
 
-.member_info_detail .phoneNum {
+.member_info_detail .phone, .member_info_detail .major {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Align text to the left */
+}
+
+.member_info_detail .phoneNum, .member_info_detail .majorName {
     background-color: rgba(0, 0, 0, 0.05);
     width: 125px;
     height: 33px;
@@ -62,24 +68,17 @@
     font-weight: normal;
 }
 
-.member_info_detail .majorName {
-    background-color: rgba(0, 0, 0, 0.05);
-    width: 120px;
-    height: 33px;
-    padding-left: 12px;
-    margin-top: 6px;
-    margin-left: 0px;
-    border-radius: 5px;
-    padding-top: 4px;
-    font-size: 16px;
-    font-weight: normal;
+.member_info_detail .phone {
+    margin-bottom: 35px;
 }
 
 .buttons {
     display: flex;
     justify-content: center;
-    gap: 30px;
+    gap: 15px;
     margin-top: 90px;
+    margin-left: 15px;
+    margin-right: 15px;
 }
 
 .buttons .out {

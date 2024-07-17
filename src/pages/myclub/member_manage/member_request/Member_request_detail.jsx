@@ -19,10 +19,10 @@ function Member_request_detail() {
                 <p>가입 신청 현황</p>
             </div>
             <div className="member_request_info">
-                <img src={member.img}/>
+                <img src={member.memberImageURL}/>
                 <div className="info_detail">
                     <p className="name">{member.name}</p>
-                    <p className="other_info">{member.major} {member.studentNum}</p>
+                    <p className="other_info">{member.department} {member.studentId}</p>
                 </div>
             </div>
             <div className="apply_content">

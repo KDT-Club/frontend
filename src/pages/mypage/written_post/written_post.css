@@ -42,7 +42,8 @@
 .post_list .date {
     margin-top: 0px;
     margin-left: 26px;
-    margin-bottom: 13px;
+    margin-bottom: 10px;
+    padding-top: 3px;
     font-size: 13px;
     color: gray;
     text-align: left;
