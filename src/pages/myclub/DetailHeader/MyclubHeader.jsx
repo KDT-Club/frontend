@@ -13,8 +13,8 @@ import clubData from "../data/clubData.jsx";
 //햄버거탭을 여기에 설정해놔서 코드가 복잡해졌음....
 
 function MyclubHeader() {
-    let { id } = useParams();
     let memberId = 104;
+    const {id} = useParams();
     const member = memberInfo.find(m => m.memberId === parseInt(memberId, 10));
     const navigate = useNavigate();
     const location = useLocation();
@@ -183,8 +183,8 @@ function MyclubHeader() {
                         </div>
                         {isMemberManageOpen && (
                             <div className="member-manage-list">
-                                <div className="manage-item" onClick={() => navigate("/memberInfoFixList")}>회원정보 수정</div>
-                                <div className="manage-item">회원출석 관리</div>
+                                <div className="manage-item" onClick={() => navigate(`/clubs/${id}/memberInfoFixList`)}>회원 정보 수정</div>
+                                <div className="manage-item">회원 출석 관리</div>
                                 <div className="manage-item" onClick={() => navigate("/clubs/:id/joinRequest")}>가입 신청 현황</div>
                             </div>
                         )}
