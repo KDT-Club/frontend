@@ -1,24 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import "./community_styles/post_detail.css";
+import '../../styles/App.css'
 import { FaArrowLeft } from "react-icons/fa6";
-
-function Modal({ onClose, onConfirm }) {
-    return (
-        <div className="modal-overlay">
-            <div className="modal-content">
-                <div className="modal-header">
-                    <p style={{ marginBottom: '5px', padding: '3px' }}>댓글을 삭제하시겠습니까?</p>
-                    <hr style={{ marginTop: '10px', marginLeft: '-20px', width: '250px' }}/>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '-5px' }}>
-                        <button onClick={onConfirm} style={{ padding: '3px', borderRight: '1px solid #ccc', height: '58px' }}>네</button>
-                        <button onClick={onClose} style={{ padding: '3px' }}>아니오</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
-}
+import Modal_delete from '../../components/modal/Modal_delete.jsx'
 
 function WriteModal({ onClose, onEdit, onDelete }) {
     return (
@@ -26,9 +11,9 @@ function WriteModal({ onClose, onEdit, onDelete }) {
             <div className="modal-content">
                 <div className="modal-header">
                     <p style={{ marginBottom: '5px', padding: '3px' }}>게시글</p>
-                    <hr style={{ marginTop: '10px', marginLeft: '-20px', width: '250px' }}/>
+                    <hr style={{ marginTop: '10px', marginLeft: '-20px', width: '120%' }}/>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '-5px' }}>
-                        <button onClick={onEdit} style={{ padding: '3px', borderRight: '1px solid #ccc', height: '58px' }}>수정</button>
+                        <button onClick={onEdit} style={{ padding: '3px', borderRight: '1px solid #ccc', height: '50px' }}>수정</button>
                         <button onClick={onDelete} style={{ padding: '3px' }}>삭제</button>
                     </div>
                 </div>
@@ -193,7 +178,7 @@ function PostDetail() {
         <div className="post-detail">
             <header>
                 <FaArrowLeft onClick={handleBack} style={{ cursor: 'pointer', marginLeft: '10px' }}/>
-                <h2 style={{ fontWeight: 'bold', fontSize: '20px', marginLeft: '10px' }}>동아리 가입 신청</h2>
+                <h2 style={{ width: '60%', fontWeight: 'bold', fontSize: '20px', marginLeft: '10px' }}>동아리 가입 신청</h2>
                 <button style={{ fontWeight: 'bold', fontSize: '20px', textAlign: 'right' }} onClick={handleWriteModalOpen}>:
                 </button>
                 {showWriteModal && (
@@ -227,7 +212,7 @@ function PostDetail() {
                 </form>
             </div>
             {showDeleteCommentModal && (
-                <Modal onClose={handleDeleteCommentModalClose} onConfirm={handleDeleteCommentConfirm}/>
+                <Modal_delete onClose={handleDeleteCommentModalClose} onConfirm={handleDeleteCommentConfirm}/>
             )}
         </div>
     );

@@ -62,12 +62,16 @@ function App() {
         return () => window.removeEventListener('resize', setScreenSize);
     }, []);
 
+    useEffect(() => {
+        console.log("showLogo:", showLogo);
+    }, [showLogo]);
+
     return (
         <Router>
             <GoogleOAuthProvider clientId="YOUR_GOOGLE_CLIENT_ID">
                 <div className="App">
                     <Routes>
-                        <Route path="/" element={showLogo ? <Logo /> : <Login/>} />
+                        <Route path="/" element={showLogo ? <Logo /> : <Login />} />
                         <Route path="/login" element={<Login />} />
                         <Route path="/signup" element={<SignUp />} />
                         <Route path="/members/:memberId" element={<Mypage />} />

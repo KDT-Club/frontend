@@ -1,5 +1,8 @@
 .post-detail {
     font-family: Arial, sans-serif;
+    width: 375px;
+    height: 833px;
+    overflow: hidden;
 }
 
 header {
@@ -29,38 +32,7 @@ header {
     background: none;
     border: none;
 }
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1;
-}
 
-.modal-content {
-    background-color: white;
-    width: 50%;
-    height: 13%;
-    padding: 20px;
-    border-radius: 10px;
-    text-align: center;
-}
-
-.modal-content button {
-    width: 60%;
-    margin-top: 5px;
-    padding: 5px 20px;
-    cursor: pointer;
-}
-
-.modal-header {
-    margin-bottom: 7px;
-}
 
 .comment-input {
     display: flex;
@@ -95,4 +67,8 @@ header {
     font-weight: bold;
     background: none;
     border: none;
+}
+
+.modal-content{
+    width: 60%;
 }

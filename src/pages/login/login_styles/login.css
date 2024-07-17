@@ -1,9 +1,10 @@
 .login-container {
-    max-width: 100%;
-    margin: 50px auto;
+    width: 380px;
+    height: 840px;
     padding: 20px;
     background-color: white;
     border-radius: 8px;
+    overflow: hidden;
 }
 
 h1 {
@@ -34,12 +35,13 @@ button, .social-login {
 .login-btn {
     background-color: #1877f2;
     color: white;
+    margin-left: -20px;
 }
 
 .social-login-container {
     padding: 10px;
     text-align: center;
-    margin-left: 60px;
+    margin-left: -9px;
 }
 
 
@@ -47,6 +49,7 @@ button, .social-login {
     background-color: #FEE500;
     padding: 0;
     color: #000000;
+    margin-left: -20px;
 }
 
 .signup-link {
@@ -66,7 +69,7 @@ button, .social-login {
     margin-bottom: 15px;
     text-align: left;
     width: 400px;
-    margin-left: 30px;
+    margin-left: 10px;
 }
 
 .input-group label {

@@ -3,7 +3,7 @@ import {useNavigate} from 'react-router-dom';
 import Header_center from "../../components/header/Header_center.jsx";
 import './login_styles/signup.css'
 import '../../styles/App.css'
-import back from '../../images/shape.png'
+import {FaArrowLeft} from "react-icons/fa6";
 
 function Modal({onClose}) {
     return(
@@ -89,9 +89,7 @@ function signup () {
     return(
         <div>
             <div className="header-container">
-                <button onClick={handleBackClick} className="back-button">
-                    <img src={back} alt="back"/>
-                </button>
+                <FaArrowLeft onClick={handleBackClick} style={{ cursor: 'pointer', marginTop:'-20px'}}/>
                 <div className="signup-header-center">
                     <Header_center/>
                 </div>

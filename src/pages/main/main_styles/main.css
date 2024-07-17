@@ -1,6 +1,6 @@
 .find-club {
-    width: 95%;
-    margin: 0 auto;
+    width: 90%;
+    margin-left: 5%;
 }
 
 .search-input-container {
@@ -32,6 +32,7 @@
     display: flex;
     overflow-x: auto;
     white-space: nowrap;
+    flex-shrink: 0;
     -webkit-overflow-scrolling: touch;
 }
 
@@ -51,26 +52,30 @@
     margin-bottom: 20px;
 }
 
-.clubs-logos {
-    width: 100%;
-    border-radius: 20px;
+.clubs-container-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
 }
 
 .clubs-container {
     border: 1px solid #ccc;
     border-radius: 20px;
-    width: 50%;
+    width: calc(50% - 10px);
     margin-left: 5px;
-
+    margin-right: 5px;
+    margin-bottom: 20px;
+    overflow-y: hidden;
 }
 
-.clubs-it {
-    text-align: left;
-    margin-left: 10px;
+.clubs-logos {
+    width: 100%;
+    border-radius: 20px 20px 0 0;
 }
 
 .clubs-title {
     font-weight: bold;
+    margin-bottom: 5px;
 }
 
 .clubs-sm {
