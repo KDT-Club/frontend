@@ -10,17 +10,16 @@ import Modal_ok from "../../../components/modal/Modal_ok.jsx";
 import clubmemberData from '../data/clubmemberData.jsx';
 import memberInfo from "../data/memberInfo.jsx";
 import clubData from "../data/clubData.jsx";
-//햄버거탭을 여기에 설정해놔서 코드가 복잡해졌음....
 
-function MyclubHeader() {
+function MyclubHeader({ clubName }) {
     let { id } = useParams();
     let memberId = 104;
     const member = memberInfo.find(m => m.memberId === parseInt(memberId, 10));
     const navigate = useNavigate();
     const location = useLocation();
 
-    const [clubs, setClubs] = useState([]);
-    //const [club, setClub] = useState([]); 나중에 위 코드를 이거로 변경
+    // const [clubs, setClubs] = useState([]);
+    // const [club, setClub] = useState([]);
     const [clubMembers, setClubMembers] = useState([]);
     const [isMenuOpen, setIsMenuOpen] = useState(location.state?.isMenuOpen || false); //햄버거탭 슬라이드
     const [isMemberListOpen, setIsMemberListOpen] = useState(false); //회원리스트
@@ -31,39 +30,22 @@ function MyclubHeader() {
     const [modalMessage, setModalMessage] = useState("");   // 모달 메세지
 
     //여기부터.......
-    useEffect(() => {
-        setClubs(clubData);
-    }, []);
-    const club = clubs.find(club => club.clubId === parseInt(id)) ?? {};
-
-    useEffect(() => {
-        //memberId get
-        const getMemberId = clubmemberData.filter(member => member.clubId === parseInt(id));
-        //회원 이름 get
-        const getMemberName = getMemberId.map(clubMember => {
-            const memberName = memberInfo.find(member => member.memberId === clubMember.memberId);
-            return memberName ? memberName.name : "회원이 없습니다.";
-        })
-        setClubMembers(getMemberName);
-    }, [id]);
-    //여기까지 UI보기용 데이터 조회. 나중에 삭제
-
-    //동아리 정보 API 조회; 헤더에 동아리 이름 띄워야됨
     // useEffect(() => {
-    //     const fetchClub = async() => {
-    //         try {
-    //             const response = await fetch(`/clubs/${id}`);
-    //             if (!response.ok) {
-    //                 throw new Error('동아리 정보 조회 실패');
-    //             }
-    //             const data = await response.json();
-    //             setClub(data);
-    //         } catch (error) {
-    //             console.error('동아리 정보 조회 중 에러 발생', error);
-    //         }
-    //     };
-    //     fetchClub();
+    //     setClubs(clubData);
+    // }, []);
+    // const club = clubs.find(club => club.clubId === parseInt(id)) ?? {};
+    //
+    // useEffect(() => {
+    //     //memberId get
+    //     const getMemberId = clubmemberData.filter(member => member.clubId === parseInt(id));
+    //     //회원 이름 get
+    //     const getMemberName = getMemberId.map(clubMember => {
+    //         const memberName = memberInfo.find(member => member.memberId === clubMember.memberId);
+    //         return memberName ? memberName.name : "회원이 없습니다.";
+    //     })
+    //     setClubMembers(getMemberName);
     // }, [id]);
+    //여기까지 UI보기용 데이터 조회. 나중에 삭제
 
     //햄버거탭에서 회원리스트 조회
     // useEffect(() => {
@@ -83,7 +65,7 @@ function MyclubHeader() {
     // }, [id]);
 
     const handleBackClick = () => {
-        navigate('/clubs');
+        navigate(-1);
     };
 
     //햄버거탭 열고 닫기 토글
@@ -131,7 +113,7 @@ function MyclubHeader() {
                     style={{fontSize: '24px', cursor: 'pointer'}}
                     onClick={handleBackClick}
                 />
-                <div style={{fontSize: '24px', fontWeight: "bold"}}>{club.name}</div>
+                <div style={{fontSize: '24px', fontWeight: "bold"}}>{clubName}</div>
                 <RxHamburgerMenu
                     style={{fontSize: '24px', strokeWidth: '0.3', cursor: 'pointer'}}
                     onClick={toggleMenu}

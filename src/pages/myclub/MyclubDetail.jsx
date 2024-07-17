@@ -1,42 +1,66 @@
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import "./myclubdetail.css";
 import Footer from '../../components/footer/Footer.jsx';
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import MyclubHeader from "./DetailHeader/MyclubHeader.jsx";
-import postData from "./data/postData.jsx";
-import clubData from "./data/clubData.jsx";
 
-function MyclubDetail({clubs}) {
-    let { id } = useParams();
+function MyclubDetail() {
+    const { id } = useParams();
     const navigate = useNavigate();
+    const location = useLocation();
+    const [clubName, setClubName] = useState(''); //헤더에 이름 띄우기
+    // const clubName = location.state?.clubName || '';
 
     //공지사항,자유게시판 글 API 조회
-    // const [noticePosts, setNoticePosts] = useState([]);
-    // const [freeboardPosts, setFreeboardPosts] = useState([]);
+    const [noticePosts, setNoticePosts] = useState([]);
+    const [freeboardPosts, setFreeboardPosts] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-    const boardType = {
-        "notice": 2,
-        "internal": 4
-    } //boardId 타입 지정 -> 하드코딩해놓음
+    useEffect(() => {
 
-    // 이후 boardType 구현용 예제
-    // const boardType = useEffect(
-    //   -> 백엔드에서 게시판 종류와 번호를 반환해주는 API 호출
-    // )
+        const storedClubName = localStorage.getItem(`clubName_${id}`);
 
-    // useEffect(() => {
-    //     // 공지사항 게시글 가져오기
-    //     fetch(`/clubs/${id}/board/${boardType['notice']}/posts`)
-    //         .then(response => response.json())
-    //         .then(data => setNoticePosts(data))
-    //         .catch(error => console.error('공지사항 게시글 조회 실패', error));
-    //
-    //     // 자유게시판 게시글 가져오기
-    //     fetch(`/clubs/${id}/board/${boardType['internal']}/posts`)
-    //         .then(response => response.json())
-    //         .then(data => setFreeboardPosts(data))
-    //         .catch(error => console.error('자유게시판 게시글 조회 실패', error));
-    // }, [id]);
+        if (storedClubName) {
+            setClubName(storedClubName);
+        } else if (location.state?.clubName) {
+            setClubName(location.state.clubName);
+            localStorage.setItem(`clubName_${id}`, location.state.clubName);
+        }
+
+        const fetchPosts = async () => {
+            setLoading(true);
+            setError(null);
+            try {
+                const [noticeResponse, freeboardResponse] = await Promise.all([
+                    axios.get(`http://3.36.56.20:8080/clubs/${id}/board/2/posts`),
+                    axios.get(`http://3.36.56.20:8080/clubs/${id}/board/4/posts`)
+                ]);
+                setNoticePosts(noticeResponse.data);
+                setFreeboardPosts(freeboardResponse.data);
+                console.log(noticeResponse.data);
+
+                // 서버에서 배열이 아닌 경우에 대비하여 처리
+                if (Array.isArray(noticeResponse.data)) {
+                    setNoticePosts(noticeResponse.data);
+                } else {
+                    setNoticePosts([noticeResponse.data]);
+                }
+                if (Array.isArray(freeboardResponse.data)) {
+                    setFreeboardPosts(freeboardResponse.data);
+                } else {
+                    setFreeboardPosts([freeboardResponse.data]);
+                }
+            } catch (error) {
+                console.error('게시글 조회 실패', error);
+                setError('게시글을 불러오는데 실패했습니다. 다시 시도해주세요.');
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchPosts();
+    }, [id, location.state]); //원래는 id만
 
     const handleNoticeClick = () => {
         navigate(`/clubs/${id}/noticelist`);
@@ -46,15 +70,8 @@ function MyclubDetail({clubs}) {
         navigate(`/clubs/${id}/freeboardlist`);
     };
 
-    //UI보기용 동아리id,동아리 이름,post 불러오기 -> 나중에 삭제
-    const currentClub = clubData.find(club => club.clubId === parseInt(id));
-    const currentClubName = currentClub? currentClub.name : "";
-    const noticePosts = postData.filter(post =>
-        post.boardId === 2 && post.clubName === currentClubName
-    );
-    const freeboardPosts = postData.filter(post =>
-        post.boardId === 4 && post.clubName === currentClubName
-    );
+    if (loading) return <div>로딩 중...</div>;
+    if (error) return <div>{error}</div>;
 
     const etc1handleMoreClick = () => {
         navigate(`/clubs/etc1`);
@@ -70,7 +87,7 @@ function MyclubDetail({clubs}) {
 
     return (
         <div className="myclub-detail-container">
-            <MyclubHeader clubs={clubs}/>
+            <MyclubHeader clubName={clubName} />
             <div className="scroll-container">
                 <div className="item-container">
                     <div className="headerrcontainer">
@@ -78,12 +95,16 @@ function MyclubDetail({clubs}) {
                         <p onClick={() => handleNoticeClick()}>더보기</p>
                     </div>
                     <section className="box-section">
-                        {noticePosts.map((item, index) => (
-                            <div className="box-item" key={index}>
-                                <h3>{item.title}</h3>
-                                <p>{item.content}</p>
-                            </div>
-                        ))}
+                        {noticePosts.length > 0 ? (
+                            noticePosts.map((item, index) => (
+                                <div className="box-item" key={index}>
+                                    <h3>{item.title}</h3>
+                                    <p>{item.content}</p>
+                                </div>
+                            ))
+                        ) : (
+                            <p className="no-posts-message">작성된 글이 없습니다</p>
+                        )}
                     </section>
                 </div>
                 <div className="item-container">
@@ -92,12 +113,16 @@ function MyclubDetail({clubs}) {
                         <p onClick={() => handleFreeboardClick()}>더보기</p>
                     </div>
                     <section className="box-section">
-                        {freeboardPosts.map((item, index) => (
-                            <div className="box-item" key={index}>
-                                <h3>{item.title}</h3>
-                                <p>{item.content}</p>
-                            </div>
-                        ))}
+                        {freeboardPosts.length > 0 ? (
+                            freeboardPosts.map((item, index) => (
+                                <div className="box-item" key={index}>
+                                    <h3>{item.title}</h3>
+                                    <p>{item.content}</p>
+                                </div>
+                            ))
+                        ) : (
+                            <p className="no-posts-message">작성된 글이 없습니다</p>
+                        )}
                     </section>
                 </div>
                 <div className="item-container">
