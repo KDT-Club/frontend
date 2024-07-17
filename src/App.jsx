@@ -83,7 +83,7 @@ function App() {
                         <Route path="/clubs/:id/memberInfoFixList" element={<Member_info_fix_list />} />
                         <Route path="/clubs/:id/memberInfoFix/:memberId" element={<Member_info_fix />} />
                         <Route path="/main" element={<MainPage />} />
-                        <Route path="/club/:memberId" element={<ClubDetailPage />} />
+                        <Route path="/clubs/:clubName" element={<ClubDetailPage />} />
                         <Route path="/community" element={<Community_Main/>} />
                         <Route path="/post/:postId" element={<PostDetail/>}/>
                         <Route path="/activity" element={<ActivityPage />} />

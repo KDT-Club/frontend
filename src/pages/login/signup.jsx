@@ -51,34 +51,35 @@ function signup () {
 
 
     // 회원가입 API 나중에 개발.
-    // const handleSignUp = async () => {
-    //     try {
-    //         if(password !== confirmPassword) {
-    //             alert('비밀번호가 일치하지 않습니다.');
-    //             return;
-    //         }
-    //
-    //         const response = await fetch('https://?/signup', {
-    //             method: 'POST',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //             },
-    //             body: JSON.stringify({name, phone, username, department, password })
-    //         });
-    //
-    //         if(response.status === 200) {
-    //             navigate('/login');
-    //         }
-    //     }catch(error){
-    //         console.log('회원가입 중 에러 발생:',error);
-    //         alert('회원가입 중 에러가 발생하였습니다.');
-    //     }
-    // }
+    const handleSignUp = async () => {
+        try {
+            if(password !== confirmPassword) {
+                alert('비밀번호가 일치하지 않습니다.');
+                return;
+            }
 
+            const formData = new FormData();
+            formData.append('name', name);
+            formData.append('username', username);
+            formData.append('password', password);
+            formData.append('department', department);
+            formData.append('phone', phone);
 
-    const handleSignup = (e) => {
-        e.preventDefault();
-        setShowModal(true);
+            const response = await fetch('http://3.36.56.20:8080/signup', {
+                method: 'POST',
+                body: formData
+            });
+
+            if(response.status === 200) {
+                localStorage.setItem('userInfo', JSON.stringify({name, username}))
+                setShowModal(true);
+            } else {
+                throw new Error('회원가입에 실패했습니다.');
+            }
+        }catch(error){
+            console.log('회원가입 중 에러 발생:',error);
+            alert('회원가입 중 에러가 발생하였습니다.');
+        }
     }
 
     const handleModalClose = () => {
@@ -106,26 +107,6 @@ function signup () {
                         placeholder="이름을 입력해주세요."
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                    />
-                </div>
-                <div className="input-group">
-                    <label htmlFor="phone">핸드폰 번호</label>
-                    <input
-                        id="phone"
-                        type="text"
-                        placeholder="010-0000-0000"
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                    />
-                </div>
-                <div className="input-group">
-                    <label htmlFor="student-major">학과</label>
-                    <input
-                        id="student-major"
-                        type="text"
-                        placeholder="학과를 입력해주세요."
-                        value={department}
-                        onChange={(e) => setDepartment(e.target.value)}
                     />
                 </div>
                 <div className="input-group">
@@ -165,7 +146,27 @@ function signup () {
                         }}
                     />
                 </div>
-                <button type="submit" className="signup-btn" onClick={handleSignup}>가입하기</button>
+                <div className="input-group">
+                    <label htmlFor="student-major">학과</label>
+                    <input
+                        id="student-major"
+                        type="text"
+                        placeholder="학과를 입력해주세요."
+                        value={department}
+                        onChange={(e) => setDepartment(e.target.value)}
+                    />
+                </div>
+                <div className="input-group">
+                    <label htmlFor="phone">핸드폰 번호</label>
+                    <input
+                        id="phone"
+                        type="text"
+                        placeholder="010-0000-0000"
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                    />
+                </div>
+                <button type="submit" className="signup-btn" onClick={handleSignUp}>가입하기</button>
                 {showModal && (
                     <Modal onClose={handleModalClose}/>
                 )}
