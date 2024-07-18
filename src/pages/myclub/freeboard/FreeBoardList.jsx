@@ -5,8 +5,6 @@ import '../notice/notice.css';
 import { FaArrowLeft } from "react-icons/fa6";
 import { FiEdit } from "react-icons/fi";
 import {Link, useNavigate, useParams} from "react-router-dom";
-import clubData from '../data/clubData.jsx';
-import postData from "../data/postData.jsx";
 
 function formatDate(dateString) {
     const date = new Date(dateString);
@@ -20,27 +18,35 @@ function FreeBoardList(){
     const navigate = useNavigate();
     const [list, setList] = useState([]);
 
-    useEffect(() => { //UI전용, API 구현 시 지워도 됨
-        const clubId = parseInt(id);
-        const club = clubData.find(c => c.clubId === clubId);
-        if(club) {
-            const filteredPosts = postData.filter(
-                post => post.boardId === 4 && post.clubName === club.name
-            );
-            setList(filteredPosts);
-        }
-    }, [id]);
-
     //자유게시판 리스트 API 조회
     useEffect(() => {
         const fetchPosts = async () => {
             try {
-                const response = await fetch(`/clubs/${id}/board/4/posts`);
+                const response = await fetch(`http://3.36.56.20:8080/clubs/${id}/board/4/posts`);
                 if (response.ok) {
                     const data = await response.json();
-                    setList(data);
+
+                    // 작성자 정보 가져옴
+                    const postsWithAuthors = await Promise.all(
+                        data.map(async (freeboard) => {
+                            // 각 postId를 사용하여 상세 정보 API를 호출
+                            const detailResponse = await fetch(`http://3.36.56.20:8080/clubs/${id}/board/4/posts/${freeboard.postId}`);
+                            if (detailResponse.ok) {
+                                const detailData = await detailResponse.json();
+                                return {
+                                    ...freeboard,
+                                    authorName: detailData.member.name, // 작성자 이름 추가
+                                    authorId: detailData.member.id // 작성자 ID 추가
+                                };
+                            } else {
+                                console.error(`게시글 ${freeboard.postId}의 상세 정보 조회 실패`, detailResponse.status);
+                                return freeboard; // 실패 시 기존 데이터 유지
+                            }
+                        })
+                    );
+                    setList(postsWithAuthors);
                 } else {
-                    console.error("자유게시판 리스트 조회 실패", response.status);
+                    console.error("공지사항 리스트 조회 실패", response.status);
                 }
             } catch (error) {
                 console.error('자유게시판 리스트 가져오는 중 에러 발생', error);
@@ -75,10 +81,10 @@ function FreeBoardList(){
                     {list.length > 0 ? (
                         list.map((post, index) => (
                             <div key={index} className="post">
-                                <Link to={`/clubs/${id}/board/4/posts/${post.postId}`}>
+                                <Link to={`/clubs/${id}/board/4/posts/${post.postId}?memberId=${post.authorId}`}>
                                     <p className="title">{post.title}</p>
                                     <p className="content">{post.content}</p>
-                                    <p className="createdAt">{formatDate(post.createdAt)}</p>
+                                    <p className="createdAt">{post.authorName} | {formatDate(post.createdAt)}</p>
                                 </Link>
                             </div>
                         ))

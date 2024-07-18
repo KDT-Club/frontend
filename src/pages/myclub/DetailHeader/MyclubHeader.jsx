@@ -10,17 +10,13 @@ import Modal_ok from "../../../components/modal/Modal_ok.jsx";
 import clubmemberData from '../data/clubmemberData.jsx';
 import memberInfo from "../data/memberInfo.jsx";
 import clubData from "../data/clubData.jsx";
-//햄버거탭을 여기에 설정해놔서 코드가 복잡해졌음....
 
-function MyclubHeader() {
-    let memberId = 104;
-    const {id} = useParams();
-    const member = memberInfo.find(m => m.memberId === parseInt(memberId, 10));
+function MyclubHeader({ clubName }) {
+    let { id } = useParams();
     const navigate = useNavigate();
     const location = useLocation();
+    const memberId = location.state?.memberId || localStorage.getItem('memberId');
 
-    const [clubs, setClubs] = useState([]);
-    //const [club, setClub] = useState([]); 나중에 위 코드를 이거로 변경
     const [clubMembers, setClubMembers] = useState([]);
     const [isMenuOpen, setIsMenuOpen] = useState(location.state?.isMenuOpen || false); //햄버거탭 슬라이드
     const [isMemberListOpen, setIsMemberListOpen] = useState(false); //회원리스트
@@ -29,41 +25,6 @@ function MyclubHeader() {
 
     const [showDeleteModal, setShowDeleteModel] = useState(false);  // 네,아니오 모달창 띄우기
     const [modalMessage, setModalMessage] = useState("");   // 모달 메세지
-
-    //여기부터.......
-    useEffect(() => {
-        setClubs(clubData);
-    }, []);
-    const club = clubs.find(club => club.clubId === parseInt(id)) ?? {};
-
-    useEffect(() => {
-        //memberId get
-        const getMemberId = clubmemberData.filter(member => member.clubId === parseInt(id));
-        //회원 이름 get
-        const getMemberName = getMemberId.map(clubMember => {
-            const memberName = memberInfo.find(member => member.memberId === clubMember.memberId);
-            return memberName ? memberName.name : "회원이 없습니다.";
-        })
-        setClubMembers(getMemberName);
-    }, [id]);
-    //여기까지 UI보기용 데이터 조회. 나중에 삭제
-
-    //동아리 정보 API 조회; 헤더에 동아리 이름 띄워야됨
-    // useEffect(() => {
-    //     const fetchClub = async() => {
-    //         try {
-    //             const response = await fetch(`/clubs/${id}`);
-    //             if (!response.ok) {
-    //                 throw new Error('동아리 정보 조회 실패');
-    //             }
-    //             const data = await response.json();
-    //             setClub(data);
-    //         } catch (error) {
-    //             console.error('동아리 정보 조회 중 에러 발생', error);
-    //         }
-    //     };
-    //     fetchClub();
-    // }, [id]);
 
     //햄버거탭에서 회원리스트 조회
     // useEffect(() => {
@@ -82,8 +43,14 @@ function MyclubHeader() {
     //     fetchClubMembers();
     // }, [id]);
 
+    // const handleBackClick = () => {
+    //     //MyclubDetail에서 컴포넌트 사용->뒤로가기 누르면 MyclubMain으로 이동하게 함.
+    //     //다른곳에서 사용중이면 바꿔야됨
+    //     navigate(`/clubs/${id}`);
+    // };
+
     const handleBackClick = () => {
-        navigate('/clubs');
+        navigate(`/clubs?memberId=${memberId}`);
     };
 
     //햄버거탭 열고 닫기 토글
@@ -131,7 +98,7 @@ function MyclubHeader() {
                     style={{fontSize: '24px', cursor: 'pointer'}}
                     onClick={handleBackClick}
                 />
-                <div style={{fontSize: '24px', fontWeight: "bold"}}>{club.name}</div>
+                <div style={{fontSize: '24px', fontWeight: "bold"}}>{clubName}</div>
                 <RxHamburgerMenu
                     style={{fontSize: '24px', strokeWidth: '0.3', cursor: 'pointer'}}
                     onClick={toggleMenu}
@@ -141,7 +108,7 @@ function MyclubHeader() {
             <div className={`slide-menu ${isMenuOpen ? 'open' : ''}`}>
                 <div className="slide-menu-content">
                     <div className="member-info">
-                        <h2>{member.name}</h2>
+                        <h2>최자두</h2>
                         <p>2020101460</p>
                         {/*API수정 필요!*/}
                     </div>
