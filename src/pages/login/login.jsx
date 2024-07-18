@@ -4,7 +4,7 @@ import './login_styles/login.css';
 import Header_center from '../../components/header/Header_center.jsx';
 import kakao from '../../images/kakao_login.png';
 import { GoogleLogin } from '@react-oauth/google';
-import {useAuth} from "../../components/AuthContext.jsx";
+import axios from 'axios';
 
 function Login() {
     const [username, setUserName] = useState('');
@@ -19,47 +19,50 @@ function Login() {
         formData.append('password', password);
 
         try {
-            const response = await fetch('http://3.36.56.20:8080/login', {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                credentials: 'include' // 쿠키를 보낼 수 있도록 설정
+            const response = await axios.post('http://3.36.56.20:8080/login', formData, {
+                withCredentials: true
             });
 
             console.log('Response status:', response.status);
+            console.log('Response data:', response.data);
 
-            console.log(await response.json())
+            const data = response.data;
 
-            if (response.ok) {
-                // 토큰이 아닌 JSESSIONID가 쿠키로 자동으로 저장될 것임
-
+            // 여기에서 성공 여부를 판단하는 조건을 수정합니다.
+            if (data.message === '성공') {
                 // 로그인 성공 후 메인 페이지로 이동
+                console.log('로그인 성공, 메인 페이지로 이동합니다.');
                 navigate('/main');
             } else {
-                const contentType = response.headers.get('Content-Type');
+                alert(`로그인에 실패했습니다: ${data.message}`);
+            }
+        } catch (error) {
+            if (error.response) {
+                const contentType = error.response.headers['content-type'];
                 if (contentType && contentType.includes('application/json')) {
-                    const errorData = await response.json();
+                    const errorData = error.response.data;
                     alert(`로그인에 실패했습니다: ${errorData.message}`);
                 } else {
                     // 서버에서 HTML 형식으로 오류 페이지를 반환한 경우
-                    const responseText = await response.text();
                     const parser = new DOMParser();
-                    const htmlDocument = parser.parseFromString(responseText, 'text/html');
+                    const htmlDocument = parser.parseFromString(error.response.data, 'text/html');
                     const errorElement = htmlDocument.querySelector('p');
                     if (errorElement) {
-                        alert(`로그인에 실패했습니다 : ${errorElement.textContent}`);
+                        alert(`로그인에 실패했습니다: ${errorElement.textContent}`);
                     } else {
                         alert('서버에서 예상치 않은 데이터 형식을 반환했습니다.');
                     }
                 }
+            } else {
+                console.error('로그인 중 에러 발생:', error);
+                alert('로그인 중 에러가 발생했습니다.');
             }
-        } catch (error) {
-            console.error('로그인 중 에러 발생:', error);
-            alert('로그인 중 에러가 발생했습니다.');
         }
     };
+
+
+
+
 
 
     const handleSignup = (e) => {
