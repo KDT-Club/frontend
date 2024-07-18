@@ -11,48 +11,61 @@ function Edit_info() {
     const navigate = useNavigate();
     const { memberId } = useParams();
 
-    // 여기부터
+    const apiClient = axios.create({
+        baseURL: 'http://3.36.56.20:8080',
+        timeout: 10000, // 요청 타임아웃 설정 (10초)
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+
+    /* 여기부터
     const member = member_info_data.find(m => m.memberId === parseInt(memberId, 10));
     const [data, setData] = useState({
-        img: member.img,
+        memberImageURL: member.memberImageURL,
         name: member.name,
         memberId: member.memberId,
-        major: member.major,
+        department: member.department,
         phone: member.phone,
         password: member.password
     });
+    */
     // 여기까지 임의로 memberId 설정 -> 나중에 삭제
 
     // member 데이터 관리
-//    const [data, setData] = useState({
-//        img: "",
-//        name: "",
-//        memberId: "",
-//        major: "",
-//        password: ""
-//    });
+    const [data, setData] = useState({
+        id: "",
+        name: "",
+        department: "",
+        studentId: "",
+        password: "",
+        memberImageURL: "",
+        phone: ""
+    });
 
     const [showOkModal, setShowOkModel] = useState(false);
     const [modalMessage, setModalMessage] = useState("");
     const [onConfirm, setOnConfirm] = useState(() => () => {});
 
     // 회원 정보 조회
-//    useEffect(() => {
-//        // 회원 정보를 조회하는 API 호출
-//        axios.get(`/members/${memberId}`)
-//            .then(response => {
-//                setData({
-//                    img: response.data.img,
-//                    name: response.data.name,
-//                    memberId: response.data.memberId,
-//                    major: response.data.major,
-//                    password: response.data.password
-//                });
-//            })
-//            .catch(error => {
-//                console.error('Error fetching member data:', error);
-//            });
-//    }, [memberId]);
+    useEffect(() => {
+        // 회원 정보를 조회하는 API 호출
+        apiClient.get(`/members/${memberId}`)
+            .then(response => {
+                setData({
+                    id: response.data.id,
+                    name: response.data.name,
+                    department: response.data.department,
+                    studentId: response.data.studentId,
+                    password: response.data.password,
+                    memberImageURL: response.data.memberImageURL,
+                    phone: response.data.phone
+                });
+            })
+            .catch(error => {
+                console.error('회원 정보 조회 중 오류 발생:', error);
+            });
+    }, [memberId]);
 
     const Change = (e) => {
         const {name, value} = e.target;
@@ -72,16 +85,25 @@ function Edit_info() {
         setShowOkModel(false);
     };
 
-//    const handleUpdateInfo = () => {
-//        axios.put(`/members/${memberId}`, data)
-//            .then(response => {
-//                handleOpenOkModal("수정이 완료되었습니다.", () => navigate(-1));
-//            })
-//            .catch(error => {
-//                console.error('Error updating member data:', error);
-//                handleOpenOkModal("수정에 실패했습니다. 다시 시도해주세요.", () => {});
-//            });
-//    };
+    const handleUpdateInfo = () => {
+        const requestBody = {
+            id: data.id,
+            name: data.name,
+            department: data.department,
+            studentId: data.studentId,
+            password: data.password,
+            memberImageURL: data.memberImageURL,
+            phone: data.phone
+        }
+        apiClient.post(`/members/${memberId}`, requestBody)
+            .then(response => {
+                handleOpenOkModal("수정이 완료되었습니다.", () => navigate(-1));
+            })
+            .catch(error => {
+                console.error('회원 정보 수정 중 오류 발생:', error);
+                handleOpenOkModal("수정에 실패했습니다. 다시 시도해주세요.", () => {});
+            });
+    };
 
     return (
         <div className="Edit_info">
@@ -93,7 +115,7 @@ function Edit_info() {
                 <p>정보 수정</p>
             </div>
             <div className="edit">
-                <img src={data.img} />
+                <img src={data.memberImageURL} />
                 <MdOutlineCameraAlt className="camera_icon" />
                 <div className="information">
                     <div className="name">
@@ -102,7 +124,7 @@ function Edit_info() {
                     </div>
                     <div className="major">
                         <p>학과</p>
-                        <input type="text" name="major" value={data.major} onChange={Change}/>
+                        <input type="text" name="major" value={data.department} onChange={Change}/>
                     </div>
                     <div className="phone">
                         <p>전화번호</p>
@@ -114,7 +136,7 @@ function Edit_info() {
                     </div>
                 </div>
             </div>
-            <button onClick={() => handleOpenOkModal("수정이 완료되었습니다.", () => navigate(-1))}>수정하기</button>
+            <button onClick={handleUpdateInfo}>수정하기</button>
             {showOkModal && <Modal_ok onClose={handleCloseOkModal} message={modalMessage} onConfirm={onConfirm} />}
         </div>
     )

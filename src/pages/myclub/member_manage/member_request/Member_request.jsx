@@ -24,10 +24,10 @@ function Member_request() {
                         return (
                             <List
                                 key={i}
-                                img={a.img}
+                                memberImageURL={a.memberImageURL}
                                 name={a.name}
-                                major={a.major}
-                                studentNum={a.studentNum}
+                                department={a.department}
+                                studentId={a.studentId}
                                 link={a.link.replace(":id", id)}
                             />
                         )
@@ -38,14 +38,14 @@ function Member_request() {
     )
 }
 
-function List({img, name, major, studentNum, link}) {
+function List({memberImageURL, name, department, studentId, link}) {
     const navigate = useNavigate();
     return (
         <div className="member_request_item">
-            <img src={img} alt={name} onClick={() => navigate(link)}/>
+            <img src={memberImageURL} alt={name} onClick={() => navigate(link)}/>
             <div className="member_info" onClick={() => navigate(link)}>
                 <p className="name">{name}</p>
-                <p className="major_studentNum">{major} {studentNum}</p>
+                <p className="major_studentNum">{department} {studentId}</p>
             </div>
             <div className="icons">
                 <FaXmark className="icon"/>

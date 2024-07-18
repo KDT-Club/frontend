@@ -13,15 +13,10 @@ import clubData from "../data/clubData.jsx";
 
 function MyclubHeader({ clubName }) {
     let { id } = useParams();
-    //let memberId = 104;
-    //const member = memberInfo.find(m => m.memberId === parseInt(memberId, 10));
     const navigate = useNavigate();
     const location = useLocation();
-    ///const memberId = location.state?.memberId;
     const memberId = location.state?.memberId || localStorage.getItem('memberId');
 
-    // const [clubs, setClubs] = useState([]);
-    // const [club, setClub] = useState([]);
     const [clubMembers, setClubMembers] = useState([]);
     const [isMenuOpen, setIsMenuOpen] = useState(location.state?.isMenuOpen || false); //햄버거탭 슬라이드
     const [isMemberListOpen, setIsMemberListOpen] = useState(false); //회원리스트
@@ -155,8 +150,8 @@ function MyclubHeader({ clubName }) {
                         </div>
                         {isMemberManageOpen && (
                             <div className="member-manage-list">
-                                <div className="manage-item" onClick={() => navigate("/memberInfoFixList")}>회원정보 수정</div>
-                                <div className="manage-item">회원출석 관리</div>
+                                <div className="manage-item" onClick={() => navigate(`/clubs/${id}/memberInfoFixList`)}>회원 정보 수정</div>
+                                <div className="manage-item">회원 출석 관리</div>
                                 <div className="manage-item" onClick={() => navigate("/clubs/:id/joinRequest")}>가입 신청 현황</div>
                             </div>
                         )}
