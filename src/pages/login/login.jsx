@@ -4,6 +4,7 @@ import './login_styles/login.css';
 import Header_center from '../../components/header/Header_center.jsx';
 import kakao from '../../images/kakao_login.png';
 import { GoogleLogin } from '@react-oauth/google';
+import {useAuth} from "../../components/AuthContext.jsx";
 
 function Login() {
     const [username, setUserName] = useState('');
@@ -21,10 +22,15 @@ function Login() {
             const response = await fetch('http://3.36.56.20:8080/login', {
                 method: 'POST',
                 body: formData,
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
                 credentials: 'include' // 쿠키를 보낼 수 있도록 설정
             });
 
             console.log('Response status:', response.status);
+
+            console.log(await response.json())
 
             if (response.ok) {
                 // 토큰이 아닌 JSESSIONID가 쿠키로 자동으로 저장될 것임

@@ -4,13 +4,13 @@ import { FaRegBookmark } from 'react-icons/fa';
 import { PiUsersThree } from "react-icons/pi";
 import { IoHomeOutline } from "react-icons/io5";
 import { LuUserSquare } from "react-icons/lu";
-import { Link, useLocation } from 'react-router-dom';
+import {Link, useLocation, useParams} from 'react-router-dom';
+import {useAuth} from "../AuthContext.jsx";
 
 function Footer() {
     const location = useLocation();
+    const { memberId } = useAuth();
     const [activeMenu, setActiveMenu] = useState(location.pathname);
-
-    const memberId = 101;
 
     return (
         <div className="Footer">
@@ -41,17 +41,15 @@ function Footer() {
                 isActive={activeMenu === "/clubs"}
                 onClick={() => setActiveMenu("/clubs")}
             />
-            {memberId && (
-                <Menu
-                    to={`/members/${memberId}`}
-                    Icon={LuUserSquare}
-                    title="마이페이지"
-                    iconStyle={{fontSize:"30px", marginLeft:"15px"}}
-                    textStyle={{marginTop:"5px"}}
-                    isActive={activeMenu === `/members/${memberId}`}
-                    onClick={() => setActiveMenu(`/members/${memberId}`)}
-                />
-            )}
+            <Menu
+                to={`/members/${memberId}`}
+                Icon={LuUserSquare}
+                title="마이페이지"
+                iconStyle={{fontSize:"30px", marginLeft:"15px"}}
+                textStyle={{marginTop:"5px"}}
+                isActive={activeMenu === `/members/${memberId}`}
+                onClick={() => setActiveMenu(`/members/${memberId}`)}
+            />
         </div>
     )
 }

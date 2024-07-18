@@ -53,7 +53,7 @@ const MyclubMain = () => {
                     ))}
                 </div>
             </div>
-            <Footer/>
+            <Footer memberId={memberId} />
         </div>
     );
 }
