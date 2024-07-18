@@ -31,7 +31,7 @@ function NoticeWrite() {
     const getPresignedUrl = async (file) => {
         try {
             const filename = encodeURIComponent(file.name);
-            const response = await axios.get(`http://3.36.56.20:8080/presigned-url?filename=${filename}`);
+            const response = await axios.get(`https://zmffjq.store/presigned-url?filename=${filename}`);
             const presignedUrl = response.data;
 
             // PUT 요청으로 파일 업로드
@@ -101,7 +101,7 @@ function NoticeWrite() {
         }
 
         try {
-            const response = await axios.post(`http://3.36.56.20:8080/club/${id}/board/2/posts`, {
+            const response = await axios.post(`https://zmffjq.store/club/${id}/board/2/posts`, {
                 title,
                 content,
                 attachment_flag: attachmentNames.length > 0 ? 'Y' : 'N',

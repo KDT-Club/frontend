@@ -19,7 +19,7 @@ function Login() {
         formData.append('password', password);
 
         try {
-            const response = await axios.post('http://3.36.56.20:8080/login', formData, {
+            const response = await axios.post('https://zmffjq.store/login', formData, {
                 withCredentials: true
             });
 

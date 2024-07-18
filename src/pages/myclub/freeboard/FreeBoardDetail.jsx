@@ -66,7 +66,7 @@ function FreeBoardDetail() {
     useEffect(() => {
         const fetchPost = async () => {
             try {
-                const response = await axios.get(`http://3.36.56.20:8080/clubs/${clubId}/board/4/posts/${postId}`);
+                const response = await axios.get(`https://zmffjq.store/clubs/${clubId}/board/4/posts/${postId}`);
                 setPost(response.data);
             } catch (error) {
                 console.error('게시글 조회 에러 발생:', error);
@@ -78,7 +78,7 @@ function FreeBoardDetail() {
 
         const fetchComments = async () => {
             try {
-                const response = await axios.get(`http://3.36.56.20:8080/posts/${postId}/comments`);
+                const response = await axios.get(`https://zmffjq.store/posts/${postId}/comments`);
                 setComments(response.data);
             } catch (error) {
                 console.error('댓글 조회 에러 발생:', error);
@@ -99,7 +99,7 @@ function FreeBoardDetail() {
         e.preventDefault();
         if (newComment.trim() && memberId) { // memberId가 존재하는지 확인
             try {
-                const response = await axios.post(`http://3.36.56.20:8080/posts/${postId}/comment`, {
+                const response = await axios.post(`https://zmffjq.store/posts/${postId}/comment`, {
                     memberId: memberId,
                     content: newComment
                 });
@@ -128,7 +128,7 @@ function FreeBoardDetail() {
     const handleSaveEditedComment = async () => {
         if (editingCommentId && editedCommentContent.trim() && memberId) {
             try {
-                const response = await axios.put(`http://3.36.56.20:8080/posts/${postId}/comment/${editingCommentId}`, {
+                const response = await axios.put(`https://zmffjq.store/posts/${postId}/comment/${editingCommentId}`, {
                     memberId: memberId,
                     content: editedCommentContent
                 });

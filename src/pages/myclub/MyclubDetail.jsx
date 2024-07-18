@@ -35,8 +35,8 @@ function MyclubDetail() {
             setError(null);
             try {
                 const [noticeResponse, freeboardResponse] = await Promise.all([
-                    axios.get(`http://3.36.56.20:8080/clubs/${id}/board/2/posts`),
-                    axios.get(`http://3.36.56.20:8080/clubs/${id}/board/4/posts`)
+                    axios.get(`https://zmffjq.store/clubs/${id}/board/2/posts`),
+                    axios.get(`https://zmffjq.store/clubs/${id}/board/4/posts`)
                 ]);
                 setNoticePosts(noticeResponse.data);
                 setFreeboardPosts(freeboardResponse.data);

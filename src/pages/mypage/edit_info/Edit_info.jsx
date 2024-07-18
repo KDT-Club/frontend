@@ -12,7 +12,7 @@ function Edit_info() {
     const { memberId } = useParams();
 
     const apiClient = axios.create({
-        baseURL: 'http://3.36.56.20:8080',
+        baseURL: 'https://zmffjq.store',
         timeout: 10000, // 요청 타임아웃 설정 (10초)
         headers: {
             'Content-Type': 'application/json',
