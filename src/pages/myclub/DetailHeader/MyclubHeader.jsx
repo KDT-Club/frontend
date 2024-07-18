@@ -43,12 +43,6 @@ function MyclubHeader({ clubName }) {
     //     fetchClubMembers();
     // }, [id]);
 
-    // const handleBackClick = () => {
-    //     //MyclubDetail에서 컴포넌트 사용->뒤로가기 누르면 MyclubMain으로 이동하게 함.
-    //     //다른곳에서 사용중이면 바꿔야됨
-    //     navigate(`/clubs/${id}`);
-    // };
-
     const handleBackClick = () => {
         navigate(`/clubs?memberId=${memberId}`);
     };
