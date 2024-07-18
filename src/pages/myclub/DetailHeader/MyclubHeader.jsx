@@ -13,10 +13,12 @@ import clubData from "../data/clubData.jsx";
 
 function MyclubHeader({ clubName }) {
     let { id } = useParams();
-    let memberId = 104;
-    const member = memberInfo.find(m => m.memberId === parseInt(memberId, 10));
+    //let memberId = 104;
+    //const member = memberInfo.find(m => m.memberId === parseInt(memberId, 10));
     const navigate = useNavigate();
     const location = useLocation();
+    ///const memberId = location.state?.memberId;
+    const memberId = location.state?.memberId || localStorage.getItem('memberId');
 
     // const [clubs, setClubs] = useState([]);
     // const [club, setClub] = useState([]);
@@ -28,24 +30,6 @@ function MyclubHeader({ clubName }) {
 
     const [showDeleteModal, setShowDeleteModel] = useState(false);  // 네,아니오 모달창 띄우기
     const [modalMessage, setModalMessage] = useState("");   // 모달 메세지
-
-    //여기부터.......
-    // useEffect(() => {
-    //     setClubs(clubData);
-    // }, []);
-    // const club = clubs.find(club => club.clubId === parseInt(id)) ?? {};
-    //
-    // useEffect(() => {
-    //     //memberId get
-    //     const getMemberId = clubmemberData.filter(member => member.clubId === parseInt(id));
-    //     //회원 이름 get
-    //     const getMemberName = getMemberId.map(clubMember => {
-    //         const memberName = memberInfo.find(member => member.memberId === clubMember.memberId);
-    //         return memberName ? memberName.name : "회원이 없습니다.";
-    //     })
-    //     setClubMembers(getMemberName);
-    // }, [id]);
-    //여기까지 UI보기용 데이터 조회. 나중에 삭제
 
     //햄버거탭에서 회원리스트 조회
     // useEffect(() => {
@@ -64,8 +48,14 @@ function MyclubHeader({ clubName }) {
     //     fetchClubMembers();
     // }, [id]);
 
+    // const handleBackClick = () => {
+    //     //MyclubDetail에서 컴포넌트 사용->뒤로가기 누르면 MyclubMain으로 이동하게 함.
+    //     //다른곳에서 사용중이면 바꿔야됨
+    //     navigate(`/clubs/${id}`);
+    // };
+
     const handleBackClick = () => {
-        navigate(-1);
+        navigate(`/clubs?memberId=${memberId}`);
     };
 
     //햄버거탭 열고 닫기 토글
@@ -123,7 +113,7 @@ function MyclubHeader({ clubName }) {
             <div className={`slide-menu ${isMenuOpen ? 'open' : ''}`}>
                 <div className="slide-menu-content">
                     <div className="member-info">
-                        <h2>{member.name}</h2>
+                        <h2>최자두</h2>
                         <p>2020101460</p>
                         {/*API수정 필요!*/}
                     </div>

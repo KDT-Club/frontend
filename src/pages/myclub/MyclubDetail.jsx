@@ -4,6 +4,8 @@ import "./myclubdetail.css";
 import Footer from '../../components/footer/Footer.jsx';
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import MyclubHeader from "./DetailHeader/MyclubHeader.jsx";
+import {FaArrowLeft} from "react-icons/fa6";
+import {FiMoreVertical} from "react-icons/fi";
 
 function MyclubDetail() {
     const { id } = useParams();
@@ -19,7 +21,6 @@ function MyclubDetail() {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-
         const storedClubName = localStorage.getItem(`clubName_${id}`);
 
         if (storedClubName) {
@@ -39,7 +40,6 @@ function MyclubDetail() {
                 ]);
                 setNoticePosts(noticeResponse.data);
                 setFreeboardPosts(freeboardResponse.data);
-                console.log(noticeResponse.data);
 
                 // 서버에서 배열이 아닌 경우에 대비하여 처리
                 if (Array.isArray(noticeResponse.data)) {
@@ -60,7 +60,10 @@ function MyclubDetail() {
             }
         };
         fetchPosts();
-    }, [id, location.state]); //원래는 id만
+    }, [id, location.state]);
+
+    if (loading) return <div>로딩 중...</div>;
+    if (error) return <div>{error}</div>;
 
     const handleNoticeClick = () => {
         navigate(`/clubs/${id}/noticelist`);
@@ -69,9 +72,6 @@ function MyclubDetail() {
     const handleFreeboardClick = () => {
         navigate(`/clubs/${id}/freeboardlist`);
     };
-
-    if (loading) return <div>로딩 중...</div>;
-    if (error) return <div>{error}</div>;
 
     const etc1handleMoreClick = () => {
         navigate(`/clubs/etc1`);
