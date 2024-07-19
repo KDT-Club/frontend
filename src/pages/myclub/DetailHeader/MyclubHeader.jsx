@@ -10,21 +10,44 @@ import Modal_ok from "../../../components/modal/Modal_ok.jsx";
 import clubmemberData from '../data/clubmemberData.jsx';
 import memberInfo from "../data/memberInfo.jsx";
 import clubData from "../data/clubData.jsx";
-
+import axios from "axios";
+axios.defaults.withCredentials = true;
 function MyclubHeader({ clubName }) {
     let { id } = useParams();
     const navigate = useNavigate();
     const location = useLocation();
     const memberId = location.state?.memberId || localStorage.getItem('memberId');
 
+    const apiClient = axios.create({
+        baseURL: 'https://zmffjq.store', // .env 파일에서 API URL 가져오기
+        timeout: 10000, // 요청 타임아웃 설정 (10초)
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+
+    const [member, setMember] = useState('');
     const [clubMembers, setClubMembers] = useState([]);
     const [isMenuOpen, setIsMenuOpen] = useState(location.state?.isMenuOpen || false); //햄버거탭 슬라이드
     const [isMemberListOpen, setIsMemberListOpen] = useState(false); //회원리스트
     const [isMemberManageOpen, setIsMemberManageOpen] = useState(false); //회원관리
     const [isClubManageOpen, setIsClubManageOpen] = useState(false); //동아리 관리
 
-    const [showDeleteModal, setShowDeleteModel] = useState(false);  // 네,아니오 모달창 띄우기
+    const [showDeleteModal, setShowDeleteModal] = useState(false);  // 네,아니오 모달창 띄우기
     const [modalMessage, setModalMessage] = useState("");   // 모달 메세지
+
+    // 회원 정보를 조회하는 API 호출
+    useEffect(() => {
+        apiClient.get(`/members/${memberId}`)
+            .then(response => {
+                setMember(response.data);
+            })
+            .catch(error => {
+                console.error('Error fetching member data:', error);
+            });
+    }, [memberId]);
+
+    console.log(member.name)
 
     //햄버거탭에서 회원리스트 조회
     // useEffect(() => {
@@ -79,11 +102,11 @@ function MyclubHeader({ clubName }) {
     // 네/아니오 모달창 open
     const handleOpenDeleteModal = useCallback((message) => {
         setModalMessage(message);
-        setShowDeleteModel(true);
+        setShowDeleteModal(true);
     }, []);
 
     // 네/아니오 모달창 close
-    const handleCloseDeleteModal = () => setShowDeleteModel(false);
+    const handleCloseDeleteModal = () => setShowDeleteModal(false);
 
     return (
         <>
@@ -102,8 +125,8 @@ function MyclubHeader({ clubName }) {
             <div className={`slide-menu ${isMenuOpen ? 'open' : ''}`}>
                 <div className="slide-menu-content">
                     <div className="member-info">
-                        <h2>최자두</h2>
-                        <p>2020101460</p>
+                        <h2>{member.name}</h2>
+                        <p>{member.studentId}</p>
                         {/*API수정 필요!*/}
                     </div>
                     <div className="menu-items">

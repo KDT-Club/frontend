@@ -33,6 +33,8 @@ function Written_post() {
              });
     }, [memberId]);
 
+    console.log(list)
+
     return (
         <div className="Written_post">
             <div className="header">

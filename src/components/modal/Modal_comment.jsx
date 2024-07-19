@@ -5,7 +5,6 @@ import Modal_confirm from "./Modal_confirm.jsx";
 import axios from "axios";
 
 const Modal_comment = ({ onClose, onEdit, position, postId, commentId, onDelete, content }) => {
-    const navigate = useNavigate();
     const [modalMessage, setModalMessage] = useState("");   // 모달창에 띄울 메세지 전달
     const [showDeleteModal, setShowDeleteModal] = useState(false);  // 네/아니오 모달창 띄우기
     const [onConfirm, setOnConfirm] = useState(() => () => {});
