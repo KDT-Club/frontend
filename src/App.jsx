@@ -35,7 +35,6 @@ import FreeBoardWrite from "./pages/myclub/freeboard/WriteAndEdit/FreeBoardWrite
 import NoticeEdit from "./pages/myclub/notice/WriteAndEdit/NoticeEdit.jsx";
 import FreeBoardEdit from "./pages/myclub/freeboard/WriteAndEdit/FreeBoardEdit.jsx"
 import ClubInfoEdit from "./pages/myclub/DetailHeader/club_manage/ClubInfoEdit.jsx";
-import {AuthProvider} from "./components/AuthContext.jsx";
 
 function App() {
     const [showLogo, setShowLogo] = React.useState(true);
@@ -68,10 +67,9 @@ function App() {
     }, [showLogo]);
 
     return (
-        <AuthProvider>
-            <Router>
-                <GoogleOAuthProvider clientId="YOUR_GOOGLE_CLIENT_ID">
-                    <div className="App">
+        <Router>
+            <GoogleOAuthProvider clientId="YOUR_GOOGLE_CLIENT_ID">
+                <div className="App">
                         <Routes>
                             <Route path="/" element={showLogo ? <Logo /> : <Login />} />
                             <Route path="/login" element={<Login />} />
@@ -114,7 +112,6 @@ function App() {
                     </div>
                 </GoogleOAuthProvider>
             </Router>
-        </AuthProvider>
     );
 }
 
