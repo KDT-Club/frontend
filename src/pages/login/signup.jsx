@@ -65,7 +65,7 @@ function signup () {
             formData.append('department', department);
             formData.append('phone', phone);
 
-            const response = await fetch('http://3.36.56.20:8080/signup', {
+            const response = await fetch('https://zmffjq.store/signup', {
                 method: 'POST',
                 body: formData
             });

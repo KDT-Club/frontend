@@ -26,7 +26,7 @@ const MyclubMain = () => {
 
         const fetchClubs = async () => {
             try {
-                const response = await axios.get(`http://3.36.56.20:8080/clubs?memberId=${memberId}`, {
+                const response = await axios.get(`https://zmffjq.store/clubs?memberId=${memberId}`, {
                     params: { memberId }
                 });
                 if (Array.isArray(response.data)) {

@@ -20,7 +20,7 @@ function MainPage() {
 
     const fetchAllClubs = async () => {
         try {
-            const response = await axios.get("http://3.36.56.20:8080/clubs");
+            const response = await axios.get("https://zmffjq.store/clubs");
             setAllClubs(response.data);
             setFilteredClubs([]);
         } catch (error) {

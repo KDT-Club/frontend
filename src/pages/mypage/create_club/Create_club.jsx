@@ -13,7 +13,7 @@ function Create_club() {
     const category_list = ["체육", "학술", "문화", "봉사", "신설"];
 
     const apiClient = axios.create({
-        baseURL: 'http://3.36.56.20:8080',
+        baseURL: 'https://zmffjq.store',
         timeout: 10000, // 요청 타임아웃 설정 (10초)
         headers: {
             'Content-Type': 'application/json',
