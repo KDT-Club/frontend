@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from "axios";
-import '../../DetailHeader/myclubheader.css'
-import '../../notice/WriteAndEdit/noticewrite.css';
+import '../../myclub/DetailHeader/myclubheader.css'
+import '../../myclub/notice/WriteAndEdit/noticewrite.css';
 import {useNavigate, useParams} from "react-router-dom";
 import { FiX, FiCheck } from "react-icons/fi";
 import { LuImagePlus } from "react-icons/lu";
 
 function FreeBoardEdit() {
-    let { id, postId } = useParams();
+    let { postId } = useParams();
     const navigate = useNavigate();
 
     const [title, setTitle] = useState('');
@@ -18,7 +18,7 @@ function FreeBoardEdit() {
         const fetchPostData = async () => {
             try {
                 //게시글 정보 가져오기
-                const response = await axios.get(`/club${id}/board/4/posts/${postId}`);
+                const response = await axios.get(`/postdetail/${postId}`);
                 const post = response.data;
                 console.log(response.data)
                 setTitle(post.title);
@@ -30,7 +30,7 @@ function FreeBoardEdit() {
             }
         };
         fetchPostData();
-    }, [id, postId]);
+    }, [postId]);
 
     // 제목 입력
     const handleTitleChange = (e) => {

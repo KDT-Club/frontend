@@ -57,6 +57,8 @@ function Written_post_detail() {
             });
     }, [memberId, postId]);
 
+    console.log(post)
+
     const handleBackClick = () => {
         navigate(-1);
     };
@@ -81,17 +83,6 @@ function Written_post_detail() {
 
     const handleEditClick = () => {
         navigate(`/posts_edit/${postId}`);
-    };
-
-    const handleDeletePost = () => {
-        apiClient.delete(`/posts/${postId}`)
-            .then(() => {
-                // 삭제 성공 시 목록으로 이동
-                navigate(`/post_list/${memberId}`);
-            })
-            .catch(error => {
-                console.error('글 삭제 중 오류 발생:', error);
-            });
     };
 
     return (
