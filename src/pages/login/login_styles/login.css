@@ -35,7 +35,6 @@ button, .social-login {
 .login-btn {
     background-color: #1877f2;
     color: white;
-    margin-left: -20px;
 }
 
 .social-login-container {
@@ -49,7 +48,6 @@ button, .social-login {
     background-color: #FEE500;
     padding: 0;
     color: #000000;
-    margin-left: -20px;
 }
 
 .signup-link {
