@@ -2,9 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { FaArrowLeft } from 'react-icons/fa6';
-import { FiMoreVertical, FiSend } from 'react-icons/fi';
+import { FiMoreVertical } from 'react-icons/fi';
 import Modal_post from '../../../components/modal/Modal_post.jsx';
-import Modal_comment from '../../../components/modal/Modal_comment.jsx';
 
 function formatDate(dateString) {
     const date = new Date(dateString);
@@ -28,9 +27,8 @@ function Written_post_detail() {
     const [post, setPost] = useState({});
     const [comments, setComments] = useState([]);
     const [showPostModal, setShowPostModal] = useState(false);  // 글 수정or삭제 모달창 띄우기
-    const [showCommentModal, setShowCommentModal] = useState(false);  // 댓글 수정or삭제 모달창 띄우기
-    const [modalPosition, setModalPosition] = useState({ top: '0px', left: '0px' });
     const [memberName, setMemberName] = useState('');
+
 
     useEffect(() => {
         apiClient.get(`/posts/${memberId}`)
@@ -67,23 +65,15 @@ function Written_post_detail() {
         setShowPostModal(true);
     };
 
-    const handleCommentDotClick = (e) => {
-        // 모달 위치 설정: 클릭한 위치 + 3px 여백
-        setModalPosition({
-            top: e.clientY + 3 + 'px',
-            left: e.clientX + 3 + 'px'
-        });
-        setShowCommentModal(true);
-    };
-
     const closeModal = () => {
         setShowPostModal(false);
-        setShowCommentModal(false);
     };
 
     const handleEditClick = () => {
         navigate(`/posts_edit/${postId}`);
     };
+
+
 
     return (
         <div>
@@ -142,10 +132,6 @@ function Written_post_detail() {
                                 <p style={{fontSize: '17px', color: 'gray', marginLeft: "30px", marginBottom: "2px"}}>
                                     {memberName} | {formatDate(comment.createdAt)}
                                 </p>
-                                <FiMoreVertical
-                                    style={{fontSize: '20px', cursor: 'pointer', marginRight: '20px'}}
-                                    onClick={handleCommentDotClick}
-                                />
                             </div>
                             <p style={{
                                 fontSize: '19px',
@@ -160,7 +146,6 @@ function Written_post_detail() {
                 )}
             </div>
             {showPostModal && <Modal_post onClose={closeModal} onEdit={handleEditClick} />}
-            {showCommentModal && <Modal_comment onClose={closeModal} position={modalPosition} />}
         </div>
     );
 }
