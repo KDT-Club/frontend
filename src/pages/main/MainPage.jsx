@@ -59,7 +59,7 @@ function MainPage() {
     }
 
     const handleClubClick = (clubName) => {
-        navigate(`/clubs/${clubName}`);
+        navigate(`/club_detail/${clubName}`);
     }
 
     return (
