@@ -1,16 +1,37 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import './footer.css';
 import { FaRegBookmark } from 'react-icons/fa';
 import { PiUsersThree } from "react-icons/pi";
 import { IoHomeOutline } from "react-icons/io5";
 import { LuUserSquare } from "react-icons/lu";
 import {Link, useLocation, useParams} from 'react-router-dom';
-import {useAuth} from "../AuthContext.jsx";
+import axios from "axios";
 
 function Footer() {
     const location = useLocation();
-    const { memberId } = useAuth();
+    const [memberId, setMemberId] = useState(null);
     const [activeMenu, setActiveMenu] = useState(location.pathname);
+
+    const fetchUserId = async () => {
+        try {
+            const response = await axios.get("https://zmffjq.store/getUserId", {
+                withCredentials: true // Include this if the endpoint requires credentials
+            });
+            console.log(response.data);
+            setMemberId(response.data.message); // memberId 상태 업데이트
+        } catch (error) {
+            if (error.response && error.response.status === 401) {
+                alert('Unauthorized access. Please log in.');
+            } else {
+                console.error('유저 아이디를 불러오는 중 에러 발생:', error);
+                alert('유저 아이디를 불러오는 중 에러가 발생했습니다.');
+            }
+        }
+    };
+
+    useEffect(() => {
+        fetchUserId();
+    }, []);
 
     return (
         <div className="Footer">
@@ -33,7 +54,7 @@ function Footer() {
                 onClick={() => setActiveMenu("/community")}
             />
             <Menu
-                to="/clubs"
+                to={`/clubs?memberId=${memberId}`}
                 Icon={FaRegBookmark}
                 title="내 동아리"
                 iconStyle={{fontSize:"27px", marginTop:"1px", marginLeft:"12px"}}
