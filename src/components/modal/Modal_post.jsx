@@ -43,7 +43,7 @@ const Modal_post = ({onClose, onEdit}) => {
     return (
         <div className="Modal_post" onClick={handleOverlayClick}>
             <div className="modal_post_content" onClick={(e) => e.stopPropagation()}>
-                <button className="post_delete" onClick={() => handleOpenModal("글을 삭제하시겠습니까?", () => {navigate(-1)})}>글 삭제하기</button>
+                <button className="post_delete" onClick={() => handleOpenModal("글을 삭제하시겠습니까?", handleDelete)}>글 삭제하기</button>
                 <button onClick={handleEdit}>글 수정하기</button>
             </div>
             {showDeleteModal && <Modal_confirm onClose={handleCloseModal} message={modalMessage} onConfirm={onConfirm} />}
