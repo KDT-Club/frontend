@@ -8,21 +8,30 @@ import postData from "../../myclub/data/postData.jsx";
 function Written_post() {
     const navigate = useNavigate();
     const { memberId } = useParams();
+
+    const apiClient = axios.create({
+        baseURL: 'http://3.36.56.20:8080', // .env 파일에서 API URL 가져오기
+        timeout: 10000, // 요청 타임아웃 설정 (10초)
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+
     // 임의의 list 데이터
-    const [list] = useState(postData.filter(post => post.memberId === parseInt(memberId, 10)));
-    // const [list, setList] = useState([]);
+//    const [list] = useState(postData.filter(post => post.memberId === parseInt(memberId, 10)));
+    const [list, setList] = useState([]);
 
     // 작성한 글 목록을 가져오는 API
-//    useEffect(() => {
-//      // 작성한 글 목록을 조회
-//        axios.get(`/posts/${memberId}`)
-//             .then(response => {
-//                 setList(response.data);
-//             })
-//             .catch(error => {
-//                 console.error('작성한 글 목록 조회 중 오류 발생:', error);
-//             });
-//    }, [memberId]);
+    useEffect(() => {
+      // 작성한 글 목록을 조회
+        apiClient.get(`/posts/${memberId}`)
+             .then(response => {
+                 setList(response.data);
+             })
+             .catch(error => {
+                 console.error('작성한 글 목록 조회 중 오류 발생:', error);
+             });
+    }, [memberId]);
 
     return (
         <div className="Written_post">
@@ -38,7 +47,7 @@ function Written_post() {
                     list.map((post, i) => {
                         console.log(post)
                         return (
-                            <List key={i} title={post.title} content={post.content} updateDate={post.updateDate/*updatedAt*/} postId={post.postId} />
+                            <List key={i} title={post.title} content={post.content} updatedAt={post.updatedAt} memberId={memberId} postId={post.id} />
                         )
                     })
                 }
@@ -55,13 +64,13 @@ function formatDate(dateString) {
     return `${year}-${month}-${day}`;
 }
 
-function List({title, content, updateDate/*updatedAt*/, postId}) {
+function List({title, content, updatedAt, memberId, postId}) {
     const navigate = useNavigate();
     return (
-        <div className="post_list" onClick={() => navigate("/posts/" + postId)}>
+        <div className="post_list" onClick={() => navigate(`/posts/${memberId}/${postId}`)}>
             <p className="title">{title}</p>
             <p className="content">{content}</p>
-            <p className="date">{formatDate(updateDate/*updatedAt*/)}</p>
+            <p className="date">{formatDate(updatedAt)}</p>
         </div>
     )
 }

@@ -1,14 +1,10 @@
-//내 동아리 자유게시판 - 글 상세
 import React, { useState, useEffect } from 'react';
-import {useParams, useNavigate} from 'react-router-dom';
-import postData from "../../myclub/data/postData.jsx";
-import memberInfo from "../../myclub/data/memberInfo.jsx";
-import commentData from '../../myclub/data/commentData.jsx';
-import {FaArrowLeft} from 'react-icons/fa6';
-import { FiMoreVertical, FiSend } from "react-icons/fi";
-import axios from "axios";
-import Modal_post from "../../../components/modal/Modal_post.jsx";
-import Modal_comment from "../../../components/modal/Modal_comment.jsx";
+import { useParams, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { FaArrowLeft } from 'react-icons/fa6';
+import { FiMoreVertical, FiSend } from 'react-icons/fi';
+import Modal_post from '../../../components/modal/Modal_post.jsx';
+import Modal_comment from '../../../components/modal/Modal_comment.jsx';
 
 function formatDate(dateString) {
     const date = new Date(dateString);
@@ -17,21 +13,49 @@ function formatDate(dateString) {
     return `${month}/${day}`;
 }
 
-function getMemberName(memberId) { //로컬 멤버ID 조회 -> 나중에 지움!
-    const member = memberInfo.find(member => member.memberId === memberId);
-    return member ? member.name : 'Unknown';
-}
-
 function Written_post_detail() {
-    let {clubId, postId} = useParams();
+    const { memberId, postId } = useParams();
     const navigate = useNavigate();
 
-    const post = postData.find(post => post.postId === parseInt(postId)); //로컬 게시글 조회
-    const comments = commentData.filter(comment => comment.postId === parseInt(postId));//로컬 댓글 조회
+    const apiClient = axios.create({
+        baseURL: 'http://3.36.56.20:8080', // API URL
+        timeout: 10000, // 요청 타임아웃 설정 (10초)
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
 
+    const [post, setPost] = useState({});
+    const [comments, setComments] = useState([]);
     const [showPostModal, setShowPostModal] = useState(false);  // 글 수정or삭제 모달창 띄우기
     const [showCommentModal, setShowCommentModal] = useState(false);  // 댓글 수정or삭제 모달창 띄우기
     const [modalPosition, setModalPosition] = useState({ top: '0px', left: '0px' });
+    const [memberName, setMemberName] = useState('');
+
+    useEffect(() => {
+        apiClient.get(`/posts/${memberId}`)
+            .then(response => {
+                const allPosts = response.data;
+                const currentPost = allPosts.find(post => post.id === parseInt(postId));
+
+                if (currentPost) {
+                    setPost(currentPost);
+                    return apiClient.get(`/members/${currentPost.member.id}`);   // 멤버 이름을 찾기 위함
+                } else {
+                    throw new Error('해당 글을 찾을 수 없습니다.');
+                }
+            })
+            .then(response => {
+                setMemberName(response.data.name);  // 멤버 이름 설정
+                return apiClient.get(`/posts/${postId}/comments`);  // 댓글 목록 조회
+            })
+            .then(response => {
+                setComments(response.data);  // 댓글 목록 설정
+            })
+            .catch(error => {
+                console.error('작성한 글 또는 댓글 조회 중 오류 발생:', error);
+            });
+    }, [memberId, postId]);
 
     const handleBackClick = () => {
         navigate(-1);
@@ -42,9 +66,10 @@ function Written_post_detail() {
     };
 
     const handleCommentDotClick = (e) => {
-        // 모달 위치 설정: 클릭한 위치 + 10px 여백
+        // 모달 위치 설정: 클릭한 위치 + 3px 여백
         setModalPosition({
-            top: e.clientY + 3 + 'px'
+            top: e.clientY + 3 + 'px',
+            left: e.clientX + 3 + 'px'
         });
         setShowCommentModal(true);
     };
@@ -52,99 +77,33 @@ function Written_post_detail() {
     const closeModal = () => {
         setShowPostModal(false);
         setShowCommentModal(false);
-    }
+    };
 
     const handleEditClick = () => {
         navigate(`/posts_edit/${postId}`);
     };
 
-    //게시글, 댓글 API 조회-----------------------------------------------------------------------------
-    //const [post, setPost] = useState('');
-    //const [comments, setComments] = useState([]);
-    const [newComment, setNewComment] = useState(''); //댓글 입력
-    const [memberId, setMemberId] = useState(null);
-
-    useEffect(() => {
-        const fetchClubInfo = async () => {
-            try {
-                const userResponse = await axios.get(''); //로그인 정보 받을 수 있는 url
-                const memberId = userResponse.data.memberId;
-                setMemberId(memberId);
-            } catch (error) {
-                console.error('회원 정보 가져오는 중 오류 발생:', error);
-                alert('회원 정보를 불러오는 데 실패했습니다.');
-            }
-        };
-
-        const fetchPost = async () => {
-            try {
-                const response = await axios.get(`posts/${memberId}`);
-                //setPost(response.data);
-            } catch (error) {
-                console.error('게시글 조회 에러 발생:', error);
-                if (error.response) {
-                    console.error('게시글 조회 실패', error.response.status);
-                }
-            }
-        };
-
-        const fetchComments = async () => {
-            try {
-                const response = await axios.get(`/posts/${postId}/comments`);
-                //setComments(response.data);
-            } catch (error) {
-                console.error('댓글 조회 에러 발생:', error);
-                if (error.response) {
-                    console.error('댓글 조회 실패', error.response.status);
-                }
-            }
-        };
-        fetchPost();
-        fetchComments();
-        fetchClubInfo();
-    }, [memberId, clubId, postId]);
-
-    //댓글 POST
-    const handleCommentChange = (e) => {
-        setNewComment(e.target.value);
-    };
-    const handleCommentSubmit = async (e) => {
-        e.preventDefault();
-        if (newComment.trim() && memberId) { // memberId가 존재하는지 확인
-            try {
-                const response = await axios.post(`/posts/${postId}/comment`, {
-                    memberId: memberId,
-                    content: newComment
-                }, {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
-                if (response.status === 200) {
-                    const newCommentData = response.data;
-                    // 서버로부터 받은 새로운 댓글 상태 업데이트
-                    //setComments([...comments, newCommentData]);
-                    setNewComment('');
-                } else {
-                    console.error("댓글 작성 실패", response.status);
-                }
-            } catch (error) {
-                console.error('댓글 작성 중 에러 발생', error);
-                alert('댓글 작성 중 오류가 발생했습니다. 다시 시도해주세요.');
-            }
-        }
+    const handleDeletePost = () => {
+        apiClient.delete(`/posts/${postId}`)
+            .then(() => {
+                // 삭제 성공 시 목록으로 이동
+                navigate(`/post_list/${memberId}`);
+            })
+            .catch(error => {
+                console.error('글 삭제 중 오류 발생:', error);
+            });
     };
 
     return (
         <div>
             <div className="header_container">
                 <FaArrowLeft
-                    style={{fontSize: '26px', cursor: 'pointer'}}
+                    style={{ fontSize: '26px', cursor: 'pointer' }}
                     onClick={handleBackClick}
                 />
-                <div style={{fontSize: '22px', fontWeight: "bold"}}>작성한 글 보기</div>
+                <div style={{ fontSize: '22px', fontWeight: "bold" }}>작성한 글 보기</div>
                 <FiMoreVertical
-                    style={{fontSize: '26px', cursor: 'pointer'}}
+                    style={{ fontSize: '26px', cursor: 'pointer' }}
                     onClick={handlePostDotClick}
                 />
             </div>
@@ -165,7 +124,7 @@ function Written_post_detail() {
                         fontWeight: "bold",
                         marginBottom: "5px"
                     }}
-                >{getMemberName(post.memberId)} | {formatDate(post.createdAt)}</p>
+                >{memberName} | {formatDate(post.createdAt)}</p>
                 <p
                     style={{
                         fontSize: "22px",
@@ -190,7 +149,7 @@ function Written_post_detail() {
                         <div key={comment.commentId} className="comment-oneline">
                             <div style={{display: 'flex', justifyContent: 'space-between', width: '100%'}}>
                                 <p style={{fontSize: '17px', color: 'gray', marginLeft: "30px", marginBottom: "2px"}}>
-                                    {getMemberName(comment.memberId)} | {formatDate(comment.createdAt)}
+                                    {memberName} | {formatDate(comment.createdAt)}
                                 </p>
                                 <FiMoreVertical
                                     style={{fontSize: '20px', cursor: 'pointer', marginRight: '20px'}}
@@ -209,19 +168,7 @@ function Written_post_detail() {
                     <p style={{fontSize: '18px'}}>댓글이 없습니다.</p>
                 )}
             </div>
-            <form onSubmit={handleCommentSubmit} style={{marginTop: '15px', display: 'flex', alignItems: 'center'}}>
-                <div className="submit-comment-container">
-                    <input
-                        type="text"
-                        value={newComment}
-                        onChange={handleCommentChange}
-                        placeholder="댓글을 입력하세요."
-                    />
-                    <button type="submit">
-                        <FiSend style={{textAlign: "center", fontSize: "27px"}}/></button>
-                </div>
-            </form>
-            {showPostModal && <Modal_post onClose={closeModal} onEdit={handleEditClick}/>}
+            {showPostModal && <Modal_post onClose={closeModal} onEdit={handleEditClick} />}
             {showCommentModal && <Modal_comment onClose={closeModal} position={modalPosition} />}
         </div>
     );

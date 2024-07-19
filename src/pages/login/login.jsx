@@ -28,9 +28,7 @@ function Login() {
 
             const data = response.data;
 
-            // 여기에서 성공 여부를 판단하는 조건을 수정합니다.
             if (data.message === '성공') {
-                // 로그인 성공 후 메인 페이지로 이동
                 console.log('로그인 성공, 메인 페이지로 이동합니다.');
                 navigate('/main');
             } else {
@@ -43,7 +41,6 @@ function Login() {
                     const errorData = error.response.data;
                     alert(`로그인에 실패했습니다: ${errorData.message}`);
                 } else {
-                    // 서버에서 HTML 형식으로 오류 페이지를 반환한 경우
                     const parser = new DOMParser();
                     const htmlDocument = parser.parseFromString(error.response.data, 'text/html');
                     const errorElement = htmlDocument.querySelector('p');
@@ -59,11 +56,6 @@ function Login() {
             }
         }
     };
-
-
-
-
-
 
     const handleSignup = (e) => {
         e.preventDefault();
