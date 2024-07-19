@@ -9,10 +9,10 @@ import {FiMoreVertical} from "react-icons/fi";
 
 function MyclubDetail() {
     const { id } = useParams();
+    console.log("club id:", id); //test
     const navigate = useNavigate();
     const location = useLocation();
     const [clubName, setClubName] = useState(''); //헤더에 이름 띄우기
-    // const clubName = location.state?.clubName || '';
 
     //공지사항,자유게시판 글 API 조회
     const [noticePosts, setNoticePosts] = useState([]);
@@ -53,7 +53,7 @@ function MyclubDetail() {
                     setFreeboardPosts([freeboardResponse.data]);
                 }
             } catch (error) {
-                console.error('게시글 조회 실패', error);
+                console.error('API 호출 중 오류 발생:', error.response || error);
                 setError('게시글을 불러오는데 실패했습니다. 다시 시도해주세요.');
             } finally {
                 setLoading(false);

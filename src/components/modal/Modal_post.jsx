@@ -1,10 +1,12 @@
 import React, {useCallback, useState} from "react";
 import './modal_post.css';
 import Modal_confirm from "./Modal_confirm.jsx";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
+import axios from "axios";
 
 const Modal_post = ({onClose, onEdit}) => {
     const navigate = useNavigate();
+    const { postId } = useParams();
     const [modalMessage, setModalMessage] = useState("");   // 모달창에 띄울 메세지 전달
     const [showDeleteModal, setShowDeleteModal] = useState(false);  // 네/아니오 모달창 띄우기
     const [onConfirm, setOnConfirm] = useState(() => () => {});
@@ -26,6 +28,16 @@ const Modal_post = ({onClose, onEdit}) => {
     const handleEdit = () => {
         onEdit();
         onClose();
+    };
+
+    const handleDelete = async () => {
+        try {
+            await axios.delete(`https://zmffjq.store/posts/${postId}`);
+            navigate(-1);
+        } catch (error) {
+            console.error('게시글 삭제 중 에러 발생:', error);
+            alert('게시글 삭제 중 오류가 발생했습니다. 다시 시도해주세요.');
+        }
     };
 
     return (
