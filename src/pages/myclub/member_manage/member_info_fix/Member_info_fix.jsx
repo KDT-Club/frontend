@@ -17,7 +17,7 @@ function Member_info_fix() {
 
     // Axios 인스턴스 생성 및 설정
     const apiClient = axios.create({
-        baseURL: 'http://3.36.56.20:8080',  // 환경 변수에서 API URL 가져오기
+        baseURL: 'https://zmffjq.store',  // 환경 변수에서 API URL 가져오기
         timeout: 10000,  // 요청 타임아웃 설정 (10초)
         headers: {
             'Content-Type': 'application/json',

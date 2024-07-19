@@ -15,7 +15,7 @@ function Member_info_fix_list() {
     const { id } = useParams();
 
     const apiClient = axios.create({
-        baseURL: 'http://3.36.56.20:8080', // .env 파일에서 API URL 가져오기
+        baseURL: 'https://zmffjq.store', // .env 파일에서 API URL 가져오기
         timeout: 10000, // 요청 타임아웃 설정 (10초)
         headers: {
             'Content-Type': 'application/json',

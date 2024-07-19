@@ -22,7 +22,7 @@ function NoticeList(){
     useEffect(() => {
         const fetchNotices = async () => {
             try {
-                const response = await fetch(`http://3.36.56.20:8080/clubs/${id}/board/2/posts`);
+                const response = await fetch(`https://zmffjq.store/clubs/${id}/board/2/posts`);
                 if (response.ok) {
                     const data = await response.json();
 
@@ -30,7 +30,7 @@ function NoticeList(){
                     const noticesWithAuthors = await Promise.all(
                         data.map(async (notice) => {
                             // 각 postId를 사용하여 상세 정보 API를 호출
-                            const detailResponse = await fetch(`http://3.36.56.20:8080/clubs/${id}/board/2/posts/${notice.postId}`);
+                            const detailResponse = await fetch(`https://zmffjq.store/clubs/${id}/board/2/posts/${notice.postId}`);
                             if (detailResponse.ok) {
                                 const detailData = await detailResponse.json();
                                 return {

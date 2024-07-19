@@ -20,7 +20,7 @@ const ClubDetailPage = () => {
     useEffect(() => {
         const fetchClubDetails = async () => {
             try {
-                const response = await fetch(`http://3.36.56.20:8080/clubs/${clubName}`);
+                const response = await fetch(`https://zmffjq.store/clubs/${clubName}`);
                 if (response.ok) {
                     const data = await response.json();
                     setClub(data);
@@ -55,7 +55,7 @@ const ClubDetailPage = () => {
                 withCredentials: true // Axios에 withCredentials 옵션 추가
             };
 
-            const response = await axios.post(`http://3.36.56.20:8080/clubs/${clubName}/applications`, {
+            const response = await axios.post(`https://zmffjq.store/clubs/${clubName}/applications`, {
                 motivation
             }, config);
 
