@@ -5,7 +5,6 @@ import list_data from "./mypage_list_data.jsx";
 import Header_center from "../../../components/header/Header_center.jsx";
 import Footer from "../../../components/footer/Footer.jsx";
 import Modal_confirm from "../../../components/modal/Modal_confirm.jsx";
-import member_info_data from "../../../data/member_info_data.jsx";
 import axios from "axios";
 
 function Mypage() {
