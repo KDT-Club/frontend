@@ -30,6 +30,7 @@ function NoticeDetail() {
     const [newComment, setNewComment] = useState(''); //댓글 입력
 
     //댓글 수정 상태 변수
+    const [selectedCommentContent, setSelectedCommentContent] = useState('');
     const [editingCommentId, setEditingCommentId] = useState(null);
     const [editedCommentContent, setEditedCommentContent] = useState('');
 
@@ -50,7 +51,7 @@ function NoticeDetail() {
         });
         setShowCommentModal(true);
         setEditingCommentId(commentId);
-        setEditedCommentContent(content);
+        setSelectedCommentContent(content);  // 선택된 댓글 내용 저장
     };
 
     const closeModal = () => {
@@ -119,16 +120,16 @@ function NoticeDetail() {
     };
 
     //댓글 수정 상태 관리 함수
-    const handleCommentEdit = (commentId, content) => {
-        setEditingCommentId(commentId); //현재 수정 중인 댓글의 ID 저장
-        setEditedCommentContent(content); //수정 중인 댓글의 원래 내용 저장
+    const handleCommentEdit = () => {
+        setEditedCommentContent(selectedCommentContent);  // 선택된 댓글 내용으로 수정
+        setShowCommentModal(false);
     };
 
     //수정 내용 저장하는 함수
     const handleSaveEditedComment = async () => {
         if (editingCommentId && editedCommentContent.trim() && memberId) {
             try {
-                const response = await axios.put(`https://zmffjq.store/posts/${postId}/comment/${editingCommentId}`, {
+                const response = await axios.put(`https://zmffjq.store/posts/${postId}/${editingCommentId}`, {
                     memberId: memberId,
                     content: editedCommentContent
                 });
@@ -150,6 +151,10 @@ function NoticeDetail() {
                 alert('댓글 수정 중 오류가 발생했습니다. 다시 시도해주세요.');
             }
         }
+    };
+
+    const handleDeleteComment = (commentId) => {
+        setComments(prevComments => prevComments.filter(comment => comment.commentId !== commentId));
     };
 
     const handleSubmit = (e) => {
@@ -254,7 +259,11 @@ function NoticeDetail() {
             {showCommentModal && <Modal_comment
                 onClose={closeModal}
                 position={modalPosition}
-                onEdit={() => handleCommentEdit(editingCommentId, editedCommentContent)}
+                onEdit={handleCommentEdit}
+                postId={postId}
+                commentId={editingCommentId}
+                onDelete={handleDeleteComment}
+                content={selectedCommentContent}
             />}
         </div>
     );

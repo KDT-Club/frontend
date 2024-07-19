@@ -1,21 +1,30 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState } from 'react';
 import axios from "axios";
 import '../../DetailHeader/myclubheader.css'
 import './noticewrite.css';
-import {useNavigate, useParams, useLocation} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import { FiX, FiCheck } from "react-icons/fi";
 import { LuImagePlus } from "react-icons/lu";
 
 function NoticeWrite() {
     let { id } = useParams();
     const navigate = useNavigate();
-    const location = useLocation();
-    const clubName = location.state?.clubName;
 
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [attachmentNames, setAttachmentNames] = useState([]);
-    const [uploading, setUploading] = useState(false); // 이미지 업로드 중 여부를 관리 //!
+    const [uploading, setUploading] = useState(false); // 이미지 업로드 중 여부를 관리
+
+    const [clubName, setClubName] = useState('');
+
+    useEffect(() => {
+        const storedClubName = localStorage.getItem(`clubName_${id}`);
+        if (storedClubName) {
+            setClubName(storedClubName);
+        } else {
+            alert('동아리 조회 실패. 다시 시도해주세요.');
+        }
+    }, [id]);
 
     // 제목 입력
     const handleTitleChange = (e) => {
@@ -34,13 +43,11 @@ function NoticeWrite() {
             const response = await axios.get(`https://zmffjq.store/presigned-url?filename=${filename}`);
             const presignedUrl = response.data;
 
-            // PUT 요청으로 파일 업로드
             await axios.put(presignedUrl, file, {
                 headers: {
                     'Content-Type': file.type
                 }
             });
-
             return presignedUrl.split("?")[0]; // 이미지 URL 반환
         } catch (error) {
             console.error('Presigned URL 요청 또는 이미지 업로드 실패:', error);
@@ -77,7 +84,6 @@ function NoticeWrite() {
                 imgElement.style.margin = '10px';
                 uploadedImagesDiv.appendChild(imgElement);
             });
-
             console.log('업로드된 이미지 URL들:', urls);
         } catch (error) {
             console.error('이미지 업로드 중 오류 발생:', error);
