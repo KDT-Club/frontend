@@ -4,7 +4,7 @@ import Modal_confirm from "./Modal_confirm.jsx";
 import {useNavigate, useParams} from "react-router-dom";
 import axios from "axios";
 
-const Modal_post = ({onClose, onEdit}) => {
+const Modal_post = ({onClose, onEdit, currentUserId, postAuthorId}) => {
     const navigate = useNavigate();
     const { postId } = useParams();
     const [modalMessage, setModalMessage] = useState("");   // 모달창에 띄울 메세지 전달
@@ -31,12 +31,16 @@ const Modal_post = ({onClose, onEdit}) => {
     };
 
     const handleDelete = async () => {
-        try {
-            await axios.delete(`https://zmffjq.store/posts/${postId}`);
-            navigate(-1);
-        } catch (error) {
-            console.error('게시글 삭제 중 에러 발생:', error);
-            alert('게시글 삭제 중 오류가 발생했습니다. 다시 시도해주세요.');
+        if (currentUserId === postAuthorId) {
+            try {
+                await axios.delete(`https://zmffjq.store/posts/${postId}`);
+                navigate(-1);
+            } catch (error) {
+                console.error('게시글 삭제 중 에러 발생:', error);
+                alert('게시글 삭제 중 오류가 발생했습니다. 다시 시도해주세요.');
+            }
+        } else {
+            alert('자신이 작성한 게시글만 삭제할 수 있습니다.');
         }
     };
 

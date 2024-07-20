@@ -6,6 +6,7 @@ import { FiMoreVertical, FiSend } from "react-icons/fi";
 import axios from "axios";
 import Modal_post from "../../../components/modal/Modal_post.jsx";
 import Modal_comment from "../../../components/modal/Modal_comment.jsx";
+axios.defaults.withCredentials = true;
 
 function formatDate(dateString) {
     const date = new Date(dateString);
@@ -34,13 +35,31 @@ function FreeBoardDetail() {
     const [editingCommentId, setEditingCommentId] = useState(null);
     const [editedCommentContent, setEditedCommentContent] = useState('');
 
+    const [currentUserId, setCurrentUserId] = useState(null);
+
     //-------------------------------------------------------------------------
     const handleBackClick = () => {
         navigate(`/clubs/${clubId}/freeboardlist`);
     };
 
+    // const handlePostDotClick = () => {
+    //     setShowPostModal(true);
+    // };
+
+    // const handlePostDotClick = () => {
+    //     if (currentUserId && post.member.id === parseInt(currentUserId)) {
+    //         setShowPostModal(true);
+    //     } else {
+    //         alert('자신이 작성한 게시글만 수정 또는 삭제할 수 있습니다.');
+    //     }
+    // };
+
     const handlePostDotClick = () => {
-        setShowPostModal(true);
+        if (currentUserId && post.member.id === parseInt(currentUserId)) {
+            setShowPostModal(true);
+        } else {
+            alert('자신이 작성한 게시글만 수정 또는 삭제할 수 있습니다.');
+        }
     };
 
     //댓글 더보기 아이콘 클릭 -> 수정 or 삭제 모달
@@ -59,12 +78,23 @@ function FreeBoardDetail() {
         setShowCommentModal(false);
     }
 
+    // const handleEditClick = () => {
+    //     navigate(`/clubs/${clubId}/board/4/posts/${postId}/edit`);
+    // };
     const handleEditClick = () => {
-        navigate(`/clubs/${clubId}/board/4/posts/${postId}/edit`);
+        if (currentUserId && post.member.id === parseInt(currentUserId)) {
+            navigate(`/clubs/${clubId}/board/4/posts/${postId}/edit`);
+        } else {
+            alert('자신이 작성한 게시글만 수정할 수 있습니다.');
+        }
     };
 
     //게시글, 댓글 API 조회-----------------------------------------------------------------------------
     useEffect(() => {
+        const queryParams = new URLSearchParams(location.search);
+        const memberId = queryParams.get('memberId') || localStorage.getItem('memberId');
+        setCurrentUserId(memberId);
+
         const fetchPost = async () => {
             try {
                 const response = await axios.get(`https://zmffjq.store/clubs/${clubId}/board/4/posts/${postId}`);
@@ -90,7 +120,7 @@ function FreeBoardDetail() {
         };
         fetchPost();
         fetchComments();
-    }, [clubId, postId]);
+    }, [clubId, postId, location.search]);
 
     //댓글 POST
     const handleCommentChange = (e) => {
@@ -100,7 +130,7 @@ function FreeBoardDetail() {
         e.preventDefault();
         if (newComment.trim() && memberId) { // memberId가 존재하는지 확인
             try {
-                const response = await axios.post(`https://zmffjq.store/posts/${postId}/comment`, {
+                const response = await axios.post(`https://zmffjq.store/posts/${postId}/comments`, {
                     memberId: memberId,
                     content: newComment
                 });
@@ -255,7 +285,12 @@ function FreeBoardDetail() {
                     </button>
                 </div>
             </form>
-            {showPostModal && <Modal_post onClose={closeModal} onEdit={handleEditClick}/>}
+            {showPostModal && <Modal_post
+                onClose={closeModal}
+                onEdit={handleEditClick}
+                currentUserId={currentUserId}
+                postAuthorId={post.member ? post.member.id.toString() : ''}
+            />}
             {showCommentModal && <Modal_comment
                 onClose={closeModal}
                 position={modalPosition}

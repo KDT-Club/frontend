@@ -6,6 +6,7 @@ import { FiMoreVertical, FiSend } from "react-icons/fi";
 import axios from "axios";
 import Modal_post from "../../../components/modal/Modal_post.jsx";
 import Modal_comment from "../../../components/modal/Modal_comment.jsx";
+axios.defaults.withCredentials = true;
 
 function formatDate(dateString) {
     const date = new Date(dateString);
@@ -100,7 +101,7 @@ function NoticeDetail() {
         e.preventDefault();
         if (newComment.trim() && memberId) { // memberId가 존재하는지 확인
             try {
-                const response = await axios.post(`https://zmffjq.store/posts/${postId}/comment`, {
+                const response = await axios.post(`https://zmffjq.store/posts/${postId}/comments`, {
                     memberId: memberId,
                     content: newComment
                 });

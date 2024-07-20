@@ -5,6 +5,7 @@ import '../../notice/WriteAndEdit/noticewrite.css';
 import {useNavigate, useParams} from "react-router-dom";
 import { FiX, FiCheck } from "react-icons/fi";
 import { LuImagePlus } from "react-icons/lu";
+axios.defaults.withCredentials = true;
 
 function FreeBoardWrite() {
     let {id} = useParams();
