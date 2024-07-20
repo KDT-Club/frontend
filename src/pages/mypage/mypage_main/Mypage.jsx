@@ -21,7 +21,6 @@ function Mypage() {
     const { memberId } = useParams();
 
     // 임의로 설정한 memberId의 member 조회 -> 나중에 삭제
-//    const member = member_info_data.find(m => m.memberId === parseInt(memberId, 10));
     const [member, setMember] = useState(null); //  member 데이터 관리 -> 백엔드랑 연결 시 주석 해제
     let [list] = useState(list_data);   // 마이페이지 목록 (작성 글 조회, 정보 수정 등)
     const [showDeleteModal, setShowDeleteModal] = useState(false);  // 네/아니오 모달창 띄우기

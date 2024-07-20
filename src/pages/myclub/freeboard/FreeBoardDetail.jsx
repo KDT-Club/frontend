@@ -19,8 +19,7 @@ function FreeBoardDetail() {
     let {clubId, postId} = useParams();
     const navigate = useNavigate();
     const location = useLocation();
-    const queryParams = new URLSearchParams(location.search);
-    const memberId = queryParams.get('memberId');
+    const [memberId, setMemberId] = useState(null);
 
     const [showPostModal, setShowPostModal] = useState(false);  // 글 수정or삭제 모달창 띄우기
     const [showCommentModal, setShowCommentModal] = useState(false);  // 댓글 수정or삭제 모달창 띄우기
@@ -35,24 +34,39 @@ function FreeBoardDetail() {
     const [editingCommentId, setEditingCommentId] = useState(null);
     const [editedCommentContent, setEditedCommentContent] = useState('');
 
-    const [currentUserId, setCurrentUserId] = useState(null);
+    const apiClient = axios.create({
+        baseURL: 'http://3.36.56.20:8080', // API URL
+        timeout: 10000, // 요청 타임아웃 설정 (10초)
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
 
     //-------------------------------------------------------------------------
+    const fetchUserId = async () => {
+        try {
+            const response = await apiClient.get("https://zmffjq.store/getUserId", {
+                withCredentials: true // Include this if the endpoint requires credentials
+            });
+            console.log(response.data);
+            setMemberId(response.data.message); // memberId 상태 업데이트
+        } catch (error) {
+            if (error.response && error.response.status === 401) {
+                alert('Unauthorized access. Please log in.');
+            } else {
+                console.error('유저 아이디를 불러오는 중 에러 발생:', error);
+                alert('유저 아이디를 불러오는 중 에러가 발생했습니다.');
+            }
+        }
+    };
+
+    useEffect(() => {
+        fetchUserId();
+    }, []);
+
     const handleBackClick = () => {
         navigate(`/clubs/${clubId}/freeboardlist`);
     };
-
-    // const handlePostDotClick = () => {
-    //     setShowPostModal(true);
-    // };
-
-    // const handlePostDotClick = () => {
-    //     if (currentUserId && post.member.id === parseInt(currentUserId)) {
-    //         setShowPostModal(true);
-    //     } else {
-    //         alert('자신이 작성한 게시글만 수정 또는 삭제할 수 있습니다.');
-    //     }
-    // };
 
     const handlePostDotClick = () => {
         if (currentUserId && post.member.id === parseInt(currentUserId)) {
@@ -78,26 +92,11 @@ function FreeBoardDetail() {
         setShowCommentModal(false);
     }
 
-    // const handleEditClick = () => {
-    //     navigate(`/clubs/${clubId}/board/4/posts/${postId}/edit`);
-    // };
-    const handleEditClick = () => {
-        if (currentUserId && post.member.id === parseInt(currentUserId)) {
-            navigate(`/clubs/${clubId}/board/4/posts/${postId}/edit`);
-        } else {
-            alert('자신이 작성한 게시글만 수정할 수 있습니다.');
-        }
-    };
-
     //게시글, 댓글 API 조회-----------------------------------------------------------------------------
     useEffect(() => {
-        const queryParams = new URLSearchParams(location.search);
-        const memberId = queryParams.get('memberId') || localStorage.getItem('memberId');
-        setCurrentUserId(memberId);
-
         const fetchPost = async () => {
             try {
-                const response = await axios.get(`https://zmffjq.store/clubs/${clubId}/board/4/posts/${postId}`);
+                const response = await apiClient.get(`https://zmffjq.store/clubs/${clubId}/board/4/posts/${postId}`);
                 setPost(response.data);
             } catch (error) {
                 console.error('게시글 조회 에러 발생:', error);
@@ -109,7 +108,7 @@ function FreeBoardDetail() {
 
         const fetchComments = async () => {
             try {
-                const response = await axios.get(`https://zmffjq.store/posts/${postId}/comments`);
+                const response = await apiClient.get(`https://zmffjq.store/posts/${postId}/comments`);
                 setComments(response.data);
             } catch (error) {
                 console.error('댓글 조회 에러 발생:', error);
@@ -120,7 +119,7 @@ function FreeBoardDetail() {
         };
         fetchPost();
         fetchComments();
-    }, [clubId, postId, location.search]);
+    }, [clubId, postId]);
 
     //댓글 POST
     const handleCommentChange = (e) => {
@@ -130,12 +129,13 @@ function FreeBoardDetail() {
         e.preventDefault();
         if (newComment.trim() && memberId) { // memberId가 존재하는지 확인
             try {
-                const response = await axios.post(`https://zmffjq.store/posts/${postId}/comments`, {
+                const response = await apiClient.post(`https://zmffjq.store/posts/${postId}/comments`, {
                     memberId: memberId,
                     content: newComment
                 });
+                console.log(response.data)
                 if (response.status === 200) {
-                    const newCommentData = response.data;
+                    const newCommentData = response.data.content;
                     // 서버로부터 받은 새로운 댓글 상태 업데이트
                     setComments(prevComments => [...prevComments, newCommentData]);
                     setNewComment('');
@@ -159,7 +159,7 @@ function FreeBoardDetail() {
     const handleSaveEditedComment = async () => {
         if (editingCommentId && editedCommentContent.trim() && memberId) {
             try {
-                const response = await axios.put(`https://zmffjq.store/posts/${postId}/${editingCommentId}`, {
+                const response = await apiClient.put(`https://zmffjq.store/posts/${postId}/${editingCommentId}`, {
                     memberId: memberId,
                     content: editedCommentContent
                 });
@@ -285,12 +285,7 @@ function FreeBoardDetail() {
                     </button>
                 </div>
             </form>
-            {showPostModal && <Modal_post
-                onClose={closeModal}
-                onEdit={handleEditClick}
-                currentUserId={currentUserId}
-                postAuthorId={post.member ? post.member.id.toString() : ''}
-            />}
+            {showPostModal && <Modal_post onClose={closeModal} onEdit={handleEditClick}/>}
             {showCommentModal && <Modal_comment
                 onClose={closeModal}
                 position={modalPosition}

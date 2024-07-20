@@ -35,6 +35,7 @@ import FreeBoardWrite from "./pages/myclub/freeboard/WriteAndEdit/FreeBoardWrite
 import NoticeEdit from "./pages/myclub/notice/WriteAndEdit/NoticeEdit.jsx";
 import FreeBoardEdit from "./pages/myclub/freeboard/WriteAndEdit/FreeBoardEdit.jsx"
 import ClubInfoEdit from "./pages/myclub/DetailHeader/club_manage/ClubInfoEdit.jsx";
+import BoardEdit from "./pages/mypage/written_post/BoardEdit.jsx";
 
 function App() {
     const [showLogo, setShowLogo] = React.useState(true);
@@ -70,48 +71,48 @@ function App() {
         <Router>
             <GoogleOAuthProvider clientId="YOUR_GOOGLE_CLIENT_ID">
                 <div className="App">
-                    <Routes>
-                        <Route path="/" element={showLogo ? <Logo /> : <Login />} />
-                        <Route path="/login" element={<Login />} />
-                        <Route path="/signup" element={<SignUp />} />
-                        <Route path="/members/:memberId" element={<Mypage />} />
-                        <Route path="/post_list/:memberId" element={<Written_post />} />
-                        <Route path="/posts/:postId" element={<Written_post_detail />} />
-                        {/*<Route path="/posts_edit/:postId/" element={<NoticeEdit />} />*/}
-                        <Route path="/edit_info/:memberId" element={<Edit_info />} />
-                        <Route path="/clubs/create/:memberId" element={<Create_club />} />
-                        <Route path="/clubs/:id/memberInfoFixList" element={<Member_info_fix_list />} />
-                        <Route path="/clubs/:id/memberInfoFix/:memberId" element={<Member_info_fix />} />
-                        <Route path="/main" element={<MainPage />} />
-                        <Route path="/club_detail/:clubName" element={<ClubDetailPage />} />
-                        <Route path="/community" element={<Community_Main/>} />
-                        <Route path="/post/:postId" element={<PostDetail/>}/>
-                        <Route path="/activity" element={<ActivityPage />} />
-                        <Route path="/activity_detail" element={<ActivityDetailPage />} />
-                        <Route path="/clubs/:id/joinRequest" element={<Member_request />} />
-                        <Route path="/clubs/:id/joinRequest/:memberId" element={<Member_request_detail />} />
-                        <Route path="/activity_detail" element={<ActivityDetailPage />}/>
+                        <Routes>
+                            <Route path="/" element={showLogo ? <Logo /> : <Login />} />
+                            <Route path="/login" element={<Login />} />
+                            <Route path="/signup" element={<SignUp />} />
+                            <Route path="/members/:memberId" element={<Mypage />} />
+                            <Route path="/post_list/:memberId" element={<Written_post />} />
+                            <Route path="/posts/:memberId/:postId" element={<Written_post_detail />} />
+                            <Route path="/posts_edit/:postId/" element={<BoardEdit />} />
+                            <Route path="/edit_info/:memberId" element={<Edit_info />} />
+                            <Route path="/clubs/create/:memberId" element={<Create_club />} />
+                            <Route path="/clubs/:id/memberInfoFixList" element={<Member_info_fix_list />} />
+                            <Route path="/clubs/:id/memberInfoFix/:memberId" element={<Member_info_fix />} />
+                            <Route path="/main" element={<MainPage />} />
+                            <Route path="/clubs_detail/:clubName" element={<ClubDetailPage />} />
+                            <Route path="/community" element={<Community_Main/>} />
+                            <Route path="/post/:postId" element={<PostDetail/>}/>
+                            <Route path="/activity" element={<ActivityPage />} />
+                            <Route path="/activity_detail" element={<ActivityDetailPage />} />
+                            <Route path="/clubs/:id/joinRequest" element={<Member_request />} />
+                            <Route path="/clubs/:id/joinRequest/:memberId" element={<Member_request_detail />} />
+                            <Route path="/activity_detail" element={<ActivityDetailPage />}/>
 
-                        //내동아리 라우팅
-                        <Route path="/clubs" element={<MyclubMain />} />
-                        <Route path="/clubs/:id" element={<MyclubDetail />} />
-                        <Route path="/clubs/:id/noticelist" element={<NoticeList />} />
-                        <Route path="/clubs/:id/noticelist/noticewrite" element={<NoticeWrite />} />
-                        <Route path="/clubs/:clubId/board/2/posts/:postId" element={<NoticeDetail />} />
-                        <Route path="/clubs/:clubId/board/2/posts/:postId/edit" element={<NoticeEdit />} />
-                        <Route path="/clubs/:id/freeboardlist" element={<FreeBoardList />} />
-                        <Route path="/clubs/:id/freeboardlist/freeboardwrite" element={<FreeBoardWrite />} />
-                        <Route path="/clubs/:clubId/board/4/posts/:postId" element={<FreeBoardDetail />} />
-                        <Route path="/clubs/:clubId/board/4/posts/:postId/edit" element={<FreeBoardEdit />} />
-                        <Route path="/clubs/etc1" element={<Etc1 />} />
-                        <Route path="/clubs/etc1/atd" element={<Atd />} />
-                        <Route path="/clubs/etc2" element={<Etc2 />} />
-                        <Route path="/clubs/etc3" element={<Etc3 />} />
-                        <Route path="/clubs/:id/changeclubinfo" element={<ClubInfoEdit />} />
-                    </Routes>
-                </div>
-            </GoogleOAuthProvider>
-        </Router>
+                            //내동아리 라우팅
+                            <Route path="/clubs" element={<MyclubMain />} />
+                            <Route path="/clubs/:id" element={<MyclubDetail />} />
+                            <Route path="/clubs/:id/noticelist" element={<NoticeList />} />
+                            <Route path="/clubs/:id/noticelist/noticewrite" element={<NoticeWrite />} />
+                            <Route path="/clubs/:clubId/board/2/posts/:postId" element={<NoticeDetail />} />
+                            <Route path="/clubs/:clubId/board/2/posts/:postId/edit" element={<NoticeEdit />} />
+                            <Route path="/clubs/:id/freeboardlist" element={<FreeBoardList />} />
+                            <Route path="/clubs/:id/freeboardlist/freeboardwrite" element={<FreeBoardWrite />} />
+                            <Route path="/clubs/:clubId/board/4/posts/:postId" element={<FreeBoardDetail />} />
+                            <Route path="/clubs/:clubId/board/4/posts/:postId/edit" element={<FreeBoardEdit />} />
+                            <Route path="/clubs/etc1" element={<Etc1 />} />
+                            <Route path="/clubs/etc1/atd" element={<Atd />} />
+                            <Route path="/clubs/etc2" element={<Etc2 />} />
+                            <Route path="/clubs/etc3" element={<Etc3 />} />
+                            <Route path="/clubs/:id/changeclubinfo" element={<ClubInfoEdit />} />
+                        </Routes>
+                    </div>
+                </GoogleOAuthProvider>
+            </Router>
     );
 }
 

@@ -4,12 +4,21 @@ import Modal_confirm from "./Modal_confirm.jsx";
 import {useNavigate, useParams} from "react-router-dom";
 import axios from "axios";
 
-const Modal_post = ({onClose, onEdit, currentUserId, postAuthorId}) => {
+const Modal_post = ({onClose, onEdit}) => {
     const navigate = useNavigate();
+    const {memberId} = useParams();
     const { postId } = useParams();
     const [modalMessage, setModalMessage] = useState("");   // 모달창에 띄울 메세지 전달
     const [showDeleteModal, setShowDeleteModal] = useState(false);  // 네/아니오 모달창 띄우기
     const [onConfirm, setOnConfirm] = useState(() => () => {});
+
+    const apiClient = axios.create({
+        baseURL: 'http://3.36.56.20:8080', // API URL
+        timeout: 10000, // 요청 타임아웃 설정 (10초)
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
 
     const handleOpenModal = useCallback((message, confirmCallback) => {
         setModalMessage(message);
@@ -31,16 +40,23 @@ const Modal_post = ({onClose, onEdit, currentUserId, postAuthorId}) => {
     };
 
     const handleDelete = async () => {
-        if (currentUserId === postAuthorId) {
-            try {
-                await axios.delete(`https://zmffjq.store/posts/${postId}`);
-                navigate(-1);
-            } catch (error) {
-                console.error('게시글 삭제 중 에러 발생:', error);
-                alert('게시글 삭제 중 오류가 발생했습니다. 다시 시도해주세요.');
-            }
-        } else {
-            alert('자신이 작성한 게시글만 삭제할 수 있습니다.');
+        try {
+            await apiClient.delete(`https://zmffjq.store/posts/${postId}`);
+            navigate(`/post_list/${memberId}`);
+        } catch (error) {
+            console.error('게시글 삭제 중 에러 발생:', error);
+            alert('게시글 삭제 중 오류가 발생했습니다. 다시 시도해주세요.');
+        // if (currentUserId === postAuthorId) {
+        //     try {
+        //         await axios.delete(`https://zmffjq.store/posts/${postId}`);
+        //         navigate(-1);
+        //     } catch (error) {
+        //         console.error('게시글 삭제 중 에러 발생:', error);
+        //         alert('게시글 삭제 중 오류가 발생했습니다. 다시 시도해주세요.');
+        //     }
+        // } else {
+        //     alert('자신이 작성한 게시글만 삭제할 수 있습니다.');
+        // }
         }
     };
 
