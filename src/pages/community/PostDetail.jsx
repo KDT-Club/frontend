@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import "./community_styles/post_detail.css";
-import '../../styles/App.css'
+import '../../styles/App.css';
 import { FaArrowLeft } from "react-icons/fa6";
-import Modal_delete from '../../components/modal/Modal_delete.jsx'
+import Modal_delete from '../../components/modal/Modal_delete.jsx';
+import axios from "axios";
 
 function WriteModal({ onClose, onEdit, onDelete }) {
     return (
@@ -11,7 +12,7 @@ function WriteModal({ onClose, onEdit, onDelete }) {
             <div className="modal-content">
                 <div className="modal-header">
                     <p style={{ marginBottom: '5px', padding: '3px' }}>게시글</p>
-                    <hr style={{ marginTop: '10px', marginLeft: '-20px', width: '120%' }}/>
+                    <hr style={{ marginLeft: '-20px', width: '120%' }}/>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '-5px' }}>
                         <button onClick={onEdit} style={{ padding: '3px', borderRight: '1px solid #ccc', height: '50px' }}>수정</button>
                         <button onClick={onDelete} style={{ padding: '3px' }}>삭제</button>
@@ -23,55 +24,76 @@ function WriteModal({ onClose, onEdit, onDelete }) {
 }
 
 function PostDetail() {
-    const { postId: urlPostId } = useParams();
-    const postId = String(urlPostId);
+    const { postId } = useParams();
     const [showDeleteCommentModal, setShowDeleteCommentModal] = useState(false);
     const [showWriteModal, setShowWriteModal] = useState(false);
     const [post, setPost] = useState(null);
-    const [deleteIndex, setDeleteIndex] = useState(null);
+    const [comments, setComments] = useState([]);
+    const [deleteCommentId, setDeleteCommentId] = useState(null);
     const [newComment, setNewComment] = useState("");
     const [isEditing, setIsEditing] = useState(false);
     const [editedTitle, setEditedTitle] = useState("");
     const [editedContent, setEditedContent] = useState("");
+    const [editingCommentId, setEditingCommentId] = useState(null);
+    const [editedCommentContent, setEditedCommentContent] = useState("");
+    const [memberId, setMemberId] = useState(null);
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const storedPosts = JSON.parse(localStorage.getItem("posts")) || [];
-        console.log("Stored Posts:", storedPosts);
-        console.log("Post ID:", postId);
-        console.log("Post ID type:", typeof postId);
-
-        console.log("All stored post IDs:", storedPosts.map(p => p.postId));
-
-        const matchingPosts = storedPosts.filter(p => {
-            // TODO: 이 판단이 필요한 이유 확인하기
-            // 데이터 처리 자체는 typeCasting 이 제일 안전
-            // 캐스팅 후 비교하는 - 연산으로 하면 좋음
-            console.log("Comparing:", p.postId, postId, p.postId == postId, p.postId === postId);
-            return p.postId == postId;
-        });
-
-        console.log("Matching Posts:", matchingPosts);
-
-        if (matchingPosts.length > 0) {
-            setPost(matchingPosts[0]);
+    const fetchUserId = async () => {
+        try {
+            const response = await axios.get("https://zmffjq.store/getUserId", {
+                withCredentials: true
+            });
+            console.log(response.data);
+            setMemberId(response.data.message);
+        } catch (error) {
+            if (error.response && error.response.status === 401) {
+                alert('Unauthorized access. Please log in.');
+            } else {
+                console.error('유저 아이디를 불러오는 중 에러 발생:', error);
+                alert('유저 아이디를 불러오는 중 에러가 발생했습니다.');
+            }
         }
+    };
+
+    useEffect(() => {
+        fetchUserId();
+    }, []);
+
+    useEffect(() => {
+        const fetchPostAndComments = async () => {
+            try {
+                const postResponse = await axios.get(`https://zmffjq.store/board/1/posts/${postId}`);
+                setPost(postResponse.data);
+                setEditedTitle(postResponse.data.title);
+                setEditedContent(postResponse.data.content);
+
+                const commentsResponse = await axios.get(`https://zmffjq.store/posts/${postId}/comments`);
+                setComments(commentsResponse.data);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
+
+        fetchPostAndComments();
     }, [postId]);
 
     const handleEdit = () => {
         setIsEditing(true);
-        setEditedTitle(post.title);
-        setEditedContent(post.content);
         setShowWriteModal(false);
     };
 
-    const handleSaveEdit = () => {
-        const updatedPost = { ...post, title: editedTitle, content: editedContent };
-        const storedPosts = JSON.parse(localStorage.getItem("posts")) || [];
-        const updatedPosts = storedPosts.map(p => p.postId === post.postId ? updatedPost : p);
-        localStorage.setItem("posts", JSON.stringify(updatedPosts));
-        setPost(updatedPost);
-        setIsEditing(false);
+    const handleSaveEdit = async () => {
+        try {
+            await axios.put(`https://zmffjq.store/posts/${postId}`, {
+                title: editedTitle,
+                content: editedContent
+            });
+            setPost({ ...post, title: editedTitle, content: editedContent });
+            setIsEditing(false);
+        } catch (error) {
+            console.error("Error updating post:", error);
+        }
     };
 
     const handleCancelEdit = () => {
@@ -82,26 +104,25 @@ function PostDetail() {
         navigate('/community');
     };
 
-    const handleDeleteCommentModalOpen = (e, index) => {
-        e.preventDefault();
-        setDeleteIndex(index);
+    const handleDeleteCommentModalOpen = (commentId) => {
+        setDeleteCommentId(commentId);
         setShowDeleteCommentModal(true);
     };
 
     const handleDeleteCommentModalClose = () => {
-        setDeleteIndex(null);
+        setDeleteCommentId(null);
         setShowDeleteCommentModal(false);
     };
 
-    const handleDeleteCommentConfirm = () => {
-        if (deleteIndex !== null) {
-            const newComments = post.comments.filter((_, index) => index !== deleteIndex);
-            const updatedPost = { ...post, comments: newComments };
-            const storedPosts = JSON.parse(localStorage.getItem("posts")) || [];
-            const updatedPosts = storedPosts.map(p => p.postId === post.postId ? updatedPost : p);
-            localStorage.setItem("posts", JSON.stringify(updatedPosts));
-            setPost(updatedPost);
-            handleDeleteCommentModalClose();
+    const handleDeleteCommentConfirm = async () => {
+        if (deleteCommentId) {
+            try {
+                await axios.delete(`https://zmffjq.store/posts/${postId}/${deleteCommentId}`);
+                setComments(comments.filter(comment => comment.commentId !== deleteCommentId));
+                handleDeleteCommentModalClose();
+            } catch (error) {
+                console.error("Error deleting comment:", error);
+            }
         }
     };
 
@@ -109,24 +130,41 @@ function PostDetail() {
         setNewComment(e.target.value);
     };
 
-    const handleAddComment = (e) => {
+    const handleAddComment = async (e) => {
         e.preventDefault();
-        if (newComment.trim() === "") {
-            return;
+        if (newComment.trim() === "") return;
+
+        try {
+            const response = await axios.post(`https://zmffjq.store/posts/${postId}/comments`, {
+                memberId: memberId,
+                content: newComment
+            });
+            setComments([...comments, response.data]);
+            setNewComment("");
+        } catch (error) {
+            console.error("Error adding comment:", error);
         }
-        const date = new Date();
-        const formattedDate = `${date.getMonth() + 1}/${date.getDate()}`;
-        const newCommentObject = {
-            author: getUserName(),
-            date: formattedDate,
-            content: newComment
-        };
-        const updatedPost = { ...post, comments: [...post.comments, newCommentObject] };
-        const storedPosts = JSON.parse(localStorage.getItem("posts")) || [];
-        const updatedPosts = storedPosts.map(p => p.postId === post.postId ? updatedPost : p);
-        localStorage.setItem("posts", JSON.stringify(updatedPosts));
-        setPost(updatedPost);
-        setNewComment("");
+    };
+
+    const handleEditComment = (commentId, content) => {
+        setEditingCommentId(commentId);
+        setEditedCommentContent(content);
+    };
+
+    const handleSaveCommentEdit = async (commentId) => {
+        try {
+            await axios.put(`https://zmffjq.store/posts/${postId}/${commentId}`, {
+                content: editedCommentContent
+            });
+            setComments(comments.map(comment =>
+                comment.commentId === commentId
+                    ? { ...comment, content: editedCommentContent }
+                    : comment
+            ));
+            setEditingCommentId(null);
+        } catch (error) {
+            console.error("Error updating comment:", error);
+        }
     };
 
     const handleWriteModalOpen = () => {
@@ -137,15 +175,17 @@ function PostDetail() {
         setShowWriteModal(false);
     };
 
-    const handleDeletePost = () => {
-        const storedPosts = JSON.parse(localStorage.getItem("posts")) || [];
-        const updatedPosts = storedPosts.filter(p => p.postId !== post.postId);
-        localStorage.setItem("posts", JSON.stringify(updatedPosts));
-        navigate('/community');
+    const handleDeletePost = async () => {
+        try {
+            await axios.delete(`https://zmffjq.store/posts/${postId}`);
+            navigate('/community');
+        } catch (error) {
+            console.error("Error deleting post:", error);
+        }
     };
 
     if (!post) {
-        return <div>Post not found</div>;
+        return <div>Loading...</div>;
     }
 
     if (isEditing) {
@@ -178,7 +218,7 @@ function PostDetail() {
         <div className="post-detail">
             <header>
                 <FaArrowLeft onClick={handleBack} style={{ cursor: 'pointer', marginLeft: '10px' }}/>
-                <h2 style={{ width: '60%', fontWeight: 'bold', fontSize: '20px', marginLeft: '10px' }}>동아리 가입 신청</h2>
+                <h2 style={{ width: '70%', fontWeight: 'bold', fontSize: '20px', marginLeft: '10px' }}>게시물 내용</h2>
                 <button style={{ fontWeight: 'bold', fontSize: '20px', textAlign: 'right' }} onClick={handleWriteModalOpen}>:
                 </button>
                 {showWriteModal && (
@@ -187,20 +227,56 @@ function PostDetail() {
             </header>
             <hr style={{ marginTop: '-30px' }}/>
             <div className="post-content">
-                <p style={{ textAlign: 'left', marginLeft: '20px', marginTop: '20px', fontSize: '18px', color: 'gray' }}>{post.author} | {post.date}</p>
+                <p style={{ textAlign: 'left', marginLeft: '20px', marginTop: '20px', fontSize: '18px', color: 'gray' }}>
+                    {post.member.name} | {new Date(post.createdAt).toLocaleDateString()}
+                </p>
                 <h3 style={{ textAlign: 'left', fontSize: '20px', marginLeft: '20px', marginBottom: '10px', fontWeight: 'bold' }}>{post.title}</h3>
                 <p style={{ textAlign: 'left', marginLeft: '20px' }}>{post.content}</p>
+                {/* 사진 렌더링 */}
+                <div className="post-photos" style={{ marginLeft: '20px', marginTop: '20px' }}>
+                    {post.photos && post.photos.length > 0 ? (
+                        post.photos.map((photoUrl, index) => (
+                            <img key={index} src={photoUrl} alt={`Post photo ${index}`} style={{ width: '100%', height: 'auto', marginBottom: '10px' }} />
+                        ))
+                    ) : (
+                        <p>사진이 없습니다.</p>
+                    )}
+                </div>
             </div>
             <div className="comments-section">
-                {post.comments.map((comment, index) => (
-                    <div key={index} className="comment" style={{ textAlign: 'left', marginLeft: '20px' }}>
-                        <p style={{ color: 'gray', fontWeight: 'bold' }}>{comment.author} | {comment.date}</p>
-                        <p>{comment.content}</p>
-                        <button className="delete-button" style={{ textAlign: 'right', marginRight: '10px' }} onClick={(e) => handleDeleteCommentModalOpen(e, index)}>🗑️</button>
-                        <hr style={{ marginTop: '10px', marginLeft: '-20px', width: '1000px' }}/>
+                {comments.map((comment) => (
+                    <div key={comment.commentId} className="comment" style={{textAlign: 'left', marginLeft: '20px'}}>
+                        <p style={{
+                            color: 'gray',
+                            fontWeight: 'bold'
+                        }}>{comment.memberName} | {new Date(comment.createdAt).toLocaleDateString()}</p>
+                        {editingCommentId === comment.commentId ? (
+                            <div>
+                                <input
+                                    type="text"
+                                    value={editedCommentContent}
+                                    onChange={(e) => setEditedCommentContent(e.target.value)}
+                                />
+                                <button onClick={() => handleSaveCommentEdit(comment.commentId)}>저장</button>
+                            </div>
+                        ) : (
+                            <p>{comment.content}</p>
+                        )}
+                        <div style={{
+                            display: "flex"
+                        }}>
+                            <button className="delete-button" style={{textAlign: 'right'}}
+                                    onClick={() => handleEditComment(comment.commentId, comment.content)}>수정
+                            </button>
+                            <button className="delete-button" style={{textAlign: 'right', marginRight: '40px'}}
+                                    onClick={() => handleDeleteCommentModalOpen(comment.commentId)}>🗑️
+                            </button>
+                        </div>
+                        <hr style={{marginTop: '10px', marginLeft: '-20px', width: '1000px'}}/>
                     </div>
                 ))}
-                <form className="comment-input" onSubmit={handleAddComment} style={{ marginTop: '20px', marginLeft: '20px' }}>
+                <form className="comment-input" onSubmit={handleAddComment}
+                      style={{marginTop: '20px', marginLeft: '20px'}}>
                     <input
                         type="text"
                         placeholder="댓글"
@@ -216,11 +292,6 @@ function PostDetail() {
             )}
         </div>
     );
-}
-
-function getUserName() {
-    // 나중에 사용자 아이디 가져올게용
-    return "사용자";
 }
 
 export default PostDetail;
