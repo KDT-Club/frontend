@@ -46,17 +46,17 @@ const Modal_post = ({onClose, onEdit}) => {
         } catch (error) {
             console.error('게시글 삭제 중 에러 발생:', error);
             alert('게시글 삭제 중 오류가 발생했습니다. 다시 시도해주세요.');
-        // if (currentUserId === postAuthorId) {
-        //     try {
-        //         await axios.delete(`https://zmffjq.store/posts/${postId}`);
-        //         navigate(-1);
-        //     } catch (error) {
-        //         console.error('게시글 삭제 중 에러 발생:', error);
-        //         alert('게시글 삭제 중 오류가 발생했습니다. 다시 시도해주세요.');
-        //     }
-        // } else {
-        //     alert('자신이 작성한 게시글만 삭제할 수 있습니다.');
-        // }
+            // if (currentUserId === postAuthorId) {
+            //     try {
+            //         await axios.delete(`https://zmffjq.store/posts/${postId}`);
+            //         navigate(-1);
+            //     } catch (error) {
+            //         console.error('게시글 삭제 중 에러 발생:', error);
+            //         alert('게시글 삭제 중 오류가 발생했습니다. 다시 시도해주세요.');
+            //     }
+            // } else {
+            //     alert('자신이 작성한 게시글만 삭제할 수 있습니다.');
+            // }
         }
     };
 
