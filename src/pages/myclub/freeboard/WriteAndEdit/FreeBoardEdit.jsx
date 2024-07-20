@@ -14,11 +14,19 @@ function FreeBoardEdit() {
     const [content, setContent] = useState('');
     const [attachmentNames, setAttachmentNames] = useState([]);
 
+    const apiClient = axios.create({
+        baseURL: 'https://zmffjq.store',
+        timeout: 10000, // 요청 타임아웃 설정 (10초)
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+
     useEffect(() => {
         const fetchPostData = async () => {
             try {
                 //게시글 정보 가져오기
-                const response = await axios.get(`/club${id}/board/4/posts/${postId}`);
+                const response = await apiClient.get(`/postdetail/${postId}`);
                 const post = response.data;
                 console.log(response.data)
                 setTitle(post.title);
