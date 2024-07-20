@@ -18,8 +18,7 @@ function NoticeDetail() {
     let {clubId, postId} = useParams();
     const navigate = useNavigate();
     const location = useLocation();
-    const queryParams = new URLSearchParams(location.search);
-    const memberId = queryParams.get('memberId');
+    const [memberId, setMemberId] = useState(null);
 
     const [showPostModal, setShowPostModal] = useState(false);  // 글 수정or삭제 모달창 띄우기
     const [showCommentModal, setShowCommentModal] = useState(false);  // 댓글 수정or삭제 모달창 띄우기
@@ -34,7 +33,36 @@ function NoticeDetail() {
     const [editingCommentId, setEditingCommentId] = useState(null);
     const [editedCommentContent, setEditedCommentContent] = useState('');
 
+    const apiClient = axios.create({
+        baseURL: 'http://3.36.56.20:8080', // API URL
+        timeout: 10000, // 요청 타임아웃 설정 (10초)
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+
     //-------------------------------------------------------------------------
+    const fetchUserId = async () => {
+        try {
+            const response = await apiClient.get("https://zmffjq.store/getUserId", {
+                withCredentials: true // Include this if the endpoint requires credentials
+            });
+            console.log(response.data);
+            setMemberId(response.data.message); // memberId 상태 업데이트
+        } catch (error) {
+            if (error.response && error.response.status === 401) {
+                alert('Unauthorized access. Please log in.');
+            } else {
+                console.error('유저 아이디를 불러오는 중 에러 발생:', error);
+                alert('유저 아이디를 불러오는 중 에러가 발생했습니다.');
+            }
+        }
+    };
+
+    useEffect(() => {
+        fetchUserId();
+    }, []);
+
     const handleBackClick = () => {
         navigate(`/clubs/${clubId}/noticelist`);
     };
@@ -100,7 +128,7 @@ function NoticeDetail() {
         e.preventDefault();
         if (newComment.trim() && memberId) { // memberId가 존재하는지 확인
             try {
-                const response = await axios.post(`https://zmffjq.store/posts/${postId}/comment`, {
+                const response = await axios.post(`https://zmffjq.store/posts/${postId}/comments`, {
                     memberId: memberId,
                     content: newComment
                 });

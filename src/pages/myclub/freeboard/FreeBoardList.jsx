@@ -5,6 +5,7 @@ import '../notice/notice.css';
 import { FaArrowLeft } from "react-icons/fa6";
 import { FiEdit } from "react-icons/fi";
 import {Link, useNavigate, useParams} from "react-router-dom";
+import axios from "axios";
 
 function formatDate(dateString) {
     const date = new Date(dateString);
@@ -17,6 +18,28 @@ function FreeBoardList(){
     let { id } = useParams();
     const navigate = useNavigate();
     const [list, setList] = useState([]);
+    const [memberId, setMemberId] = useState(null);
+
+    const fetchUserId = async () => {
+        try {
+            const response = await axios.get("https://zmffjq.store/getUserId", {
+                withCredentials: true // Include this if the endpoint requires credentials
+            });
+            console.log(response.data);
+            setMemberId(response.data.message); // memberId 상태 업데이트
+        } catch (error) {
+            if (error.response && error.response.status === 401) {
+                alert('Unauthorized access. Please log in.');
+            } else {
+                console.error('유저 아이디를 불러오는 중 에러 발생:', error);
+                alert('유저 아이디를 불러오는 중 에러가 발생했습니다.');
+            }
+        }
+    };
+
+    useEffect(() => {
+        fetchUserId();
+    }, []);
 
     //자유게시판 리스트 API 조회
     useEffect(() => {
@@ -81,7 +104,7 @@ function FreeBoardList(){
                     {list.length > 0 ? (
                         list.map((post, index) => (
                             <div key={index} className="post">
-                                <Link to={`/clubs/${id}/board/4/posts/${post.postId}?memberId=${post.authorId}`}>
+                                <Link to={`/clubs/${id}/board/4/posts/${post.postId}?memberId=${memberId}`}>
                                     <p className="title">{post.title}</p>
                                     <p className="content">{post.content}</p>
                                     <p className="createdAt">{post.authorName} | {formatDate(post.createdAt)}</p>

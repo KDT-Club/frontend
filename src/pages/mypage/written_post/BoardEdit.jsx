@@ -5,6 +5,7 @@ import '../../myclub/notice/WriteAndEdit/noticewrite.css';
 import { useNavigate, useParams } from "react-router-dom";
 import { FiX, FiCheck } from "react-icons/fi";
 import { LuImagePlus } from "react-icons/lu";
+import Modal_ok from "../../../components/modal/Modal_ok.jsx";
 
 function BoardEdit() {
     let { postId } = useParams();
@@ -14,6 +15,7 @@ function BoardEdit() {
     const [content, setContent] = useState('');
     const [attachmentNames, setAttachmentNames] = useState([]);
     const [selectedFiles, setSelectedFiles] = useState([]);  // 이미지 파일 상태
+    const [isModalOpen, setIsModalOpen] = useState(false);  // 모달 상태 추가
 
     const apiClient = axios.create({
         baseURL: 'https://zmffjq.store',
@@ -76,8 +78,7 @@ function BoardEdit() {
             });
 
             if (response.status === 200 || response.status === 201) {
-                alert('수정 완료');
-                navigate(-1);
+                setIsModalOpen(true);
             }
         } catch (error) {
             console.error('수정 중 오류 발생:', error);
@@ -86,6 +87,14 @@ function BoardEdit() {
     };
 
     const handleBackClick = () => {
+        navigate(-1);
+    };
+
+    const handleModalClose = () => {
+        setIsModalOpen(false);
+    };
+
+    const handleModalConfirm = () => {
         navigate(-1);
     };
 
@@ -139,6 +148,13 @@ function BoardEdit() {
                     ))}
                 </div>
             </div>
+            {isModalOpen && (
+                <Modal_ok
+                    message="수정이 완료되었습니다."
+                    onClose={handleModalClose}
+                    onConfirm={handleModalConfirm}
+                />
+            )}
         </div>
     )
 }
