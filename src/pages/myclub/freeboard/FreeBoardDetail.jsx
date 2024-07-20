@@ -1,6 +1,6 @@
 //내 동아리 자유게시판 - 글 상세
 import React, { useState, useEffect } from 'react';
-import {useParams, useNavigate, useLocation} from 'react-router-dom';
+import {useParams, useNavigate} from 'react-router-dom';
 import {FaArrowLeft} from 'react-icons/fa6';
 import { FiMoreVertical, FiSend } from "react-icons/fi";
 import axios from "axios";
@@ -18,7 +18,6 @@ function formatDate(dateString) {
 function FreeBoardDetail() {
     let {clubId, postId} = useParams();
     const navigate = useNavigate();
-    const location = useLocation();
     const [memberId, setMemberId] = useState(null);
 
     const [showPostModal, setShowPostModal] = useState(false);  // 글 수정or삭제 모달창 띄우기
@@ -35,7 +34,7 @@ function FreeBoardDetail() {
     const [editedCommentContent, setEditedCommentContent] = useState('');
 
     const apiClient = axios.create({
-        baseURL: 'http://3.36.56.20:8080', // API URL
+        baseURL: 'https://zmffjq.store', // API URL
         timeout: 10000, // 요청 타임아웃 설정 (10초)
         headers: {
             'Content-Type': 'application/json',
@@ -45,7 +44,7 @@ function FreeBoardDetail() {
     //-------------------------------------------------------------------------
     const fetchUserId = async () => {
         try {
-            const response = await apiClient.get("https://zmffjq.store/getUserId", {
+            const response = await apiClient.get("/getUserId", {
                 withCredentials: true // Include this if the endpoint requires credentials
             });
             console.log(response.data);
@@ -69,11 +68,7 @@ function FreeBoardDetail() {
     };
 
     const handlePostDotClick = () => {
-        if (currentUserId && post.member.id === parseInt(currentUserId)) {
-            setShowPostModal(true);
-        } else {
-            alert('자신이 작성한 게시글만 수정 또는 삭제할 수 있습니다.');
-        }
+        setShowPostModal(true);
     };
 
     //댓글 더보기 아이콘 클릭 -> 수정 or 삭제 모달
@@ -92,12 +87,16 @@ function FreeBoardDetail() {
         setShowCommentModal(false);
     }
 
+    const handleEditClick = () => { //글 수정
+        navigate(`/clubs/${clubId}/board/4/posts/${postId}/edit`);
+    };
+
     //게시글, 댓글 API 조회-----------------------------------------------------------------------------
     useEffect(() => {
         const fetchPost = async () => {
             try {
-                const response = await apiClient.get(`https://zmffjq.store/clubs/${clubId}/board/4/posts/${postId}`);
-                setPost(response.data);
+                const response = await apiClient.get(`/clubs/${clubId}/board/4/posts/${postId}`);
+                setPost(response.data.post);
             } catch (error) {
                 console.error('게시글 조회 에러 발생:', error);
                 if (error.response) {
@@ -108,7 +107,7 @@ function FreeBoardDetail() {
 
         const fetchComments = async () => {
             try {
-                const response = await apiClient.get(`https://zmffjq.store/posts/${postId}/comments`);
+                const response = await apiClient.get(`/posts/${postId}/comments`);
                 setComments(response.data);
             } catch (error) {
                 console.error('댓글 조회 에러 발생:', error);
