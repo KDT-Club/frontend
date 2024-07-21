@@ -4,6 +4,10 @@
     overflow-x: auto;
 }
 
+.club-activity {
+    overflow-y : auto;
+}
+
 .activity-img {
     display: flex;
     padding: 5px;

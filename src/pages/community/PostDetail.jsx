@@ -39,9 +39,13 @@ function PostDetail() {
     const [memberId, setMemberId] = useState(null);
     const navigate = useNavigate();
 
+    const axiosInstance = axios.create({
+        withCredentials: true
+    });
+
     const fetchUserId = async () => {
         try {
-            const response = await axios.get("https://zmffjq.store/getUserId", {
+            const response = await axiosInstance.get("https://zmffjq.store/getUserId", {
                 withCredentials: true
             });
             console.log(response.data);
@@ -63,12 +67,24 @@ function PostDetail() {
     useEffect(() => {
         const fetchPostAndComments = async () => {
             try {
-                const postResponse = await axios.get(`https://zmffjq.store/board/1/posts/${postId}`);
-                setPost(postResponse.data);
-                setEditedTitle(postResponse.data.title);
-                setEditedContent(postResponse.data.content);
+                const postResponse = await axiosInstance.get(`https://zmffjq.store/board/1/posts/${postId}`);
+                console.log("전체 게시글 데이터:", postResponse.data);
 
-                const commentsResponse = await axios.get(`https://zmffjq.store/posts/${postId}/comments`);
+                // attachmentNames가 있으면 그대로 사용, 없으면 빈 배열로 초기화
+                const attachmentNames = postResponse.data.attachmentNames || [];
+                console.log("첨부 파일 이름들:", attachmentNames);
+                if (postResponse.data && postResponse.data.post) {
+                    setPost({
+                        ...postResponse.data,
+                        attachmentNames: attachmentNames,
+                    });
+                    setEditedTitle(postResponse.data.title);
+                    setEditedContent(postResponse.data.content);
+                } else{
+                    console.error("에러", postResponse.data)
+                }
+
+                const commentsResponse = await axiosInstance.get(`https://zmffjq.store/posts/${postId}/comments`);
                 setComments(commentsResponse.data);
             } catch (error) {
                 console.error("Error fetching data:", error);
@@ -85,7 +101,7 @@ function PostDetail() {
 
     const handleSaveEdit = async () => {
         try {
-            await axios.put(`https://zmffjq.store/posts/${postId}`, {
+            await axiosInstance.put(`https://zmffjq.store/posts/${postId}`, {
                 title: editedTitle,
                 content: editedContent
             });
@@ -117,7 +133,7 @@ function PostDetail() {
     const handleDeleteCommentConfirm = async () => {
         if (deleteCommentId) {
             try {
-                await axios.delete(`https://zmffjq.store/posts/${postId}/${deleteCommentId}`);
+                await axiosInstance.delete(`https://zmffjq.store/posts/${postId}/${deleteCommentId}`);
                 setComments(comments.filter(comment => comment.commentId !== deleteCommentId));
                 handleDeleteCommentModalClose();
             } catch (error) {
@@ -135,7 +151,7 @@ function PostDetail() {
         if (newComment.trim() === "") return;
 
         try {
-            const response = await axios.post(`https://zmffjq.store/posts/${postId}/comments`, {
+            const response = await axiosInstance.post(`https://zmffjq.store/posts/${postId}/comments`, {
                 memberId: memberId,
                 content: newComment
             });
@@ -153,7 +169,7 @@ function PostDetail() {
 
     const handleSaveCommentEdit = async (commentId) => {
         try {
-            await axios.put(`https://zmffjq.store/posts/${postId}/${commentId}`, {
+            await axiosInstance.put(`https://zmffjq.store/posts/${postId}/${commentId}`, {
                 content: editedCommentContent
             });
             setComments(comments.map(comment =>
@@ -177,7 +193,7 @@ function PostDetail() {
 
     const handleDeletePost = async () => {
         try {
-            await axios.delete(`https://zmffjq.store/posts/${postId}`);
+            await axiosInstance.delete(`https://zmffjq.store/posts/${postId}`);
             navigate('/community');
         } catch (error) {
             console.error("Error deleting post:", error);
@@ -222,73 +238,101 @@ function PostDetail() {
                 <button style={{ fontWeight: 'bold', fontSize: '20px', textAlign: 'right' }} onClick={handleWriteModalOpen}>:
                 </button>
                 {showWriteModal && (
-                    <WriteModal onClose={handleWriteModalClose} onEdit={handleEdit} onDelete={handleDeletePost}/>
+                    <WriteModal
+                        onClose={handleWriteModalClose}
+                        onEdit={handleEdit}
+                        onDelete={handleDeletePost}
+                    />
                 )}
             </header>
-            <hr style={{ marginTop: '-30px' }}/>
+            <hr style={{marginTop: '-30px'}}/>
             <div className="post-content">
-                <p style={{ textAlign: 'left', marginLeft: '20px', marginTop: '20px', fontSize: '18px', color: 'gray' }}>
+                <p style={{textAlign: 'left', marginLeft: '20px', marginTop: '20px', fontSize: '18px', color: 'gray'}}>
                     {post.member.name} | {new Date(post.createdAt).toLocaleDateString()}
                 </p>
-                <h3 style={{ textAlign: 'left', fontSize: '20px', marginLeft: '20px', marginBottom: '10px', fontWeight: 'bold' }}>{post.title}</h3>
-                <p style={{ textAlign: 'left', marginLeft: '20px' }}>{post.content}</p>
-                {/* 사진 렌더링 */}
-                <div className="post-photos" style={{ marginLeft: '20px', marginTop: '20px' }}>
-                    {post.photos && post.photos.length > 0 ? (
-                        post.photos.map((photoUrl, index) => (
-                            <img key={index} src={photoUrl} alt={`Post photo ${index}`} style={{ width: '100%', height: 'auto', marginBottom: '10px' }} />
-                        ))
+                <h3 style={{
+                    textAlign: 'left',
+                    fontSize: '20px',
+                    marginLeft: '20px',
+                    marginBottom: '10px',
+                    fontWeight: 'bold'
+                }}>{post.title}</h3>
+                <p style={{textAlign: 'left', marginLeft: '20px'}}>{post.content}</p>
+                <div className="post-photos" style={{marginLeft: '20px', marginTop: '20px'}}>
+                    {post.attachmentNames && post.attachmentNames.length > 0 ? (
+                        post.attachmentNames.map((photoName, index) => {
+                            // 이미지 파일만 렌더링합니다.
+                            const isImage = /\.(jpg|jpeg|png|gif)$/i.test(photoName);
+
+                            return isImage ? (
+                                <img
+                                    key={index}
+                                    src={photoName}
+                                    alt={`Post photo ${index + 1}`}
+                                    style={{width: '100%', maxWidth: '500px', height: 'auto', marginBottom: '10px'}}
+                                    onError={(e) => {
+                                        console.error(`이미지 로딩 오류 ${index}:`, e);
+                                        e.target.style.display = 'none';
+                                    }}
+                                />
+                            ) : (
+                                <p key={index}>첨부된 파일: {photoName}</p>
+                            );
+                        })
                     ) : (
-                        <p>사진이 없습니다.</p>
+                        <p>첨부된 파일이 없습니다.</p>
                     )}
                 </div>
+
             </div>
+            <hr/>
             <div className="comments-section">
-                {comments.map((comment) => (
-                    <div key={comment.commentId} className="comment" style={{textAlign: 'left', marginLeft: '20px'}}>
-                        <p style={{
-                            color: 'gray',
-                            fontWeight: 'bold'
-                        }}>{comment.memberName} | {new Date(comment.createdAt).toLocaleDateString()}</p>
-                        {editingCommentId === comment.commentId ? (
-                            <div>
-                                <input
-                                    type="text"
-                                    value={editedCommentContent}
-                                    onChange={(e) => setEditedCommentContent(e.target.value)}
-                                />
-                                <button onClick={() => handleSaveCommentEdit(comment.commentId)}>저장</button>
-                            </div>
-                        ) : (
-                            <p>{comment.content}</p>
-                        )}
-                        <div style={{
-                            display: "flex"
-                        }}>
-                            <button className="delete-button" style={{textAlign: 'right'}}
-                                    onClick={() => handleEditComment(comment.commentId, comment.content)}>수정
-                            </button>
-                            <button className="delete-button" style={{textAlign: 'right', marginRight: '40px'}}
-                                    onClick={() => handleDeleteCommentModalOpen(comment.commentId)}>🗑️
-                            </button>
-                        </div>
-                        <hr style={{marginTop: '10px', marginLeft: '-20px', width: '1000px'}}/>
-                    </div>
-                ))}
-                <form className="comment-input" onSubmit={handleAddComment}
-                      style={{marginTop: '20px', marginLeft: '20px'}}>
+                <form onSubmit={handleAddComment}>
                     <input
                         type="text"
-                        placeholder="댓글"
                         value={newComment}
                         onChange={handleCommentChange}
-                        style={{ marginRight: '10px', padding: '10px' }}
+                        placeholder="댓글을 입력하세요"
+                        style={{width: '80%', marginRight: '10px'}}
                     />
-                    <button type="submit" style={{ position: 'relative', border: '1px solid rgb(204, 204, 204, 0.7)', width: '20%', marginRight : '10px' }}>작성</button>
+                    <button type="submit">댓글 달기</button>
                 </form>
+                <ul>
+                    {comments.map((comment) => (
+                        <li key={comment.commentId}>
+                            <div>
+                                <strong>{comment.member.name}</strong>
+                                {editingCommentId === comment.commentId ? (
+                                    <div>
+                                        <input
+                                            type="text"
+                                            value={editedCommentContent}
+                                            onChange={(e) => setEditedCommentContent(e.target.value)}
+                                            style={{ marginRight: '10px' }}
+                                        />
+                                        <button onClick={() => handleSaveCommentEdit(comment.commentId)}>저장</button>
+                                    </div>
+                                ) : (
+                                    <p>{comment.content}</p>
+                                )}
+                            </div>
+                            <div>
+                                {editingCommentId !== comment.commentId && (
+                                    <>
+                                        <button onClick={() => handleEditComment(comment.commentId, comment.content)}>수정</button>
+                                        <button onClick={() => handleDeleteCommentModalOpen(comment.commentId)}>삭제</button>
+                                    </>
+                                )}
+                            </div>
+                        </li>
+                    ))}
+                </ul>
             </div>
             {showDeleteCommentModal && (
-                <Modal_delete onClose={handleDeleteCommentModalClose} onConfirm={handleDeleteCommentConfirm}/>
+                <Modal_delete
+                    onClose={handleDeleteCommentModalClose}
+                    onConfirm={handleDeleteCommentConfirm}
+                />
             )}
         </div>
     );

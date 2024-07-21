@@ -1,56 +1,78 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import './activity.css';
-import board from '../../../images/boardgame.png';
-import game from '../../../images/game.jpg';
-import dm from "../../../images/DM.png";
 import axios from 'axios';
+import dm from '../../../images/DM.png';
+import { useNavigate } from "react-router-dom";
 
 function ActivityPage() {
+    const [clubActivities, setClubActivities] = useState([]);
     const navigate = useNavigate();
-    const { clubId } = useParams(); // URL 파라미터에서 clubId를 가져옵니다.
-    const [posts, setPosts] = useState([]);
 
     useEffect(() => {
-        const fetchPosts = async () => {
+        const fetchAllClubActivities = async () => {
             try {
-                // clubId를 포함하여 API 요청
-                const response = await axios.get(`https://zmffjq.store/board/3/clubs/${clubId}/posts`);
-                setPosts(response.data);
+                // 1. 먼저 모든 동아리 목록을 가져옵니다.
+                const clubsResponse = await axios.get('https://zmffjq.store/clubs');
+                const clubs = clubsResponse.data;
+
+                // 2. 각 동아리의 활동 내용을 가져옵니다.
+                const activitiesPromises = clubs.map(club =>
+                    axios.get(`https://zmffjq.store/board/3/clubs/${club.clubId}/posts`)
+                );
+
+                const activitiesResponses = await Promise.all(activitiesPromises);
+
+                // 3. 동아리 정보와 활동 내용을 결합합니다.
+                const allActivities = clubs.map((club, index) => ({
+                    clubId: club.clubId,
+                    clubName: club.clubName,
+                    posts: activitiesResponses[index].data
+                }));
+
+                setClubActivities(allActivities);
             } catch (error) {
-                console.error("Error fetching posts:", error);
+                console.error('Error fetching club activities:', error);
             }
         };
 
-        // clubId가 정의되어 있을 때만 API 호출
-        if (clubId) {
-            fetchPosts();
-        }
-    }, [clubId]); // clubId가 변경될 때마다 호출
+        fetchAllClubActivities();
+    }, []);
 
-    const handleInActivity = (postId) => {
-        navigate(`/activity_detail/${postId}`);
+    const handleInActivity = (clubId, postId) => {
+        navigate(`/board/3/clubs/${clubId}/posts/${postId}`);
     };
 
     return (
-        <div>
-            <div className="activity-container">
-                <div className="activity-img">
-                    <img src={board} alt="board image" />
-                    <img src={game} alt="game image" />
-                    <img src={game} alt="game image" />
-                </div>
-            </div>
-            {posts.map(post => (
-                <div key={post.postId} onClick={() => handleInActivity(post.postId)} style={{ cursor: 'pointer' }} className="activity-info">
-                    <img src={dm} alt="dm" className="clubs-logo" />
-                    <div style={{ display: 'flex', flexDirection: 'column' }}>
-                        <h2 style={{ fontSize: "20px", fontWeight: 'bold' }}>{post.title}</h2>
-                        <span style={{ marginLeft: '10px' }}>{new Date(post.createdAt).toLocaleDateString()} 보드게임 활동입니다.</span>
+        <div className="club-activity">
+            {clubActivities.length > 0 ? (
+                clubActivities.map(club => (
+                    <div key={club.clubId}>
+                        <h2>{club.clubName}</h2>
+                        {club.posts.length > 0 ? (
+                            club.posts.map(post => (
+                                <div
+                                    key={post.postId}
+                                    onClick={() => handleInActivity(club.clubId, post.postId)}
+                                    style={{ cursor: 'pointer', padding: '10px', borderBottom: '1px solid #ccc' }}
+                                    className="activity-info"
+                                >
+                                    <img src={dm} alt="DM" className="clubs-logo" style={{ width: '50px', height: '50px', borderRadius: '50%' }} />
+                                    <div style={{ display: 'flex', flexDirection: 'column', marginLeft: '10px' }}>
+                                        <h3 style={{ fontSize: "20px", fontWeight: 'bold' }}>{post.title}</h3>
+                                        <span style={{ marginLeft: '10px', color: '#666' }}>
+                                            {new Date(post.createdAt).toLocaleDateString()} {club.clubName} 활동입니다.
+                                        </span>
+                                    </div>
+                                </div>
+                            ))
+                        ) : (
+                            <p>활동 내용이 없습니다.</p>
+                        )}
+                        <hr />
                     </div>
-                </div>
-            ))}
-            <hr />
+                ))
+            ) : (
+                <p>동아리 활동 내용이 없습니다.</p>
+            )}
         </div>
     );
 }
