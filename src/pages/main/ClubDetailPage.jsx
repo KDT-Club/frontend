@@ -121,10 +121,10 @@ const ClubDetailPage = () => {
             <div className="club-info">
                 <img src={dm} alt="dm" />
                 <div className="club-info-text">
-                    <h3>{club.name}</h3>
-                    <p className="info-des">{club.description}</p>
+                    <h3 style={{textAlign:"left", marginLeft:'20px'}}>{club.name}</h3>
+                    <p className="info-des">{club.clubSlogan}</p>
                     <div className="club-info-center">
-                        <p>{club.location}</p>
+                        <p>{club.description}</p>
                         {activities.map((activity, index) => (
                             <p key={index}>{activity}</p>
                         ))}
@@ -135,7 +135,7 @@ const ClubDetailPage = () => {
                 <h4>최근 활동(가로 스크롤)</h4>
                 <div className="last-activity-text">
                     <div className="uno-cards">
-                        <img src={uno} alt="uno"/>
+                        <img src={club.clubImgUrl} alt="uno"/>
                     </div>
                     <p>{lastActivity.date}</p>
                 </div>
