@@ -1,10 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import "./community_styles/post_detail.css";
 import '../../styles/App.css';
 import { FaArrowLeft } from "react-icons/fa6";
 import Modal_delete from '../../components/modal/Modal_delete.jsx';
 import axios from "axios";
+
+// SVG 아이콘 컴포넌트
+const UploadIcon = () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 5V13.17L15.58 16.75L16.75 15.58L13 11.83V5H11V11.83L7.42 15.42L8.58 16.58L12 13.17V5H12ZM4 18H20V20H4V18ZM20 2H4C2.9 2 2 2.9 2 4V20C2 21.1 2.9 22 4 22H20C21.1 22 22 21.1 22 20V4C22 2.9 21.1 2 20 2Z" fill="currentColor"/>
+    </svg>
+);
 
 function WriteModal({ onClose, onEdit, onDelete }) {
     return (
@@ -36,19 +43,50 @@ function PostDetail() {
     const [editedContent, setEditedContent] = useState("");
     const [editingCommentId, setEditingCommentId] = useState(null);
     const [editedCommentContent, setEditedCommentContent] = useState("");
+    const [editedImages, setEditedImages] = useState([]);
     const [memberId, setMemberId] = useState(null);
     const navigate = useNavigate();
+    const fileInputRef = useRef(null);
 
     const axiosInstance = axios.create({
         withCredentials: true
     });
+
+    const handleFileChange = (e) => {
+        setEditedImages([...e.target.files]);
+    };
+
+    const uploadFileToS3 = async (file) => {
+        try {
+            const filename = encodeURIComponent(file.name);
+            const response = await fetch(`https://zmffjq.store/presigned-url?filename=${filename}`);
+            if (!response.ok) {
+                throw new Error('Failed to get presigned URL');
+            }
+            const presignedUrl = await response.text();
+
+            const uploadResponse = await fetch(presignedUrl, {
+                method: 'PUT',
+                headers: { 'Content-Type': file.type },
+                body: file
+            });
+
+            if (uploadResponse.ok) {
+                return presignedUrl.split('?')[0]; // 업로드된 파일의 URL 반환
+            } else {
+                throw new Error('S3 upload failed with status: ' + uploadResponse.status);
+            }
+        } catch (error) {
+            console.error('Error uploading file:', error);
+            throw error;
+        }
+    };
 
     const fetchUserId = async () => {
         try {
             const response = await axiosInstance.get("https://zmffjq.store/getUserId", {
                 withCredentials: true
             });
-            console.log(response.data);
             setMemberId(response.data.message);
         } catch (error) {
             if (error.response && error.response.status === 401) {
@@ -70,27 +108,16 @@ function PostDetail() {
                 const response = await axiosInstance.get(`https://zmffjq.store/board/1/posts/${postId}`);
                 const { post } = response.data;
 
-                // post.attachmentFlag를 확인하여 attachmentNames 설정
-                const attachmentNames = post.attachmentFlag === 'Y' ? (post.attachmentNames || []) : [];
+                const attachmentNames = post.attachment_names || [];
 
                 setPost({
-                    ...post,
-                    attachmentNames: attachmentNames
-                });
-                console.log("API 응답 전체:", response.data);
-                console.log("post 객체:", response.data.post);
-                console.log("attachmentFlag:", response.data.post.attachmentFlag);
-                console.log("attachmentNames:", response.data.attachmentNames);
-
-                console.log("설정된 post 데이터:", {
-                    ...post,
-                    attachmentNames: attachmentNames
+                    ...response.data.post,
+                    attachmentNames: response.data.attachmentNames
                 });
 
                 setEditedTitle(post.title);
                 setEditedContent(post.content);
 
-                // 댓글 데이터 가져오기
                 const commentsResponse = await axiosInstance.get(`https://zmffjq.store/posts/${postId}/comments`);
                 setComments(commentsResponse.data);
             } catch (error) {
@@ -101,8 +128,6 @@ function PostDetail() {
         fetchPostAndComments();
     }, [postId]);
 
-
-
     const handleEdit = () => {
         setIsEditing(true);
         setShowWriteModal(false);
@@ -110,11 +135,22 @@ function PostDetail() {
 
     const handleSaveEdit = async () => {
         try {
+            const uploadPromises = editedImages.map(file => uploadFileToS3(file));
+            const fileUrls = await Promise.all(uploadPromises);
+
             await axiosInstance.put(`https://zmffjq.store/posts/${postId}`, {
                 title: editedTitle,
-                content: editedContent
+                content: editedContent,
+                attachment_names: fileUrls,
             });
-            setPost({ ...post, title: editedTitle, content: editedContent });
+
+            setPost(prevPost => ({
+                ...prevPost,
+                title: editedTitle,
+                content: editedContent,
+                attachmentNames: fileUrls,
+            }));
+
             setIsEditing(false);
         } catch (error) {
             console.error("Error updating post:", error);
@@ -209,6 +245,10 @@ function PostDetail() {
         }
     };
 
+    const handleFileInputClick = () => {
+        fileInputRef.current.click();
+    };
+
     if (!post) {
         return <div>Loading...</div>;
     }
@@ -234,6 +274,28 @@ function PostDetail() {
                         onChange={(e) => setEditedContent(e.target.value)}
                         style={{ fontSize: '16px', width: '100%', height: '200px', padding: '5px' }}
                     />
+                    <input
+                        type="file"
+                        multiple
+                        onChange={handleFileChange}
+                        accept="image/*"
+                        style={{ display: 'none' }}  // 숨깁니다.
+                        ref={fileInputRef}
+                    />
+                    <div className="new-images">
+                        {editedImages && Array.from(editedImages).map((file, index) => (
+                            <img
+                                key={index}
+                                src={URL.createObjectURL(file)}
+                                alt={`New attachment ${index + 1}`}
+                                style={{ width: '100px', height: '100px', objectFit: 'cover', margin: '5px' }}
+                            />
+                        ))}
+                    </div>
+                    <button onClick={handleFileInputClick} style={{ cursor: 'pointer', marginTop: '10px' }}>
+                        <UploadIcon />
+                        <p style={{ marginLeft: '-100px', marginTop:'-25px'}}>이미지 업로드</p>
+                    </button>
                 </div>
             </div>
         );
@@ -270,23 +332,22 @@ function PostDetail() {
                 <div className="post-photos" style={{marginLeft: '20px', marginTop: '20px'}}>
                     {post.attachmentNames && post.attachmentNames.length > 0 ? (
                         post.attachmentNames.map((fileName, index) => {
-                            // 이미지 파일만 렌더링합니다.
                             const isImage = /\.(jpg|jpeg|png|gif)$/i.test(fileName);
 
                             return isImage ? (
                                 <img
                                     key={index}
-                                    src={`https://kdt-apple-newbee-backet1.s3.ap-northeast-2.amazonaws.com/${fileName}`} // 실제 S3 URL로 수정
+                                    src={fileName}
                                     alt={`Post photo ${index + 1}`}
                                     style={{width: '100%', maxWidth: '500px', height: 'auto', marginBottom: '10px'}}
                                     onError={(e) => {
                                         console.error(`이미지 로딩 오류 ${index}:`, e);
-                                        e.target.style.display = 'none';  // 이미지가 로드되지 않을 경우 숨김 처리
+                                        e.target.style.display = 'none';
                                     }}
                                 />
                             ) : (
                                 <p key={index}>첨부된 파일: {fileName}</p>
-                            );
+                            )
                         })
                     ) : (
                         <p>첨부된 파일이 없습니다.</p>
@@ -352,7 +413,6 @@ function PostDetail() {
             )}
         </div>
     );
-
 }
 
 export default PostDetail;
