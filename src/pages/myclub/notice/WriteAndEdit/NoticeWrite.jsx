@@ -119,7 +119,11 @@ function NoticeWrite() {
             navigate(`/clubs/${id}/noticelist`);
         } catch (error) {
             console.error('공지사항 작성 중 오류 발생:', error.response?.data || error.message);
-            alert('글 작성 중 오류가 발생했습니다. 다시 시도해주세요.');
+            if (error.response && error.response.status === 403) {
+                alert('동아리 회장만 접근 가능합니다.');
+            } else {
+                alert('공지사항 작성 중 오류가 발생했습니다. 다시 시도해주세요.');
+            }
         }
     };
 

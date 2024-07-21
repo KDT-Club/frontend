@@ -64,7 +64,6 @@ function FreeBoardList(){
                                     return {
                                         ...freeboard,
                                         authorName: detailData.member.name, // 작성자 이름 추가
-                                        //authorId: detailData.member.id // 작성자 ID 추가
                                     };
                                 } else {
                                     console.error(`게시글 ${freeboard.postId}의 상세 정보 조회 실패`, detailResponse.status);
@@ -76,9 +75,14 @@ function FreeBoardList(){
                             }
                         })
                     );
-                    setList(postsWithAuthors);
+                    //내림차순 정렬
+                    const sortedPosts = postsWithAuthors.sort((a, b) =>
+                        new Date(b.createdAt) - new Date(a.createdAt)
+                    );
+
+                    setList(sortedPosts);
                 } else {
-                    console.error("공지사항 리스트 조회 실패", response.status);
+                    console.error("자유게시판 리스트 조회 실패", response.status);
                 }
             } catch (error) {
                 console.error('자유게시판 리스트 가져오는 중 에러 발생', error);

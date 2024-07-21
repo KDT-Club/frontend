@@ -116,10 +116,10 @@ function FreeBoardWrite() {
                 club_name: clubName,
             });
             console.log('서버 응답:', response.data);
-            alert('공지사항 작성 완료');
+            alert('게시글 작성 완료');
             navigate(`/clubs/${id}/freeboardlist`);
         } catch (error) {
-            console.error('공지사항 작성 중 오류 발생:', error.response?.data || error.message);
+            console.error('글 작성 중 오류 발생:', error.response?.data || error.message);
             alert('글 작성 중 오류가 발생했습니다. 다시 시도해주세요.');
         }
     };

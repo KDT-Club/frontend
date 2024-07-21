@@ -35,7 +35,7 @@ function NoticeDetail() {
 
     const apiClient = axios.create({
         baseURL: 'https://zmffjq.store', // API URL
-        timeout: 10000, // 요청 타임아웃 설정 (10초)
+        //timeout: 10000, // 요청 타임아웃 설정 (10초)
         headers: {
             'Content-Type': 'application/json',
         },
