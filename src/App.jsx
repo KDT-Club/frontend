@@ -86,7 +86,7 @@ function App() {
                             <Route path="/main" element={<MainPage />} />
                             <Route path="/clubs/:clubName" element={<ClubDetailPage />} />
                             <Route path="/community" element={<Community_Main />} />
-                            <Route path="/post/:postId" element={<PostDetail/>}/>
+                            <Route path="/board/1/posts/:postId" element={<PostDetail/>}/>
                             <Route path="/board/3/clubs/:clubId/posts" element={<ActivityPage />} />
                             <Route path="/board/3/clubs/:clubId/posts/:postId" element={<ActivityDetailPage />} />
                             <Route path="/clubs/:id/joinRequest" element={<Member_request />} />
