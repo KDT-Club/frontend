@@ -27,12 +27,18 @@ header {
 
 .delete-button {
     position: absolute;
+    width: 50px;
     right: 0;
     top: 0;
     background: none;
     border: none;
 }
 
+.modify-button {
+    position: absolute;
+    right: 20px;
+    top: 0;
+}
 
 .comment-input {
     display: flex;

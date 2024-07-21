@@ -67,23 +67,30 @@ function PostDetail() {
     useEffect(() => {
         const fetchPostAndComments = async () => {
             try {
-                const postResponse = await axiosInstance.get(`https://zmffjq.store/board/1/posts/${postId}`);
-                console.log("전체 게시글 데이터:", postResponse.data);
+                const response = await axiosInstance.get(`https://zmffjq.store/board/1/posts/${postId}`);
+                const { post } = response.data;
 
-                // attachmentNames가 있으면 그대로 사용, 없으면 빈 배열로 초기화
-                const attachmentNames = postResponse.data.attachmentNames || [];
-                console.log("첨부 파일 이름들:", attachmentNames);
-                if (postResponse.data && postResponse.data.post) {
-                    setPost({
-                        ...postResponse.data,
-                        attachmentNames: attachmentNames,
-                    });
-                    setEditedTitle(postResponse.data.title);
-                    setEditedContent(postResponse.data.content);
-                } else{
-                    console.error("에러", postResponse.data)
-                }
+                // post.attachmentFlag를 확인하여 attachmentNames 설정
+                const attachmentNames = post.attachmentFlag === 'Y' ? (post.attachmentNames || []) : [];
 
+                setPost({
+                    ...post,
+                    attachmentNames: attachmentNames
+                });
+                console.log("API 응답 전체:", response.data);
+                console.log("post 객체:", response.data.post);
+                console.log("attachmentFlag:", response.data.post.attachmentFlag);
+                console.log("attachmentNames:", response.data.attachmentNames);
+
+                console.log("설정된 post 데이터:", {
+                    ...post,
+                    attachmentNames: attachmentNames
+                });
+
+                setEditedTitle(post.title);
+                setEditedContent(post.content);
+
+                // 댓글 데이터 가져오기
                 const commentsResponse = await axiosInstance.get(`https://zmffjq.store/posts/${postId}/comments`);
                 setComments(commentsResponse.data);
             } catch (error) {
@@ -93,6 +100,8 @@ function PostDetail() {
 
         fetchPostAndComments();
     }, [postId]);
+
+
 
     const handleEdit = () => {
         setIsEditing(true);
@@ -248,7 +257,7 @@ function PostDetail() {
             <hr style={{marginTop: '-30px'}}/>
             <div className="post-content">
                 <p style={{textAlign: 'left', marginLeft: '20px', marginTop: '20px', fontSize: '18px', color: 'gray'}}>
-                    {post.member.name} | {new Date(post.createdAt).toLocaleDateString()}
+                    {post && post.member && post.member.name} | {new Date(post.createdAt).toLocaleDateString()}
                 </p>
                 <h3 style={{
                     textAlign: 'left',
@@ -260,74 +269,81 @@ function PostDetail() {
                 <p style={{textAlign: 'left', marginLeft: '20px'}}>{post.content}</p>
                 <div className="post-photos" style={{marginLeft: '20px', marginTop: '20px'}}>
                     {post.attachmentNames && post.attachmentNames.length > 0 ? (
-                        post.attachmentNames.map((photoName, index) => {
+                        post.attachmentNames.map((fileName, index) => {
                             // 이미지 파일만 렌더링합니다.
-                            const isImage = /\.(jpg|jpeg|png|gif)$/i.test(photoName);
+                            const isImage = /\.(jpg|jpeg|png|gif)$/i.test(fileName);
 
                             return isImage ? (
                                 <img
                                     key={index}
-                                    src={photoName}
+                                    src={`https://kdt-apple-newbee-backet1.s3.ap-northeast-2.amazonaws.com/${fileName}`} // 실제 S3 URL로 수정
                                     alt={`Post photo ${index + 1}`}
                                     style={{width: '100%', maxWidth: '500px', height: 'auto', marginBottom: '10px'}}
                                     onError={(e) => {
                                         console.error(`이미지 로딩 오류 ${index}:`, e);
-                                        e.target.style.display = 'none';
+                                        e.target.style.display = 'none';  // 이미지가 로드되지 않을 경우 숨김 처리
                                     }}
                                 />
                             ) : (
-                                <p key={index}>첨부된 파일: {photoName}</p>
+                                <p key={index}>첨부된 파일: {fileName}</p>
                             );
                         })
                     ) : (
                         <p>첨부된 파일이 없습니다.</p>
                     )}
                 </div>
-
             </div>
             <hr/>
             <div className="comments-section">
-                <form onSubmit={handleAddComment}>
+                {comments.map((comment) => (
+                    <div key={comment.commentId} className="comment" style={{textAlign: 'left', marginLeft: '20px'}}>
+                        <p style={{
+                            color: 'gray',
+                            fontWeight: 'bold'
+                        }}>{comment.memberName} | {new Date(comment.createdAt).toLocaleDateString()}</p>
+                        {editingCommentId === comment.commentId ? (
+                            <div>
+                                <input
+                                    type="text"
+                                    value={editedCommentContent}
+                                    onChange={(e) => setEditedCommentContent(e.target.value)}
+                                    style={{marginRight: '10px'}}
+                                />
+                                <button onClick={() => handleSaveCommentEdit(comment.commentId)}>저장</button>
+                            </div>
+                        ) : (
+                            <p>{comment.content}</p>
+                        )}
+                        <div style={{display: "flex", marginTop: '10px'}}>
+                            {editingCommentId !== comment.commentId && (
+                                <>
+                                    <button className="modify-button" style={{textAlign: 'right', marginRight: '30px'}}
+                                            onClick={() => handleEditComment(comment.commentId, comment.content)}>수정
+                                    </button>
+                                    <button className="delete-button" style={{textAlign: 'right'}}
+                                            onClick={() => handleDeleteCommentModalOpen(comment.commentId)}>🗑️
+                                    </button>
+                                </>
+                            )}
+                        </div>
+                        <hr style={{marginTop: '10px', marginLeft: '-20px', width: '1000px'}}/>
+                    </div>
+                ))}
+                <form className="comment-input" onSubmit={handleAddComment}
+                      style={{marginTop: '20px', marginLeft: '20px', display: 'flex', alignItems: 'center'}}>
                     <input
                         type="text"
+                        placeholder="댓글"
                         value={newComment}
                         onChange={handleCommentChange}
-                        placeholder="댓글을 입력하세요"
-                        style={{width: '80%', marginRight: '10px'}}
+                        style={{marginRight: '10px', padding: '10px', width:'500%'}}
                     />
-                    <button type="submit">댓글 달기</button>
+                    <button type="submit"
+                            style={{border: '1px solid rgb(204, 204, 204, 0.7)', padding: '10px 20px'}}>작성
+                    </button>
                 </form>
-                <ul>
-                    {comments.map((comment) => (
-                        <li key={comment.commentId}>
-                            <div>
-                                <strong>{comment.member.name}</strong>
-                                {editingCommentId === comment.commentId ? (
-                                    <div>
-                                        <input
-                                            type="text"
-                                            value={editedCommentContent}
-                                            onChange={(e) => setEditedCommentContent(e.target.value)}
-                                            style={{ marginRight: '10px' }}
-                                        />
-                                        <button onClick={() => handleSaveCommentEdit(comment.commentId)}>저장</button>
-                                    </div>
-                                ) : (
-                                    <p>{comment.content}</p>
-                                )}
-                            </div>
-                            <div>
-                                {editingCommentId !== comment.commentId && (
-                                    <>
-                                        <button onClick={() => handleEditComment(comment.commentId, comment.content)}>수정</button>
-                                        <button onClick={() => handleDeleteCommentModalOpen(comment.commentId)}>삭제</button>
-                                    </>
-                                )}
-                            </div>
-                        </li>
-                    ))}
-                </ul>
             </div>
+
             {showDeleteCommentModal && (
                 <Modal_delete
                     onClose={handleDeleteCommentModalClose}
@@ -336,6 +352,7 @@ function PostDetail() {
             )}
         </div>
     );
+
 }
 
 export default PostDetail;

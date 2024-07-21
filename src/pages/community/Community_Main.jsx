@@ -68,7 +68,7 @@ function CommunityMain() {
 
                                 return (
                                     <div key={post.postId.toString()} className="post-item"
-                                         onClick={() => navigate(`/post/${post.postId.toString()}`)}>
+                                         onClick={() => navigate(`/board/1/posts/${post.postId.toString()}`)}>
                                         <h3 style={{
                                             textAlign: "left",
                                             marginLeft: "10px",
