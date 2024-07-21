@@ -20,35 +20,23 @@ function WritePostModal({ isOpen, onClose, onSubmit }) {
 
     const uploadFileToS3 = async (file) => {
         try {
-            // 서버에서 presigned URL을 요청합니다.
             const filename = encodeURIComponent(file.name);
-            const response = await fetch(`https://zmffjq.store/presigned-url?filename=${filename}`);
-            if (!response.ok) {
-                throw new Error('Failed to get presigned URL');
-            }
-            const presignedUrl = await response.text(); // 문자열로 응답 처리
+            const response = await axios.get(`https://zmffjq.store/presigned-url?filename=${filename}`);
+            const presignedUrl = response.data;
 
-            // presigned URL을 사용하여 파일을 S3에 업로드합니다.
-            const uploadResponse = await fetch(presignedUrl, {
+            await fetch(presignedUrl, {
                 method: 'PUT',
                 headers: { 'Content-Type': file.type },
                 body: file
             });
 
-            if (uploadResponse.ok) {
-                // 업로드된 파일의 URL을 반환합니다.
-                const uploadedFileUrl = presignedUrl.split('?')[0];
-                console.log('Uploaded file URL:', uploadedFileUrl);
-                return uploadedFileUrl;
-            } else {
-                throw new Error('S3 upload failed with status: ' + uploadResponse.status);
-            }
+            const uploadedFileUrl = presignedUrl.split('?')[0];
+            return uploadedFileUrl;
         } catch (error) {
             console.error('Error uploading file:', error);
             throw error;
         }
     };
-
 
     const handleSubmit = async () => {
         if (title && content && clubName) {
@@ -62,10 +50,9 @@ function WritePostModal({ isOpen, onClose, onSubmit }) {
                     title,
                     content,
                     attachment_flag: files.length > 0 ? 'Y' : 'N',
-                    attachmentNames: fileUrls, // 업로드된 파일의 URL을 attachmentNames로 설정
+                    attachment_names: fileUrls, // 업로드된 파일의 URL을 attachmentNames로 설정
                     club_name: clubName
                 };
-
                 const response = await fetch('https://zmffjq.store/board/1/posts', {
                     method: 'POST',
                     body: JSON.stringify(postData),
