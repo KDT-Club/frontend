@@ -58,7 +58,7 @@ function WritePostModal({ isOpen, onClose, onSubmit }) {
                     title,
                     content,
                     attachment_flag: files.length > 0 ? 'Y' : 'N',
-                    attachment_urls: fileUrls,
+                    attachmentNames: fileUrls,
                     club_name: clubName
                 };
 
