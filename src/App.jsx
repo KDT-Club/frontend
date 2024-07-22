@@ -95,7 +95,7 @@ function App() {
 
                             //내동아리 라우팅
                             <Route path="/clubs" element={<MyclubMain />} />
-                            <Route path="/clubs/:id" element={<MyclubDetail />} />
+                            <Route path="/clubs/:id/myclub" element={<MyclubDetail />} />
                             <Route path="/clubs/:id/noticelist" element={<NoticeList />} />
                             <Route path="/clubs/:id/noticelist/noticewrite" element={<NoticeWrite />} />
                             <Route path="/clubs/:clubId/board/2/posts/:postId" element={<NoticeDetail />} />

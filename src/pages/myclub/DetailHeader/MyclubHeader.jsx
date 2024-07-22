@@ -7,11 +7,9 @@ import { MdOutlineManageAccounts, MdOutlinePerson, MdOutlineSettings, MdKeyboard
 import { TbDoorExit } from "react-icons/tb";
 import Modal_confirm from "../../../components/modal/Modal_confirm.jsx";
 import Modal_ok from "../../../components/modal/Modal_ok.jsx";
-import clubmemberData from '../data/clubmemberData.jsx';
-import memberInfo from "../data/memberInfo.jsx";
-import clubData from "../data/clubData.jsx";
 import axios from "axios";
 axios.defaults.withCredentials = true;
+
 function MyclubHeader({ clubName }) {
     let { id } = useParams();
     const navigate = useNavigate();
@@ -19,7 +17,7 @@ function MyclubHeader({ clubName }) {
     const memberId = location.state?.memberId || localStorage.getItem('memberId');
 
     const apiClient = axios.create({
-        baseURL: 'https://zmffjq.store', // .env 파일에서 API URL 가져오기
+        baseURL: 'https://zmffjq.store',
         timeout: 10000, // 요청 타임아웃 설정 (10초)
         headers: {
             'Content-Type': 'application/json',
@@ -47,24 +45,34 @@ function MyclubHeader({ clubName }) {
             });
     }, [memberId]);
 
-    console.log(member.name)
-
     //햄버거탭에서 회원리스트 조회
-    // useEffect(() => {
-    //     const fetchClubMembers = async () => {
-    //         try {
-    //             const response = await fetch(`/clubs/${id}/clubMember`);
-    //             if (!response.ok) {
-    //                 throw new Error('동아리 회원 리스트 조회 실패');
-    //             }
-    //             const data = await response.json();
-    //             setClubMembers(data);
-    //         } catch (error) {
-    //             console.error('동아리 회원 리스트 조회 중 에러 발생', error);
-    //         }
-    //     };
-    //     fetchClubMembers();
-    // }, [id]);
+    useEffect(() => {
+        const fetchClubMembers = async () => {
+            try {
+                const response = await apiClient.get(`/clubs/${id}/clubMember`);
+                const members = response.data;
+                setClubMembers(response.data);
+                console.log(response.data);
+                const sortedMembers = members.sort((a, b) => {
+                    if (a.status === "CLUB_PRESIDENT") return -1;
+                    if (b.status === "CLUB_PRESIDENT") return 1;
+                    return 0;
+                });
+                setClubMembers(sortedMembers);
+            } catch (error) {
+                console.error('동아리 회원 리스트 조회 중 에러 발생', error);
+                if (error.response) {
+                    console.error('회원 리스트 조회 에러 발생:', error.response.data);
+                    console.error('응답 상태:', error.response.status);
+                } else if (error.request) {
+                    console.error('요청 전송 실패:', error.request);
+                } else {
+                    console.error('Error', error.message);
+                }
+            }
+        };
+        fetchClubMembers();
+    }, [id]);
 
     const handleBackClick = () => {
         navigate(`/clubs?memberId=${memberId}`);
@@ -127,7 +135,6 @@ function MyclubHeader({ clubName }) {
                     <div className="member-info">
                         <h2>{member.name}</h2>
                         <p>{member.studentId}</p>
-                        {/*API수정 필요!*/}
                     </div>
                     <div className="menu-items">
                         <div className="li-container" onClick={toggleMemberList}>
@@ -143,15 +150,11 @@ function MyclubHeader({ clubName }) {
                         </div>
                         {isMemberListOpen && (
                             <div className="member-list">
-                                {clubMembers.map((memberName, index) => (
-                                    <div key={index} className="member-item">{memberName}</div>
+                                {clubMembers.map((member, index) => (
+                                    <div key={index} className="member-item">
+                                        <div>{member.studentId} {member.name} {member.status === "CLUB_PRESIDENT" && "(회장)"}</div>
+                                    </div>
                                 ))}
-                                {/*API로부터 회원 이름, 학번 조회: 아래 코드임*/}
-                                {/*{clubMembers.map((member, index) => (*/}
-                                {/*    <div key={index} className="member-item">*/}
-                                {/*        <div>{member.name} ({member.studentId})</div>*/}
-                                {/*    </div>*/}
-                                {/*))}*/}
                             </div>
                         )}
                         <div className="li-container" onClick={toggleMemberManage}>
