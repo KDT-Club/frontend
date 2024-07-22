@@ -43,7 +43,7 @@
 
 .info-des{
     text-align: left;
-    margin-left: -10px;
+    margin-left: 20px;
 }
 
 .club-info-text {
@@ -86,7 +86,7 @@
 
 .uno-cards img {
     width: 100%;
-    height: auto;
+    height: 250px;
     margin-top: 10px;
     margin-right: 10px;
     margin-left: 10px;

@@ -20,30 +20,20 @@ function WritePostModal({ isOpen, onClose, onSubmit }) {
 
     const uploadFileToS3 = async (file) => {
         try {
-            // 서버에서 presigned URL을 요청합니다.
             const filename = encodeURIComponent(file.name);
-            const response = await fetch(`https://zmffjq.store/presigned-url?filename=${filename}`,{
-                withCredentials: true
-            });
-            if (!response.ok) {
-                throw new Error('Failed to get presigned URL');
-            }
-            const presignedUrl = await response.text(); // 문자열로 응답 처리
+            const response = await axios.get(`https://zmffjq.store/presigned-url?filename=${filename}`);
+            const presignedUrl = response.data;
 
-            // presigned URL을 사용하여 파일을 S3에 업로드합니다.
-            const uploadResponse = await fetch(presignedUrl, {
+            await fetch(presignedUrl, {
                 method: 'PUT',
                 headers: { 'Content-Type': file.type },
                 body: file
             });
 
-            if (uploadResponse.ok) {
-                return presignedUrl.split("?")[0]; // 업로드된 파일의 URL을 반환합니다.
-            } else {
-                throw new Error('S3 upload failed with status: ' + uploadResponse.status);
-            }
+            const uploadedFileUrl = presignedUrl.split('?')[0];
+            return uploadedFileUrl;
         } catch (error) {
-            console.error("파일 업로드 중 오류 발생:", error);
+            console.error('Error uploading file:', error);
             throw error;
         }
     };
@@ -54,26 +44,25 @@ function WritePostModal({ isOpen, onClose, onSubmit }) {
                 const uploadPromises = files.map(file => uploadFileToS3(file));
                 const fileUrls = await Promise.all(uploadPromises);
 
+                console.log('All uploaded file URLs:', fileUrls); // 모든 파일 URL을 콘솔에 찍기
+
                 const postData = {
                     title,
                     content,
                     attachment_flag: files.length > 0 ? 'Y' : 'N',
-                    attachment_urls: fileUrls,
+                    attachment_names: fileUrls, // 업로드된 파일의 URL을 attachmentNames로 설정
                     club_name: clubName
                 };
-
                 const response = await fetch('https://zmffjq.store/board/1/posts', {
                     method: 'POST',
                     body: JSON.stringify(postData),
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     credentials: 'include'
                 });
 
                 if (response.ok) {
                     const responseData = await response.json();
-                    onSubmit(responseData);
+                    console.log('Post created successfully:', responseData);
                     setTitle('');
                     setContent('');
                     setClubName('');
@@ -85,17 +74,12 @@ function WritePostModal({ isOpen, onClose, onSubmit }) {
                     throw new Error('Failed to create post with status: ' + response.status);
                 }
             } catch (error) {
-                console.error("게시글 작성 중 오류 발생:", error);
-                if (error.response) {
-                    console.error("서버 응답:", error.response.data);
-                }
+                console.error('Error submitting post:', error);
             }
         } else {
-            alert("제목, 내용, 동아리 이름을 모두 입력해주세요.");
+            alert('제목, 내용, 동아리 이름을 모두 입력해주세요.');
         }
     };
-
-
 
     return (
         <div className="post-edit-overlay">

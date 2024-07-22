@@ -14,6 +14,7 @@ function CommunityMain() {
     const [posts, setPosts] = useState([]);
     const [isWriteModalOpen, setIsWriteModalOpen] = useState(false);
     const navigate = useNavigate();
+    const clubId = 1;
 
     useEffect(() => {
         fetchPosts();
@@ -55,57 +56,66 @@ function CommunityMain() {
             case 0:
                 return (
                     <div className="posts-container">
-                        {posts.map((post) => {
-                            const isLongContent = post.content.length > maxContentLength;
-                            const showFullContent = expandedPosts[post.postId];
+                        {posts && posts.length > 0 ? (
+                            posts.map((post) => {
+                                // null 체크 추가
+                                if (!post.title || !post.content) {
+                                    return null; // null인 게시글은 렌더링하지 않음
+                                }
 
-                            return (
-                                <div key={post.postId.toString()} className="post-item"
-                                     onClick={() => navigate(`/post/${post.postId.toString()}`)}>
-                                    <h3 style={{
-                                        textAlign: "left",
-                                        marginLeft: "10px",
-                                        marginBottom: "-5px",
-                                        fontWeight: "bold",
-                                        fontSize: "20px"
-                                    }}>{post.title}</h3>
-                                    <div style={{display: "flex", alignItems: "center", marginLeft: "10px"}}>
+                                const isLongContent = post.content.length > maxContentLength;
+                                const showFullContent = expandedPosts[post.postId];
+
+                                return (
+                                    <div key={post.postId.toString()} className="post-item"
+                                         onClick={() => navigate(`/board/1/posts/${post.postId.toString()}`)}>
+                                        <h3 style={{
+                                            textAlign: "left",
+                                            marginLeft: "10px",
+                                            marginBottom: "-5px",
+                                            fontWeight: "bold",
+                                            fontSize: "20px"
+                                        }}>{post.title}</h3>
+                                        <div style={{display: "flex", alignItems: "center", marginLeft: "10px"}}>
+                                            <p style={{
+                                                overflow: "hidden",
+                                                textOverflow: "ellipsis",
+                                                whiteSpace: showFullContent ? "normal" : "nowrap",
+                                                maxWidth: showFullContent ? "none" : "450px"
+                                            }}>
+                                                {post.content}
+                                            </p>
+                                            {isLongContent && (
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        toggleContent(post.postId);
+                                                    }}
+                                                    style={{
+                                                        color: "gray",
+                                                        cursor: "pointer",
+                                                        border: "none",
+                                                        background: "none",
+                                                        marginLeft: "-20px",
+                                                        padding: "0",
+                                                    }}
+                                                >
+                                                    {showFullContent ? "간략히" : "더 보기"}
+                                                </button>
+                                            )}
+                                        </div>
                                         <p style={{
-                                            overflow: "hidden",
-                                            textOverflow: "ellipsis",
-                                            whiteSpace: showFullContent ? "normal" : "nowrap",
-                                            maxWidth: showFullContent ? "none" : "450px"
-                                        }}>
-                                            {post.content}
-                                        </p>
-                                        {isLongContent && (
-                                            <button
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    toggleContent(post.postId);
-                                                }}
-                                                style={{
-                                                    color: "gray",
-                                                    cursor: "pointer",
-                                                    border: "none",
-                                                    background: "none",
-                                                    marginLeft: "-20px",
-                                                    padding: "0",
-                                                }}
-                                            >
-                                                {showFullContent ? "간략히" : "더 보기"}
-                                            </button>
-                                        )}
+                                            textAlign: "left",
+                                            marginLeft: "10px",
+                                            marginTop: "-5px",
+                                            color: "gray",
+                                        }}>{new Date(post.createdAt).toLocaleDateString()}</p>
                                     </div>
-                                    <p style={{
-                                        textAlign: "left",
-                                        marginLeft: "10px",
-                                        marginTop: "-5px",
-                                        color: "gray",
-                                    }}>{new Date(post.createdAt).toLocaleDateString()}</p>
-                                </div>
-                            );
-                        })}
+                                );
+                            }).filter(Boolean) // null인 요소 제거
+                        ) : (
+                            <p>게시글이 없습니다.</p>
+                        )}
                         <div>
                             <button onClick={() => setIsWriteModalOpen(true)}
                                     style={{
@@ -122,7 +132,7 @@ function CommunityMain() {
             case 1:
                 return <Calendar/>
             case 2:
-                return <ActivityPage/>
+                return <ActivityPage clubId={clubId} />;
             default:
                 return null;
         }
