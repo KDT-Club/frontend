@@ -149,7 +149,7 @@ function MyclubDetail() {
                         >
                             <p
                                 style={{fontSize: "15px"}}
-                            >2024/07/30 (일)<br/>연합 경기</p>
+                            >2024/07/30 (일)<br/>정기 모임</p>
                         </div>
                         <div className="box-item"
                              style={{minWidth: "190px", border: "1.5px solid black"}}

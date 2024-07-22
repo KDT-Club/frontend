@@ -52,7 +52,6 @@ function MyclubHeader({ clubName }) {
             try {
                 const response = await apiClient.get(`/clubs/${id}/clubMember`);
                 const members = response.data;
-                // setClubMembers(response.data);
                 setClubMembers(members);
 
                 // 로그인 중인 멤버의 상태를 찾아 회장 여부를 확인
