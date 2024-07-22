@@ -9,7 +9,7 @@ import axios from "axios";
 import WritePostModal from "./WritePostModal.jsx";
 
 function CommunityMain() {
-    const [activeIndex, setActiveIndex] = useState(null);
+    const [activeIndex, setActiveIndex] = useState(0);
     const [expandedPosts, setExpandedPosts] = useState({});
     const [posts, setPosts] = useState([]);
     const [isWriteModalOpen, setIsWriteModalOpen] = useState(false);

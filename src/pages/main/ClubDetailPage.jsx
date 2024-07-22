@@ -98,7 +98,7 @@ const ClubDetailPage = () => {
                         <p style={{
                             marginLeft: '10px',
                             color: 'gray'
-                        }}>학번: {userInfo.username}</p>
+                        }}>학번: {userInfo.id}</p>
                     </div>
                 </div>
                 <div className="reason-input">
@@ -126,7 +126,7 @@ const ClubDetailPage = () => {
             <div className="club-info">
                 <img src={club.clubImgUrl} alt="dm" />
                 <div className="club-info-text">
-                    <h3 style={{textAlign:"left", marginLeft:'20px'}}>{club.name}</h3>
+                    <h3 style={{textAlign:"left", marginLeft:'20px'}}>{club.clubName}</h3>
                     <p className="info-des">{club.clubSlogan}</p>
                     <div className="club-info-center">
                         <p>{club.description}</p>
@@ -148,7 +148,7 @@ const ClubDetailPage = () => {
             <div className="leader-info">
                 <h4>동아리 회장 연락처</h4>
                 <div className="leader-info-text">
-                    <img src={dm} alt="dm"/>
+                    <img src={club.clubImgUrl} alt="dm"/>
                     <div className="leader-info-name">
                         <p style={{
                             fontSize: "20px"
@@ -156,10 +156,10 @@ const ClubDetailPage = () => {
                         <p style={{
                             color: "gray",
                         }
-                        }>{leader.name}</p>
+                        }>{club.member.id}</p>
                     </div>
                     <div className="leader-info-phone">
-                        <p>{leader.phone}</p>
+                        <p>{club.member.phone}</p>
                     </div>
                 </div>
             </div>
