@@ -26,7 +26,7 @@ function ActivityPage() {
                     clubId: club.clubId,
                     clubName: club.clubName,
                     posts: activitiesResponses[index].data
-                }));
+                })).filter(club => club.posts.length > 0); // 활동 내용이 있는 동아리만 필터링
 
                 setClubActivities(allActivities);
             } catch (error) {
@@ -47,26 +47,22 @@ function ActivityPage() {
                 clubActivities.map(club => (
                     <div key={club.clubId}>
                         <h2>{club.clubName}</h2>
-                        {club.posts.length > 0 ? (
-                            club.posts.map(post => (
-                                <div
-                                    key={post.postId}
-                                    onClick={() => handleInActivity(club.clubId, post.postId)}
-                                    style={{ cursor: 'pointer', padding: '10px', borderBottom: '1px solid #ccc' }}
-                                    className="activity-info"
-                                >
-                                    <img src={dm} alt="DM" className="clubs-logo" style={{ width: '50px', height: '50px', borderRadius: '50%' }} />
-                                    <div style={{ display: 'flex', flexDirection: 'column', marginLeft: '10px' }}>
-                                        <h3 style={{ fontSize: "20px", fontWeight: 'bold' }}>{post.title}</h3>
-                                        <span style={{ marginLeft: '10px', color: '#666' }}>
-                                            {new Date(post.createdAt).toLocaleDateString()} {club.clubName} 활동입니다.
-                                        </span>
-                                    </div>
+                        {club.posts.map(post => (
+                            <div
+                                key={post.postId}
+                                onClick={() => handleInActivity(club.clubId, post.postId)}
+                                style={{ cursor: 'pointer', padding: '10px', borderBottom: '1px solid #ccc' }}
+                                className="activity-info"
+                            >
+                                <img src={dm} alt="DM" className="clubs-logo" style={{ width: '50px', height: '50px', borderRadius: '50%' }} />
+                                <div style={{ display: 'flex', flexDirection: 'column', marginLeft: '10px' }}>
+                                    <h3 style={{ fontSize: "20px", fontWeight: 'bold' }}>{post.title}</h3>
+                                    <span style={{ marginLeft: '10px', color: '#666' }}>
+                                        {new Date(post.createdAt).toLocaleDateString()} {club.clubName} 활동입니다.
+                                    </span>
                                 </div>
-                            ))
-                        ) : (
-                            <p>활동 내용이 없습니다.</p>
-                        )}
+                            </div>
+                        ))}
                         <hr />
                     </div>
                 ))
