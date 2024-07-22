@@ -47,6 +47,7 @@
     background-color: #EFEFEF;
     color: black;
     box-sizing: border-box;
+    height: 40px;
 }
 
 .confirm_button:hover {

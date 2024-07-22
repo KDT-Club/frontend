@@ -8,6 +8,7 @@ import dm from '../../images/DM.png';
 import uno from '../../images/uno.png';
 import profile from '../../images/profile.jpeg';
 import axios from 'axios';
+import Modal_ok from "../../components/modal/Modal_ok.jsx";
 
 const ClubDetailPage = () => {
     const { clubName } = useParams();
