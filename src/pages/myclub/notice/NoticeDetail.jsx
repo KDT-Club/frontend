@@ -35,7 +35,7 @@ function NoticeDetail() {
 
     const apiClient = axios.create({
         baseURL: 'https://zmffjq.store', // API URL
-        //timeout: 10000, // 요청 타임아웃 설정 (10초)
+        timeout: 10000, // 요청 타임아웃 설정 (10초)
         headers: {
             'Content-Type': 'application/json',
         },
@@ -59,9 +59,9 @@ function NoticeDetail() {
         }
     };
 
-    useEffect(() => {
-        fetchUserId();
-    }, []);
+    // useEffect(() => {
+    //     fetchUserId();
+    // }, []);
 
     const handleBackClick = () => {
         navigate(`/clubs/${clubId}/noticelist`);
@@ -104,21 +104,22 @@ function NoticeDetail() {
                 }
             }
         };
-
-        const fetchComments = async () => {
-            try {
-                const response = await apiClient.get(`/posts/${postId}/comments`);
-                setComments(response.data);
-            } catch (error) {
-                console.error('댓글 조회 에러 발생:', error);
-                if (error.response) {
-                    console.error('댓글 조회 실패', error.response.status);
-                }
-            }
-        };
         fetchPost();
         fetchComments();
+        fetchUserId();
     }, [clubId, postId]);
+
+    const fetchComments = async () => {
+        try {
+            const response = await apiClient.get(`/posts/${postId}/comments`);
+            setComments(response.data);
+        } catch (error) {
+            console.error('댓글 조회 에러 발생:', error);
+            if (error.response) {
+                console.error('댓글 조회 실패', error.response.status);
+            }
+        }
+    };
 
     //댓글 POST
     const handleCommentChange = (e) => {
@@ -128,17 +129,14 @@ function NoticeDetail() {
         e.preventDefault();
         if (newComment.trim() && memberId) { // memberId가 존재하는지 확인
             try {
-                const response = await apiClient.post(`https://zmffjq.store/posts/${postId}/comments`, {
+                const response = await apiClient.post(`/posts/${postId}/comments`, {
                     memberId: memberId,
                     content: newComment
                 });
-                if (response.status === 200) {
-                    const newCommentData = response.data;
-                    // 서버로부터 받은 새로운 댓글 상태 업데이트
-                    setComments(prevComments => [...prevComments, newCommentData]);
+                if (response.data.message === '성공') {
+                    //댓글 추가 성공 후 전체 댓글 목록 다시 불러옴
+                    await fetchComments();
                     setNewComment('');
-                } else {
-                    console.error("댓글 작성 실패", response.status);
                 }
             } catch (error) {
                 console.error('댓글 작성 중 에러 발생', error);
@@ -157,8 +155,7 @@ function NoticeDetail() {
     const handleSaveEditedComment = async () => {
         if (editingCommentId && editedCommentContent.trim() && memberId) {
             try {
-                const response = await apiClient.put(`https://zmffjq.store/posts/${postId}/${editingCommentId}`, {
-                    memberId: memberId,
+                const response = await apiClient.put(`/posts/${postId}/${editingCommentId}`, {
                     content: editedCommentContent
                 });
                 if (response.status === 200) {

@@ -79,7 +79,6 @@ function FreeBoardList(){
                     const sortedPosts = postsWithAuthors.sort((a, b) =>
                         new Date(b.createdAt) - new Date(a.createdAt)
                     );
-
                     setList(sortedPosts);
                 } else {
                     console.error("자유게시판 리스트 조회 실패", response.status);

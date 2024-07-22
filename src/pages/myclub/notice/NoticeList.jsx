@@ -79,7 +79,6 @@ function NoticeList(){
                     const sortedPosts = noticesWithAuthors.sort((a, b) =>
                         new Date(b.createdAt) - new Date(a.createdAt)
                     );
-
                     setList(sortedPosts);
                 } else {
                     console.error("공지사항 리스트 조회 실패", response.status);
