@@ -18,7 +18,7 @@ function WriteModal({ onClose, onEdit, onDelete }) {
         <div className="modal-overlay">
             <div className="modal-content">
                 <div className="modal-header">
-                    <p style={{ marginBottom: '0px', padding: '3px' }}>게시글</p>
+                    <p style={{ marginBottom: '0px', padding: '3px' }}></p>
                     <hr style={{ marginLeft: '-20px', width: '120%' }}/>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '-5px' }}>
                         <button onClick={onEdit} style={{ padding: '3px', borderRight: '1px solid #ccc', height: '50px' }}>수정</button>
@@ -332,7 +332,7 @@ function PostDetail() {
                     fontWeight: 'bold'
                 }}>{post.title}</h3>
                 <p style={{textAlign: 'left', marginLeft: '20px'}}>{post.content}</p>
-                <div className="post-photos" style={{marginLeft: '20px', marginTop: '20px'}}>
+                <div className="post-photos" style={{marginLeft: '0px', marginTop: '20px'}}>
                     {post.attachmentNames && post.attachmentNames.length > 0 ? (
                         post.attachmentNames.map((fileName, index) => {
                             const isImage = /\.(jpg|jpeg|png|gif)$/i.test(fileName);
@@ -342,7 +342,7 @@ function PostDetail() {
                                     key={index}
                                     src={fileName}
                                     alt={`Post photo ${index + 1}`}
-                                    style={{width: '390px', maxWidth: '500px', height: 'auto', marginBottom: '20px'}}
+                                    style={{width: '390px', maxWidth: '400px', height: 'auto', marginBottom: '20px'}}
                                     onError={(e) => {
                                         console.error(`이미지 로딩 오류 ${index}:`, e);
                                         e.target.style.display = 'none';

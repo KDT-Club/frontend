@@ -151,8 +151,8 @@ const ClubDetailPage = () => {
                 <h4>최근 활동</h4>
                 <div className="last-activity-text">
                     <div className="uno-cards">
-                        {lastActivity && lastActivity.attachment_names && lastActivity.attachment_names.length > 0 ? (
-                            <img src={lastActivity.attachment_names[0]} alt="최근 활동" />
+                        {lastActivity && lastActivity.attachmentNames && lastActivity.attachmentNames.length > 0 ? (
+                            <img src={lastActivity.attachmentNames[0]} alt="최근 활동" />
                         ) : (
                             <img src={club.clubImgUrl} alt="기본 이미지" />
                         )}
@@ -163,15 +163,16 @@ const ClubDetailPage = () => {
             <div className="leader-info">
                 <h4>동아리 회장 연락처</h4>
                 <div className="leader-info-text">
-                    <img src={club.clubImgUrl} alt="club"/>
+                    <img src={club.member.memberImageURL} alt="club"/>
                     <div className="leader-info-name">
                         <p style={{
-                            fontSize: "20px"
+                            fontSize: "18px",
+                            fontWeight: 'bold'
                         }}>회장</p>
                         <p style={{
-                            color: "gray",
+                            color: "black",
                         }
-                        }>{club.member.id}</p>
+                        }>{club.member.name}</p>
                     </div>
                     <div className="leader-info-phone">
                         <p>{club.member.phone}</p>

@@ -82,7 +82,7 @@
     border: 1px solid #ccc;
     border-radius: 20px;
     overflow-x: auto;
-    width:400px;
+    width:360px;
     object-fit: scale-down;
     margin-left: 15px;
 }
@@ -137,15 +137,14 @@
 }
 
 .leader-info-phone {
+    margin-right: 80px;
     display: flex;
     flex-direction: column;
     text-align: right;
-    margin-top: 20px;
-    font-weight: bold;
-    font-size: 20px;
+    margin-top: 28px;
+    font-size: 15px;
     flex: 1;
     position:relative;
-    background-color: #007bff;
 }
 
 .join-button {
