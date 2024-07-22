@@ -3,7 +3,6 @@ import axios from "axios";
 import './written_post.css'
 import {useNavigate, useParams} from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa6";
-import postData from "../../myclub/data/postData.jsx";
 
 function Written_post() {
     const navigate = useNavigate();
@@ -33,14 +32,12 @@ function Written_post() {
              });
     }, [memberId]);
 
-    console.log(list)
-
     return (
         <div className="Written_post">
             <div className="header">
                 <FaArrowLeft
                     style={{ fontSize: '25px', strokeWidth: '0.1', cursor: 'pointer', marginLeft: '15px' }}
-                    onClick={() => navigate(-1)}
+                    onClick={() => navigate(`/members/${memberId}`)}
                 />
                 <p>작성한 글 보기</p>
             </div>

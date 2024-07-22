@@ -3,6 +3,7 @@ import "./member_info_fix.css";
 import { useNavigate, useParams } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa6";
 import Modal_confirm from "../../../../components/modal/Modal_confirm.jsx";
+import Modal_ok from "../../../../components/modal/Modal_ok.jsx";
 import axios from "axios";
 
 function Member_info_fix() {
@@ -11,8 +12,10 @@ function Member_info_fix() {
 
     const [member, setMember] = useState(null);  // 멤버 정보 상태
     const [role, setRole] = useState('');  // 직책 상태
-    const [showDeleteModal, setShowDeleteModal] = useState(false);  // 모달 상태
+    const [showDeleteModal, setShowDeleteModal] = useState(false);  // 삭제 모달 상태
+    const [showFixModal, setShowFixModal] = useState(false);  // 수정 모달 상태
     const [modalMessage, setModalMessage] = useState("");  // 모달 메시지
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const token = localStorage.getItem('token');
 
     // Axios 인스턴스 생성 및 설정
@@ -44,6 +47,12 @@ function Member_info_fix() {
 
     // 직책을 서버에 업데이트하는 API 호출
     const handleFixMember = () => {
+        setModalMessage("직책을 변경하시겠습니까?");
+        setShowFixModal(true);
+    }
+
+    // Confirm the role change
+    const handleConfirmFix = () => {
         const newStatus = role === '회장' ? 'CLUB_PRESIDENT' : 'CLUB_MEMBER';
         apiClient.post(`/clubs/${id}/clubMember/${memberId}/changeStatus`, { changeStatus: newStatus })
             .then(response => {
@@ -52,6 +61,11 @@ function Member_info_fix() {
             })
             .catch(error => {
                 console.error('Error updating role:', error);
+                setModalMessage("동아리 회장만 수정 가능합니다.");
+                setIsModalOpen(true);
+            })
+            .finally(() => {
+                setShowFixModal(false);
             });
     }
 
@@ -64,8 +78,14 @@ function Member_info_fix() {
             })
             .catch(error => {
                 console.error('Error deleting member:', error);
+                setModalMessage("동아리 회장만 탈퇴 가능합니다.");
+                setIsModalOpen(true);
             });
     }
+
+    const handleModalClose = () => setIsModalOpen(false);
+    
+    const handleModalConfirm = () => navigate(-1);
 
     // 탈퇴 확인 모달 열기
     const handleOpenModal = (message) => {
@@ -118,6 +138,8 @@ function Member_info_fix() {
                 <button className="fix" onClick={handleFixMember}>수정하기</button>
             </div>
             {showDeleteModal && <Modal_confirm onClose={handleCloseModal} message={modalMessage} link={`/clubs/${id}/memberInfoFixList`} onConfirm={handleDeleteMember} />}
+            {showFixModal && <Modal_confirm onClose={() => setShowFixModal(false)} message={modalMessage} onConfirm={handleConfirmFix} />}
+            {isModalOpen && <Modal_ok message={modalMessage} onClose={handleModalClose} onConfirm={handleModalConfirm} />}
         </div>
     );
 }
