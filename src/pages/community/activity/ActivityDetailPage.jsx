@@ -9,34 +9,55 @@ function ActivityDetailPage() {
     const navigate = useNavigate();
     const { clubId, postId } = useParams();
     const [post, setPost] = useState(null);
+    const [clubImgUrl, setClubImgUrl] = useState(null);
 
     useEffect(() => {
-        const fetchPostDetail = async () => {
+        const fetchData = async () => {
             try {
-                const response = await axios.get(`https://zmffjq.store/board/3/clubs/${clubId}/posts/${postId}`);
-                const postData = response.data;
+                const [postResponse, clubsResponse] = await Promise.all([
+                    axios.get(`https://zmffjq.store/board/3/clubs/${clubId}/posts/${postId}`),
+                    axios.get('https://zmffjq.store/clubs')
+                ]);
+
+                const postData = postResponse.data;
                 const attachmentNames = postData.attachmentNames || [];
 
                 setPost({
                     ...postData.post,
                     attachmentNames: attachmentNames
                 });
+
+                const clubs = clubsResponse.data;
+                const currentClub = clubs.find(club => club.clubId === parseInt(clubId));
+                if (currentClub) {
+                    setClubImgUrl(currentClub.clubImgUrl);
+                }
             } catch (error) {
-                console.error('Error fetching post detail:', error);
+                console.error('Error fetching post detail or club info:', error);
             }
         };
 
-        fetchPostDetail();
+        fetchData();
     }, [clubId, postId]);
 
     const handleBack = () => {
         navigate('/community');
     };
 
-    if (!post) {
+    if (!post || !clubImgUrl) {
         return <div>Loading...</div>;
     }
 
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        return date.toLocaleString('ko-KR', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    }
 
     return (
         <div>
@@ -47,7 +68,7 @@ function ActivityDetailPage() {
                 <p>활동 내용</p>
             </div>
             <div className="detail-info">
-                <img src={dm} alt="dm" className="clubs-logo" />
+                <img src={clubImgUrl} alt="club" className="clubs-logo" />
                 <h2 style={{
                     fontSize: "20px",
                     fontWeight: 'bold',

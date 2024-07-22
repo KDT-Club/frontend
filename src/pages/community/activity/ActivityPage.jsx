@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import dm from '../../../images/DM.png';
 import { useNavigate } from "react-router-dom";
 
 function ActivityPage() {
@@ -25,6 +24,7 @@ function ActivityPage() {
                 const allActivities = clubs.map((club, index) => ({
                     clubId: club.clubId,
                     clubName: club.clubName,
+                    clubImgUrl: club.clubImgUrl, // clubImgUrl 추가
                     posts: activitiesResponses[index].data
                 })).filter(club => club.posts.length > 0); // 활동 내용이 있는 동아리만 필터링
 
@@ -54,7 +54,7 @@ function ActivityPage() {
                                 style={{ cursor: 'pointer', padding: '10px', borderBottom: '1px solid #ccc' }}
                                 className="activity-info"
                             >
-                                <img src={dm} alt="DM" className="clubs-logo" style={{ width: '50px', height: '50px', borderRadius: '50%' }} />
+                                <img src={club.clubImgUrl} alt={club.clubName} className="clubs-logo" style={{ width: '50px', height: '50px', borderRadius: '50%' }} />
                                 <div style={{ display: 'flex', flexDirection: 'column', marginLeft: '10px' }}>
                                     <h3 style={{ fontSize: "20px", fontWeight: 'bold' }}>{post.title}</h3>
                                     <span style={{ marginLeft: '10px', color: '#666' }}>
