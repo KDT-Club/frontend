@@ -25,6 +25,7 @@
 .menu-item.active {
     border-color: #000;
     font-weight: bold;
+
 }
 
 .posts-container {
@@ -33,7 +34,7 @@
 
 .post-item {
     border-bottom: 1px solid #eee;
-    margin-top: 5px;
+    margin-top: 15px;
 }
 
 .write-button {
