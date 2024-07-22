@@ -42,7 +42,7 @@ const Modal_post = ({onClose, onEdit}) => {
     const handleDelete = async () => {
         try {
             await apiClient.delete(`https://zmffjq.store/posts/${postId}`);
-            navigate(`/post_list/${memberId}`);
+            navigate(-1);
         } catch (error) {
             console.error('게시글 삭제 중 에러 발생:', error);
             alert('게시글 삭제 중 오류가 발생했습니다. 다시 시도해주세요.');

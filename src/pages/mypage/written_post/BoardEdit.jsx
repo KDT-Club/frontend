@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from "axios";
-import '../../myclub/DetailHeader/myclubheader.css'
+import '../../myclub/DetailHeader/myclubheader.css';
 import '../../myclub/notice/WriteAndEdit/noticewrite.css';
 import { useNavigate, useParams } from "react-router-dom";
 import { FiX, FiCheck } from "react-icons/fi";
@@ -15,12 +15,12 @@ function BoardEdit() {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [attachmentNames, setAttachmentNames] = useState([]);
-    const [selectedFiles, setSelectedFiles] = useState([]);  // 이미지 파일 상태
-    const [isModalOpen, setIsModalOpen] = useState(false);  // 모달 상태 추가
+    const [selectedFiles, setSelectedFiles] = useState([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const apiClient = axios.create({
         baseURL: 'https://zmffjq.store',
-        timeout: 10000, // 요청 타임아웃 설정 (10초)
+        timeout: 10000,
         headers: {
             'Content-Type': 'application/json',
         },
@@ -29,7 +29,6 @@ function BoardEdit() {
     useEffect(() => {
         const fetchPostData = async () => {
             try {
-                // 게시글 정보 가져오기
                 const response = await apiClient.get(`/postdetail/${postId}`);
                 const post = response.data;
                 setTitle(post.post.title);
@@ -46,10 +45,9 @@ function BoardEdit() {
     const fetchUserId = async () => {
         try {
             const response = await axios.get("https://zmffjq.store/getUserId", {
-                withCredentials: true // Include this if the endpoint requires credentials
+                withCredentials: true
             });
-            console.log(response.data);
-            setMemberId(response.data.message); // memberId 상태 업데이트
+            setMemberId(response.data.message);
         } catch (error) {
             if (error.response && error.response.status === 401) {
                 alert('Unauthorized access. Please log in.');
@@ -64,15 +62,8 @@ function BoardEdit() {
         fetchUserId();
     }, []);
 
-    // 제목 입력
-    const handleTitleChange = (e) => {
-        setTitle(e.target.value);
-    };
-
-    // 내용 입력
-    const handleContentChange = (e) => {
-        setContent(e.target.value);
-    };
+    const handleTitleChange = (e) => setTitle(e.target.value);
+    const handleContentChange = (e) => setContent(e.target.value);
 
     const handleFileChange = (e) => {
         const files = Array.from(e.target.files);
@@ -83,7 +74,6 @@ function BoardEdit() {
         console.log('Attachment URLs:', fileUrls);
     };
 
-    // 글쓰기 폼 제출
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -107,17 +97,9 @@ function BoardEdit() {
         }
     };
 
-    const handleBackClick = () => {
-        navigate(-1);
-    };
-
-    const handleModalClose = () => {
-        setIsModalOpen(false);
-    };
-
-    const handleModalConfirm = () => {
-        navigate(`/posts/${memberId}/${postId}`);
-    };
+    const handleBackClick = () => navigate(-1);
+    const handleModalClose = () => setIsModalOpen(false);
+    const handleModalConfirm = () => navigate(`/posts/${memberId}/${postId}`);
 
     return (
         <div>
@@ -177,7 +159,7 @@ function BoardEdit() {
                 />
             )}
         </div>
-    )
+    );
 }
 
 export default BoardEdit;

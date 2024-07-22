@@ -37,7 +37,7 @@ function Written_post() {
             <div className="header">
                 <FaArrowLeft
                     style={{ fontSize: '25px', strokeWidth: '0.1', cursor: 'pointer', marginLeft: '15px' }}
-                    onClick={() => navigate(-1)}
+                    onClick={() => navigate(`/members/${memberId}`)}
                 />
                 <p>작성한 글 보기</p>
             </div>

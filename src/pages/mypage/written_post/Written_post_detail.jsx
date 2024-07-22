@@ -17,8 +17,8 @@ function Written_post_detail() {
     const navigate = useNavigate();
 
     const apiClient = axios.create({
-        baseURL: 'http://3.36.56.20:8080', // API URL
-        timeout: 10000, // 요청 타임아웃 설정 (10초)
+        baseURL: 'http://3.36.56.20:8080',
+        timeout: 10000,
         headers: {
             'Content-Type': 'application/json',
         },
@@ -26,51 +26,40 @@ function Written_post_detail() {
 
     const [post, setPost] = useState({});
     const [comments, setComments] = useState([]);
-    const [showPostModal, setShowPostModal] = useState(false);  // 글 수정or삭제 모달창 띄우기
+    const [showPostModal, setShowPostModal] = useState(false);
     const [memberName, setMemberName] = useState('');
 
     useEffect(() => {
         apiClient.get(`/postdetail/${postId}`)
             .then(response => {
                 const currentPost = response.data.post;
-                const attachmentNames = response.data.post.attachmentFlag === 'Y' ? (post.attachmentNames || []) : [];
+                const attachmentNames = currentPost.attachment_flag === 'Y' ? (currentPost.attachment_names || []) : [];
                 if (currentPost) {
                     setPost({
                         ...currentPost,
                         attachmentNames: attachmentNames
                     });
-                    return apiClient.get(`/members/${currentPost.member.id}`);   // 멤버 이름을 찾기 위함
+                    return apiClient.get(`/members/${currentPost.member.id}`);
                 } else {
                     throw new Error('해당 글을 찾을 수 없습니다.');
                 }
             })
             .then(response => {
-                setMemberName(response.data.name);  // 멤버 이름 설정
-                return apiClient.get(`/posts/${postId}/comments`);  // 댓글 목록 조회
+                setMemberName(response.data.name);
+                return apiClient.get(`/posts/${postId}/comments`);
             })
             .then(response => {
-                setComments(response.data);  // 댓글 목록 설정
+                setComments(response.data);
             })
             .catch(error => {
                 console.error('작성한 글 또는 댓글 조회 중 오류 발생:', error);
             });
-    }, [memberId, postId]);
+    }, [postId]);
 
-    const handleBackClick = () => {
-        navigate(-1);
-    };
-
-    const handlePostDotClick = () => {
-        setShowPostModal(true);
-    };
-
-    const closeModal = () => {
-        setShowPostModal(false);
-    };
-
-    const handleEditClick = () => {
-        navigate(`/posts_edit/${postId}`);
-    };
+    const handleBackClick = () => navigate(`/post_list/${memberId}`);
+    const handlePostDotClick = () => setShowPostModal(true);
+    const closeModal = () => setShowPostModal(false);
+    const handleEditClick = () => navigate(`/posts_edit/${postId}`);
 
     return (
         <div>
