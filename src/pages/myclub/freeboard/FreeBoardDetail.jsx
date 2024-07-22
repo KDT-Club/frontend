@@ -18,13 +18,14 @@ function formatDate(dateString) {
 function FreeBoardDetail() {
     let {clubId, postId} = useParams();
     const navigate = useNavigate();
-    const [memberId, setMemberId] = useState(null);
 
+    const [memberId, setMemberId] = useState(null);
     const [showPostModal, setShowPostModal] = useState(false);  // 글 수정or삭제 모달창 띄우기
     const [showCommentModal, setShowCommentModal] = useState(false);  // 댓글 수정or삭제 모달창 띄우기
     const [modalPosition, setModalPosition] = useState({ top: '0px', left: '0px' }); // 모달창 위치 설정
 
     const [post, setPost] = useState('');
+    const [attachmentNames, setAttachmentNames] = useState([]);
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState(''); //댓글 입력
 
@@ -58,10 +59,6 @@ function FreeBoardDetail() {
             }
         }
     };
-
-    // useEffect(() => {
-    //     fetchUserId();
-    // }, []);
 
     const handleBackClick = () => {
         navigate(`/clubs/${clubId}/freeboardlist`);
@@ -97,6 +94,7 @@ function FreeBoardDetail() {
             try {
                 const response = await apiClient.get(`/clubs/${clubId}/board/4/posts/${postId}`);
                 setPost(response.data.post);
+                setAttachmentNames(response.data.attachmentNames || []);
             } catch (error) {
                 console.error('게시글 조회 에러 발생:', error);
                 if (error.response) {
@@ -239,9 +237,32 @@ function FreeBoardDetail() {
                             textAlign: "start"
                         }}
                     >{post.content}</p>
+                    <div className="image-container">
+                        {attachmentNames.length > 0 ? (
+                            attachmentNames.map((url, index) => (
+                                <img
+                                    key={index}
+                                    src={url}
+                                    alt={`첨부 이미지 ${index + 1}`}
+                                    // style={{
+                                    //     width: "100%",
+                                    //     maxWidth: "250px",
+                                    //     marginBottom: "10px",
+                                    //     borderRadius: "8px"
+                                    // }}
+                                    onError={(e) => {
+                                        console.error(`이미지 로딩 오류 ${index}:`, e);
+                                        e.target.style.display = 'none';
+                                    }}
+                                />
+                            ))
+                        ) : (
+                            <p></p>
+                        )}
+                    </div>
                 </div>
             )}
-            <div style={{ borderBottom: '1.5px solid dimgrey', marginTop: '24px' }}></div>
+            <div style={{borderBottom: '1.5px solid dimgrey', marginTop: '24px'}}></div>
             <div className="comment-container">
                 {comments.length > 0 ? (
                     comments.map(comment => (
