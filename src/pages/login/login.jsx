@@ -108,21 +108,6 @@ function Login() {
                 </p>
                 <button type="submit" className="login-btn">Login</button>
             </form>
-            <div className="social-login-container">
-                <GoogleLogin
-                    onSuccess={responseMessage}
-                    onError={errorMessage}
-                    size="large"
-                    buttonText="Sign in with Google"
-                    shape="rectangular"
-                    logo_alignment="left"
-                    width="320"
-                    height="300"
-                />
-            </div>
-            <button onClick={handleKakaoLogin} className="social-login kakao-btn">
-                <img src={kakao} alt="KakaoTalk" />
-            </button>
         </div>
     );
 }

@@ -174,8 +174,10 @@ function CommunityMain() {
                             key={index}
                             className={`menu-all ${activeIndex === index ? 'active' : ''}`}
                             onClick={() => handleMenuClick(index)}
-                            style={{ border: activeIndex === index ? '2px solid black' : '0.5px solid gray' }}
-                        >
+                            style={{border: activeIndex === index ? '2px solid black' : '2px solid lightgray'
+                            ,  color: activeIndex === index ? 'black' : 'lightgray',
+                            fontWeight: activeIndex === index ? '700' : '500',
+                            width: '114px', marginTop:'20px'}}>
                             <p>{item}</p>
                         </div>
                     ))}

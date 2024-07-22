@@ -18,6 +18,11 @@ function MainPage() {
         fetchAllClubs();
     }, []);
 
+    useEffect(() => {
+        setActiveIndex(0);
+        setFilteredClubs(allClubs);
+    }, [allClubs]);
+
     const fetchAllClubs = async () => {
         try {
             const response = await axios.get("https://zmffjq.store/clubs");
@@ -90,7 +95,10 @@ function MainPage() {
                             key={index}
                             className={`menu-all ${activeIndex === index ? 'active' : ''}`}
                             onClick={() => handleMenuClick(index, item)}
-                            style={{border: activeIndex === index ? '2px solid black' : '0.5px solid gray'}}
+                            style={{border: activeIndex === index ? '2px solid black' : '2px solid lightgray'
+                                ,  color: activeIndex === index ? 'black' : 'lightgray',
+                                fontWeight: activeIndex === index ? '700' : '500',
+                                width: '100px', marginTop:'20px'}}
                         >
                             <p>{item}</p>
                         </div>
