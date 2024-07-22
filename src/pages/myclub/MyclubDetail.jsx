@@ -4,8 +4,8 @@ import "./myclubdetail.css";
 import Footer from '../../components/footer/Footer.jsx';
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import MyclubHeader from "./DetailHeader/MyclubHeader.jsx";
-import {FaArrowLeft} from "react-icons/fa6";
-import {FiMoreVertical} from "react-icons/fi";
+// import {FaArrowLeft} from "react-icons/fa6";
+// import {FiMoreVertical} from "react-icons/fi";
 
 function MyclubDetail() {
     const { id } = useParams();
@@ -52,6 +52,19 @@ function MyclubDetail() {
                 } else {
                     setFreeboardPosts([freeboardResponse.data]);
                 }
+
+                // 공지사항 정렬
+                const sortedNoticePosts = Array.isArray(noticeResponse.data)
+                    ? noticeResponse.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+                    : [noticeResponse.data];
+                setNoticePosts(sortedNoticePosts);
+
+                // 자유게시판 정렬
+                const sortedFreeboardPosts = Array.isArray(freeboardResponse.data)
+                    ? freeboardResponse.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+                    : [freeboardResponse.data];
+                setFreeboardPosts(sortedFreeboardPosts);
+
             } catch (error) {
                 console.error('API 호출 중 오류 발생:', error.response || error);
                 setError('게시글을 불러오는데 실패했습니다. 다시 시도해주세요.');

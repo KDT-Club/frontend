@@ -47,7 +47,7 @@ const MyclubMain = () => {
         const queryParams = new URLSearchParams(location.search);
         ///const memberId = queryParams.get('memberId');
         const memberId = queryParams.get('memberId') || localStorage.getItem('memberId');
-        navigate(`/clubs/${clubId}`, { state: { clubName: club.clubName, memberId } });
+        navigate(`/clubs/${clubId}/myclub`, { state: { clubName: club.clubName, memberId } });
     };
 
     return (

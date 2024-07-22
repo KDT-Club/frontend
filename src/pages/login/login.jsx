@@ -29,6 +29,8 @@ function Login() {
             const data = response.data;
 
             if (data.message === '성공') {
+                // 로그인 성공 시 memberId를 로컬 스토리지에 저장
+                localStorage.setItem('memberId', data.memberId);
                 console.log('로그인 성공, 메인 페이지로 이동합니다.');
                 navigate('/main');
             } else {

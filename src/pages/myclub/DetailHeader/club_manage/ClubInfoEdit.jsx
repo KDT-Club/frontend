@@ -78,7 +78,7 @@ function ClubInfoEdit() {
     };
 
     const handleBackClick = () => {
-        navigate(`/clubs/${id}`, { state: { isMenuOpen: location.state?.isMenuOpen } });
+        navigate(`/clubs/${id}/myclub`, { state: { isMenuOpen: location.state?.isMenuOpen } });
     };
 
     const handleSubmit = () => {
@@ -106,7 +106,7 @@ function ClubInfoEdit() {
             updateOtherInfo();
         } else {
             console.log('변경된 정보가 없습니다.');
-            navigate(`/clubs/${id}`, {state: {isMenuOpen: location.state?.isMenuOpen}});
+            navigate(`/clubs/${id}/myclub`, {state: {isMenuOpen: location.state?.isMenuOpen}});
         }
     }
 

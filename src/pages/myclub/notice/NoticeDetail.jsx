@@ -1,11 +1,12 @@
 //동아리 공지사항 -  글 상세
 import React, { useEffect, useState } from 'react';
-import {useParams, useNavigate, useLocation} from 'react-router-dom';
+import {useParams, useNavigate} from 'react-router-dom';
 import {FaArrowLeft} from 'react-icons/fa6';
 import { FiMoreVertical, FiSend } from "react-icons/fi";
 import axios from "axios";
 import Modal_post from "../../../components/modal/Modal_post.jsx";
 import Modal_comment from "../../../components/modal/Modal_comment.jsx";
+axios.defaults.withCredentials = true;
 
 function formatDate(dateString) {
     const date = new Date(dateString);
@@ -17,7 +18,6 @@ function formatDate(dateString) {
 function NoticeDetail() {
     let {clubId, postId} = useParams();
     const navigate = useNavigate();
-    const location = useLocation();
     const [memberId, setMemberId] = useState(null);
 
     const [showPostModal, setShowPostModal] = useState(false);  // 글 수정or삭제 모달창 띄우기
@@ -34,7 +34,7 @@ function NoticeDetail() {
     const [editedCommentContent, setEditedCommentContent] = useState('');
 
     const apiClient = axios.create({
-        baseURL: 'http://3.36.56.20:8080', // API URL
+        baseURL: 'https://zmffjq.store', // API URL
         timeout: 10000, // 요청 타임아웃 설정 (10초)
         headers: {
             'Content-Type': 'application/json',
@@ -44,7 +44,7 @@ function NoticeDetail() {
     //-------------------------------------------------------------------------
     const fetchUserId = async () => {
         try {
-            const response = await apiClient.get("https://zmffjq.store/getUserId", {
+            const response = await apiClient.get("/getUserId", {
                 withCredentials: true // Include this if the endpoint requires credentials
             });
             console.log(response.data);
@@ -59,9 +59,9 @@ function NoticeDetail() {
         }
     };
 
-    useEffect(() => {
-        fetchUserId();
-    }, []);
+    // useEffect(() => {
+    //     fetchUserId();
+    // }, []);
 
     const handleBackClick = () => {
         navigate(`/clubs/${clubId}/noticelist`);
@@ -95,8 +95,8 @@ function NoticeDetail() {
     useEffect(() => {
         const fetchPost = async () => {
             try {
-                const response = await axios.get(`https://zmffjq.store/clubs/${clubId}/board/2/posts/${postId}`);
-                setPost(response.data);
+                const response = await apiClient.get(`/clubs/${clubId}/board/2/posts/${postId}`);
+                setPost(response.data.post);
             } catch (error) {
                 console.error('게시글 조회 에러 발생:', error);
                 if (error.response) {
@@ -104,21 +104,22 @@ function NoticeDetail() {
                 }
             }
         };
-
-        const fetchComments = async () => {
-            try {
-                const response = await axios.get(`https://zmffjq.store/posts/${postId}/comments`);
-                setComments(response.data);
-            } catch (error) {
-                console.error('댓글 조회 에러 발생:', error);
-                if (error.response) {
-                    console.error('댓글 조회 실패', error.response.status);
-                }
-            }
-        };
         fetchPost();
         fetchComments();
+        fetchUserId();
     }, [clubId, postId]);
+
+    const fetchComments = async () => {
+        try {
+            const response = await apiClient.get(`/posts/${postId}/comments`);
+            setComments(response.data);
+        } catch (error) {
+            console.error('댓글 조회 에러 발생:', error);
+            if (error.response) {
+                console.error('댓글 조회 실패', error.response.status);
+            }
+        }
+    };
 
     //댓글 POST
     const handleCommentChange = (e) => {
@@ -128,17 +129,14 @@ function NoticeDetail() {
         e.preventDefault();
         if (newComment.trim() && memberId) { // memberId가 존재하는지 확인
             try {
-                const response = await axios.post(`https://zmffjq.store/posts/${postId}/comments`, {
+                const response = await apiClient.post(`/posts/${postId}/comments`, {
                     memberId: memberId,
                     content: newComment
                 });
-                if (response.status === 200) {
-                    const newCommentData = response.data;
-                    // 서버로부터 받은 새로운 댓글 상태 업데이트
-                    setComments(prevComments => [...prevComments, newCommentData]);
+                if (response.data.message === '성공') {
+                    //댓글 추가 성공 후 전체 댓글 목록 다시 불러옴
+                    await fetchComments();
                     setNewComment('');
-                } else {
-                    console.error("댓글 작성 실패", response.status);
                 }
             } catch (error) {
                 console.error('댓글 작성 중 에러 발생', error);
@@ -157,8 +155,7 @@ function NoticeDetail() {
     const handleSaveEditedComment = async () => {
         if (editingCommentId && editedCommentContent.trim() && memberId) {
             try {
-                const response = await axios.put(`https://zmffjq.store/posts/${postId}/${editingCommentId}`, {
-                    memberId: memberId,
+                const response = await apiClient.put(`/posts/${postId}/${editingCommentId}`, {
                     content: editedCommentContent
                 });
                 if (response.status === 200) {

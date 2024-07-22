@@ -4,7 +4,7 @@ import { FaRegBookmark } from 'react-icons/fa';
 import { PiUsersThree } from "react-icons/pi";
 import { IoHomeOutline } from "react-icons/io5";
 import { LuUserSquare } from "react-icons/lu";
-import {Link, useLocation, useParams} from 'react-router-dom';
+import {Link, useLocation} from 'react-router-dom';
 import axios from "axios";
 
 function Footer() {
