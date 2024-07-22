@@ -98,13 +98,6 @@ function FreeBoardWrite() {
             return;
         }
         try {
-            console.log('전송할 데이터:', {
-                title,
-                content,
-                attachment_flag: attachmentNames.length > 0 ? 'Y' : 'N',
-                attachment_names: attachmentNames,
-                club_name: clubName,
-            });
             const response = await apiClient.post(`/club/${id}/board/4/posts`, {
                 title,
                 content,
@@ -166,10 +159,18 @@ function FreeBoardWrite() {
                             style={{display: 'none'}}
                             ref={fileInputRef}
                         />
-                        <button type="button" onClick={handleFileInputClick}
-                                style={{cursor: 'pointer', marginTop: '10px'}}>
+                        <button
+                            type="button" onClick={handleFileInputClick}
+                            style={{
+                                cursor: 'pointer',
+                                marginTop: '10px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: "center",
+                            }}
+                        >
                             <LuImagePlus style={{fontSize: '30px'}}/>
-                            <span style={{marginLeft: "10px"}}>
+                            <span style={{marginLeft: "20px"}}>
                                 {uploading ? "이미지 업로드 중..." : "첨부할 사진을 선택하세요."}
                             </span>
                         </button>
