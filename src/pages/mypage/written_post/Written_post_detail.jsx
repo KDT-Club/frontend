@@ -29,15 +29,16 @@ function Written_post_detail() {
     const [showPostModal, setShowPostModal] = useState(false);  // 글 수정or삭제 모달창 띄우기
     const [memberName, setMemberName] = useState('');
 
-
     useEffect(() => {
-        apiClient.get(`/posts/${memberId}`)
+        apiClient.get(`/postdetail/${postId}`)
             .then(response => {
-                const allPosts = response.data;
-                const currentPost = allPosts.find(post => post.id === parseInt(postId));
-
+                const currentPost = response.data.post;
+                const attachmentNames = response.data.post.attachmentFlag === 'Y' ? (post.attachmentNames || []) : [];
                 if (currentPost) {
-                    setPost(currentPost);
+                    setPost({
+                        ...currentPost,
+                        attachmentNames: attachmentNames
+                    });
                     return apiClient.get(`/members/${currentPost.member.id}`);   // 멤버 이름을 찾기 위함
                 } else {
                     throw new Error('해당 글을 찾을 수 없습니다.');
@@ -55,8 +56,6 @@ function Written_post_detail() {
             });
     }, [memberId, postId]);
 
-    console.log(post)
-
     const handleBackClick = () => {
         navigate(-1);
     };
@@ -72,8 +71,6 @@ function Written_post_detail() {
     const handleEditClick = () => {
         navigate(`/posts_edit/${postId}`);
     };
-
-
 
     return (
         <div>
@@ -122,6 +119,18 @@ function Written_post_detail() {
                         textAlign: "start"
                     }}
                 >{post.content}</p>
+                {post.attachmentNames && post.attachmentNames.length > 0 && (
+                    <div style={{ marginTop: '20px' }}>
+                        {post.attachmentNames.map((url, index) => (
+                            <img
+                                key={index}
+                                src={url}
+                                alt={`image-${index}`}
+                                style={{ width: '100%', maxHeight: '400px', marginBottom: '10px', objectFit: 'cover' }}
+                            />
+                        ))}
+                    </div>
+                )}
             </div>
             <div style={{ borderBottom: '1.5px solid dimgrey', marginTop: '24px' }}></div>
             <div className="comment-container">

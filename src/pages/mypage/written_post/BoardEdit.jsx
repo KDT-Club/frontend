@@ -11,6 +11,7 @@ function BoardEdit() {
     let { postId } = useParams();
     const navigate = useNavigate();
 
+    const [memberId, setMemberId] = useState('');
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [attachmentNames, setAttachmentNames] = useState([]);
@@ -31,9 +32,9 @@ function BoardEdit() {
                 // 게시글 정보 가져오기
                 const response = await apiClient.get(`/postdetail/${postId}`);
                 const post = response.data;
-                console.log('Fetched post data:', response.data);
-                setTitle(post.title);
-                setContent(post.content);
+                setTitle(post.post.title);
+                setContent(post.post.content);
+                setAttachmentNames(Array.isArray(post.attachmentNames) ? post.attachmentNames : []);
             } catch (error) {
                 console.error('게시글 정보 가져오는 중 오류 발생:', error);
                 alert('게시글 정보를 불러오는 데 실패했습니다.');
@@ -41,6 +42,27 @@ function BoardEdit() {
         };
         fetchPostData();
     }, [postId]);
+
+    const fetchUserId = async () => {
+        try {
+            const response = await axios.get("https://zmffjq.store/getUserId", {
+                withCredentials: true // Include this if the endpoint requires credentials
+            });
+            console.log(response.data);
+            setMemberId(response.data.message); // memberId 상태 업데이트
+        } catch (error) {
+            if (error.response && error.response.status === 401) {
+                alert('Unauthorized access. Please log in.');
+            } else {
+                console.error('유저 아이디를 불러오는 중 에러 발생:', error);
+                alert('유저 아이디를 불러오는 중 에러가 발생했습니다.');
+            }
+        }
+    };
+
+    useEffect(() => {
+        fetchUserId();
+    }, []);
 
     // 제목 입력
     const handleTitleChange = (e) => {
@@ -54,11 +76,10 @@ function BoardEdit() {
 
     const handleFileChange = (e) => {
         const files = Array.from(e.target.files);
-        setSelectedFiles(files);
+        setSelectedFiles(prevSelectedFiles => [...prevSelectedFiles, ...files]);
         const fileUrls = files.map(file => URL.createObjectURL(file));
-        setAttachmentNames(fileUrls);
+        setAttachmentNames(prevAttachmentNames => [...prevAttachmentNames, ...fileUrls]);
 
-        console.log('Selected files:', files);
         console.log('Attachment URLs:', fileUrls);
     };
 
@@ -95,7 +116,7 @@ function BoardEdit() {
     };
 
     const handleModalConfirm = () => {
-        navigate(-1);
+        navigate(`/posts/${memberId}/${postId}`);
     };
 
     return (

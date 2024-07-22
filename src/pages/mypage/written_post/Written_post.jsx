@@ -3,7 +3,6 @@ import axios from "axios";
 import './written_post.css'
 import {useNavigate, useParams} from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa6";
-import postData from "../../myclub/data/postData.jsx";
 
 function Written_post() {
     const navigate = useNavigate();
@@ -32,8 +31,6 @@ function Written_post() {
                  console.error('작성한 글 목록 조회 중 오류 발생:', error);
              });
     }, [memberId]);
-
-    console.log(list)
 
     return (
         <div className="Written_post">

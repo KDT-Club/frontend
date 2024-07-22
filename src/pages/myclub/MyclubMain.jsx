@@ -36,7 +36,6 @@ const MyclubMain = () => {
                 }
             } catch (error) {
                 console.error('동아리 목록을 가져오는 중 에러 발생', error);
-                console.log(clubs);
             }
         };
         fetchClubs();
