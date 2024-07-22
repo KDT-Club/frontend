@@ -81,6 +81,11 @@ function Edit_info() {
         };
         apiClient.post(`/members/${memberId}`, requestBody)
             .then(response => {
+                // 로컬 스토리지의 userInfo 업데이트
+                const updatedUserInfo = JSON.parse(localStorage.getItem('userInfo'));
+                updatedUserInfo.memberImageURL = data.memberImageURL;
+                localStorage.setItem('userInfo', JSON.stringify(updatedUserInfo));
+
                 handleOpenOkModal("수정이 완료되었습니다.", () => navigate(-1));
             })
             .catch(error => {

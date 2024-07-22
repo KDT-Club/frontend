@@ -13,7 +13,7 @@ const ClubDetailPage = () => {
     const [club, setClub] = useState(null);
     const [showJoinForm, setShowJoinForm] = useState(false);
     const [motivation, setMotivation] = useState('');
-    const [userInfo, setUserInfo] = useState({ name: '', username: '' });
+    const [userInfo, setUserInfo] = useState({ name: '', username: '', id: '', memberImageURL: '' });
     const [lastActivity, setLastActivity] = useState(null);
     const navigate = useNavigate();
 
@@ -25,7 +25,6 @@ const ClubDetailPage = () => {
                     const data = await response.json();
                     setClub(data);
 
-                    // 클럽 정보를 가져온 후 최근 활동 게시물 정보를 가져옵니다
                     if (data.id) {
                         fetchLastActivity(data.id);
                     }
@@ -41,9 +40,37 @@ const ClubDetailPage = () => {
 
         const storedUserInfo = localStorage.getItem('userInfo');
         if (storedUserInfo) {
-            setUserInfo(JSON.parse(storedUserInfo));
+            const parsedUserInfo = JSON.parse(storedUserInfo);
+            setUserInfo(parsedUserInfo);
+            // 로컬 스토리지의 이미지 URL을 사용하되, 없다면 서버에서 가져오기
+            if (parsedUserInfo.memberImageURL) {
+                setUserInfo(prevState => ({
+                    ...prevState,
+                    memberImageURL: parsedUserInfo.memberImageURL
+                }));
+            } else {
+                fetchMemberDetails(parsedUserInfo.id);
+            }
         }
     }, [clubName]);
+
+    const fetchMemberDetails = async (memberId) => {
+        try {
+            const response = await axios.get(`https://zmffjq.store/members/${memberId}`);
+            if (response.data) {
+                setUserInfo(prevState => ({
+                    ...prevState,
+                    memberImageURL: response.data.memberImageURL
+                }));
+                // 로컬 스토리지 업데이트
+                const updatedUserInfo = JSON.parse(localStorage.getItem('userInfo'));
+                updatedUserInfo.memberImageURL = response.data.memberImageURL;
+                localStorage.setItem('userInfo', JSON.stringify(updatedUserInfo));
+            }
+        } catch (error) {
+            console.error('Error fetching member details:', error);
+        }
+    };
 
     const fetchLastActivity = async (clubId) => {
         try {
@@ -99,7 +126,7 @@ const ClubDetailPage = () => {
                     <p>동아리 가입 신청</p>
                 </div>
                 <div className="user-info">
-                    <img src={profile} alt="profile" />
+                    <img src={userInfo.memberImageURL} alt="profile" />
                     <div className="profile-info">
                         <p style={{
                             fontWeight: 'bold',
