@@ -96,7 +96,7 @@ function NoticeList(){
     };
 
     const handleBackClick = () => {
-        navigate(`/clubs/${id}`);
+        navigate(`/clubs/${id}/myclub`);
     };
 
     return (

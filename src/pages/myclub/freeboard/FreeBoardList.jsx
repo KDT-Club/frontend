@@ -96,7 +96,7 @@ function FreeBoardList(){
     };
 
     const handleBackClick = () => {
-        navigate(`/clubs/${id}`);
+        navigate(`/clubs/${id}/myclub`);
     };
 
     return (
