@@ -5,6 +5,7 @@ import '../../notice/WriteAndEdit/noticewrite.css';
 import {useNavigate, useParams} from "react-router-dom";
 import { FiX, FiCheck } from "react-icons/fi";
 import { LuImagePlus } from "react-icons/lu";
+axios.defaults.withCredentials = true;
 
 function FreeBoardWrite() {
     let {id} = useParams();
@@ -13,33 +14,17 @@ function FreeBoardWrite() {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [attachmentNames, setAttachmentNames] = useState([]);
+    const [uploading, setUploading] = useState(false); // 이미지 업로드 중 여부를 관리
 
     const [clubName, setClubName] = useState('');
 
     useEffect(() => {
-        const fetchClubInfo = async () => {
-            try {
-                // 1. 현재 로그인한 사용자 정보 가져오기
-                const userResponse = await axios.get(''); //로그인 정보 받을 수 있는 url
-                const memberId = userResponse.data.memberId;
-
-                // 2. 해당 사용자의 동아리 목록 가져오기
-                const clubsResponse = await axios.get(`/clubs?memberId=${memberId}`);
-                const clubs = clubsResponse.data;
-
-                // 3. 현재 페이지의 id와 일치하는 동아리 찾고 clubName 얻기
-                const club = clubs.find(club => club.clubId === parseInt(id));
-                if (club) {
-                    setClubName(club.clubName);
-                } else {
-                    throw new Error('해당 동아리를 찾을 수 없습니다.');
-                }
-            } catch (error) {
-                console.error('정보를 가져오는 중 오류 발생:', error);
-                alert('정보를 불러오는 데 실패했습니다.');
-            }
-        };
-        fetchClubInfo();
+        const storedClubName = localStorage.getItem(`clubName_${id}`);
+        if (storedClubName) {
+            setClubName(storedClubName);
+        } else {
+            alert('동아리 조회 실패. 다시 시도해주세요.');
+        }
     }, [id]);
 
     // 제목 입력
@@ -56,49 +41,85 @@ function FreeBoardWrite() {
     const getPresignedUrl = async (file) => {
         try {
             const filename = encodeURIComponent(file.name);
-            const response = await axios.get(`/presigned-url?filename=${filename}`);
+            const response = await axios.get(`https://zmffjq.store/presigned-url?filename=${filename}`);
             const presignedUrl = response.data;
 
             await axios.put(presignedUrl, file, {
                 headers: {
                     'Content-Type': file.type,
-                },
+                }
             });
             return presignedUrl.split("?")[0]; // 이미지 URL 반환
         } catch (error) {
             console.error('Presigned URL 요청 또는 이미지 업로드 실패:', error);
+            if (error.response) {
+                console.error('Error response:', error.response.data);
+                console.error('Error status:', error.response.status);
+            }
             throw error;
         }
     };
 
     // 첨부 파일 선택
+    // const handleFileChange = async (e) => {
+    //     const selectedFiles = Array.from(e.target.files);
+    //     const urls = await Promise.all(selectedFiles.map(file => getPresignedUrl(file)));
+    //     setAttachmentNames(urls);
+    // };
     const handleFileChange = async (e) => {
         const selectedFiles = Array.from(e.target.files);
-        const urls = await Promise.all(selectedFiles.map(file => getPresignedUrl(file)));
-        setAttachmentNames(urls);
+        setUploading(true);
+
+        try {
+            const urls = await Promise.all(selectedFiles.map(file => getPresignedUrl(file)));
+            setAttachmentNames(urls);
+
+            // 업로드된 이미지 표시
+            const uploadedImagesDiv = document.getElementById('uploaded-images');
+            uploadedImagesDiv.innerHTML = '';
+            urls.forEach(url => {
+                const imgElement = document.createElement('img');
+                imgElement.src = url;
+                imgElement.style.width = '100px';
+                imgElement.style.height = '100px';
+                imgElement.style.margin = '10px';
+                uploadedImagesDiv.appendChild(imgElement);
+            });
+            console.log('업로드된 이미지 URL들:', urls);
+        } catch (error) {
+            console.error('이미지 업로드 중 오류 발생:', error);
+            alert('이미지 업로드 중 오류가 발생했습니다. 다시 시도해주세요.');
+        } finally {
+            setUploading(false);
+        }
     };
 
     // 글쓰기 폼 제출
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!clubName) {
-            alert('동아리 정보를 불러오는 중 오류가 발생했습니다. 페이지를 새로고침 후 다시 시도해주세요.');
+            alert('동아리 정보를 불러오는 중 오류가 발생했습니다. 다시 시도해주세요.');
             return;
         }
+
+        if (!title.trim() || !content.trim()) {
+            alert('제목과 내용을 모두 입력해주세요.');
+            return;
+        }
+
         try {
-            const response = await axios.post(`/club${id}/board/4/posts`, {
+            const response = await axios.post(`https://zmffjq.store/club/${id}/board/4/posts`, {
                 title,
                 content,
                 attachment_flag: attachmentNames.length > 0 ? 'Y' : 'N',
                 attachment_names: attachmentNames,
                 club_name: clubName,
             });
-            if (response.status === 200 || response.status === 201) {
-                alert('게시글 작성 완료');
-                navigate(`/clubs/${id}/freeboardlist`);
-            }
+            console.log('서버 응답:', response.data);
+            alert('게시글 작성 완료');
+            navigate(`/clubs/${id}/freeboardlist`);
         } catch (error) {
-            console.error('게시글 작성 중 오류 발생:', error);
+            console.error('글 작성 중 오류 발생:', error.response?.data || error.message);
             alert('글 작성 중 오류가 발생했습니다. 다시 시도해주세요.');
         }
     };
@@ -147,7 +168,13 @@ function FreeBoardWrite() {
                                 onChange={handleFileChange}
                             />
                         </label>
-                        <div style={{marginLeft: "10px"}}>첨부할 사진을 선택하세요.</div>
+                        <div style={{marginLeft: "10px"}}>
+                            {uploading ? (
+                                <span>이미지 업로드 중...</span>
+                            ) : (
+                                <span>첨부할 사진을 선택하세요.</span>
+                            )}
+                        </div>
                     </div>
                 </form>
                 <div id="uploaded-images">

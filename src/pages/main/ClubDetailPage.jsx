@@ -139,7 +139,7 @@ const ClubDetailPage = () => {
                 <h4>최근 활동</h4>
                 <div className="last-activity-text">
                     <div className="uno-cards">
-                        <img src={uno} alt="uno"/>
+                        <img src={club.clubImgUrl} alt="uno"/>
                     </div>
                     <p>{lastActivity.date}</p>
                 </div>

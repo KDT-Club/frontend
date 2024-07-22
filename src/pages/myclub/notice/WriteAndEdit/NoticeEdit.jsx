@@ -7,29 +7,55 @@ import { FiX, FiCheck } from "react-icons/fi";
 import { LuImagePlus } from "react-icons/lu";
 
 function NoticeEdit() {
-    let { id, postId } = useParams();
     const navigate = useNavigate();
-
+    let { clubId, postId } = useParams();
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [attachmentNames, setAttachmentNames] = useState([]);
+    const [memberId, setMemberId] = useState(null);
+
+    const apiClient = axios.create({
+        baseURL: 'https://zmffjq.store',
+        timeout: 10000, // 요청 타임아웃 설정 (10초)
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+
+    const fetchUserId = async () => {
+        try {
+            const response = await apiClient.get("/getUserId", {
+                withCredentials: true // Include this if the endpoint requires credentials
+            });
+            console.log(response.data);
+            setMemberId(response.data.message); // memberId 상태 업데이트
+        } catch (error) {
+            if (error.response && error.response.status === 401) {
+                alert('Unauthorized access. Please log in.');
+            } else {
+                console.error('유저 아이디를 불러오는 중 에러 발생:', error);
+                alert('유저 아이디를 불러오는 중 에러가 발생했습니다.');
+            }
+        }
+    };
 
     useEffect(() => {
         const fetchPostData = async () => {
             try {
                 //게시글 정보 가져오기
-                const response = await axios.get(`/club${id}/board/2/posts/${postId}`);
-                const post = response.data;
+                const response = await apiClient.get(`/clubs/${clubId}/board/2/posts/${postId}`);
+                const post = response.data.post;
                 setTitle(post.title);
                 setContent(post.content);
-                setAttachmentNames(post.attachmentNames || []);
+                setAttachmentNames(response.data.attachmentNames || []);
             } catch (error) {
                 console.error('게시글 정보 가져오는 중 오류 발생:', error);
                 alert('게시글 정보를 불러오는 데 실패했습니다.');
             }
         };
         fetchPostData();
-    }, [id, postId]);
+        fetchUserId();
+    }, [clubId, postId]);
 
     // 제목 입력
     const handleTitleChange = (e) => {
@@ -45,13 +71,22 @@ function NoticeEdit() {
     const getPresignedUrl = async (file) => {
         try {
             const filename = encodeURIComponent(file.name);
-            const response = await axios.get(`/presigned-url?filename=${filename}`);
-            const presignedUrl = response.data;
+            const response = await apiClient.get(`/presigned-url?filename=${filename}`);
+
+            console.log("Server response:", response.data.url); // 서버 응답 전체 출력
+
+            const presignedUrl = response.data.url;
+            if (!presignedUrl) {
+                throw new Error('서버로부터 URL 받을 수 없음');
+            }
+            
+            console.log("Fetched Presigned URL:", presignedUrl);
 
             await axios.put(presignedUrl, file, {
                 headers: {
                     'Content-Type': file.type,
                 },
+                withCredentials: false
             });
             return presignedUrl.split("?")[0]; // 이미지 URL 반환
         } catch (error) {
@@ -63,7 +98,17 @@ function NoticeEdit() {
     // 첨부 파일 선택
     const handleFileChange = async (e) => {
         const selectedFiles = Array.from(e.target.files);
-        const urls = await Promise.all(selectedFiles.map(file => getPresignedUrl(file)));
+        const urls = await Promise.all(selectedFiles.map(async (file) => {
+            try {
+                const presignedUrl = await getPresignedUrl(file);
+                console.log("Presigned URL:", presignedUrl);
+                return presignedUrl;
+            } catch (error) {
+                console.error('파일 업로드 중 오류 발생:', error);
+                alert('파일 업로드 중 오류가 발생했습니다.');
+                throw error;
+            }
+        }));
         setAttachmentNames([...attachmentNames, ...urls]);
     };
 
@@ -71,16 +116,17 @@ function NoticeEdit() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.put(`/posts/${postId}`, {
+            const response = await apiClient.put(`/posts/${postId}`, {
                 postId,
                 title,
                 content,
                 attachment_flag: attachmentNames.length > 0 ? 'Y' : 'N',
-                attachment_names: attachmentNames, //attachment_name: 첨부파일 이름 -> ???
+                attachment_names: attachmentNames,
             });
             if (response.status === 200 || response.status === 201) {
                 alert('수정 완료');
-                navigate(`/clubs/${id}/board/2/posts/${postId}`);
+                //navigate(`/clubs/${clubId}/board/2/posts/${postId}`);
+                navigate(-1)
             }
         } catch (error) {
             console.error('수정 중 오류 발생:', error);

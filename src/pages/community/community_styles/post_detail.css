@@ -1,6 +1,6 @@
 .post-detail {
     font-family: Arial, sans-serif;
-    width: 375px;
+    width: 350px;
     height: 833px;
     overflow: hidden;
 }
@@ -27,12 +27,18 @@ header {
 
 .delete-button {
     position: absolute;
+    width: 50px;
     right: 0;
     top: 0;
     background: none;
     border: none;
 }
 
+.modify-button {
+    position: absolute;
+    right: 20px;
+    top: 0;
+}
 
 .comment-input {
     display: flex;
