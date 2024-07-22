@@ -26,6 +26,7 @@
     border-color: #000;
     font-weight: bold;
 }
+
 .posts-container {
     margin-bottom: 20px;
 }
@@ -34,7 +35,6 @@
     border-bottom: 1px solid #eee;
     margin-top: 5px;
 }
-
 
 .write-button {
     display: block;

@@ -90,7 +90,7 @@ function signup () {
     return(
         <div>
             <div className="header-container">
-                <FaArrowLeft onClick={handleBackClick} style={{ cursor: 'pointer', marginTop:'-20px'}}/>
+                <FaArrowLeft onClick={handleBackClick} style={{ cursor: 'pointer', marginTop:'30px', marginLeft:'35px'}}/>
                 <div className="signup-header-center">
                     <Header_center/>
                 </div>
@@ -119,7 +119,6 @@ function signup () {
                             value={username}
                             onChange={(e) => setUserName(e.target.value)}
                         />
-                        <button onClick={handleDuplicateCheck} className="duplicate-check-btn">중복확인</button>
                     </div>
                 </div>
                 <div className="input-group">

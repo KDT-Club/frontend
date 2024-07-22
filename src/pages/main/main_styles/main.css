@@ -1,6 +1,6 @@
 .find-club {
-    width: 90%;
-    margin-left: 5%;
+    width: 350px;
+    margin: 0 auto;
 }
 
 .search-input-container {
@@ -9,18 +9,19 @@
 
 .search-input-container input {
     padding: 10px;
-    border: 1px solid #ccc;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
     border-radius: 20px;
     font-size: 16px;
+    border: none;
 }
 
 .search-icon {
     position: absolute;
-    right: 13px;
-    top: 42%;
-    border-radius: 10px;
+    right: 5px;
+    top: 50%;
+    border-radius: 20px;
     transform: translateY(-50%);
-    width: 40px;
+    width: 35px;
     height: 35px;
     padding: 7px;
     cursor: pointer;
@@ -34,6 +35,11 @@
     white-space: nowrap;
     flex-shrink: 0;
     -webkit-overflow-scrolling: touch;
+
+}
+
+.menu-container::-webkit-scrollbar {
+    display: none;
 }
 
 .menu-scroll {
@@ -43,9 +49,8 @@
 
 .menu-all {
     flex: 0 0 auto;
-    border: 1px solid #ccc;
+    border: 5px solid #ccc;
     border-radius: 20px;
-    width: 70%;
     padding: 5px;
     margin-top: 10px;
     margin-left: 10px;
@@ -56,21 +61,28 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+    padding-bottom: 70px;
+    padding-right: 10px;
+    padding-left: 10px;
 }
 
 .clubs-container {
-    border: 1px solid #ccc;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
     border-radius: 20px;
     width: calc(50% - 10px);
     margin-left: 5px;
     margin-right: 5px;
     margin-bottom: 20px;
     overflow-y: hidden;
+    padding: 7px;
+    height: 280px;
 }
 
 .clubs-logos {
     width: 100%;
     border-radius: 20px 20px 0 0;
+    height: 150px;
+    object-fit: scale-down;
 }
 
 .clubs-title {
@@ -79,5 +91,6 @@
 }
 
 .clubs-sm {
-    color: #ccc;
+    color: black;
+    font-size: 12px;
 }

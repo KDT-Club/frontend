@@ -1,37 +1,52 @@
-.club-detail-page {
-    padding: 20px;
+/*.club-detail-page {
     font-family: Arial, sans-serif;
+    background-color: yellow;
+    padding-left: 20px;
+    padding-right: 20px;
+}*/
+
+.club-detail-page {
+    font-family: Arial, sans-serif;
+    position: relative;
 }
 
 .header {
+    width: 100%;
     display: flex;
     align-items: center;
     margin-bottom: 20px;
-}
 
-.header h2 {
+    padding: 10px 0;
+}
+/*.header h2 {
     margin-left: 20px;
     font-size: 24px;
-}
+    background-color: #90EE90;
+}*/
 
 .club-info {
+    padding: 20px;
     margin-top: 10px;
-    margin-bottom: 20px;
     display: flex;
     align-items: flex-start;
-    overflow-y: auto;
     height: 25%;
 }
 
 .club-info img {
-    width: 45px;
-    height: 45px;
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+    object-fit: scale-down;
+    width: 90px;
+    height: 90px;
     border-radius: 50%;
     margin-bottom: 10px;
 }
 
 .club-info h3 {
-    margin-left: -40px;
+    border-bottom: dimgray 3px solid;
+    position: absolute;
+    margin-left: 20px;
+    font-weight: bold;
+    font-size: 25px;
 }
 
 .club-info-center {
@@ -42,6 +57,7 @@
 }
 
 .info-des{
+    margin-top: 60px;
     text-align: left;
     margin-left: 20px;
 }
@@ -50,17 +66,14 @@
     flex: 1;
 }
 
-.club-info h3 {
-    font-size: 20px;
-    margin-bottom: 10px;
-}
-
 .club-info p {
     margin-bottom: 8px;
     font-size: 14px;
 }
 
 .last-activity {
+    position: relative;
+    margin-top: 10px;
     margin-bottom: 20px;
     font-size: 18px;
 }
@@ -72,7 +85,8 @@
 }
 
 .last-activity h4 {
-    font-size: 18px;
+    font-size: 25px;
+    font-weight: bold;
     margin-bottom: 10px;
 }
 
@@ -84,7 +98,7 @@
     border-radius: 30px;
 }
 
-.uno-cards img {
+.uno-cards img {border-radius: 20px;
     width: 100%;
     height: 250px;
     margin-top: 10px;
@@ -93,6 +107,7 @@
 }
 
 .leader-info {
+    padding: 20px;
     margin-bottom: 20px;
 }
 
@@ -129,28 +144,34 @@
 }
 
 .join-button {
-    width: 100%;
-    padding: 15px;
+    width: 330px;
+    padding: 10px;
     background-color: #567cac;
     color: white;
     border: none;
     border-radius: 10px;
     font-size: 18px;
     cursor: pointer;
+    font-weight: bold;
+    height: 50px;
 }
 
 .join-form {
-    padding: 20px;
+    position: relative;
 }
 
 .join-form .header {
-    margin-bottom: 30px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 10px 0;
 }
 
 .user-info {
     display: flex;
     align-items: flex-start;
-    margin-bottom: 20px;
+    margin: 20px;
 }
 
 .user-info img {
@@ -169,12 +190,18 @@
 }
 
 .reason-input p {
+    margin-left: 20px;
+    font-weight: bold;
     text-align: left;
     margin-bottom: 20px;
     font-size: 25px;
 }
+
+textarea:focus {
+    outline:none;
+}
 .reason-input textarea {
-    width: 100%;
+    width: 400px;
     height: 400px;
     padding: 10px;
     border: 1px solid #ccc;
@@ -182,16 +209,16 @@
 }
 
 .submit-button {
-    width: 95%;
-    padding: 15px;
+    width: 330px;
+    padding: 10px;
     background-color: #567cac;
     display: flex;
+    font-weight: bold;
     justify-content: center;
     margin: 0 auto;
     position: fixed;
     left: 0;
     right: 0;
-    bottom: 20px;
     color: white;
     border: none;
     border-radius: 10px;
