@@ -4,8 +4,6 @@ import { FaArrowLeft } from "react-icons/fa";
 import '../../styles/App.css';
 import './main_styles/main.css';
 import './main_styles/club_detail.css';
-import dm from '../../images/DM.png';
-import profile from '../../images/profile.jpeg';
 import axios from 'axios';
 
 const ClubDetailPage = () => {
@@ -14,7 +12,7 @@ const ClubDetailPage = () => {
     const [showJoinForm, setShowJoinForm] = useState(false);
     const [motivation, setMotivation] = useState('');
     const [userInfo, setUserInfo] = useState({ name: '', username: '', id: '', memberImageURL: '' });
-    const [lastActivity, setLastActivity] = useState(null);
+    const [lastActivityImage, setLastActivityImage] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -25,8 +23,8 @@ const ClubDetailPage = () => {
                     const data = await response.json();
                     setClub(data);
 
-                    if (data.id) {
-                        fetchLastActivity(data.id);
+                    if (data.clubId) {
+                        fetchLastActivityImage(data.clubId);
                     }
                 } else {
                     console.error('Failed to fetch club details');
@@ -42,7 +40,6 @@ const ClubDetailPage = () => {
         if (storedUserInfo) {
             const parsedUserInfo = JSON.parse(storedUserInfo);
             setUserInfo(parsedUserInfo);
-            // 로컬 스토리지의 이미지 URL을 사용하되, 없다면 서버에서 가져오기
             if (parsedUserInfo.memberImageURL) {
                 setUserInfo(prevState => ({
                     ...prevState,
@@ -62,7 +59,6 @@ const ClubDetailPage = () => {
                     ...prevState,
                     memberImageURL: response.data.memberImageURL
                 }));
-                // 로컬 스토리지 업데이트
                 const updatedUserInfo = JSON.parse(localStorage.getItem('userInfo'));
                 updatedUserInfo.memberImageURL = response.data.memberImageURL;
                 localStorage.setItem('userInfo', JSON.stringify(updatedUserInfo));
@@ -72,18 +68,21 @@ const ClubDetailPage = () => {
         }
     };
 
-    const fetchLastActivity = async (clubId) => {
+    const fetchLastActivityImage = async (clubId) => {
         try {
             const response = await axios.get(`https://zmffjq.store/board/3/clubs/${clubId}/posts`);
             if (response.data && response.data.length > 0) {
-                // 가장 최근 게시물을 가져옵니다
-                setLastActivity(response.data[0]);
+                const lastPost = response.data[0];
+                const postResponse = await axios.get(`https://zmffjq.store/board/3/clubs/${clubId}/posts/${lastPost.postId}`);
+                const attachmentNames = postResponse.data.attachmentNames || [];
+                if (attachmentNames.length > 0) {
+                    setLastActivityImage(attachmentNames[0]);
+                }
             }
         } catch (error) {
-            console.error('Error fetching last activity:', error);
+            console.error('Error fetching last activity image:', error);
         }
     };
-
     const handleBackClick = () => {
         navigate('/main');
     };
@@ -156,15 +155,15 @@ const ClubDetailPage = () => {
         <div className="club-detail-page">
             <div className="header">
                 <FaArrowLeft
-                    style={{ fontSize: '25px', strokeWidth: '0.1', cursor: 'pointer', marginLeft: '15px' }}
+                    style={{fontSize: '25px', strokeWidth: '0.1', cursor: 'pointer', marginLeft: '15px'}}
                     onClick={handleBackClick}/>
                 <p>동아리 소개</p>
             </div>
             <hr/>
             <div className="club-info">
-                <img src={club.clubImgUrl} alt="club" />
+                <img src={club.clubImgUrl} alt="club"/>
                 <div className="club-info-text">
-                    <h3 style={{textAlign:"left", marginLeft:'20px'}}>{club.clubName}</h3>
+                    <h3 style={{textAlign: "left", marginLeft: '20px'}}>{club.clubName}</h3>
                     <p className="info-des">{club.clubSlogan}</p>
                     <div className="club-info-center">
                         <p>{club.description}</p>
@@ -178,13 +177,12 @@ const ClubDetailPage = () => {
                 <h4>최근 활동</h4>
                 <div className="last-activity-text">
                     <div className="uno-cards">
-                        {lastActivity && lastActivity.attachment_names && lastActivity.attachment_names.length > 0 ? (
-                            <img src={lastActivity.attachment_names[0]} alt="최근 활동" />
+                        {lastActivityImage ? (
+                            <img src={lastActivityImage} alt="최근 활동"/>
                         ) : (
-                            <img src={club.clubImgUrl} alt="기본 이미지" />
+                            <img src={club.clubImgUrl} alt="기본 이미지"/>
                         )}
                     </div>
-                    <p>{lastActivity ? new Date(lastActivity.createdAt).toLocaleDateString() : '최근 활동 없음'}</p>
                 </div>
             </div>
             <div className="leader-info">
