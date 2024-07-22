@@ -72,7 +72,7 @@ function CommunityMain() {
                                         <h3 style={{
                                             textAlign: "left",
                                             marginLeft: "10px",
-                                            marginBottom: "-5px",
+                                            marginBottom: "5px",
                                             fontWeight: "bold",
                                             fontSize: "20px"
                                         }}>{post.title}</h3>
@@ -81,7 +81,8 @@ function CommunityMain() {
                                                 overflow: "hidden",
                                                 textOverflow: "ellipsis",
                                                 whiteSpace: showFullContent ? "normal" : "nowrap",
-                                                maxWidth: showFullContent ? "none" : "450px"
+                                                maxWidth: showFullContent ? "none" : "450px",
+                                                marginBottom: "5px"
                                             }}>
                                                 {post.content}
                                             </p>
@@ -97,7 +98,7 @@ function CommunityMain() {
                                                         border: "none",
                                                         background: "none",
                                                         marginLeft: "-20px",
-                                                        padding: "0",
+                                                        padding: "0"
                                                     }}
                                                 >
                                                     {showFullContent ? "간략히" : "더 보기"}
@@ -109,6 +110,7 @@ function CommunityMain() {
                                             marginLeft: "10px",
                                             marginTop: "-5px",
                                             color: "gray",
+                                            marginBottom:"10px"
                                         }}>{new Date(post.createdAt).toLocaleDateString()}</p>
                                     </div>
                                 );
@@ -120,10 +122,16 @@ function CommunityMain() {
                             <button onClick={() => setIsWriteModalOpen(true)}
                                     style={{
                                         backgroundColor: "#7995b6",
-                                        width: '150px',
-                                        borderRadius: '20px',
-                                        marginTop: '20px',
-                                        color: 'white'
+                                        width: '90px',
+                                        borderRadius: '100px',
+                                        marginTop: '50px',
+                                        color: 'white',
+                                        marginLeft: '100px',
+                                        fontWeight: 'bold',
+                                        position:'fixed',
+                                        bottom: '100px',
+                                        right: '20px',
+                                        zIndex: '1000'
                                     }}>글쓰기
                             </button>
                         </div>

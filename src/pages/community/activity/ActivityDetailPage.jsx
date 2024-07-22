@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import './activity.css';
 import { FaArrowLeft } from "react-icons/fa6";
+import dm from "../../../images/DM.png";
 
 function ActivityDetailPage() {
     const navigate = useNavigate();
@@ -47,11 +48,24 @@ function ActivityDetailPage() {
         return <div>Loading...</div>;
     }
 
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        return date.toLocaleString('ko-KR', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    }
+
     return (
         <div>
             <div className="header">
-                <FaArrowLeft onClick={handleBack} />
-                <h2>활동내용</h2>
+                <FaArrowLeft
+                    style={{ fontSize: '25px', strokeWidth: '0.1', cursor: 'pointer', marginLeft: '15px' }}
+                    onClick={handleBack}/>
+                <p>활동 내용</p>
             </div>
             <div className="detail-info">
                 <img src={clubImgUrl} alt="club" className="clubs-logo" />

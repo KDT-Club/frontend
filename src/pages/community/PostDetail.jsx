@@ -18,11 +18,11 @@ function WriteModal({ onClose, onEdit, onDelete }) {
         <div className="modal-overlay">
             <div className="modal-content">
                 <div className="modal-header">
-                    <p style={{ marginBottom: '5px', padding: '3px' }}>게시글</p>
+                    <p style={{ marginBottom: '0px', padding: '3px' }}></p>
                     <hr style={{ marginLeft: '-20px', width: '120%' }}/>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '-5px' }}>
                         <button onClick={onEdit} style={{ padding: '3px', borderRight: '1px solid #ccc', height: '50px' }}>수정</button>
-                        <button onClick={onDelete} style={{ padding: '3px' }}>삭제</button>
+                        <button onClick={onDelete} style={{ padding: '5px' }}>삭제</button>
                     </div>
                 </div>
             </div>
@@ -303,9 +303,11 @@ function PostDetail() {
 
     return (
         <div className="post-detail">
-            <header>
-                <FaArrowLeft onClick={handleBack} style={{ cursor: 'pointer', marginLeft: '10px' }}/>
-                <h2 style={{ width: '70%', fontWeight: 'bold', fontSize: '20px', marginLeft: '10px' }}>게시물 내용</h2>
+            <div className="header">
+                <FaArrowLeft
+                    style={{ fontSize: '25px', strokeWidth: '0.1', cursor: 'pointer', marginLeft: '15px' }}
+                    onClick={handleBack}/>
+                <p>게시물 내용</p>
                 <button style={{ fontWeight: 'bold', fontSize: '20px', textAlign: 'right' }} onClick={handleWriteModalOpen}>:
                 </button>
                 {showWriteModal && (
@@ -315,21 +317,22 @@ function PostDetail() {
                         onDelete={handleDeletePost}
                     />
                 )}
-            </header>
+            </div>
             <hr style={{marginTop: '-30px'}}/>
             <div className="post-content">
-                <p style={{textAlign: 'left', marginLeft: '20px', marginTop: '20px', fontSize: '18px', color: 'gray'}}>
+                <p style={{textAlign: 'left', marginLeft: '20px', marginTop: '40px', fontSize: '18px', color: 'gray'}}>
                     {post && post.member && post.member.name} | {new Date(post.createdAt).toLocaleDateString()}
                 </p>
                 <h3 style={{
                     textAlign: 'left',
                     fontSize: '20px',
                     marginLeft: '20px',
-                    marginBottom: '10px',
+                    marginBottom: '40px',
+                    marginTop:'10px',
                     fontWeight: 'bold'
                 }}>{post.title}</h3>
                 <p style={{textAlign: 'left', marginLeft: '20px'}}>{post.content}</p>
-                <div className="post-photos" style={{marginLeft: '20px', marginTop: '20px'}}>
+                <div className="post-photos" style={{marginLeft: '0px', marginTop: '20px'}}>
                     {post.attachmentNames && post.attachmentNames.length > 0 ? (
                         post.attachmentNames.map((fileName, index) => {
                             const isImage = /\.(jpg|jpeg|png|gif)$/i.test(fileName);
@@ -339,7 +342,7 @@ function PostDetail() {
                                     key={index}
                                     src={fileName}
                                     alt={`Post photo ${index + 1}`}
-                                    style={{width: '100%', maxWidth: '500px', height: 'auto', marginBottom: '10px'}}
+                                    style={{width: '390px', maxWidth: '400px', height: 'auto', marginBottom: '20px'}}
                                     onError={(e) => {
                                         console.error(`이미지 로딩 오류 ${index}:`, e);
                                         e.target.style.display = 'none';
@@ -378,7 +381,7 @@ function PostDetail() {
                         <div style={{display: "flex", marginTop: '10px'}}>
                             {editingCommentId !== comment.commentId && (
                                 <>
-                                    <button className="modify-button" style={{textAlign: 'right', marginRight: '30px'}}
+                                    <button className="modify-button" style={{textAlign: 'right', marginRight: '20px'}}
                                             onClick={() => handleEditComment(comment.commentId, comment.content)}>수정
                                     </button>
                                     <button className="delete-button" style={{textAlign: 'right'}}
@@ -400,7 +403,7 @@ function PostDetail() {
                         style={{marginRight: '10px', padding: '10px', width:'500%'}}
                     />
                     <button type="submit"
-                            style={{border: '1px solid rgb(204, 204, 204, 0.7)', padding: '10px 20px'}}>작성
+                            style={{height:'45px',color:'white',fontWeight:'bold',backgroundColor:'#567cac',border: '1px solid rgb(204, 204, 204, 0.7)', padding: '10px 10px',marginRight:'15px'}}>작성
                     </button>
                 </form>
             </div>

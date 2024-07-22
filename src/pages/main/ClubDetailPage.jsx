@@ -4,6 +4,8 @@ import { FaArrowLeft } from "react-icons/fa";
 import '../../styles/App.css';
 import './main_styles/main.css';
 import './main_styles/club_detail.css';
+import dm from '../../images/DM.png';
+import profile from '../../images/profile.jpeg';
 import axios from 'axios';
 
 const ClubDetailPage = () => {
@@ -40,6 +42,7 @@ const ClubDetailPage = () => {
         if (storedUserInfo) {
             const parsedUserInfo = JSON.parse(storedUserInfo);
             setUserInfo(parsedUserInfo);
+            // 로컬 스토리지의 이미지 URL을 사용하되, 없다면 서버에서 가져오기
             if (parsedUserInfo.memberImageURL) {
                 setUserInfo(prevState => ({
                     ...prevState,
@@ -59,6 +62,7 @@ const ClubDetailPage = () => {
                     ...prevState,
                     memberImageURL: response.data.memberImageURL
                 }));
+                // 로컬 스토리지 업데이트
                 const updatedUserInfo = JSON.parse(localStorage.getItem('userInfo'));
                 updatedUserInfo.memberImageURL = response.data.memberImageURL;
                 localStorage.setItem('userInfo', JSON.stringify(updatedUserInfo));
@@ -83,6 +87,7 @@ const ClubDetailPage = () => {
             console.error('Error fetching last activity image:', error);
         }
     };
+
     const handleBackClick = () => {
         navigate('/main');
     };
@@ -188,15 +193,16 @@ const ClubDetailPage = () => {
             <div className="leader-info">
                 <h4>동아리 회장 연락처</h4>
                 <div className="leader-info-text">
-                    <img src={club.clubImgUrl} alt="club"/>
+                    <img src={club.member.memberImageURL} alt="club"/>
                     <div className="leader-info-name">
                         <p style={{
-                            fontSize: "20px"
+                            fontSize: "18px",
+                            fontWeight: 'bold'
                         }}>회장</p>
                         <p style={{
-                            color: "gray",
+                            color: "black",
                         }
-                        }>{club.member.id}</p>
+                        }>{club.member.name}</p>
                     </div>
                     <div className="leader-info-phone">
                         <p>{club.member.phone}</p>

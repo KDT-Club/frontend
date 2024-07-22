@@ -1,14 +1,14 @@
 .post-detail {
     font-family: Arial, sans-serif;
-    width: 350px;
-    height: 833px;
     overflow: hidden;
 }
 
-header {
+.header {
     display: flex;
     align-items: center;
+    height: 50px;
     margin-bottom: 20px;
+    padding: 10px 0;
 }
 
 .post-content {

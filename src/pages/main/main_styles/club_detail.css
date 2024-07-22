@@ -15,7 +15,6 @@
     display: flex;
     align-items: center;
     margin-bottom: 20px;
-
     padding: 10px 0;
 }
 /*.header h2 {
@@ -83,6 +82,9 @@
     border: 1px solid #ccc;
     border-radius: 20px;
     overflow-x: auto;
+    width:360px;
+    object-fit: scale-down;
+    margin-left: 15px;
 }
 
 .last-activity h4 {
@@ -99,7 +101,8 @@
     border-radius: 30px;
 }
 
-.uno-cards img {border-radius: 20px;
+.uno-cards img {
+    border-radius: 10px;
     width: 100%;
     height: 250px;
     margin-top: 10px;
@@ -123,6 +126,7 @@
     width: 60px;
     height: 60px;
     border-radius: 50%;
+    object-fit: cover;
 }
 
 .leader-info-text {
@@ -130,18 +134,18 @@
 }
 
 .leader-info-name {
-    margin-left: 10px;
+    margin-left: 20px;
 }
 
-
 .leader-info-phone {
+    margin-right: 80px;
     display: flex;
     flex-direction: column;
     text-align: right;
-    margin-top: 15px;
-    font-weight: bold;
-    font-size: 20px;
+    margin-top: 28px;
+    font-size: 15px;
     flex: 1;
+    position:relative;
 }
 
 .join-button {

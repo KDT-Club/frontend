@@ -25,15 +25,17 @@
 .menu-item.active {
     border-color: #000;
     font-weight: bold;
+
 }
 
 .posts-container {
     margin-bottom: 20px;
+    height: 100%;
 }
 
 .post-item {
     border-bottom: 1px solid #eee;
-    margin-top: 5px;
+    margin-top: 10px;
 }
 
 .write-button {
