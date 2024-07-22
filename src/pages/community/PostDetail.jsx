@@ -18,11 +18,11 @@ function WriteModal({ onClose, onEdit, onDelete }) {
         <div className="modal-overlay">
             <div className="modal-content">
                 <div className="modal-header">
-                    <p style={{ marginBottom: '5px', padding: '3px' }}>게시글</p>
+                    <p style={{ marginBottom: '0px', padding: '3px' }}>게시글</p>
                     <hr style={{ marginLeft: '-20px', width: '120%' }}/>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '-5px' }}>
                         <button onClick={onEdit} style={{ padding: '3px', borderRight: '1px solid #ccc', height: '50px' }}>수정</button>
-                        <button onClick={onDelete} style={{ padding: '3px' }}>삭제</button>
+                        <button onClick={onDelete} style={{ padding: '5px' }}>삭제</button>
                     </div>
                 </div>
             </div>
@@ -381,7 +381,7 @@ function PostDetail() {
                         <div style={{display: "flex", marginTop: '10px'}}>
                             {editingCommentId !== comment.commentId && (
                                 <>
-                                    <button className="modify-button" style={{textAlign: 'right', marginRight: '30px'}}
+                                    <button className="modify-button" style={{textAlign: 'right', marginRight: '20px'}}
                                             onClick={() => handleEditComment(comment.commentId, comment.content)}>수정
                                     </button>
                                     <button className="delete-button" style={{textAlign: 'right'}}
