@@ -186,8 +186,8 @@ function MyclubHeader({ clubName }) {
                         {isMemberManageOpen && (
                             <div className="member-manage-list">
                                 <div className="manage-item" onClick={() => navigate(`/clubs/${id}/memberInfoFixList`)}>회원 정보 수정</div>
-                                <div className="manage-item">회원 출석 관리</div>
-                                <div className="manage-item" onClick={() => navigate("/clubs/:id/joinRequest")}>가입 신청 현황</div>
+                                <div className="manage-item" onClick={() => navigate('/clubs/etc1/atd')}>회원 출석 관리</div>
+                                <div className="manage-item" onClick={() => navigate(`/clubs/${id}/joinRequest`)}>가입 신청 현황</div>
                             </div>
                         )}
                         <div className="li-container" onClick={toggleClubManage}>

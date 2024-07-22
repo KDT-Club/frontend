@@ -8,10 +8,15 @@
 .member_request_info img {
     margin-left: 31px;
     margin-right: 20px;
+    border-radius: 50%;
+    width: 90px;
+    height: 90px;
 }
 
 .member_request_info .info_detail {
     text-align: left;
+    margin-top: 18px;
+    margin-left: 10px;
 }
 
 .member_request_info .name {

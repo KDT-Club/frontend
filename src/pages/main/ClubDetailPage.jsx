@@ -8,6 +8,7 @@ import dm from '../../images/DM.png';
 import uno from '../../images/uno.png';
 import profile from '../../images/profile.jpeg';
 import axios from 'axios';
+import Modal_ok from "../../components/modal/Modal_ok.jsx";
 
 const ClubDetailPage = () => {
     const { clubName } = useParams();
@@ -81,8 +82,10 @@ const ClubDetailPage = () => {
         return (
             <div className="join-form">
                 <div className="header">
-                    <FaArrowLeft onClick={() => setShowJoinForm(false)} />
-                    <h2>동아리 가입 신청</h2>
+                    <FaArrowLeft
+                        style={{ fontSize: '25px', strokeWidth: '0.1', cursor: 'pointer', marginLeft: '15px' }}
+                        onClick={() => setShowJoinForm(false)}/>
+                    <p>동아리 가입 신청</p>
                 </div>
                 <div className="user-info">
                     <img src={profile} alt="profile" />
@@ -112,14 +115,16 @@ const ClubDetailPage = () => {
     }
 
     return (
-        <div className="club-detail-page">
-            <div className="header">
-                <FaArrowLeft onClick={handleBackClick} />
-                <h2>동아리 소개</h2>
-            </div>
+         <div className="club-detail-page">
+             <div className="header">
+                 <FaArrowLeft
+                     style={{ fontSize: '25px', strokeWidth: '0.1', cursor: 'pointer', marginLeft: '15px' }}
+                     onClick={handleBackClick}/>
+                 <p>동아리 소개</p>
+             </div>
             <hr/>
             <div className="club-info">
-                <img src={dm} alt="dm" />
+                <img src={club.clubImgUrl} alt="dm" />
                 <div className="club-info-text">
                     <h3 style={{textAlign:"left", marginLeft:'20px'}}>{club.name}</h3>
                     <p className="info-des">{club.clubSlogan}</p>
@@ -132,7 +137,7 @@ const ClubDetailPage = () => {
                 </div>
             </div>
             <div className="last-activity">
-                <h4>최근 활동(가로 스크롤)</h4>
+                <h4>최근 활동</h4>
                 <div className="last-activity-text">
                     <div className="uno-cards">
                         <img src={club.clubImgUrl} alt="uno"/>
