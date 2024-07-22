@@ -28,7 +28,7 @@
     margin-top: 10px;
     display: flex;
     align-items: flex-start;
-    height: 25%;
+    height: 22%;
 }
 
 .club-info img {
@@ -53,6 +53,7 @@
     margin-top: 30px;
     margin-left: -45px;
     padding: 5px;
+    overflow-y: auto;
 }
 
 .info-des{

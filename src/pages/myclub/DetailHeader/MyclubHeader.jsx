@@ -6,7 +6,6 @@ import {useNavigate, useParams, useLocation} from "react-router-dom";
 import { MdOutlineManageAccounts, MdOutlinePerson, MdOutlineSettings, MdKeyboardArrowRight, MdKeyboardArrowDown } from "react-icons/md";
 import { TbDoorExit } from "react-icons/tb";
 import Modal_confirm from "../../../components/modal/Modal_confirm.jsx";
-import Modal_ok from "../../../components/modal/Modal_ok.jsx";
 import axios from "axios";
 axios.defaults.withCredentials = true;
 
@@ -34,6 +33,8 @@ function MyclubHeader({ clubName }) {
     const [showDeleteModal, setShowDeleteModal] = useState(false);  // 네,아니오 모달창 띄우기
     const [modalMessage, setModalMessage] = useState("");   // 모달 메세지
 
+    const [isClubPresident, setIsClubPresident] = useState(false);
+
     // 회원 정보를 조회하는 API 호출
     useEffect(() => {
         apiClient.get(`/members/${memberId}`)
@@ -51,8 +52,16 @@ function MyclubHeader({ clubName }) {
             try {
                 const response = await apiClient.get(`/clubs/${id}/clubMember`);
                 const members = response.data;
-                setClubMembers(response.data);
-                console.log(response.data);
+                setClubMembers(members);
+
+                // 로그인 중인 멤버의 상태를 찾아 회장 여부를 확인
+                const loggedInMember = members.find(member => member.studentId === member?.studentId);
+                if (loggedInMember?.status === "CLUB_PRESIDENT") {
+                    setIsClubPresident(true);
+                } else {
+                    setIsClubPresident(false);
+                }
+
                 const sortedMembers = members.sort((a, b) => {
                     if (a.status === "CLUB_PRESIDENT") return -1;
                     if (b.status === "CLUB_PRESIDENT") return 1;
@@ -103,8 +112,13 @@ function MyclubHeader({ clubName }) {
         e.stopPropagation();
         setIsClubManageOpen(!isClubManageOpen);
     };
-    const handleClubInfoEdit = () => { //동아리 정보 수정
-        navigate(`/clubs/${id}/changeclubinfo`, { state: { isMenuOpen: true } }); // 햄버거탭 오픈 상태 전달;
+
+    const handleClubInfoEdit = () => {
+        if (isClubPresident) {
+            navigate(`/clubs/${id}/changeclubinfo`, { state: { isMenuOpen: true } });
+        } else {
+            alert("동아리 회장만 동아리 정보를 수정할 수 있습니다.");
+        }
     };
 
     // 네/아니오 모달창 open
@@ -123,7 +137,7 @@ function MyclubHeader({ clubName }) {
                     style={{fontSize: '24px', cursor: 'pointer'}}
                     onClick={handleBackClick}
                 />
-                <div style={{fontSize: '24px', fontWeight: "bold"}}>{clubName}</div>
+                <div style={{fontSize: '20px', fontWeight: "bold"}}>{clubName}</div>
                 <RxHamburgerMenu
                     style={{fontSize: '24px', strokeWidth: '0.3', cursor: 'pointer'}}
                     onClick={toggleMenu}
