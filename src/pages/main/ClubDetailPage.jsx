@@ -5,10 +5,8 @@ import '../../styles/App.css';
 import './main_styles/main.css';
 import './main_styles/club_detail.css';
 import dm from '../../images/DM.png';
-import uno from '../../images/uno.png';
 import profile from '../../images/profile.jpeg';
 import axios from 'axios';
-import Modal_ok from "../../components/modal/Modal_ok.jsx";
 
 const ClubDetailPage = () => {
     const { clubName } = useParams();
@@ -16,6 +14,7 @@ const ClubDetailPage = () => {
     const [showJoinForm, setShowJoinForm] = useState(false);
     const [motivation, setMotivation] = useState('');
     const [userInfo, setUserInfo] = useState({ name: '', username: '' });
+    const [lastActivity, setLastActivity] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -25,6 +24,11 @@ const ClubDetailPage = () => {
                 if (response.ok) {
                     const data = await response.json();
                     setClub(data);
+
+                    // 클럽 정보를 가져온 후 최근 활동 게시물 정보를 가져옵니다
+                    if (data.id) {
+                        fetchLastActivity(data.id);
+                    }
                 } else {
                     console.error('Failed to fetch club details');
                 }
@@ -41,6 +45,17 @@ const ClubDetailPage = () => {
         }
     }, [clubName]);
 
+    const fetchLastActivity = async (clubId) => {
+        try {
+            const response = await axios.get(`https://zmffjq.store/board/3/clubs/${clubId}/posts`);
+            if (response.data && response.data.length > 0) {
+                // 가장 최근 게시물을 가져옵니다
+                setLastActivity(response.data[0]);
+            }
+        } catch (error) {
+            console.error('Error fetching last activity:', error);
+        }
+    };
 
     const handleBackClick = () => {
         navigate('/main');
@@ -53,7 +68,7 @@ const ClubDetailPage = () => {
     const handleJoinSubmit = async () => {
         try {
             const config = {
-                withCredentials: true // Axios에 withCredentials 옵션 추가
+                withCredentials: true
             };
 
             const response = await axios.post(`https://zmffjq.store/clubs/${clubName}/applications`, {
@@ -73,10 +88,6 @@ const ClubDetailPage = () => {
     if (!club) {
         return <div>Loading...</div>;
     }
-
-    const activities = club.activities || [];
-    const lastActivity = club.lastActivity || {};
-    const leader = club.leader || {};
 
     if (showJoinForm) {
         return (
@@ -115,22 +126,22 @@ const ClubDetailPage = () => {
     }
 
     return (
-         <div className="club-detail-page">
-             <div className="header">
-                 <FaArrowLeft
-                     style={{ fontSize: '25px', strokeWidth: '0.1', cursor: 'pointer', marginLeft: '15px' }}
-                     onClick={handleBackClick}/>
-                 <p>동아리 소개</p>
-             </div>
+        <div className="club-detail-page">
+            <div className="header">
+                <FaArrowLeft
+                    style={{ fontSize: '25px', strokeWidth: '0.1', cursor: 'pointer', marginLeft: '15px' }}
+                    onClick={handleBackClick}/>
+                <p>동아리 소개</p>
+            </div>
             <hr/>
             <div className="club-info">
-                <img src={club.clubImgUrl} alt="dm" />
+                <img src={club.clubImgUrl} alt="club" />
                 <div className="club-info-text">
                     <h3 style={{textAlign:"left", marginLeft:'20px'}}>{club.clubName}</h3>
                     <p className="info-des">{club.clubSlogan}</p>
                     <div className="club-info-center">
                         <p>{club.description}</p>
-                        {activities.map((activity, index) => (
+                        {club.activities && club.activities.map((activity, index) => (
                             <p key={index}>{activity}</p>
                         ))}
                     </div>
@@ -140,15 +151,19 @@ const ClubDetailPage = () => {
                 <h4>최근 활동</h4>
                 <div className="last-activity-text">
                     <div className="uno-cards">
-                        <img src={club.clubImgUrl} alt="uno"/>
+                        {lastActivity && lastActivity.attachment_names && lastActivity.attachment_names.length > 0 ? (
+                            <img src={lastActivity.attachment_names[0]} alt="최근 활동" />
+                        ) : (
+                            <img src={club.clubImgUrl} alt="기본 이미지" />
+                        )}
                     </div>
-                    <p>{lastActivity.date}</p>
+                    <p>{lastActivity ? new Date(lastActivity.createdAt).toLocaleDateString() : '최근 활동 없음'}</p>
                 </div>
             </div>
             <div className="leader-info">
                 <h4>동아리 회장 연락처</h4>
                 <div className="leader-info-text">
-                    <img src={club.clubImgUrl} alt="dm"/>
+                    <img src={club.clubImgUrl} alt="club"/>
                     <div className="leader-info-name">
                         <p style={{
                             fontSize: "20px"
