@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import './activity.css'
 import { FaArrowLeft } from "react-icons/fa6";
-import { useNavigate } from "react-router-dom";
 import dm from "../../../images/DM.png";
 
 function ActivityDetailPage() {
@@ -15,7 +14,7 @@ function ActivityDetailPage() {
         const fetchPostDetail = async () => {
             try {
                 const response = await axios.get(`https://zmffjq.store/board/3/clubs/${clubId}/posts/${postId}`);
-                setPost(response.data);
+                setPost({...response.data.post});
             } catch (error) {
                 console.error('Error fetching post detail:', error);
             }
@@ -32,6 +31,17 @@ function ActivityDetailPage() {
         return <div>Loading...</div>;
     }
 
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        return date.toLocaleString('ko-KR', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    }
+
     return (
         <div>
             <div className="header">
@@ -45,17 +55,16 @@ function ActivityDetailPage() {
                     fontWeight: 'bold',
                     marginLeft: '10px',
                     marginTop: '10px'
-                }}>{post.club_name}</h2>
+                }}>{post.clubName}</h2>
             </div>
             <div className="post-content">
                 <h3>{post.title}</h3>
                 <p>{post.content}</p>
-                {post.attachment_flag === 'Y' && (
+                {post.attachmentFlag === 'Y' && post.attachmentNames && post.attachmentNames.length > 0 && (
                     <div className="attachments">
                         <h4>첨부 파일:</h4>
-                        <p>{post.attachment_name}</p>
-                        {post.attachment_names && post.attachment_names.map((url, index) => (
-                            <img key={index} src={url} alt={`Attachment ${index + 1}`} />
+                        {post.attachmentNames.map((name, index) => (
+                            <p key={index}>{name}</p>
                         ))}
                     </div>
                 )}
