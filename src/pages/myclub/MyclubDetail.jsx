@@ -9,7 +9,7 @@ import MyclubHeader from "./DetailHeader/MyclubHeader.jsx";
 
 function MyclubDetail() {
     const { id } = useParams();
-    console.log("club id:", id); //test
+    console.log("club id:", id); // test
     const navigate = useNavigate();
     const location = useLocation();
     const [clubName, setClubName] = useState(''); //헤더에 이름 띄우기
