@@ -90,7 +90,7 @@ function App() {
                             <Route path="/board/3/clubs/:clubId/posts" element={<ActivityPage />} />
                             <Route path="/board/3/clubs/:clubId/posts/:postId" element={<ActivityDetailPage />} />
                             <Route path="/clubs/:id/joinRequest" element={<Member_request />} />
-                            <Route path="/clubs/:id/joinRequest/:memberId" element={<Member_request_detail />} />
+                            <Route path="/clubs/:id/joinRequest/:requestId" element={<Member_request_detail />} />
                             <Route path="/activity_detail" element={<ActivityDetailPage />}/>
 
                             //내동아리 라우팅

@@ -98,7 +98,9 @@ function BoardEdit() {
     };
 
     const handleBackClick = () => navigate(-1);
+
     const handleModalClose = () => setIsModalOpen(false);
+
     const handleModalConfirm = () => navigate(`/posts/${memberId}/${postId}`);
 
     return (

@@ -6,7 +6,6 @@ import axios from "axios";
 
 const Modal_post = ({onClose, onEdit}) => {
     const navigate = useNavigate();
-    const {memberId} = useParams();
     const { postId } = useParams();
     const [modalMessage, setModalMessage] = useState("");   // 모달창에 띄울 메세지 전달
     const [showDeleteModal, setShowDeleteModal] = useState(false);  // 네/아니오 모달창 띄우기

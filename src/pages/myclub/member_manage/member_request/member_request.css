@@ -31,15 +31,3 @@
     color: gray;
     margin-bottom: 15px;
 }
-
-.member_request_item .icons {
-    display: flex;
-    gap: 20px;
-    margin-right: 17px;
-    padding-bottom: 10px;
-}
-
-.member_request_item .icon {
-    font-size: 23px;
-    cursor: pointer;
-}
