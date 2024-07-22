@@ -18,8 +18,8 @@ function formatDate(dateString) {
 function FreeBoardDetail() {
     let {clubId, postId} = useParams();
     const navigate = useNavigate();
-
     const [memberId, setMemberId] = useState(null);
+
     const [showPostModal, setShowPostModal] = useState(false);  // 글 수정or삭제 모달창 띄우기
     const [showCommentModal, setShowCommentModal] = useState(false);  // 댓글 수정or삭제 모달창 띄우기
     const [modalPosition, setModalPosition] = useState({ top: '0px', left: '0px' }); // 모달창 위치 설정
@@ -244,12 +244,6 @@ function FreeBoardDetail() {
                                     key={index}
                                     src={url}
                                     alt={`첨부 이미지 ${index + 1}`}
-                                    // style={{
-                                    //     width: "100%",
-                                    //     maxWidth: "250px",
-                                    //     marginBottom: "10px",
-                                    //     borderRadius: "8px"
-                                    // }}
                                     onError={(e) => {
                                         console.error(`이미지 로딩 오류 ${index}:`, e);
                                         e.target.style.display = 'none';
@@ -262,7 +256,7 @@ function FreeBoardDetail() {
                     </div>
                 </div>
             )}
-            <div style={{borderBottom: '1.5px solid dimgrey', marginTop: '24px'}}></div>
+            <div style={{borderBottom: '1.5px solid dimgrey', marginTop: '10px'}}></div>
             <div className="comment-container">
                 {comments.length > 0 ? (
                     comments.map(comment => (
