@@ -17,7 +17,7 @@ function MyclubHeader({ clubName }) {
 
     const apiClient = axios.create({
         baseURL: 'https://zmffjq.store',
-        timeout: 10000, // 요청 타임아웃 설정 (10초)
+        timeout: 10000,
         headers: {
             'Content-Type': 'application/json',
         },
@@ -34,28 +34,32 @@ function MyclubHeader({ clubName }) {
     const [modalMessage, setModalMessage] = useState("");   // 모달 메세지
 
     const [isClubPresident, setIsClubPresident] = useState(false);
+    const [studentId, setStudentId] = useState(null);
 
     // 회원 정보를 조회하는 API 호출
     useEffect(() => {
         apiClient.get(`/members/${memberId}`)
             .then(response => {
                 setMember(response.data);
+                if (response.data.id === parseInt(memberId)) {
+                    setStudentId(response.data.studentId);
+                }
             })
             .catch(error => {
-                console.error('Error fetching member data:', error);
+                console.error('회원정보 조회 중 에러 발생', error);
             });
     }, [memberId]);
 
-    //햄버거탭에서 회원리스트 조회
+    //햄버거탭에서 회원리스트 조회 및 회장 여부 확인
     useEffect(() => {
         const fetchClubMembers = async () => {
             try {
                 const response = await apiClient.get(`/clubs/${id}/clubMember`);
                 const members = response.data;
-                setClubMembers(members);
+                ///setClubMembers(members);
 
                 // 로그인 중인 멤버의 상태를 찾아 회장 여부를 확인
-                const loggedInMember = members.find(member => member.studentId === member?.studentId);
+                const loggedInMember = members.find(member => member.studentId === studentId);
                 if (loggedInMember?.status === "CLUB_PRESIDENT") {
                     setIsClubPresident(true);
                 } else {
@@ -70,18 +74,12 @@ function MyclubHeader({ clubName }) {
                 setClubMembers(sortedMembers);
             } catch (error) {
                 console.error('동아리 회원 리스트 조회 중 에러 발생', error);
-                if (error.response) {
-                    console.error('회원 리스트 조회 에러 발생:', error.response.data);
-                    console.error('응답 상태:', error.response.status);
-                } else if (error.request) {
-                    console.error('요청 전송 실패:', error.request);
-                } else {
-                    console.error('Error', error.message);
-                }
             }
         };
-        fetchClubMembers();
-    }, [id]);
+        if (studentId) {
+            fetchClubMembers();
+        }
+    }, [id, studentId]);
 
     const handleBackClick = () => {
         navigate(`/clubs?memberId=${memberId}`);
@@ -104,21 +102,31 @@ function MyclubHeader({ clubName }) {
     //회원관리 토글
     const toggleMemberManage = (e) => {
         e.stopPropagation();
-        setIsMemberManageOpen(!isMemberManageOpen);
+        if (isClubPresident) {
+            setIsMemberManageOpen(!isMemberManageOpen);
+        } else {
+            alert("동아리 회장만 접근 가능합니다.");
+        }
     };
 
     //동아리관리 토글
     const toggleClubManage = (e) => {
         e.stopPropagation();
-        setIsClubManageOpen(!isClubManageOpen);
+        if (isClubPresident) {
+            setIsClubManageOpen(!isClubManageOpen);
+        } else {
+            alert("동아리 회장만 접근 가능합니다.");
+        }
     };
 
     const handleClubInfoEdit = () => {
         if (isClubPresident) {
             navigate(`/clubs/${id}/changeclubinfo`, { state: { isMenuOpen: true } });
-        } else {
-            alert("동아리 회장만 동아리 정보를 수정할 수 있습니다.");
         }
+    };
+
+    const handleClubDelete = () => {
+        //구현
     };
 
     // 네/아니오 모달창 open
@@ -200,10 +208,10 @@ function MyclubHeader({ clubName }) {
                                 <MdKeyboardArrowRight style={{marginRight: "17px", fontSize: "28px"}} />
                             )}
                         </div>
-                        {isClubManageOpen && (
+                        {isClubPresident && isClubManageOpen && (
                             <div className="club-manage-list">
                                 <div className="manage-item" onClick={handleClubInfoEdit}>동아리 정보 수정</div>
-                                <div className="manage-item">동아리 삭제</div>
+                                <div className="manage-item" onClick={handleClubDelete}>동아리 삭제</div>
                             </div>
                         )}
                     </div>

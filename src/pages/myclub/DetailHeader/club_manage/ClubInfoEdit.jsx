@@ -18,17 +18,17 @@ function ClubInfoEdit() {
     const location = useLocation();
 
     const [originalClubData, setOriginalClubData] = useState({
-        clubImgUrl: '',
         clubName: '',
+        description: '',
+        clubImgUrl: '',
         clubSlogan: '',
-        description: ''
     });
 
     const [clubData, setClubData] = useState({
-        clubImgUrl: '',
         clubName: '',
+        description: '',
+        clubImgUrl: '',
         clubSlogan: '',
-        description: ''
     });
 
     const [selectedImage, setSelectedImage] = useState(null);
@@ -36,10 +36,10 @@ function ClubInfoEdit() {
     useEffect(() => {
         apiClient.get(`/clubs/${id}/changeClubInfo`)
             .then(response => {
-                const { clubImgUrl, clubName, clubSlogan, description } = response.data;
+                const { clubName, description, clubImgUrl, clubSlogan } = response.data;
                 console.log('Fetched data:', response.data);
-                setClubData({ clubImgUrl, clubName, clubSlogan, description });
-                setOriginalClubData({ clubImgUrl, clubName, clubSlogan, description });
+                setClubData({ clubName, description, clubImgUrl, clubSlogan });
+                setOriginalClubData({ clubName, description, clubImgUrl, clubSlogan });
             })
             .catch(error => {
                 console.error("동아리 정보 가져오는 중 에러 발생", error);
@@ -109,10 +109,10 @@ function ClubInfoEdit() {
             };
 
             await apiClient.post(`/clubs/${id}/changeClubInfo`, updatedData);
-            console.log('성공적으로 변경되었습니다.');
+            alert('성공적으로 변경되었습니다.');
             navigate(`/clubs/${id}/myclub`, { state: { isMenuOpen: location.state?.isMenuOpen } });
         } catch (error) {
-            console.error('수정 중 오류가 발생했습니다.', error);
+            alert('수정 중 오류가 발생했습니다.', error);
         }
     };
 

@@ -158,11 +158,12 @@ const ClubDetailPage = () => {
 
     return (
         <div className="club-detail-page">
-            <div className="header">
+            <div className="header_container">
                 <FaArrowLeft
-                    style={{fontSize: '25px', strokeWidth: '0.1', cursor: 'pointer', marginLeft: '15px'}}
+                    style={{fontSize: '24px', cursor: 'pointer'}}
                     onClick={handleBackClick}/>
-                <p>동아리 소개</p>
+                <p style={{fontSize: '20px', fontWeight: "bold"}}>동아리 소개</p>
+                <div></div>
             </div>
             <hr/>
             <div className="club-info">
