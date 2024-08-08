@@ -13,7 +13,7 @@ const Calendar = () => {
 
     const events = [
         { dates: [26, 27, 28, 29, 30], type: 'dance', description: '댄스 동아리 교내 공연' },
-        { dates: [12, 13, 14], type: 'board-game', description: '보드게임 동아리 부원 모집' },
+        { dates: [12, 13, 14], type: 'component-game', description: '보드게임 동아리 부원 모집' },
         { dates: [1, 2, 3, 4, 5], type: 'stock', description: '주식 동아리 주식 대회 접수' },
     ];
 
