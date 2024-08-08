@@ -125,7 +125,7 @@ function NoticeEdit() {
             });
             if (response.status === 200 || response.status === 201) {
                 alert('수정 완료');
-                //navigate(`/clubs/${clubId}/board/2/posts/${postId}`);
+                //navigate(`/clubs/${clubId}/component/2/posts/${postId}`);
                 navigate(-1)
             }
         } catch (error) {
