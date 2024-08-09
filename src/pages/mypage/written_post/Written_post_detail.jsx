@@ -5,7 +5,20 @@ import { FiMoreVertical, FiSend } from "react-icons/fi";
 import axios from "axios";
 import Modal_post from "../../../components/modal/Modal_post.jsx";
 import Modal_comment from "../../../components/modal/Modal_comment.jsx";
+import styled from "styled-components";
 axios.defaults.withCredentials = true;
+
+const HeaderContainer = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 47.5px;
+    background-color: white;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    padding-left: 25px;
+    padding-right: 25px;
+    margin-bottom: 0px;
+`;
 
 function formatDate(dateString) {
     const date = new Date(dateString);
@@ -94,6 +107,7 @@ function Written_post_detail() {
                 const response = await apiClient.get(`/postdetail/${postId}`);
                 setPost(response.data.post);
                 setAttachmentNames(response.data.attachmentNames || []);
+                console.log(response.data.attachmentNames)
             } catch (error) {
                 console.error('게시글 조회 에러 발생:', error);
                 if (error.response) {
@@ -121,25 +135,6 @@ function Written_post_detail() {
     //댓글 POST
     const handleCommentChange = (e) => {
         setNewComment(e.target.value);
-    };
-    const handleCommentSubmit = async (e) => {
-        e.preventDefault();
-        if (newComment.trim() && memberId) { // memberId가 존재하는지 확인
-            try {
-                const response = await apiClient.post(`/posts/${postId}/comments`, {
-                    memberId: memberId,
-                    content: newComment
-                });
-                if (response.data.message === '성공') {
-                    //댓글 추가 성공 후 전체 댓글 목록 다시 불러옴
-                    await fetchComments();
-                    setNewComment('');
-                }
-            } catch (error) {
-                console.error('댓글 작성 중 에러 발생', error);
-                alert('댓글 작성 중 오류가 발생했습니다. 다시 시도해주세요.');
-            }
-        }
     };
 
     //댓글 수정 상태 관리 함수
@@ -179,28 +174,19 @@ function Written_post_detail() {
         setComments(prevComments => prevComments.filter(comment => comment.commentId !== commentId));
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        if (editingCommentId) {
-            handleSaveEditedComment();
-        } else {
-            handleCommentSubmit(e);
-        }
-    };
-
     return (
         <div>
-            <div className="header_container">
+            <HeaderContainer>
                 <FaArrowLeft
                     style={{fontSize: '24px', cursor: 'pointer'}}
                     onClick={handleBackClick}
                 />
-                <div style={{fontSize: '20px', fontWeight: "bold"}}>자유게시판</div>
+                <div style={{fontSize: '20px', fontWeight: "bold"}}>작성한 글 보기</div>
                 <FiMoreVertical
                     style={{fontSize: '24px', cursor: 'pointer'}}
                     onClick={handlePostDotClick}
                 />
-            </div>
+            </HeaderContainer>
             {post && (
                 <div
                     style={{
@@ -243,12 +229,12 @@ function Written_post_detail() {
                                     key={index}
                                     src={url}
                                     alt={`첨부 이미지 ${index + 1}`}
-                                    // style={{
-                                    //     width: "100%",
-                                    //     maxWidth: "250px",
-                                    //     marginBottom: "10px",
-                                    //     borderRadius: "8px"
-                                    // }}
+                                    style={{
+                                        width: "100%",
+                                        maxWidth: "250px",
+                                        marginBottom: "10px",
+                                        borderRadius: "8px"
+                                    }}
                                     onError={(e) => {
                                         console.error(`이미지 로딩 오류 ${index}:`, e);
                                         e.target.style.display = 'none';
@@ -256,7 +242,7 @@ function Written_post_detail() {
                                 />
                             ))
                         ) : (
-                            <p></p>
+                            <p>이미지가 없습니다.</p>
                         )}
                     </div>
                 </div>
@@ -287,19 +273,6 @@ function Written_post_detail() {
                     <p style={{fontSize: '18px'}}>댓글이 없습니다.</p>
                 )}
             </div>
-            <form onSubmit={handleSubmit} style={{marginTop: '15px', display: 'flex', alignItems: 'center'}}>
-                <div className="submit-comment-container">
-                    <input
-                        type="text"
-                        value={editingCommentId ? editedCommentContent : newComment}
-                        onChange={(e) => editingCommentId ? setEditedCommentContent(e.target.value) : handleCommentChange(e)}
-                        placeholder="댓글을 입력하세요."
-                    />
-                    <button type="submit">
-                        <FiSend style={{textAlign: "center", fontSize: "27px"}}/>
-                    </button>
-                </div>
-            </form>
             {showPostModal && <Modal_post onClose={closeModal} onEdit={handleEditClick}/>}
             {showCommentModal && <Modal_comment
                 onClose={closeModal}

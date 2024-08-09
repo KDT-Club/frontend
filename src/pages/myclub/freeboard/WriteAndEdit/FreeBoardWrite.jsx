@@ -5,6 +5,7 @@ import '../../notice/WriteAndEdit/noticewrite.css';
 import {useNavigate, useParams} from "react-router-dom";
 import { FiX, FiCheck } from "react-icons/fi";
 import { LuImagePlus } from "react-icons/lu";
+import Modal_ok from "../../../../components/modal/Modal_ok.jsx";
 axios.defaults.withCredentials = true;
 
 function FreeBoardWrite() {
@@ -26,6 +27,7 @@ function FreeBoardWrite() {
     const [uploading, setUploading] = useState(false); // 이미지 업로드 중 여부를 관리
     const [clubName, setClubName] = useState('');
     const [previewImages, setPreviewImages] = useState([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
         const storedClubName = localStorage.getItem(`clubName_${id}`);
@@ -105,8 +107,7 @@ function FreeBoardWrite() {
                 attachment_names: attachmentNames,
                 club_name: clubName,
             });
-            alert('게시글 작성 완료');
-            navigate(`/clubs/${id}/freeboardlist`);
+            setIsModalOpen(true);
         } catch (error) {
             console.error('글 작성 중 오류 발생:', error.response?.data || error.message);
             alert('글 작성 중 오류가 발생했습니다. 다시 시도해주세요.');
@@ -116,6 +117,9 @@ function FreeBoardWrite() {
     const handleBackClick = () => {
         navigate(`/clubs/${id}/freeboardlist`);
     };
+
+    const handleModalClose = () => setIsModalOpen(false);
+    const handleModalConfirm = () => navigate(`/clubs/${id}/freeboardlist`);
 
     const handleFileInputClick = () => {
         fileInputRef.current.click();
@@ -183,6 +187,13 @@ function FreeBoardWrite() {
                     ))}
                 </div>
             </div>
+            {isModalOpen && (
+                <Modal_ok
+                    message="작성이 완료되었습니다."
+                    onClose={handleModalClose}
+                    onConfirm={handleModalConfirm}
+                />
+            )}
         </div>
     )
 }

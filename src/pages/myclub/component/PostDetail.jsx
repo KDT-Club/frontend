@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { FaArrowLeft } from 'react-icons/fa6';
 import { FiMoreVertical } from "react-icons/fi";
 import Modal_post from "../../../components/modal/Modal_post.jsx";
 import { formatDate } from "../component/Date.jsx";
+import "../notice/notice.css";
+import axios from "axios";
+import Modal_post_complain from "../../../components/modal/Modal_post_complain.jsx";
 import styled from 'styled-components';
 import CommentSection from "./CommentSection.jsx";
 
@@ -111,14 +114,54 @@ function PostDetail({
                         editedCommentContent,
                         setEditedCommentContent,
                     }) {
+    const [memberId, setMemberId] = useState(null);
     const [showPostModal, setShowPostModal] = useState(false);
+    const [showCommentModal, setShowCommentModal] = useState(false);
+    const [showComplainModal, setShowComplainModal] = useState(false);
+    const [modalPosition, setModalPosition] = useState({ top: '0px', left: '0px' });
+    const [selectedCommentContent, setSelectedCommentContent] = useState('');
+
+    useEffect(() => {
+        const fetchUserId = async () => {
+            try {
+                const response = await axios.get("https://zmffjq.store/getUserId", {
+                    withCredentials: true
+                });
+                setMemberId(response.data.message);
+            } catch (error) {
+                if (error.response && error.response.status === 401) {
+                    alert('Unauthorized access. Please log in.');
+                } else {
+                    console.error('유저 아이디를 불러오는 중 에러 발생:', error);
+                    alert('유저 아이디를 불러오는 중 에러가 발생했습니다.');
+                }
+            }
+        };
+
+        fetchUserId();
+    }, []);
 
     const handlePostDotClick = () => {
-        setShowPostModal(true);
+        if (String(post.member.id) === String(memberId)) { // 사용자가 작성자와 동일한지 확인
+            setShowPostModal(true);
+        } else {
+            setShowComplainModal(true);
+        }
     };
 
     const closeModal = () => {
         setShowPostModal(false);
+        setShowCommentModal(false);
+        setShowComplainModal(false);
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (editingCommentId) {
+            onCommentEdit(editingCommentId, editedCommentContent);
+        } else {
+            onCommentSubmit(e);
+        }
     };
 
     return (
@@ -168,8 +211,12 @@ function PostDetail({
                 onCommentEdit={onCommentEdit}
                 onSaveEditedComment={onSaveEditedComment}
                 onCommentDelete={onCommentDelete}
+                commentId={editingCommentId}
+                onDelete={onCommentDelete}
+                content={selectedCommentContent}
             />
             {showPostModal && <Modal_post onClose={closeModal} onEdit={onPostDotClick}/>}
+            {showComplainModal && <Modal_post_complain onClose={closeModal} />}
         </Container>
     );
 }
