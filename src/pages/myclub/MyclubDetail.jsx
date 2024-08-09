@@ -3,7 +3,6 @@ import axios from 'axios';
 import "./myclubdetail.css";
 import Footer from '../../components/footer/Footer.jsx';
 import { useParams, useNavigate, useLocation } from "react-router-dom";
-//import Slide from "./DetailHeader/Slide.jsx";
 import Slide from "./headerHamburger/Slide.jsx"
 
 function MyclubDetail() {
@@ -89,14 +88,6 @@ function MyclubDetail() {
         navigate(`/clubs/etc1`);
     }; //출석 화면으로 이동
 
-    const etc2handleMoreClick = () => {
-        navigate(`/clubs/etc2`);
-    }; //정산 화면으로 이동
-
-    const etc3handleMoreClick = () => {
-        navigate(`/clubs/etc3`);
-    }; //투표 화면으로 이동
-
     return (
         <div className="myclub-detail-container">
             <Slide clubName={clubName} />
@@ -177,57 +168,6 @@ function MyclubDetail() {
                             <p
                                 style={{fontSize: "15px"}}
                             >2024/05/21 (화)<br/>오리엔테이션</p>
-                        </div>
-                    </section>
-                </div>
-                <div className="item-container">
-                    <div className="headerrcontainer">
-                        <h2>정산</h2>
-                        <p onClick={etc2handleMoreClick}>더보기</p>
-                    </div>
-                    <section className="box-section">
-                        <div className="box-item"
-                             style={{minWidth: "190px", border: "1.5px solid black"}}
-                        >
-                            <p
-                                style={{fontSize: "15px"}}
-                            >7월 19일 회식</p>
-                        </div>
-                        <div className="box-item"
-                             style={{minWidth: "190px", border: "1.5px solid black"}}
-                        >
-                            <p
-                                style={{fontSize: "15px"}}
-                            >유니폼 구입</p>
-                        </div>
-                        <div className="box-item"
-                             style={{minWidth: "190px", border: "1.5px solid black"}}
-                        >
-                            <p
-                                style={{fontSize: "15px"}}
-                            >MT 참가비</p>
-                        </div>
-                    </section>
-                </div>
-                <div className="item-container">
-                    <div className="headerrcontainer">
-                        <h2>투표</h2>
-                        <p onClick={etc3handleMoreClick}>더보기</p>
-                    </div>
-                    <section className="box-section">
-                        <div className="box-item"
-                             style={{minWidth: "190px", border: "1.5px solid black"}}
-                        >
-                            <p
-                                style={{fontSize: "15px"}}
-                            >7월 19일 회식 장소</p>
-                        </div>
-                        <div className="box-item"
-                             style={{minWidth: "190px", border: "1.5px solid black"}}
-                        >
-                            <p
-                                style={{fontSize: "15px"}}
-                            >MT 날짜</p>
                         </div>
                     </section>
                 </div>
