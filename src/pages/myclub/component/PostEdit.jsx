@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from "axios";
-import '../../headerHamburger/slide.css'
-import './noticewrite.css';
-import {useNavigate, useParams} from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { FiX, FiCheck } from "react-icons/fi";
 import { LuImagePlus } from "react-icons/lu";
 
-function NoticeEdit() {
+function PostEdit({ boardType }) {
     const navigate = useNavigate();
     let { clubId, postId } = useParams();
     const [title, setTitle] = useState('');
@@ -16,7 +14,7 @@ function NoticeEdit() {
 
     const apiClient = axios.create({
         baseURL: 'https://zmffjq.store',
-        timeout: 10000, // 요청 타임아웃 설정 (10초)
+        timeout: 10000,
         headers: {
             'Content-Type': 'application/json',
         },
@@ -25,14 +23,12 @@ function NoticeEdit() {
     const fetchUserId = async () => {
         try {
             const response = await apiClient.get("/getUserId", {
-                withCredentials: true // Include this if the endpoint requires credentials
+                withCredentials: true
             });
-            console.log(response.data);
-            setMemberId(response.data.message); // memberId 상태 업데이트
+            setMemberId(response.data.message);
         } catch (error) {
             if (error.response && error.response.status === 401) {
-                alert('로그인이 필요합니다.');
-                navigate('/login');
+                alert('Unauthorized access. Please log in.');
             } else {
                 console.error('유저 아이디를 불러오는 중 에러 발생:', error);
                 alert('유저 아이디를 불러오는 중 에러가 발생했습니다.');
@@ -43,8 +39,7 @@ function NoticeEdit() {
     useEffect(() => {
         const fetchPostData = async () => {
             try {
-                //게시글 정보 가져오기
-                const response = await apiClient.get(`/clubs/${clubId}/board/2/posts/${postId}`);
+                const response = await apiClient.get(`/clubs/${clubId}/board/${boardType}/posts/${postId}`);
                 const post = response.data.post;
                 setTitle(post.title);
                 setContent(post.content);
@@ -56,54 +51,42 @@ function NoticeEdit() {
         };
         fetchPostData();
         fetchUserId();
-    }, [clubId, postId]);
+    }, [clubId, postId, boardType]);
 
-    // 제목 입력
     const handleTitleChange = (e) => {
         setTitle(e.target.value);
     };
 
-    // 내용 입력
     const handleContentChange = (e) => {
         setContent(e.target.value);
     };
 
-    // Presigned URL 요청 및 이미지 업로드
     const getPresignedUrl = async (file) => {
         try {
             const filename = encodeURIComponent(file.name);
             const response = await apiClient.get(`/presigned-url?filename=${filename}`);
-
-            console.log("Server response:", response.data.url); // 서버 응답 전체 출력
-
             const presignedUrl = response.data.url;
             if (!presignedUrl) {
                 throw new Error('서버로부터 URL 받을 수 없음');
             }
-
-            console.log("Fetched Presigned URL:", presignedUrl);
-
             await axios.put(presignedUrl, file, {
                 headers: {
                     'Content-Type': file.type,
                 },
                 withCredentials: false
             });
-            return presignedUrl.split("?")[0]; // 이미지 URL 반환
+            return presignedUrl.split("?")[0];
         } catch (error) {
             console.error('Presigned URL 요청 또는 이미지 업로드 실패:', error);
             throw error;
         }
     };
 
-    // 첨부 파일 선택
     const handleFileChange = async (e) => {
         const selectedFiles = Array.from(e.target.files);
         const urls = await Promise.all(selectedFiles.map(async (file) => {
             try {
-                const presignedUrl = await getPresignedUrl(file);
-                console.log("Presigned URL:", presignedUrl);
-                return presignedUrl;
+                return await getPresignedUrl(file);
             } catch (error) {
                 console.error('파일 업로드 중 오류 발생:', error);
                 alert('파일 업로드 중 오류가 발생했습니다.');
@@ -113,7 +96,6 @@ function NoticeEdit() {
         setAttachmentNames([...attachmentNames, ...urls]);
     };
 
-    // 글쓰기 폼 제출
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -126,8 +108,7 @@ function NoticeEdit() {
             });
             if (response.status === 200 || response.status === 201) {
                 alert('수정 완료');
-                //navigate(`/clubs/${clubId}/component/2/posts/${postId}`);
-                navigate(-1)
+                navigate(-1);
             }
         } catch (error) {
             console.error('수정 중 오류 발생:', error);
@@ -168,8 +149,7 @@ function NoticeEdit() {
                         value={content}
                         onChange={handleContentChange}
                     ></textarea>
-                    <div
-                        style={{display: "flex", justifyContent: "center", alignItems: "center", color: "#414141"}}>
+                    <div style={{display: "flex", justifyContent: "center", alignItems: "center", color: "#414141"}}>
                         <label>
                             <LuImagePlus style={{fontSize: '30px', cursor: 'pointer', marginLeft: "10px"}}/>
                             <input
@@ -190,7 +170,7 @@ function NoticeEdit() {
                 </div>
             </div>
         </div>
-    )
+    );
 }
 
-export default NoticeEdit;
+export default PostEdit;

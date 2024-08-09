@@ -122,6 +122,10 @@
 }
 
 .member-item {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
     padding: 10px 30px;
     border-bottom: 1px solid #e0e0e0;
     font-size: 14px;

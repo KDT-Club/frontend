@@ -10,18 +10,19 @@ import axios from "axios";
 import MemberManagement from './MemberManagement.jsx';
 import ClubManagement from './ClubManagement';
 import styled from "styled-components";
+import { RiVipCrown2Line } from "react-icons/ri";
 
 axios.defaults.withCredentials = true;
 
 const ProfileImage = styled.img`
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-bottom: 10px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
 `;
 
-function Slide({ clubName }) {
+function Slide({ clubName, clubImgUrl }) {
     let { id } = useParams();
     const navigate = useNavigate();
     const location = useLocation();
@@ -154,7 +155,12 @@ function Slide({ clubName }) {
                             <div className="member-list">
                                 {clubMembers.map((member, index) => (
                                     <div key={index} className="member-item">
-                                        <div>{member.studentId} {member.name} {member.status === "CLUB_PRESIDENT" && "(회장)"}</div>
+                                        <div>{member.studentId} {member.name} </div>
+                                        <div>
+                                            {member.status === "CLUB_PRESIDENT" && <RiVipCrown2Line style={{
+                                                fontSize: "17px", marginLeft: "7px"
+                                            }}/>}
+                                        </div>
                                     </div>
                                 ))}
                             </div>

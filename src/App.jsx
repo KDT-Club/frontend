@@ -36,7 +36,8 @@ import NoticeEdit from "./pages/myclub/notice/WriteAndEdit/NoticeEdit.jsx";
 import FreeBoardEdit from "./pages/myclub/freeboard/WriteAndEdit/FreeBoardEdit.jsx"
 import ClubInfoEdit from "./pages/myclub/headerHamburger/club_manage/ClubInfoEdit.jsx";
 import BoardEdit from "./pages/mypage/written_post/BoardEdit.jsx";
-
+import ActivityList from "./pages/myclub/etc/ActivityList.jsx";
+import PostEdit from "./pages/myclub/component/PostEdit.jsx";
 function App() {
     const [showLogo, setShowLogo] = React.useState(true);
 
@@ -96,14 +97,15 @@ function App() {
                             //내동아리 라우팅
                             <Route path="/clubs" element={<MyclubMain />} />
                             <Route path="/clubs/:id/myclub" element={<MyclubDetail />} />
+                            <Route path="/clubs/:id/activeList" element={<ActivityList />} />
                             <Route path="/clubs/:id/noticelist" element={<NoticeList />} />
                             <Route path="/clubs/:id/noticelist/noticewrite" element={<NoticeWrite />} />
                             <Route path="/clubs/:clubId/board/2/posts/:postId" element={<NoticeDetail />} />
-                            <Route path="/clubs/:clubId/board/2/posts/:postId/edit" element={<NoticeEdit />} />
+                            <Route path="/clubs/:clubId/board/2/posts/:postId/edit" element={<PostEdit />} />
                             <Route path="/clubs/:id/freeboardlist" element={<FreeBoardList />} />
                             <Route path="/clubs/:id/freeboardlist/freeboardwrite" element={<FreeBoardWrite />} />
                             <Route path="/clubs/:clubId/board/4/posts/:postId" element={<FreeBoardDetail />} />
-                            <Route path="/clubs/:clubId/board/4/posts/:postId/edit" element={<FreeBoardEdit />} />
+                            <Route path="/clubs/:clubId/board/4/posts/:postId/edit" element={<PostEdit />} />
                             <Route path="/clubs/etc1" element={<Etc1 />} />
                             <Route path="/clubs/etc1/atd" element={<Atd />} />
                             <Route path="/clubs/etc2" element={<Etc2 />} />

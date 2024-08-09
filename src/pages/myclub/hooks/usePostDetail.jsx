@@ -112,7 +112,6 @@ function usePostDetail(boardId) {
         try {
             await apiClient.delete(`/posts/${postId}/${commentId}`);
             await fetchComments();
-            alert('댓글 삭제 완료');
         } catch (error) {
             console.error('댓글 삭제 중 에러 발생', error);
             if (error.response) {

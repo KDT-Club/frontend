@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import PostDetail from '../component/PostDetail';
+import PostDetail from '../component/PostDetail.jsx';
 import usePostDetail from '../hooks/usePostDetail';
 
 function NoticeDetail() {
