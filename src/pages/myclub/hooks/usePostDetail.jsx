@@ -87,11 +87,11 @@ function usePostDetail(boardId) {
     };
 
     //수정된 댓글 저장
-    const handleSaveEditedComment = async () => {
-        if (editingCommentId && editedCommentContent.trim() && memberId) {
+    const handleSaveEditedComment = async (commentId, content) => {
+        if (commentId && content.trim()) {
             try {
-                const response = await apiClient.put(`/posts/${postId}/${editingCommentId}`, {
-                    content: editedCommentContent
+                const response = await apiClient.put(`/posts/${postId}/${commentId}`, {
+                    content: content
                 });
                 if (response.status === 200) {
                     await fetchComments();
@@ -109,8 +109,7 @@ function usePostDetail(boardId) {
         try {
             await apiClient.delete(`/posts/${postId}/${commentId}`);
             await fetchComments();
-            // 성공 메시지 표시
-            alert('댓글이 성공적으로 삭제되었습니다.');
+            alert('댓글 삭제 완료');
         } catch (error) {
             console.error('댓글 삭제 중 에러 발생', error);
             if (error.response) {

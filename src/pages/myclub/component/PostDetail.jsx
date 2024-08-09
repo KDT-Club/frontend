@@ -191,15 +191,17 @@ function PostDetail({
                         onSaveEditedComment,
                         onCommentDelete,
                         newComment,
-                        setNewComment
+                        setNewComment,
+                        // 추가
+                        editingCommentId,
+                        editedCommentContent,
+                        setEditedCommentContent,
                     }) {
     const [showPostModal, setShowPostModal] = useState(false);
     const [showCommentModal, setShowCommentModal] = useState(false);
     const [modalPosition, setModalPosition] = useState({ top: '0px', left: '0px' });
     const [selectedCommentId, setSelectedCommentId] = useState(null);
     const [selectedCommentContent, setSelectedCommentContent] = useState('');
-    const [isEditing, setIsEditing] = useState(false);
-    const [editedCommentContent, setEditedCommentContent] = useState('');
 
     const handlePostDotClick = () => {
         setShowPostModal(true);
@@ -220,23 +222,18 @@ function PostDetail({
     };
 
     const handleEditComment = () => {
-        setIsEditing(true);
-        setEditedCommentContent(selectedCommentContent);
+        onCommentEdit(selectedCommentId, selectedCommentContent);
         closeModal();
     };
 
     const handleCancelEdit = () => {
-        setIsEditing(false);
-        setEditedCommentContent('');
+        onCommentEdit(null, '');
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (isEditing) {
-            onSaveEditedComment(selectedCommentId, editedCommentContent);
-            setIsEditing(false);
-            setSelectedCommentId(null);
-            setEditedCommentContent('');
+        if (editingCommentId) {
+            onSaveEditedComment(editingCommentId, editedCommentContent);
         } else {
             onCommentSubmit(e);
         }
@@ -305,15 +302,22 @@ function PostDetail({
                 <SubmitCommentContainer>
                     <CommentInput
                         type="text"
-                        value={isEditing ? editedCommentContent : newComment}
-                        onChange={(e) => isEditing ? setEditedCommentContent(e.target.value) : setNewComment(e.target.value)}
-                        placeholder={isEditing ? "댓글을 수정하세요." : "댓글을 입력하세요."}
+                        value={editingCommentId ? editedCommentContent : newComment}
+                        onChange={(e) =>
+                            editingCommentId
+                                ? setEditedCommentContent(e.target.value)
+                                : setNewComment(e.target.value)
+                        }
+                        placeholder="댓글을 입력하세요"
                     />
                     <SubmitButton type="submit">
                         <FiSend style={{textAlign: "center", fontSize: "27px"}}/>
                     </SubmitButton>
-                    {isEditing && (
-                        <MdOutlineCancel style={{fontSize: "27px", marginLeft: '5px', marginRight: "10px", color: "#5c5c5c"}} onClick={handleCancelEdit}></MdOutlineCancel>
+                    {editingCommentId && (
+                        <MdOutlineCancel
+                            style={{fontSize: "27px", marginLeft: '5px', marginRight: "10px", color: "#5c5c5c"}}
+                            onClick={handleCancelEdit}
+                        />
                     )}
                 </SubmitCommentContainer>
             </Form>
