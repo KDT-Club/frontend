@@ -8,12 +8,12 @@ import Header_center from "../../components/header/Header_center.jsx";
 import styled from 'styled-components';
 
 const NoClubMessage = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  font-size: 1.2rem;
-  color: #666;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-size: 1.2rem;
+    color: #666;
 `;
 
 const MyclubMain = () => {
@@ -34,7 +34,7 @@ const MyclubMain = () => {
         const fetchClubs = async () => {
             try {
                 const response = await axios.get(`https://zmffjq.store/clubs?memberId=${memberId}`, {
-                params: { memberId }
+                    params: { memberId }
                 });
                 // 응답이 배열이고 유효한 클럽 데이터를 포함하고 있는지 확인
                 if (Array.isArray(response.data) && response.data.some(club => club.clubId)) {
@@ -42,13 +42,13 @@ const MyclubMain = () => {
                 } else {
                     setClubs([]); // 유효한 클럽 데이터가 없으면 빈 배열로 설정
                 }
-        } catch (error) {
-            console.error('동아리 목록을 가져오는 중 에러 발생', error);
-            setClubs([]); //추가
-        }
-    };
-    fetchClubs();
-}, [location, navigate]);
+            } catch (error) {
+                console.error('동아리 목록을 가져오는 중 에러 발생', error);
+                setClubs([]); //추가
+            }
+        };
+        fetchClubs();
+    }, [location, navigate]);
 
     const handleClubClick = (clubId) => {
         const club = clubs.find(club => club.clubId === clubId);

@@ -19,7 +19,7 @@
 
 .item-container {
     margin-top: 10px;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
 
 .headerrcontainer {
@@ -27,6 +27,7 @@
     flex-direction: row;
     justify-content: space-between;
     margin: 20px 20px 0 10px;
+    border-bottom: 1px solid grey;
 }
 
 .headerrcontainer h2 {
@@ -46,12 +47,11 @@
 
 .box-section {
     display: flex;
+    width: calc(100vw - 30px);
     overflow-x: auto;
     padding: 10px;
     gap: 10px;
     margin-bottom: 20px;
-    /*scrollbar-width: thin;*/
-    /*scrollbar-color: darkgray white;*/
     scrollbar-width: none;
 }
 
@@ -64,10 +64,8 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-width: 210px;
-    max-width: 210px;
-    /*max-height: 110px;*/
-    /*min-height: 110px;*/
+    min-width: 190px;
+    max-width: 190px;
     padding: 15px;
     border: 1.5px solid #597CA5;
     border-radius: 8px;
@@ -79,17 +77,21 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    width: 100%; /* 부모 요소의 너비에 맞춰서 작동하게 설정 */
+    width: 100%;
 }
 
 .box-item h3 {
-    font-size: 16px;
+    font-size: 14.5px;
     font-weight: bold;
     margin: 0 0 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
 }
 
 .box-item p {
-    font-size: 14px;
+    font-size: 12.5px;
     margin: 0;
 }
 

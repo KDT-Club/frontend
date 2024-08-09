@@ -7,14 +7,14 @@ import Slide from "./headerHamburger/Slide.jsx"
 
 function MyclubDetail() {
     const { id } = useParams();
-    console.log("club id:", id); // test
     const navigate = useNavigate();
     const location = useLocation();
     const [clubName, setClubName] = useState(''); //헤더에 이름 띄우기
-
-    //공지사항,자유게시판 글 API 조회
+    //공지사항,자유게시판,활동게시판 글 API 조회
     const [noticePosts, setNoticePosts] = useState([]);
     const [freeboardPosts, setFreeboardPosts] = useState([]);
+    const [activityPosts, setActivityPosts] = useState([]);
+
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -32,36 +32,49 @@ function MyclubDetail() {
             setLoading(true);
             setError(null);
             try {
-                const [noticeResponse, freeboardResponse] = await Promise.all([
+                const [noticeResponse, freeboardResponse,activityResponse] = await Promise.all([
                     axios.get(`https://zmffjq.store/clubs/${id}/board/2/posts`),
-                    axios.get(`https://zmffjq.store/clubs/${id}/board/4/posts`)
+                    axios.get(`https://zmffjq.store/clubs/${id}/board/4/posts`),
+                    axios.get(`https://zmffjq.store/board/3/clubs/${id}/posts`)
                 ]);
-                setNoticePosts(noticeResponse.data);
-                setFreeboardPosts(freeboardResponse.data);
 
-                // 서버에서 배열이 아닌 경우에 대비하여 처리
-                if (Array.isArray(noticeResponse.data)) {
-                    setNoticePosts(noticeResponse.data);
-                } else {
-                    setNoticePosts([noticeResponse.data]);
-                }
-                if (Array.isArray(freeboardResponse.data)) {
-                    setFreeboardPosts(freeboardResponse.data);
-                } else {
-                    setFreeboardPosts([freeboardResponse.data]);
-                }
-
-                // 공지사항 정렬
+                // 공지사항
                 const sortedNoticePosts = Array.isArray(noticeResponse.data)
                     ? noticeResponse.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
                     : [noticeResponse.data];
                 setNoticePosts(sortedNoticePosts);
 
-                // 자유게시판 정렬
+                // 자유게시판
                 const sortedFreeboardPosts = Array.isArray(freeboardResponse.data)
                     ? freeboardResponse.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
                     : [freeboardResponse.data];
                 setFreeboardPosts(sortedFreeboardPosts);
+
+                // 활동내용
+                const sortedActivityPosts = Array.isArray(activityResponse.data)
+                    ? await Promise.all(
+                        activityResponse.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+                            .map(async (post) => {
+                                try {
+                                    const imgResponse = await axios.get(`https://zmffjq.store/board/3/clubs/${id}/posts/${post.postId}`);
+                                    const attachmentNames = imgResponse.data.attachmentNames || [];
+                                    return {
+                                        ...post,
+                                        imageUrl: attachmentNames[0] || null,
+                                        content: attachmentNames.length > 0 ? null : post.content // 이미지가 없으면 content를 설정
+                                    };
+                                } catch (err) {
+                                    console.error('활동 게시글 조회 중 에러 발생:', err);
+                                    return {
+                                        ...post,
+                                        imageUrl: null,
+                                        content: post.content
+                                    };
+                                }
+                            })
+                    )
+                    : [activityResponse.data];
+                setActivityPosts(sortedActivityPosts);
 
             } catch (error) {
                 console.error('API 호출 중 오류 발생:', error.response || error);
@@ -82,6 +95,10 @@ function MyclubDetail() {
 
     const handleFreeboardClick = () => {
         navigate(`/clubs/${id}/freeboardlist`);
+    };
+
+    const handleActivityClick = () => {
+        navigate(`/clubs/${id}/activeList`);
     };
 
     const etc1handleMoreClick = () => {
@@ -125,6 +142,28 @@ function MyclubDetail() {
                             ))
                         ) : (
                             <p className="no-posts-message">작성된 글이 없습니다</p>
+                        )}
+                    </section>
+                </div>
+                <div className="item-container">
+                    <div className="headerrcontainer">
+                        <h2>동아리 활동</h2>
+                        <p onClick={handleActivityClick}>더보기</p>
+                    </div>
+                    <section className="box-section">
+                        {activityPosts.length > 0 ? (
+                            activityPosts.map((item, index) => (
+                                <div className="box-item" key={index}>
+                                    <h3>{item.title}</h3>
+                                    {item.imageUrl ? (
+                                        <img src={item.imageUrl} alt="첨부 이미지" style={{maxWidth: '100%'}}/>
+                                    ) : (
+                                        <p>{item.content}</p> // 이미지가 없는 경우 content를 표시
+                                    )}
+                                </div>
+                            ))
+                        ) : (
+                            <p className="no-posts-message">작성된 활동내용이 없습니다</p>
                         )}
                     </section>
                 </div>
