@@ -3,10 +3,13 @@ import './myclubheader.css'
 import { FaArrowLeft } from "react-icons/fa6";
 import { RxHamburgerMenu } from "react-icons/rx";
 import {useNavigate, useParams, useLocation} from "react-router-dom";
-import { MdOutlineManageAccounts, MdOutlinePerson, MdOutlineSettings, MdKeyboardArrowRight, MdKeyboardArrowDown } from "react-icons/md";
+import { MdOutlinePerson, MdKeyboardArrowRight, MdKeyboardArrowDown } from "react-icons/md";
 import { TbDoorExit } from "react-icons/tb";
 import Modal_confirm from "../../../components/modal/Modal_confirm.jsx";
 import axios from "axios";
+import MemberManagement from './MemberManagement.jsx';
+import ClubManagement from './ClubManagement';
+
 axios.defaults.withCredentials = true;
 
 function MyclubHeader({ clubName }) {
@@ -178,41 +181,8 @@ function MyclubHeader({ clubName }) {
                                 ))}
                             </div>
                         )}
-                        <div className="li-container" onClick={toggleMemberManage}>
-                            <div className="li-container-left">
-                                <MdOutlineManageAccounts style={{fontSize: "27px"}}/>
-                                <li>회원 관리</li>
-                            </div>
-                            {isMemberManageOpen ? (
-                                <MdKeyboardArrowDown style={{marginRight: "17px", fontSize: "28px"}} />
-                            ) : (
-                                <MdKeyboardArrowRight style={{marginRight: "17px", fontSize: "28px"}} />
-                            )}
-                        </div>
-                        {isMemberManageOpen && (
-                            <div className="member-manage-list">
-                                <div className="manage-item" onClick={() => navigate(`/clubs/${id}/memberInfoFixList`)}>회원 정보 수정</div>
-                                <div className="manage-item" onClick={() => navigate('/clubs/etc1/atd')}>회원 출석 관리</div>
-                                <div className="manage-item" onClick={() => navigate(`/clubs/${id}/joinRequest`)}>가입 신청 현황</div>
-                            </div>
-                        )}
-                        <div className="li-container" onClick={toggleClubManage}>
-                            <div className="li-container-left">
-                                <MdOutlineSettings style={{fontSize: "27px"}}/>
-                                <li>동아리 관리</li>
-                            </div>
-                            {isClubManageOpen ? (
-                                <MdKeyboardArrowDown style={{marginRight: "17px", fontSize: "28px"}} />
-                            ) : (
-                                <MdKeyboardArrowRight style={{marginRight: "17px", fontSize: "28px"}} />
-                            )}
-                        </div>
-                        {isClubPresident && isClubManageOpen && (
-                            <div className="club-manage-list">
-                                <div className="manage-item" onClick={handleClubInfoEdit}>동아리 정보 수정</div>
-                                <div className="manage-item" onClick={handleClubDelete}>동아리 삭제</div>
-                            </div>
-                        )}
+                        <MemberManagement id={id} isClubPresident={isClubPresident} />
+                        <ClubManagement id={id} isClubPresident={isClubPresident} />
                     </div>
                     <div className="leave-club" onClick={() => handleOpenDeleteModal("동아리에서 탈퇴하시겠습니까?")}>
                         <div className="leave-club-line">
@@ -225,6 +195,7 @@ function MyclubHeader({ clubName }) {
             </div>
         </>
     );
+
 }
 
 export default MyclubHeader;

@@ -74,11 +74,14 @@ const PostTitle = styled.p`
     padding-bottom: 12px;
     text-align: start;
     width: 100%;
+    margin-top: 8px;
+    margin-left: 10px;
 `;
 
 const PostContent = styled.p`
     font-size: 17.8px;
     margin-top: 5px;
+    margin-left: 10px;
     text-align: start;
 `;
 

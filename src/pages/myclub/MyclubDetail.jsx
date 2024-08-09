@@ -3,9 +3,8 @@ import axios from 'axios';
 import "./myclubdetail.css";
 import Footer from '../../components/footer/Footer.jsx';
 import { useParams, useNavigate, useLocation } from "react-router-dom";
-import MyclubHeader from "./DetailHeader/MyclubHeader.jsx";
-// import {FaArrowLeft} from "react-icons/fa6";
-// import {FiMoreVertical} from "react-icons/fi";
+//import MyclubHeader from "./DetailHeader/MyclubHeader.jsx";
+import MyclubHeader from "./headerHamburger/MyclubHeader.jsx"
 
 function MyclubDetail() {
     const { id } = useParams();
