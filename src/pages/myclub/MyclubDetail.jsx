@@ -3,8 +3,8 @@ import axios from 'axios';
 import "./myclubdetail.css";
 import Footer from '../../components/footer/Footer.jsx';
 import { useParams, useNavigate, useLocation } from "react-router-dom";
-//import MyclubHeader from "./DetailHeader/MyclubHeader.jsx";
-import MyclubHeader from "./headerHamburger/MyclubHeader.jsx"
+//import Slide from "./DetailHeader/Slide.jsx";
+import Slide from "./headerHamburger/Slide.jsx"
 
 function MyclubDetail() {
     const { id } = useParams();
@@ -99,7 +99,7 @@ function MyclubDetail() {
 
     return (
         <div className="myclub-detail-container">
-            <MyclubHeader clubName={clubName} />
+            <Slide clubName={clubName} />
             <div className="scroll-container">
                 <div className="item-container">
                     <div className="headerrcontainer">

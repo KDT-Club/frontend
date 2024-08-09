@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { FaArrowLeft } from 'react-icons/fa6';
 import { FiMoreVertical } from "react-icons/fi";
 import Modal_post from "../../../components/modal/Modal_post.jsx";
-import { formatDate } from "../component/Date.jsx";
+import { formatDate } from "../component/Date";
+import Modal_post_complain from "../../../components/modal/Modal_post_complain.jsx";
 import styled from 'styled-components';
 import CommentSection from "./CommentSection.jsx";
 
@@ -123,17 +124,22 @@ function PostDetail({
                         editingCommentId,
                         editedCommentContent,
                         setEditedCommentContent,
-                        showEditButton,
                         memberId
                     }) {
     const [showPostModal, setShowPostModal] = useState(false);
+    const [showComplainModal, setShowComplainModal] = useState(false);
 
     const handlePostDotClick = () => {
-        setShowPostModal(true);
+        if (parseInt(post.member.id) === parseInt(memberId)) {
+            setShowPostModal(true);
+        } else {
+            setShowComplainModal(true);
+        }
     };
 
     const closeModal = () => {
         setShowPostModal(false);
+        setShowComplainModal(false);
     };
 
     return (
@@ -141,11 +147,7 @@ function PostDetail({
             <HeaderContainer>
                 <FaArrowLeft style={{fontSize: '24px', cursor: 'pointer'}} onClick={onBackClick}/>
                 <Title>{title}</Title>
-                {showEditButton ? (
-                    <FiMoreVertical style={{fontSize: '24px', cursor: 'pointer'}} onClick={handlePostDotClick}/>
-                ) : (
-                    <div><div></div></div>
-                )}
+                <FiMoreVertical style={{fontSize: '24px', cursor: 'pointer'}} onClick={handlePostDotClick}/>
             </HeaderContainer>
             <ScrollContainer>
                 {post && (
@@ -190,6 +192,7 @@ function PostDetail({
                     onCommentDelete={onCommentDelete}
                 />
                 {showPostModal && <Modal_post onClose={closeModal} onEdit={onPostDotClick}/>}
+                {showComplainModal && <Modal_post_complain onClose={closeModal} />}
             </ScrollContainer>
         </Whole>
     );

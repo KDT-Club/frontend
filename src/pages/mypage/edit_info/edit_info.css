@@ -6,7 +6,7 @@
     display: flex;
     justify-content: center;
     width: 80%;
-    margin: 45px auto 0 auto;
+    margin: 70px auto 0 auto;
     position: relative;
 }
 
@@ -36,7 +36,7 @@
 }
 
 .information {
-    margin-top: 180px;
+    margin-top: 160px;
 }
 
 .information .name, .information .major, .information .phone, .information .password {

@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useCallback} from 'react';
-import './myclubheader.css'
+import './slide.css'
 import { FaArrowLeft } from "react-icons/fa6";
 import { RxHamburgerMenu } from "react-icons/rx";
 import {useNavigate, useParams, useLocation} from "react-router-dom";
@@ -9,10 +9,19 @@ import Modal_confirm from "../../../components/modal/Modal_confirm.jsx";
 import axios from "axios";
 import MemberManagement from './MemberManagement.jsx';
 import ClubManagement from './ClubManagement';
+import styled from "styled-components";
 
 axios.defaults.withCredentials = true;
 
-function MyclubHeader({ clubName }) {
+const ProfileImage = styled.img`
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 10px;
+`;
+
+function Slide({ clubName }) {
     let { id } = useParams();
     const navigate = useNavigate();
     const location = useLocation();
@@ -30,8 +39,6 @@ function MyclubHeader({ clubName }) {
     const [clubMembers, setClubMembers] = useState([]);
     const [isMenuOpen, setIsMenuOpen] = useState(location.state?.isMenuOpen || false); //햄버거탭 슬라이드
     const [isMemberListOpen, setIsMemberListOpen] = useState(false); //회원리스트
-    const [isMemberManageOpen, setIsMemberManageOpen] = useState(false); //회원관리
-    const [isClubManageOpen, setIsClubManageOpen] = useState(false); //동아리 관리
 
     const [showDeleteModal, setShowDeleteModal] = useState(false);  // 네,아니오 모달창 띄우기
     const [modalMessage, setModalMessage] = useState("");   // 모달 메세지
@@ -101,36 +108,6 @@ function MyclubHeader({ clubName }) {
         setIsMemberListOpen(!isMemberListOpen);
     };
 
-    //회원관리 토글
-    const toggleMemberManage = (e) => {
-        e.stopPropagation();
-        if (isClubPresident) {
-            setIsMemberManageOpen(!isMemberManageOpen);
-        } else {
-            alert("동아리 회장만 접근 가능합니다.");
-        }
-    };
-
-    //동아리관리 토글
-    const toggleClubManage = (e) => {
-        e.stopPropagation();
-        if (isClubPresident) {
-            setIsClubManageOpen(!isClubManageOpen);
-        } else {
-            alert("동아리 회장만 접근 가능합니다.");
-        }
-    };
-
-    const handleClubInfoEdit = () => {
-        if (isClubPresident) {
-            navigate(`/clubs/${id}/changeclubinfo`, { state: { isMenuOpen: true } });
-        }
-    };
-
-    const handleClubDelete = () => {
-        //구현
-    };
-
     // 네/아니오 모달창 open
     const handleOpenDeleteModal = useCallback((message) => {
         setModalMessage(message);
@@ -157,7 +134,8 @@ function MyclubHeader({ clubName }) {
             <div className={`slide-menu ${isMenuOpen ? 'open' : ''}`}>
                 <div className="slide-menu-content">
                     <div className="member-info">
-                        <h2>{member.name}</h2>
+                        <ProfileImage src={member.memberImageURL} alt={member.name}/>
+                        <h3>{member.name}</h3>
                         <p>{member.studentId}</p>
                     </div>
                     <div className="menu-items">
@@ -167,9 +145,9 @@ function MyclubHeader({ clubName }) {
                                 <li>회원</li>
                             </div>
                             {isMemberListOpen ? (
-                                <MdKeyboardArrowDown style={{marginRight: "17px", fontSize: "28px"}} />
+                                <MdKeyboardArrowDown style={{marginRight: "17px", fontSize: "28px"}}/>
                             ) : (
-                                <MdKeyboardArrowRight style={{marginRight: "17px", fontSize: "28px"}} />
+                                <MdKeyboardArrowRight style={{marginRight: "17px", fontSize: "28px"}}/>
                             )}
                         </div>
                         {isMemberListOpen && (
@@ -181,8 +159,8 @@ function MyclubHeader({ clubName }) {
                                 ))}
                             </div>
                         )}
-                        <MemberManagement id={id} isClubPresident={isClubPresident} />
-                        <ClubManagement id={id} isClubPresident={isClubPresident} />
+                        <MemberManagement id={id} isClubPresident={isClubPresident}/>
+                        <ClubManagement id={id} isClubPresident={isClubPresident}/>
                     </div>
                     <div className="leave-club" onClick={() => handleOpenDeleteModal("동아리에서 탈퇴하시겠습니까?")}>
                         <div className="leave-club-line">
@@ -191,11 +169,11 @@ function MyclubHeader({ clubName }) {
                         </div>
                     </div>
                 </div>
-                {showDeleteModal && <Modal_confirm onClose={handleCloseDeleteModal} message={modalMessage} link="/" />}
+                {showDeleteModal && <Modal_confirm onClose={handleCloseDeleteModal} message={modalMessage} link="/"/>}
             </div>
         </>
     );
 
 }
 
-export default MyclubHeader;
+export default Slide;

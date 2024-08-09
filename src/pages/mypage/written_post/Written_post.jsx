@@ -3,6 +3,19 @@ import axios from "axios";
 import './written_post.css'
 import {useNavigate, useParams} from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa6";
+import styled from "styled-components";
+
+const HeaderContainer = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 47.5px;
+    background-color: white;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    padding-left: 25px;
+    padding-right: 25px;
+    margin-bottom: 0px;
+`;
 
 function Written_post() {
     const navigate = useNavigate();
@@ -34,13 +47,13 @@ function Written_post() {
 
     return (
         <div className="Written_post">
-            <div className="header">
+            <HeaderContainer>
                 <FaArrowLeft
-                    style={{ fontSize: '25px', strokeWidth: '0.1', cursor: 'pointer', marginLeft: '15px' }}
+                    style={{fontSize: '24px', cursor: 'pointer'}}
                     onClick={() => navigate(`/members/${memberId}`)}
                 />
-                <p>작성한 글 보기</p>
-            </div>
+                <div style={{fontSize: '20px', fontWeight: "bold", textAlign: "left", marginRight: "110px"}}>작성한 글 보기</div>
+            </HeaderContainer>
             <div className="written_post_list">
                 {
                     list.map((post, i) => {

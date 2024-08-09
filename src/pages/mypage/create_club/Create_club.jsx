@@ -103,7 +103,7 @@ function Create_club() {
         <div className="Create_club">
             <div className="header">
                 <FaArrowLeft
-                    style={{ fontSize: '25px', strokeWidth: '0.1', cursor: 'pointer', marginLeft: '15px' }}
+                    style={{ fontSize: '25px', strokeWidth: '0.1', cursor: 'pointer', marginLeft: '25px' }}
                     onClick={() => navigate(-1)}
                 />
                 <p>동아리 만들기</p>
@@ -119,9 +119,9 @@ function Create_club() {
                     />
                     <label htmlFor="upload" className="image-label">
                         {selectedFile ? (
-                            <img src={clubData.clubImgUrl} alt="club" style={{ width: "55px", height: "55px", borderRadius: "50%" }} />
+                            <img src={clubData.clubImgUrl} alt="club" style={{ marginLeft: "0px", width: "54px", height: "54px", borderRadius: "50%", position: "relative" }} />
                         ) : (
-                            <CiCirclePlus style={{ fontSize: "55px", display: "flex", float: "left", position: "relative" }} />
+                            <CiCirclePlus style={{ marginTop: "6px", fontSize: "55px", display: "flex", float: "left", position: "relative" }} />
                         )}
                     </label>
                     <div className="add_club_picture">
