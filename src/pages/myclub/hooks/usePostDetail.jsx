@@ -1,3 +1,4 @@
+//글 상세보기 페이지의 데이터 관리, 비즈니스 로직 담당
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from "axios";
