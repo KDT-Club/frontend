@@ -1,8 +1,6 @@
 import React, {useCallback, useState} from "react";
 import './modal_comment.css';
-import {useNavigate} from "react-router-dom";
 import Modal_confirm from "./Modal_confirm.jsx";
-import axios from "axios";
 
 const Modal_comment = ({ onClose, onEdit, position, postId, commentId, onDelete, content }) => {
     const [modalMessage, setModalMessage] = useState("");   // 모달창에 띄울 메세지 전달
@@ -24,14 +22,8 @@ const Modal_comment = ({ onClose, onEdit, position, postId, commentId, onDelete,
     };
 
     const handleDelete = async () => {
-        try {
-            await axios.delete(`https://zmffjq.store/posts/${postId}/${commentId}`);
-            onDelete(commentId);
-            onClose();
-        } catch (error) {
-            console.error('댓글 삭제 중 에러 발생:', error);
-            alert('댓글 삭제 중 오류가 발생했습니다. 다시 시도해주세요.');
-        }
+        onDelete(commentId);
+        onClose();
     };
 
     const handleEdit = () => {

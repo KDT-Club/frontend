@@ -35,6 +35,7 @@ function FreeBoardDetail() {
             onPostDotClick={handleEditClick}
             onCommentSubmit={handleCommentSubmit}
             onCommentEdit={handleCommentEdit}
+            onSaveEditedComment={handleSaveEditedComment}
             onCommentDelete={handleDeleteComment}
             newComment={newComment}
             setNewComment={setNewComment}

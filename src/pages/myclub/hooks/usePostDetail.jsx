@@ -1,3 +1,4 @@
+//글 상세보기 페이지의 데이터 관리, 비즈니스 로직 담당
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from "axios";
@@ -8,6 +9,7 @@ const apiClient = axios.create({
     headers: {
         'Content-Type': 'application/json',
     },
+    withCredentials: true,
 });
 
 function usePostDetail(boardId) {
@@ -79,23 +81,21 @@ function usePostDetail(boardId) {
         }
     };
 
+    //댓글 수정
     const handleCommentEdit = async (commentId, content) => {
         setEditingCommentId(commentId);
         setEditedCommentContent(content);
     };
 
-    const handleSaveEditedComment = async () => {
-        if (editingCommentId && editedCommentContent.trim() && memberId) {
+    //수정된 댓글 저장
+    const handleSaveEditedComment = async (commentId, content) => {
+        if (commentId && content.trim()) {
             try {
-                const response = await apiClient.put(`/posts/${postId}/${editingCommentId}`, {
-                    content: editedCommentContent
+                const response = await apiClient.put(`/posts/${postId}/${commentId}`, {
+                    content: content
                 });
                 if (response.status === 200) {
-                    setComments(prevComments =>
-                        prevComments.map(comment =>
-                            comment.commentId === editingCommentId ? { ...comment, content: editedCommentContent } : comment
-                        )
-                    );
+                    await fetchComments();
                     setEditingCommentId(null);
                     setEditedCommentContent('');
                 }
@@ -109,9 +109,14 @@ function usePostDetail(boardId) {
     const handleDeleteComment = async (commentId) => {
         try {
             await apiClient.delete(`/posts/${postId}/${commentId}`);
-            setComments(prevComments => prevComments.filter(comment => comment.commentId !== commentId));
+            await fetchComments();
+            alert('댓글 삭제 완료');
         } catch (error) {
             console.error('댓글 삭제 중 에러 발생', error);
+            if (error.response) {
+                console.error('Error data:', error.response.data);
+                console.error('Error status:', error.response.status);
+            }
             alert('댓글 삭제 중 오류가 발생했습니다. 다시 시도해주세요.');
         }
     };

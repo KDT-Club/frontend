@@ -46,6 +46,19 @@ const PostListContainer = styled.div`
     scrollbar-color: darkgray white;
 `;
 
+const EmptyMessageContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+`;
+
+const EmptyMessage = styled.p`
+    font-size: 18px;
+    color: gray;
+    text-align: center;
+`;
+
 const Content = styled.p`
     font-size: 16px;
     color: #666;
@@ -64,7 +77,7 @@ const Post = styled.div`
     align-items: flex-start;
     justify-content: center;
     border-bottom: 1px solid #ddd;
-    padding: 15px 20px;
+    padding: 11px 20px;
     
     a {
         text-decoration: none;
@@ -77,17 +90,14 @@ const Title = styled.p`
     font-weight: bold;
     font-size: 18.6px;
     text-align: left;
-    margin: 0px 10px 10px 8px;
+    margin: 0px 10px 6px 8px;
 `;
 
 const CreatedAt = styled.p`
-    margin-top: 5px;
-    margin-bottom: 0;
     font-size: 16px;
     color: gray;
     text-align: left;
-    margin-left: 8px;
-    margin-right: 10px;
+    margin: 5px 10px 0 8px;
 `;
 
 const PostList = ({ boardType, boardId, title }) => {
@@ -179,7 +189,9 @@ const PostList = ({ boardType, boardId, title }) => {
                             </Post>
                         ))
                     ) : (
-                        <p>작성된 글이 없습니다.</p>
+                        <EmptyMessageContainer>
+                            <EmptyMessage>작성된 글이 없습니다.</EmptyMessage>
+                        </EmptyMessageContainer>
                     )}
                 </PostListContainer>
             </ScrollContainer>
