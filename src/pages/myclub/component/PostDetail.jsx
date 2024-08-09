@@ -1,10 +1,97 @@
 import React, { useState } from 'react';
 import { FaArrowLeft } from 'react-icons/fa6';
-import { FiMoreVertical, FiSend } from "react-icons/fi";
+import { FiMoreVertical } from "react-icons/fi";
 import Modal_post from "../../../components/modal/Modal_post.jsx";
-import Modal_comment from "../../../components/modal/Modal_comment.jsx";
 import { formatDate } from "../component/Date.jsx";
-import "../notice/notice.css";
+import styled from 'styled-components';
+import CommentSection from "./CommentSection.jsx";
+
+const Container = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+`;
+
+const HeaderContainer = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 47.5px;
+    background-color: white;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    padding-left: 25px;
+    padding-right: 25px;
+    margin-bottom: 0px;
+`;
+
+const Title = styled.div`
+    font-size: 20px;
+    font-weight: bold;
+`;
+
+const PostContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: 20px;
+    margin-left: 20px;
+    margin-right: 10px;
+`;
+
+const PostAuthorContainer = styled.div`
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+`;
+
+const ProfileImage = styled.img`
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    margin-right: 10px;`;
+
+const PostAuthorDate = styled.p`
+    font-size: 16.6px;
+    color: gray;
+    font-weight: bold;
+    margin: 0;
+`;
+
+const PostTitle = styled.p`
+    font-size: 20px;
+    font-weight: bold;
+    padding-bottom: 12px;
+    text-align: start;
+    width: 100%;
+`;
+
+const PostContent = styled.p`
+    font-size: 17.8px;
+    margin-top: 5px;
+    text-align: start;
+`;
+
+const ImageContainer = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    box-sizing: border-box;
+    img {
+        width: 100%;
+        max-width: 200px;
+        min-width: 200px;
+        height: auto;
+        border-radius: 8px;
+        margin-bottom: 10px;
+    }
+`;
+
+const Divider = styled.div`
+    border-bottom: 1.5px solid dimgrey;
+    margin-top: 10px;
+`;
 
 function PostDetail({
                         title,
@@ -15,86 +102,41 @@ function PostDetail({
                         onPostDotClick,
                         onCommentSubmit,
                         onCommentEdit,
+                        onSaveEditedComment,
                         onCommentDelete,
                         newComment,
                         setNewComment,
+                        // 추가
                         editingCommentId,
                         editedCommentContent,
                         setEditedCommentContent,
                     }) {
     const [showPostModal, setShowPostModal] = useState(false);
-    const [showCommentModal, setShowCommentModal] = useState(false);
-    const [modalPosition, setModalPosition] = useState({ top: '0px', left: '0px' });
-    const [selectedCommentContent, setSelectedCommentContent] = useState('');
 
     const handlePostDotClick = () => {
         setShowPostModal(true);
     };
 
-    const handleCommentDotClick = (e, commentId, content) => {
-        setModalPosition({
-            top: e.clientY + 3 + 'px'
-        });
-        setShowCommentModal(true);
-        setSelectedCommentContent(content);
-        onCommentEdit(commentId, content);
-    };
-
     const closeModal = () => {
         setShowPostModal(false);
-        setShowCommentModal(false);
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        if (editingCommentId) {
-            onCommentEdit(editingCommentId, editedCommentContent);
-        } else {
-            onCommentSubmit(e);
-        }
     };
 
     return (
-        <div>
-            <div className="header_container">
-                <FaArrowLeft
-                    style={{fontSize: '24px', cursor: 'pointer'}}
-                    onClick={onBackClick}
-                />
-                <div style={{fontSize: '20px', fontWeight: "bold"}}>{title}</div>
-                <FiMoreVertical
-                    style={{fontSize: '24px', cursor: 'pointer'}}
-                    onClick={handlePostDotClick}
-                />
-            </div>
+        <Container>
+            <HeaderContainer>
+                <FaArrowLeft style={{fontSize: '24px', cursor: 'pointer'}} onClick={onBackClick}/>
+                <Title>{title}</Title>
+                <FiMoreVertical style={{fontSize: '24px', cursor: 'pointer'}} onClick={handlePostDotClick}/>
+            </HeaderContainer>
             {post && (
-                <div style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "flex-start",
-                    marginTop: "30px",
-                    marginLeft: "20px",
-                    marginRight: "10px"
-                }}>
-                    <p style={{
-                        fontSize: "16.6px",
-                        color: "gray",
-                        fontWeight: "bold",
-                        marginBottom: "5px"
-                    }}>{post.member.name} | {formatDate(post.createdAt)}</p>
-                    <p style={{
-                        fontSize: "20px",
-                        fontWeight: "bold",
-                        paddingBottom: "12px",
-                        textAlign: "start",
-                        width: "100%"
-                    }}>{post.title}</p>
-                    <p style={{
-                        fontSize: "17.8px",
-                        marginTop: "10px",
-                        textAlign: "start"
-                    }}>{post.content}</p>
-                    <div className="image-container">
+                <PostContainer>
+                    <PostAuthorContainer>
+                        <ProfileImage src={post.member.memberImageURL} alt="" />
+                        <PostAuthorDate>{post.member.name} | {formatDate(post.createdAt)}</PostAuthorDate>
+                    </PostAuthorContainer>
+                    <PostTitle>{post.title}</PostTitle>
+                    <PostContent>{post.content}</PostContent>
+                    <ImageContainer>
                         {attachmentNames.length > 0 ? (
                             attachmentNames.map((url, index) => (
                                 <img
@@ -110,59 +152,25 @@ function PostDetail({
                         ) : (
                             <p></p>
                         )}
-                    </div>
-                </div>
+                    </ImageContainer>
+                </PostContainer>
             )}
-            <div style={{borderBottom: '1.5px solid dimgrey', marginTop: '10px'}}></div>
-            <div className="comment-container">
-                {comments.length > 0 ? (
-                    comments.map(comment => (
-                        <div key={comment.commentId} className="comment-oneline">
-                            <div style={{display: 'flex', justifyContent: 'space-between', width: '100%'}}>
-                                <p style={{fontSize: '16.5px', color: 'gray', marginLeft: "30px", marginBottom: "2px"}}>
-                                    {comment.memberName} | {formatDate(comment.createdAt)}
-                                </p>
-                                <FiMoreVertical
-                                    style={{fontSize: '20px', cursor: 'pointer', marginRight: '20px'}}
-                                    onClick={(e) => handleCommentDotClick(e, comment.commentId, comment.content)}
-                                />
-                            </div>
-                            <p style={{
-                                fontSize: '17px',
-                                marginLeft: "30px",
-                                marginBottom: "12px"
-                            }}>{comment.content}</p>
-                            <div style={{borderBottom: '1px solid gray', width: '100%'}}></div>
-                        </div>
-                    ))
-                ) : (
-                    <p style={{fontSize: '18px'}}>댓글이 없습니다.</p>
-                )}
-            </div>
-            <form onSubmit={handleSubmit} style={{marginTop: '15px', display: 'flex', alignItems: 'center'}}>
-                <div className="submit-comment-container">
-                    <input
-                        type="text"
-                        value={editingCommentId ? editedCommentContent : newComment}
-                        onChange={(e) => editingCommentId ? setEditedCommentContent(e.target.value) : setNewComment(e.target.value)}
-                        placeholder="댓글을 입력하세요."
-                    />
-                    <button type="submit">
-                        <FiSend style={{textAlign: "center", fontSize: "27px"}}/>
-                    </button>
-                </div>
-            </form>
-            {showPostModal && <Modal_post onClose={closeModal} onEdit={onPostDotClick}/>}
-            {showCommentModal && <Modal_comment
-                onClose={closeModal}
-                position={modalPosition}
-                onEdit={() => onCommentEdit(editingCommentId, selectedCommentContent)}
+            <Divider />
+            <CommentSection
+                comments={comments}
                 postId={post.postId}
-                commentId={editingCommentId}
-                onDelete={onCommentDelete}
-                content={selectedCommentContent}
-            />}
-        </div>
+                newComment={newComment}
+                setNewComment={setNewComment}
+                editingCommentId={editingCommentId}
+                editedCommentContent={editedCommentContent}
+                setEditedCommentContent={setEditedCommentContent}
+                onCommentSubmit={onCommentSubmit}
+                onCommentEdit={onCommentEdit}
+                onSaveEditedComment={onSaveEditedComment}
+                onCommentDelete={onCommentDelete}
+            />
+            {showPostModal && <Modal_post onClose={closeModal} onEdit={onPostDotClick}/>}
+        </Container>
     );
 }
 
