@@ -34,7 +34,7 @@ import FreeBoardDetail from "./pages/myclub/freeboard/FreeBoardDetail.jsx";
 import FreeBoardWrite from "./pages/myclub/freeboard/WriteAndEdit/FreeBoardWrite.jsx";
 import NoticeEdit from "./pages/myclub/notice/WriteAndEdit/NoticeEdit.jsx";
 import FreeBoardEdit from "./pages/myclub/freeboard/WriteAndEdit/FreeBoardEdit.jsx"
-import ClubInfoEdit from "./pages/myclub/DetailHeader/club_manage/ClubInfoEdit.jsx";
+import ClubInfoEdit from "./pages/myclub/headerHamburger/club_manage/ClubInfoEdit.jsx";
 import BoardEdit from "./pages/mypage/written_post/BoardEdit.jsx";
 
 function App() {

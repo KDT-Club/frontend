@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
-import '../../myclub/DetailHeader/myclubheader.css';
+import axios from "axios";
+import '../../myclub/headerHamburger/slide.css';
 import '../../myclub/notice/WriteAndEdit/noticewrite.css';
 import { useNavigate, useParams } from 'react-router-dom';
 import { FiX, FiCheck } from 'react-icons/fi';

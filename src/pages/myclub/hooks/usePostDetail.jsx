@@ -17,6 +17,7 @@ function usePostDetail(boardId) {
     const navigate = useNavigate();
     const [memberId, setMemberId] = useState(null);
     const [post, setPost] = useState('');
+    const [postAuthor, setPostAuthor] = useState('');
     const [attachmentNames, setAttachmentNames] = useState([]);
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
@@ -43,6 +44,7 @@ function usePostDetail(boardId) {
         try {
             const response = await apiClient.get(`/clubs/${clubId}/board/${boardId}/posts/${postId}`);
             setPost(response.data.post);
+            setPostAuthor(response.data.post.member.id);
             setAttachmentNames(response.data.attachmentNames || []);
         } catch (error) {
             console.error('게시글 조회 에러 발생:', error);
@@ -123,6 +125,7 @@ function usePostDetail(boardId) {
 
     return {
         post,
+        postAuthor,
         attachmentNames,
         comments,
         newComment,
@@ -134,7 +137,8 @@ function usePostDetail(boardId) {
         handleCommentSubmit,
         handleCommentEdit,
         handleSaveEditedComment,
-        handleDeleteComment
+        handleDeleteComment,
+        memberId,
     };
 }
 

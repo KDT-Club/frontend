@@ -1,5 +1,5 @@
 import React from 'react';
-import '../DetailHeader/myclubheader.css';
+import '../headerHamburger/slide.css';
 import { useNavigate } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa6";
 import { MdKeyboardArrowRight } from "react-icons/md";

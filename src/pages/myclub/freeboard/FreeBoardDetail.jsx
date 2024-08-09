@@ -7,6 +7,7 @@ function FreeBoardDetail() {
     const navigate = useNavigate();
     const {
         post,
+        postAuthor,
         attachmentNames,
         comments,
         newComment,
@@ -18,12 +19,20 @@ function FreeBoardDetail() {
         handleCommentSubmit,
         handleCommentEdit,
         handleSaveEditedComment,
-        handleDeleteComment
+        handleDeleteComment,
+        memberId
     } = usePostDetail('4');
 
     const handleEditClick = () => {
         navigate(`/clubs/${post.clubId}/board/4/posts/${post.postId}/edit`);
     };
+
+    // 현재 사용자가 게시글 작성자인지 확인
+    const isAuthor = postAuthor && memberId && parseInt(postAuthor) === parseInt(memberId);
+
+    if (!post) {
+        return <div>로딩중...</div>;
+    }
 
     return (
         <PostDetail
@@ -42,6 +51,8 @@ function FreeBoardDetail() {
             editingCommentId={editingCommentId}
             editedCommentContent={editedCommentContent}
             setEditedCommentContent={setEditedCommentContent}
+            showEditButton={isAuthor}
+            memberId={memberId}
         />
     );
 }

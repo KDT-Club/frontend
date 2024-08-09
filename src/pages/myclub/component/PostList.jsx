@@ -15,7 +15,7 @@ const apiClient = axios.create({
 
 const Whole = styled.div`
     width: 100%;
-    height: 100vh; 
+    height: 100vh;
     display: flex;
     flex-direction: column;
 `;
@@ -78,7 +78,7 @@ const Post = styled.div`
     justify-content: center;
     border-bottom: 1px solid #ddd;
     padding: 11px 20px;
-    
+
     a {
         text-decoration: none;
         color: inherit;
@@ -105,7 +105,11 @@ const PostList = ({ boardType, boardId, title }) => {
     const navigate = useNavigate();
     const [list, setList] = useState([]);
     const [memberId, setMemberId] = useState(null);
+    const [isPresident, setIsPresident] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+    const [studentId, setStudentId] = useState(null);
 
+    /*
     const fetchUserId = async () => {
         try {
             const response = await apiClient.get('/getUserId', { withCredentials: true });
@@ -117,6 +121,31 @@ const PostList = ({ boardType, boardId, title }) => {
             } else {
                 alert('유저 아이디를 불러오는 중 에러가 발생했습니다.');
             }
+        }
+    };*/
+    const fetchUserDataAndCheckStatus = async () => {
+        try {
+            // 사용자의 memberId 가져오기
+            const userResponse = await apiClient.get('/getUserId', { withCredentials: true });
+            const userMemberId = userResponse.data.message;
+            setMemberId(userMemberId);
+
+            // 회원 정보 조회
+            const memberResponse = await apiClient.get(`/members/${userMemberId}`);
+            setStudentId(memberResponse.data.studentId);
+
+            // 클럽 회원 목록 가져오기
+            const membersResponse = await apiClient.get(`/clubs/${id}/clubMember`);
+            if (membersResponse.status === 200) {
+                const members = membersResponse.data;
+                // 로그인 중인 멤버의 상태를 찾아 회장 여부를 확인
+                const loggedInMember = members.find(member => member.studentId === memberResponse.data.studentId);
+                setIsPresident(loggedInMember?.status === "CLUB_PRESIDENT");
+            }
+        } catch (error) {
+            console.error('Error fetching user data:', error);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -152,7 +181,7 @@ const PostList = ({ boardType, boardId, title }) => {
             }
         };
         fetchPosts();
-        fetchUserId();
+        fetchUserDataAndCheckStatus();
     }, [id, boardId, boardType]);
 
     const handleWriteClick = () => {
@@ -163,6 +192,12 @@ const PostList = ({ boardType, boardId, title }) => {
         navigate(`/clubs/${id}/myclub`);
     };
 
+    if (isLoading) {
+        return <div>로딩 중...</div>;
+    }
+
+    const shouldShowWriteButton = boardType !== 'notice' || isPresident;
+
     return (
         <Whole>
             <HeaderContainer>
@@ -171,10 +206,13 @@ const PostList = ({ boardType, boardId, title }) => {
                     onClick={handleBackClick}
                 />
                 <div style={{fontSize: '20px', fontWeight: "bold"}}>{title}</div>
-                <FiEdit
-                    style={{fontSize: '24px', cursor: 'pointer'}}
-                    onClick={handleWriteClick}
-                />
+                {(boardType !== 'notice' || isPresident) && (
+                    <FiEdit
+                        style={{fontSize: '24px', cursor: 'pointer'}}
+                        onClick={handleWriteClick}
+                    />
+                )}
+                {(boardType === 'notice' && !isPresident) && <div style={{width: '24px'}}></div>}
             </HeaderContainer>
             <ScrollContainer>
                 <PostListContainer>
