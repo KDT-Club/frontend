@@ -5,6 +5,7 @@ import './noticewrite.css';
 import {useNavigate, useParams} from "react-router-dom";
 import { FiX, FiCheck } from "react-icons/fi";
 import { LuImagePlus } from "react-icons/lu";
+import Modal_ok from "../../../../components/modal/Modal_ok.jsx";
 axios.defaults.withCredentials = true;
 
 function NoticeWrite() {
@@ -26,6 +27,7 @@ function NoticeWrite() {
     const [uploading, setUploading] = useState(false); // 이미지 업로드 중 여부를 관리
     const [clubName, setClubName] = useState('');
     const [previewImages, setPreviewImages] = useState([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
         const storedClubName = localStorage.getItem(`clubName_${id}`);
@@ -45,6 +47,10 @@ function NoticeWrite() {
     const handleContentChange = (e) => {
         setContent(e.target.value);
     };
+
+    const handleModalClose = () => setIsModalOpen(false);
+
+    const handleModalConfirm = () => navigate(`/clubs/${id}/noticelist`);
 
     // Presigned URL 요청 및 이미지 업로드
     const uploadFileToS3 = async (file) => {
@@ -105,8 +111,7 @@ function NoticeWrite() {
                 attachment_names: attachmentNames,
                 club_name: clubName,
             });
-            alert('게시글 작성 완료');
-            navigate(`/clubs/${id}/noticelist`);
+            setIsModalOpen(true);
         } catch (error) {
             if (error.response && error.response.status === 403) {
                 alert('동아리 회장만 작성이 가능합니다');
@@ -187,6 +192,13 @@ function NoticeWrite() {
                     ))}
                 </div>
             </div>
+            {isModalOpen && (
+                <Modal_ok
+                    message="작성이 완료되었습니다."
+                    onClose={handleModalClose}
+                    onConfirm={handleModalConfirm}
+                />
+            )}
         </div>
     )
 }

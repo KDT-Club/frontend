@@ -105,12 +105,12 @@ function Edit_info() {
 
     return (
         <div className="Edit_info">
-            <div className="header">
+            <div className="header_container">
                 <FaArrowLeft
-                    style={{ fontSize: '25px', strokeWidth: '0.1', cursor: 'pointer', marginLeft: '15px' }}
+                    style={{fontSize: '24px', cursor: 'pointer'}}
                     onClick={() => navigate(-1)}
                 />
-                <p>정보 수정</p>
+                <div style={{fontSize: '20px', fontWeight: "bold", textAlign: "left", marginRight: "110px"}}>정보 수정</div>
             </div>
             <div className="edit">
                 <input
