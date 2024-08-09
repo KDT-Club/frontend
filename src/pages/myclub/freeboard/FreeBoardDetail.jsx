@@ -21,6 +21,8 @@ function FreeBoardDetail() {
         handleDeleteComment
     } = usePostDetail('4');
 
+    console.log('handleSaveEditedComment:', handleSaveEditedComment);
+
     const handleEditClick = () => {
         navigate(`/clubs/${post.clubId}/board/4/posts/${post.postId}/edit`);
     };
@@ -35,6 +37,7 @@ function FreeBoardDetail() {
             onPostDotClick={handleEditClick}
             onCommentSubmit={handleCommentSubmit}
             onCommentEdit={handleCommentEdit}
+            onSaveEditedComment={handleSaveEditedComment}
             onCommentDelete={handleDeleteComment}
             newComment={newComment}
             setNewComment={setNewComment}

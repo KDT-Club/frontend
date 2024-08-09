@@ -8,6 +8,7 @@ const apiClient = axios.create({
     headers: {
         'Content-Type': 'application/json',
     },
+    withCredentials: true,
 });
 
 function usePostDetail(boardId) {
@@ -79,11 +80,13 @@ function usePostDetail(boardId) {
         }
     };
 
+    //댓글 수정
     const handleCommentEdit = async (commentId, content) => {
         setEditingCommentId(commentId);
         setEditedCommentContent(content);
     };
 
+    //수정된 댓글 저장
     const handleSaveEditedComment = async () => {
         if (editingCommentId && editedCommentContent.trim() && memberId) {
             try {
@@ -91,11 +94,7 @@ function usePostDetail(boardId) {
                     content: editedCommentContent
                 });
                 if (response.status === 200) {
-                    setComments(prevComments =>
-                        prevComments.map(comment =>
-                            comment.commentId === editingCommentId ? { ...comment, content: editedCommentContent } : comment
-                        )
-                    );
+                    await fetchComments();
                     setEditingCommentId(null);
                     setEditedCommentContent('');
                 }
@@ -109,9 +108,15 @@ function usePostDetail(boardId) {
     const handleDeleteComment = async (commentId) => {
         try {
             await apiClient.delete(`/posts/${postId}/${commentId}`);
-            setComments(prevComments => prevComments.filter(comment => comment.commentId !== commentId));
+            await fetchComments();
+            // 성공 메시지 표시
+            alert('댓글이 성공적으로 삭제되었습니다.');
         } catch (error) {
             console.error('댓글 삭제 중 에러 발생', error);
+            if (error.response) {
+                console.error('Error data:', error.response.data);
+                console.error('Error status:', error.response.status);
+            }
             alert('댓글 삭제 중 오류가 발생했습니다. 다시 시도해주세요.');
         }
     };

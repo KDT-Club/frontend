@@ -1,10 +1,183 @@
 import React, { useState } from 'react';
 import { FaArrowLeft } from 'react-icons/fa6';
+import { MdOutlineCancel } from "react-icons/md";
 import { FiMoreVertical, FiSend } from "react-icons/fi";
 import Modal_post from "../../../components/modal/Modal_post.jsx";
 import Modal_comment from "../../../components/modal/Modal_comment.jsx";
 import { formatDate } from "../component/Date.jsx";
-import "../notice/notice.css";
+import styled from 'styled-components';
+
+const Container = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+`;
+
+const HeaderContainer = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 47.5px;
+    background-color: white;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    padding-left: 25px;
+    padding-right: 25px;
+    margin-bottom: 0px;
+`;
+
+const Title = styled.div`
+    font-size: 20px;
+    font-weight: bold;
+`;
+
+const PostContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: 20px;
+    margin-left: 20px;
+    margin-right: 10px;
+`;
+
+const PostAuthorContainer = styled.div`
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+`;
+
+const ProfileImage = styled.img`
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    margin-right: 10px;`;
+
+const PostAuthorDate = styled.p`
+    font-size: 16.6px;
+    color: gray;
+    font-weight: bold;
+    margin: 0;
+`;
+
+const PostTitle = styled.p`
+    font-size: 20px;
+    font-weight: bold;
+    padding-bottom: 12px;
+    text-align: start;
+    width: 100%;
+`;
+
+const PostContent = styled.p`
+    font-size: 17.8px;
+    margin-top: 5px;
+    text-align: start;
+`;
+
+const ImageContainer = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    box-sizing: border-box;
+    img {
+        width: 100%;
+        max-width: 200px;
+        min-width: 200px;
+        height: auto;
+        border-radius: 8px;
+        margin-bottom: 10px;
+    }
+`;
+
+const Divider = styled.div`
+    border-bottom: 1.5px solid dimgrey;
+    margin-top: 10px;
+`;
+
+const CommentContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    margin-top: 12px;
+    padding-bottom: 60px;
+`;
+
+const CommentLine = styled.div`
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 10px;
+`;
+
+const CommentHeader = styled.div`
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+`;
+
+const CommentAuthorDate = styled.p`
+    font-size: 16.5px;
+    color: gray;
+    margin-left: 30px;
+    margin-bottom: 2px;
+`;
+
+const CommentContent = styled.p`
+    font-size: 17px;
+    margin-left: 30px;
+    margin-bottom: 12px;
+`;
+
+const CommentDivider = styled.div`
+    border-bottom: 1px solid gray;
+    width: 100%;
+`;
+
+const Form = styled.form`
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+`;
+
+const SubmitCommentContainer = styled.div`
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px;
+    background-color: white;
+    box-sizing: border-box;
+`;
+
+const CommentInput = styled.input`
+    width: calc(100% - 50px);  // 전송 버튼 공간 확보
+    flex: 1;
+    font-size: 16.5px;
+    text-align: center;
+    border-radius: 7px;
+    border: 1.5px solid darkgray;
+    height: 47px;
+    padding: 0 15px;
+    margin-right: 2px;
+    &:focus {
+        outline: none;
+        border: 1.5px solid #597CA5;
+    }
+`;
+
+const SubmitButton = styled.button`
+    width: 2%;
+    text-align: center;
+    cursor: pointer;
+    color: #5c5c5c;
+    margin-right: 15px;
+    margin-left: 0px;
+`;
 
 function PostDetail({
                         title,
@@ -15,17 +188,18 @@ function PostDetail({
                         onPostDotClick,
                         onCommentSubmit,
                         onCommentEdit,
+                        onSaveEditedComment,
                         onCommentDelete,
                         newComment,
-                        setNewComment,
-                        editingCommentId,
-                        editedCommentContent,
-                        setEditedCommentContent,
+                        setNewComment
                     }) {
     const [showPostModal, setShowPostModal] = useState(false);
     const [showCommentModal, setShowCommentModal] = useState(false);
     const [modalPosition, setModalPosition] = useState({ top: '0px', left: '0px' });
+    const [selectedCommentId, setSelectedCommentId] = useState(null);
     const [selectedCommentContent, setSelectedCommentContent] = useState('');
+    const [isEditing, setIsEditing] = useState(false);
+    const [editedCommentContent, setEditedCommentContent] = useState('');
 
     const handlePostDotClick = () => {
         setShowPostModal(true);
@@ -36,8 +210,8 @@ function PostDetail({
             top: e.clientY + 3 + 'px'
         });
         setShowCommentModal(true);
+        setSelectedCommentId(commentId);
         setSelectedCommentContent(content);
-        onCommentEdit(commentId, content);
     };
 
     const closeModal = () => {
@@ -45,56 +219,50 @@ function PostDetail({
         setShowCommentModal(false);
     };
 
+    const handleEditComment = () => {
+        setIsEditing(true);
+        setEditedCommentContent(selectedCommentContent);
+        closeModal();
+    };
+
+    const handleCancelEdit = () => {
+        setIsEditing(false);
+        setEditedCommentContent('');
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (editingCommentId) {
-            onCommentEdit(editingCommentId, editedCommentContent);
+        if (isEditing) {
+            onSaveEditedComment(selectedCommentId, editedCommentContent);
+            setIsEditing(false);
+            setSelectedCommentId(null);
+            setEditedCommentContent('');
         } else {
             onCommentSubmit(e);
         }
     };
 
+    const handleDeleteComment = () => {
+        onCommentDelete(selectedCommentId);
+        closeModal();
+    };
+
     return (
-        <div>
-            <div className="header_container">
-                <FaArrowLeft
-                    style={{fontSize: '24px', cursor: 'pointer'}}
-                    onClick={onBackClick}
-                />
-                <div style={{fontSize: '20px', fontWeight: "bold"}}>{title}</div>
-                <FiMoreVertical
-                    style={{fontSize: '24px', cursor: 'pointer'}}
-                    onClick={handlePostDotClick}
-                />
-            </div>
+        <Container>
+            <HeaderContainer>
+                <FaArrowLeft style={{fontSize: '24px', cursor: 'pointer'}} onClick={onBackClick}/>
+                <Title>{title}</Title>
+                <FiMoreVertical style={{fontSize: '24px', cursor: 'pointer'}} onClick={handlePostDotClick}/>
+            </HeaderContainer>
             {post && (
-                <div style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "flex-start",
-                    marginTop: "30px",
-                    marginLeft: "20px",
-                    marginRight: "10px"
-                }}>
-                    <p style={{
-                        fontSize: "16.6px",
-                        color: "gray",
-                        fontWeight: "bold",
-                        marginBottom: "5px"
-                    }}>{post.member.name} | {formatDate(post.createdAt)}</p>
-                    <p style={{
-                        fontSize: "20px",
-                        fontWeight: "bold",
-                        paddingBottom: "12px",
-                        textAlign: "start",
-                        width: "100%"
-                    }}>{post.title}</p>
-                    <p style={{
-                        fontSize: "17.8px",
-                        marginTop: "10px",
-                        textAlign: "start"
-                    }}>{post.content}</p>
-                    <div className="image-container">
+                <PostContainer>
+                    <PostAuthorContainer>
+                        <ProfileImage src={post.member.memberImageURL} alt="" />
+                        <PostAuthorDate>{post.member.name} | {formatDate(post.createdAt)}</PostAuthorDate>
+                    </PostAuthorContainer>
+                    <PostTitle>{post.title}</PostTitle>
+                    <PostContent>{post.content}</PostContent>
+                    <ImageContainer>
                         {attachmentNames.length > 0 ? (
                             attachmentNames.map((url, index) => (
                                 <img
@@ -110,59 +278,56 @@ function PostDetail({
                         ) : (
                             <p></p>
                         )}
-                    </div>
-                </div>
+                    </ImageContainer>
+                </PostContainer>
             )}
-            <div style={{borderBottom: '1.5px solid dimgrey', marginTop: '10px'}}></div>
-            <div className="comment-container">
+            <Divider />
+            <CommentContainer>
                 {comments.length > 0 ? (
                     comments.map(comment => (
-                        <div key={comment.commentId} className="comment-oneline">
-                            <div style={{display: 'flex', justifyContent: 'space-between', width: '100%'}}>
-                                <p style={{fontSize: '16.5px', color: 'gray', marginLeft: "30px", marginBottom: "2px"}}>
-                                    {comment.memberName} | {formatDate(comment.createdAt)}
-                                </p>
+                        <CommentLine key={comment.commentId}>
+                            <CommentHeader>
+                                <CommentAuthorDate>{comment.memberName} | {formatDate(comment.createdAt)}</CommentAuthorDate>
                                 <FiMoreVertical
                                     style={{fontSize: '20px', cursor: 'pointer', marginRight: '20px'}}
                                     onClick={(e) => handleCommentDotClick(e, comment.commentId, comment.content)}
                                 />
-                            </div>
-                            <p style={{
-                                fontSize: '17px',
-                                marginLeft: "30px",
-                                marginBottom: "12px"
-                            }}>{comment.content}</p>
-                            <div style={{borderBottom: '1px solid gray', width: '100%'}}></div>
-                        </div>
+                            </CommentHeader>
+                            <CommentContent>{comment.content}</CommentContent>
+                            <CommentDivider />
+                        </CommentLine>
                     ))
                 ) : (
                     <p style={{fontSize: '18px'}}>댓글이 없습니다.</p>
                 )}
-            </div>
-            <form onSubmit={handleSubmit} style={{marginTop: '15px', display: 'flex', alignItems: 'center'}}>
-                <div className="submit-comment-container">
-                    <input
+            </CommentContainer>
+            <Form onSubmit={handleSubmit}>
+                <SubmitCommentContainer>
+                    <CommentInput
                         type="text"
-                        value={editingCommentId ? editedCommentContent : newComment}
-                        onChange={(e) => editingCommentId ? setEditedCommentContent(e.target.value) : setNewComment(e.target.value)}
-                        placeholder="댓글을 입력하세요."
+                        value={isEditing ? editedCommentContent : newComment}
+                        onChange={(e) => isEditing ? setEditedCommentContent(e.target.value) : setNewComment(e.target.value)}
+                        placeholder={isEditing ? "댓글을 수정하세요." : "댓글을 입력하세요."}
                     />
-                    <button type="submit">
+                    <SubmitButton type="submit">
                         <FiSend style={{textAlign: "center", fontSize: "27px"}}/>
-                    </button>
-                </div>
-            </form>
+                    </SubmitButton>
+                    {isEditing && (
+                        <MdOutlineCancel style={{fontSize: "27px", marginLeft: '5px', marginRight: "10px", color: "#5c5c5c"}} onClick={handleCancelEdit}></MdOutlineCancel>
+                    )}
+                </SubmitCommentContainer>
+            </Form>
             {showPostModal && <Modal_post onClose={closeModal} onEdit={onPostDotClick}/>}
             {showCommentModal && <Modal_comment
                 onClose={closeModal}
                 position={modalPosition}
-                onEdit={() => onCommentEdit(editingCommentId, selectedCommentContent)}
+                onEdit={handleEditComment}
                 postId={post.postId}
-                commentId={editingCommentId}
-                onDelete={onCommentDelete}
+                commentId={selectedCommentId}
+                onDelete={handleDeleteComment}
                 content={selectedCommentContent}
             />}
-        </div>
+        </Container>
     );
 }
 

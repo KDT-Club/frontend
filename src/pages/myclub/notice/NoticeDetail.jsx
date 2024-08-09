@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import PostDetail from '../component/PostDetail.jsx';
+import PostDetail from '../component/PostDetail';
 import usePostDetail from '../hooks/usePostDetail';
 
 function NoticeDetail() {
@@ -35,6 +35,7 @@ function NoticeDetail() {
             onPostDotClick={handleEditClick}
             onCommentSubmit={handleCommentSubmit}
             onCommentEdit={handleCommentEdit}
+            onSaveEditedComment={handleSaveEditedComment}
             onCommentDelete={handleDeleteComment}
             newComment={newComment}
             setNewComment={setNewComment}
