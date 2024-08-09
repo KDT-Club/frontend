@@ -6,8 +6,9 @@ import { formatDate } from "../component/Date.jsx";
 import styled from 'styled-components';
 import CommentSection from "./CommentSection.jsx";
 
-const Container = styled.div`
+const Whole = styled.div`
     width: 100%;
+    height: 100vh;
     display: flex;
     flex-direction: column;
 `;
@@ -22,6 +23,16 @@ const HeaderContainer = styled.div`
     padding-left: 25px;
     padding-right: 25px;
     margin-bottom: 0px;
+`;
+
+const ScrollContainer = styled.div`
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: darkgray white;
 `;
 
 const Title = styled.div`
@@ -106,10 +117,11 @@ function PostDetail({
                         onCommentDelete,
                         newComment,
                         setNewComment,
-                        // 추가
                         editingCommentId,
                         editedCommentContent,
                         setEditedCommentContent,
+                        showEditButton,
+                        memberId
                     }) {
     const [showPostModal, setShowPostModal] = useState(false);
 
@@ -122,55 +134,61 @@ function PostDetail({
     };
 
     return (
-        <Container>
+        <Whole>
             <HeaderContainer>
                 <FaArrowLeft style={{fontSize: '24px', cursor: 'pointer'}} onClick={onBackClick}/>
                 <Title>{title}</Title>
-                <FiMoreVertical style={{fontSize: '24px', cursor: 'pointer'}} onClick={handlePostDotClick}/>
+                {showEditButton ? (
+                    <FiMoreVertical style={{fontSize: '24px', cursor: 'pointer'}} onClick={handlePostDotClick}/>
+                ) : (
+                    <div><div></div></div>
+                )}
             </HeaderContainer>
-            {post && (
-                <PostContainer>
-                    <PostAuthorContainer>
-                        <ProfileImage src={post.member.memberImageURL} alt="" />
-                        <PostAuthorDate>{post.member.name} | {formatDate(post.createdAt)}</PostAuthorDate>
-                    </PostAuthorContainer>
-                    <PostTitle>{post.title}</PostTitle>
-                    <PostContent>{post.content}</PostContent>
-                    <ImageContainer>
-                        {attachmentNames.length > 0 ? (
-                            attachmentNames.map((url, index) => (
-                                <img
-                                    key={index}
-                                    src={url}
-                                    alt={`첨부 이미지 ${index + 1}`}
-                                    onError={(e) => {
-                                        console.error(`이미지 로딩 오류 ${index}:`, e);
-                                        e.target.style.display = 'none';
-                                    }}
-                                />
-                            ))
-                        ) : (
-                            <p></p>
-                        )}
-                    </ImageContainer>
-                </PostContainer>
-            )}
-            <Divider />
-            <CommentSection
-                comments={comments}
-                postId={post.postId}
-                newComment={newComment}
-                setNewComment={setNewComment}
-                editingCommentId={editingCommentId}
-                editedCommentContent={editedCommentContent}
-                setEditedCommentContent={setEditedCommentContent}
-                onCommentSubmit={onCommentSubmit}
-                onCommentEdit={onCommentEdit}
-                onSaveEditedComment={onSaveEditedComment}
-                onCommentDelete={onCommentDelete}
-            />
-            {showPostModal && <Modal_post onClose={closeModal} onEdit={onPostDotClick}/>}
-        </Container>
+            <ScrollContainer>
+                {post && (
+                    <PostContainer>
+                        <PostAuthorContainer>
+                            <ProfileImage src={post.member.memberImageURL} alt="" />
+                            <PostAuthorDate>{post.member.name} | {formatDate(post.createdAt)}</PostAuthorDate>
+                        </PostAuthorContainer>
+                        <PostTitle>{post.title}</PostTitle>
+                        <PostContent>{post.content}</PostContent>
+                        <ImageContainer>
+                            {attachmentNames.length > 0 ? (
+                                attachmentNames.map((url, index) => (
+                                    <img
+                                        key={index}
+                                        src={url}
+                                        alt={`첨부 이미지 ${index + 1}`}
+                                        onError={(e) => {
+                                            console.error(`이미지 로딩 오류 ${index}:`, e);
+                                            e.target.style.display = 'none';
+                                        }}
+                                    />
+                                ))
+                            ) : (
+                                <p></p>
+                            )}
+                        </ImageContainer>
+                    </PostContainer>
+                )}
+                <Divider />
+                <CommentSection
+                    comments={comments}
+                    postId={post.postId}
+                    newComment={newComment}
+                    setNewComment={setNewComment}
+                    editingCommentId={editingCommentId}
+                    editedCommentContent={editedCommentContent}
+                    setEditedCommentContent={setEditedCommentContent}
+                    onCommentSubmit={onCommentSubmit}
+                    onCommentEdit={onCommentEdit}
+                    onSaveEditedComment={onSaveEditedComment}
+                    onCommentDelete={onCommentDelete}
+                />
+                {showPostModal && <Modal_post onClose={closeModal} onEdit={onPostDotClick}/>}
+            </ScrollContainer>
+        </Whole>
     );
 }
 
