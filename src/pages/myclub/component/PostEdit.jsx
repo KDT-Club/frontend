@@ -4,9 +4,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import { FiX, FiCheck } from "react-icons/fi";
 import { LuImagePlus } from "react-icons/lu";
 
-function PostEdit({ boardType }) {
+function PostEdit() {
     const navigate = useNavigate();
-    let { clubId, postId } = useParams();
+    const { clubId, boardId, postId } = useParams();
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [attachmentNames, setAttachmentNames] = useState([]);
@@ -39,7 +39,7 @@ function PostEdit({ boardType }) {
     useEffect(() => {
         const fetchPostData = async () => {
             try {
-                const response = await apiClient.get(`/clubs/${clubId}/board/${boardType}/posts/${postId}`);
+                const response = await apiClient.get(`/clubs/${clubId}/board/${boardId}/posts/${postId}`);
                 const post = response.data.post;
                 setTitle(post.title);
                 setContent(post.content);
@@ -51,7 +51,7 @@ function PostEdit({ boardType }) {
         };
         fetchPostData();
         fetchUserId();
-    }, [clubId, postId, boardType]);
+    }, [clubId, postId, boardId]);
 
     const handleTitleChange = (e) => {
         setTitle(e.target.value);

@@ -29,15 +29,12 @@ import Etc3 from "./pages/myclub/etc/Etc3.jsx";
 import NoticeList from "./pages/myclub/notice/NoticeList.jsx";
 import NoticeWrite from "./pages/myclub/notice/WriteAndEdit/NoticeWrite.jsx";
 import FreeBoardList from "./pages/myclub/freeboard/FreeBoardList.jsx";
-import NoticeDetail from "./pages/myclub/notice/NoticeDetail.jsx";
-import FreeBoardDetail from "./pages/myclub/freeboard/FreeBoardDetail.jsx";
 import FreeBoardWrite from "./pages/myclub/freeboard/WriteAndEdit/FreeBoardWrite.jsx";
-import NoticeEdit from "./pages/myclub/notice/WriteAndEdit/NoticeEdit.jsx";
-import FreeBoardEdit from "./pages/myclub/freeboard/WriteAndEdit/FreeBoardEdit.jsx"
 import ClubInfoEdit from "./pages/myclub/headerHamburger/club_manage/ClubInfoEdit.jsx";
 import BoardEdit from "./pages/mypage/written_post/BoardEdit.jsx";
 import ActivityList from "./pages/myclub/etc/ActivityList.jsx";
 import PostEdit from "./pages/myclub/component/PostEdit.jsx";
+import BoardDetail from "./pages/myclub/component/BoardDetail.jsx";
 function App() {
     const [showLogo, setShowLogo] = React.useState(true);
 
@@ -99,13 +96,11 @@ function App() {
                             <Route path="/clubs/:id/myclub" element={<MyclubDetail />} />
                             <Route path="/clubs/:id/activeList" element={<ActivityList />} />
                             <Route path="/clubs/:id/noticelist" element={<NoticeList />} />
-                            <Route path="/clubs/:id/noticelist/noticewrite" element={<NoticeWrite />} />
-                            <Route path="/clubs/:clubId/board/2/posts/:postId" element={<NoticeDetail />} />
-                            <Route path="/clubs/:clubId/board/2/posts/:postId/edit" element={<PostEdit />} />
                             <Route path="/clubs/:id/freeboardlist" element={<FreeBoardList />} />
+                            <Route path="/clubs/:id/noticelist/noticewrite" element={<NoticeWrite />} />
                             <Route path="/clubs/:id/freeboardlist/freeboardwrite" element={<FreeBoardWrite />} />
-                            <Route path="/clubs/:clubId/board/4/posts/:postId" element={<FreeBoardDetail />} />
-                            <Route path="/clubs/:clubId/board/4/posts/:postId/edit" element={<PostEdit />} />
+                            <Route path="/clubs/:clubId/board/:boardId/posts/:postId" element={<BoardDetail />} />
+                            <Route path="/clubs/:clubId/board/:boardId/posts/:postId/edit" element={<PostEdit />} />
                             <Route path="/clubs/etc1" element={<Etc1 />} />
                             <Route path="/clubs/etc1/atd" element={<Atd />} />
                             <Route path="/clubs/etc2" element={<Etc2 />} />

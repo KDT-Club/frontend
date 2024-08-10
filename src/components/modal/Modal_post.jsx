@@ -12,7 +12,8 @@ const Modal_post = ({onClose, onEdit}) => {
     const [onConfirm, setOnConfirm] = useState(() => () => {});
 
     const apiClient = axios.create({
-        baseURL: 'http://3.36.56.20:8080', // API URL
+        // baseURL: 'http://3.36.56.20:8080', // API URL
+        baseURL: 'https://zmffjq.store', // API URL
         timeout: 10000, // 요청 타임아웃 설정 (10초)
         headers: {
             'Content-Type': 'application/json',
@@ -40,7 +41,7 @@ const Modal_post = ({onClose, onEdit}) => {
 
     const handleDelete = async () => {
         try {
-            await apiClient.delete(`https://zmffjq.store/posts/${postId}`);
+            await apiClient.delete(`/posts/${postId}`);
             navigate(-1);
         } catch (error) {
             console.error('게시글 삭제 중 에러 발생:', error);
