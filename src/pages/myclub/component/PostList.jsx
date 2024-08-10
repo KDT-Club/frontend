@@ -109,20 +109,6 @@ const PostList = ({ boardType, boardId, title }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [studentId, setStudentId] = useState(null);
 
-    /*
-    const fetchUserId = async () => {
-        try {
-            const response = await apiClient.get('/getUserId', { withCredentials: true });
-            setMemberId(response.data.message);
-        } catch (error) {
-            console.error('유저 아이디를 불러오는 중 에러 발생:', error);
-            if (error.response && error.response.status === 401) {
-                alert('Unauthorized access. Please log in.');
-            } else {
-                alert('유저 아이디를 불러오는 중 에러가 발생했습니다.');
-            }
-        }
-    };*/
     const fetchUserDataAndCheckStatus = async () => {
         try {
             // 사용자의 memberId 가져오기
@@ -196,7 +182,7 @@ const PostList = ({ boardType, boardId, title }) => {
         return <div>로딩 중...</div>;
     }
 
-    const shouldShowWriteButton = boardType !== 'notice' || isPresident;
+    //const shouldShowWriteButton = boardType !== 'notice' || isPresident;
 
     return (
         <Whole>

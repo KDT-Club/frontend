@@ -1,10 +1,15 @@
+//게시글 타입 처리 코드 (자유 or 공지)
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import PostDetail from '../component/PostDetail.jsx';
 import usePostDetail from '../hooks/usePostDetail';
 
-function NoticeDetail() {
+function BoardDetail() {
     const navigate = useNavigate();
+    const { clubId, boardId, postId } = useParams();
+    const boardType = boardId === '2' ? 'notice' : 'freeBoard';
+    const title = boardType === 'notice' ? '공지사항' : '자유게시판';
+
     const {
         post,
         postAuthor,
@@ -20,11 +25,11 @@ function NoticeDetail() {
         handleCommentEdit,
         handleSaveEditedComment,
         handleDeleteComment,
-        memberId
-    } = usePostDetail('2');
+        memberId,
+    } = usePostDetail();
 
     const handleEditClick = () => {
-        navigate(`/clubs/${post.clubId}/board/2/posts/${post.postId}/edit`);
+        navigate(`/clubs/${clubId}/board/${boardId}/posts/${postId}/edit`);
     };
 
     // 현재 사용자가 게시글 작성자인지 확인
@@ -36,7 +41,7 @@ function NoticeDetail() {
 
     return (
         <PostDetail
-            title="공지사항"
+            title={title}
             post={post}
             comments={comments}
             attachmentNames={attachmentNames}
@@ -53,8 +58,9 @@ function NoticeDetail() {
             setEditedCommentContent={setEditedCommentContent}
             showEditButton={isAuthor}
             memberId={memberId}
+            onEditClick={handleEditClick}//+
         />
     );
 }
 
-export default NoticeDetail;
+export default BoardDetail;

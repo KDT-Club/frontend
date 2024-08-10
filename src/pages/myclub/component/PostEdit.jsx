@@ -4,13 +4,14 @@ import { useNavigate, useParams } from "react-router-dom";
 import { FiX, FiCheck } from "react-icons/fi";
 import { LuImagePlus } from "react-icons/lu";
 
-function PostEdit({ boardType }) {
+function PostEdit() {
     const navigate = useNavigate();
-    let { clubId, postId } = useParams();
+    const { clubId, boardId, postId } = useParams();
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [attachmentNames, setAttachmentNames] = useState([]);
     const [memberId, setMemberId] = useState(null);
+    const [deletedAttachments, setDeletedAttachments] = useState([]);
 
     const apiClient = axios.create({
         baseURL: 'https://zmffjq.store',
@@ -39,7 +40,7 @@ function PostEdit({ boardType }) {
     useEffect(() => {
         const fetchPostData = async () => {
             try {
-                const response = await apiClient.get(`/clubs/${clubId}/board/${boardType}/posts/${postId}`);
+                const response = await apiClient.get(`/clubs/${clubId}/board/${boardId}/posts/${postId}`);
                 const post = response.data.post;
                 setTitle(post.title);
                 setContent(post.content);
@@ -51,7 +52,7 @@ function PostEdit({ boardType }) {
         };
         fetchPostData();
         fetchUserId();
-    }, [clubId, postId, boardType]);
+    }, [clubId, postId, boardId]);
 
     const handleTitleChange = (e) => {
         setTitle(e.target.value);
@@ -96,6 +97,12 @@ function PostEdit({ boardType }) {
         setAttachmentNames([...attachmentNames, ...urls]);
     };
 
+    const handleImageDelete = (index) => {
+        const deletedAttachment = attachmentNames[index];
+        setDeletedAttachments([...deletedAttachments, deletedAttachment]);
+        setAttachmentNames(attachmentNames.filter((_, i) => i !== index));
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -107,6 +114,10 @@ function PostEdit({ boardType }) {
                 attachment_names: attachmentNames,
             });
             if (response.status === 200 || response.status === 201) {
+                // 삭제된 첨부 파일 처리
+                for (const deletedAttachment of deletedAttachments) {
+                    await apiClient.delete(`/attachments/${deletedAttachment}`);
+                }
                 alert('수정 완료');
                 navigate(-1);
             }
@@ -162,10 +173,27 @@ function PostEdit({ boardType }) {
                         <div style={{marginLeft: "10px"}}>첨부할 사진을 선택하세요.</div>
                     </div>
                 </form>
-                <div id="uploaded-images">
+                <div id="uploaded-images" style={{display: 'flex', flexWrap: 'wrap', gap: '10px', marginTop: '20px'}}>
                     {attachmentNames.map((url, index) => (
-                        <img key={index} src={url} alt={`uploaded ${index}`}
-                             style={{width: '100px', height: '100px', margin: '10px'}}/>
+                        <div key={index} style={{position: 'relative', width: '100px', height: '100px'}}>
+                            <img
+                                src={url}
+                                alt={`uploaded ${index}`}
+                                style={{width: '100%', height: '100%', objectFit: 'cover', border: '1px solid #ddd'}}
+                            />
+                            <FiX
+                                style={{
+                                    position: 'absolute',
+                                    top: '5px',
+                                    right: '5px',
+                                    cursor: 'pointer',
+                                    background: 'white',
+                                    borderRadius: '50%',
+                                    padding: '2px'
+                                }}
+                                onClick={() => handleImageDelete(index)}
+                            />
+                        </div>
                     ))}
                 </div>
             </div>

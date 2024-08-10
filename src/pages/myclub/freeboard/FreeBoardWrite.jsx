@@ -1,14 +1,14 @@
-import React, {useEffect, useRef, useState} from 'react';
-import axios from "axios";
-import '../../headerHamburger/slide.css'
-import './noticewrite.css';
+import React, {useEffect, useState, useRef} from 'react';
+import axios from 'axios';
+import '../headerHamburger/slide.css'
+import '../notice/noticewrite.css';
 import {useNavigate, useParams} from "react-router-dom";
 import { FiX, FiCheck } from "react-icons/fi";
 import { LuImagePlus } from "react-icons/lu";
-import Modal_ok from "../../../../components/modal/Modal_ok.jsx";
+import Modal_ok from "../../../components/modal/Modal_ok.jsx";
 axios.defaults.withCredentials = true;
 
-function NoticeWrite() {
+function FreeBoardWrite() {
     const apiClient = axios.create({
         baseURL: 'https://zmffjq.store', // API URL
         timeout: 10000, // 요청 타임아웃 설정 (10초)
@@ -17,7 +17,7 @@ function NoticeWrite() {
         },
     });
 
-    let { id } = useParams();
+    let {id} = useParams();
     const navigate = useNavigate();
     const fileInputRef = useRef(null);
 
@@ -47,10 +47,6 @@ function NoticeWrite() {
     const handleContentChange = (e) => {
         setContent(e.target.value);
     };
-
-    const handleModalClose = () => setIsModalOpen(false);
-
-    const handleModalConfirm = () => navigate(`/clubs/${id}/noticelist`);
 
     // Presigned URL 요청 및 이미지 업로드
     const uploadFileToS3 = async (file) => {
@@ -92,6 +88,11 @@ function NoticeWrite() {
         }
     };
 
+    const handleImageDelete = (index) => {
+        setPreviewImages(prevImages => prevImages.filter((_, i) => i !== index));
+        setAttachmentNames(prevUrls => prevUrls.filter((_, i) => i !== index));
+    };
+
     // 글쓰기 폼 제출
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -104,7 +105,7 @@ function NoticeWrite() {
             return;
         }
         try {
-            const response = await apiClient.post(`/club/${id}/board/2/posts`, {
+            const response = await apiClient.post(`/club/${id}/board/4/posts`, {
                 title,
                 content,
                 attachment_flag: attachmentNames.length > 0 ? 'Y' : 'N',
@@ -113,18 +114,17 @@ function NoticeWrite() {
             });
             setIsModalOpen(true);
         } catch (error) {
-            if (error.response && error.response.status === 403) {
-                alert('동아리 회장만 작성이 가능합니다');
-            } else {
-                console.error('글 작성 중 오류 발생:', error.response?.data || error.message);
-                alert('글 작성 중 오류가 발생했습니다. 다시 시도해주세요.');
-            }
+            console.error('글 작성 중 오류 발생:', error.response?.data || error.message);
+            alert('글 작성 중 오류가 발생했습니다. 다시 시도해주세요.');
         }
     };
 
     const handleBackClick = () => {
-        navigate(`/clubs/${id}/noticelist`);
+        navigate(`/clubs/${id}/freeboardlist`);
     };
+
+    const handleModalClose = () => setIsModalOpen(false);
+    const handleModalConfirm = () => navigate(`/clubs/${id}/freeboardlist`);
 
     const handleFileInputClick = () => {
         fileInputRef.current.click();
@@ -137,7 +137,7 @@ function NoticeWrite() {
                     style={{fontSize: '24px', cursor: 'pointer'}}
                     onClick={handleBackClick}
                 />
-                <div style={{fontSize: '19px', fontWeight: "bold"}}>공지사항 작성</div>
+                <div style={{fontSize: '19px', fontWeight: "bold"}}>자유게시판 글쓰기</div>
                 <FiCheck
                     style={{fontSize: '24px', cursor: 'pointer'}}
                     onClick={handleSubmit}
@@ -185,10 +185,27 @@ function NoticeWrite() {
                         </button>
                     </div>
                 </form>
-                <div id="uploaded-images" style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'center'}}>
+                <div id="uploaded-images" style={{display: 'flex', flexWrap: 'wrap', gap: '10px', marginTop: '20px'}}>
                     {previewImages.map((url, index) => (
-                        <img key={index} src={url} alt={`uploaded ${index}`}
-                             style={{width: '100px', height: '100px', objectFit: 'cover', margin: '10px'}}/>
+                        <div key={index} style={{position: 'relative', width: '100px', height: '100px'}}>
+                            <img
+                                src={url}
+                                alt={`uploaded ${index}`}
+                                style={{width: '100%', height: '100%', objectFit: 'cover', border: '1px solid #ddd'}}
+                            />
+                            <FiX
+                                style={{
+                                    position: 'absolute',
+                                    top: '5px',
+                                    right: '5px',
+                                    cursor: 'pointer',
+                                    background: 'white',
+                                    borderRadius: '50%',
+                                    padding: '2px'
+                                }}
+                                onClick={() => handleImageDelete(index)}
+                            />
+                        </div>
                     ))}
                 </div>
             </div>
@@ -203,4 +220,4 @@ function NoticeWrite() {
     )
 }
 
-export default NoticeWrite;
+export default FreeBoardWrite;

@@ -126,6 +126,7 @@ function PostDetail({
                         setEditedCommentContent,
                         memberId
                     }) {
+
     const [showPostModal, setShowPostModal] = useState(false);
     const [showComplainModal, setShowComplainModal] = useState(false);
 
@@ -191,7 +192,10 @@ function PostDetail({
                     onSaveEditedComment={onSaveEditedComment}
                     onCommentDelete={onCommentDelete}
                 />
-                {showPostModal && <Modal_post onClose={closeModal} onEdit={onPostDotClick}/>}
+                {showPostModal && <Modal_post
+                    onClose={closeModal}
+                    onEdit={onPostDotClick}
+                />}
                 {showComplainModal && <Modal_post_complain onClose={closeModal} />}
             </ScrollContainer>
         </Whole>
