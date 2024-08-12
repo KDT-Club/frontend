@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useState} from "react";
 import './member_request_detail.css';
 import {FaArrowLeft} from "react-icons/fa6";
-import Modal_ok from "../../../../components/modal/Modal_ok.jsx";
+import Modal_ok from "../../../../../components/modal/Modal_ok.jsx";
 import {useNavigate, useParams} from "react-router-dom";
 import axios from "axios";
 

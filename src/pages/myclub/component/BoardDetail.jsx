@@ -7,8 +7,8 @@ import usePostDetail from '../hooks/usePostDetail';
 function BoardDetail() {
     const navigate = useNavigate();
     const { clubId, boardId, postId } = useParams();
-    const boardType = boardId === '2' ? 'notice' : 'freeBoard';
-    const title = boardType === 'notice' ? '공지사항' : '자유게시판';
+    const boardType = boardId === '2' ? 'noticeBoard' : 'freeBoard';
+    const title = boardType === 'noticeBoard' ? '공지사항' : '자유게시판';
 
     const {
         post,

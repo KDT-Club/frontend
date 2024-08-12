@@ -1,7 +1,7 @@
 import React, {useCallback, useState} from 'react';
 import { useNavigate } from "react-router-dom";
 import { MdOutlineSettings, MdKeyboardArrowRight, MdKeyboardArrowDown } from "react-icons/md";
-import Modal_ok from "../../../components/modal/Modal_ok.jsx";
+import Modal_ok from "../../../../components/modal/Modal_ok.jsx";
 
 function ClubManagement({ id, isClubPresident }) {
     const navigate = useNavigate();

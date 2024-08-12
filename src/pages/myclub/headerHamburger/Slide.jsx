@@ -7,8 +7,8 @@ import { MdOutlinePerson, MdKeyboardArrowRight, MdKeyboardArrowDown } from "reac
 import { TbDoorExit } from "react-icons/tb";
 import Modal_confirm from "../../../components/modal/Modal_confirm.jsx";
 import axios from "axios";
-import MemberManagement from './MemberManagement.jsx';
-import ClubManagement from './ClubManagement';
+import MemberManagement from './member_manage/MemberManagement.jsx';
+import ClubManagement from './club_manage/ClubManagement.jsx';
 import styled from "styled-components";
 import { RiVipCrown2Line } from "react-icons/ri";
 
