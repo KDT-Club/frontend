@@ -5,6 +5,7 @@ import { FaArrowLeft } from "react-icons/fa6";
 import Modal_confirm from "../../../../../components/modal/Modal_confirm.jsx";
 import Modal_ok from "../../../../../components/modal/Modal_ok.jsx";
 import axios from "axios";
+import styled from "styled-components";
 
 function Member_info_fix() {
     const navigate = useNavigate();
@@ -17,6 +18,18 @@ function Member_info_fix() {
     const [modalMessage, setModalMessage] = useState("");  // 모달 메시지
     const [isModalOpen, setIsModalOpen] = useState(false);
     const token = localStorage.getItem('token');
+
+    const HeaderContainer = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 47.5px;
+    background-color: white;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    padding-left: 25px;
+    padding-right: 25px;
+    margin-bottom: 0px;
+`;
 
     // Axios 인스턴스 생성 및 설정
     const apiClient = axios.create({
@@ -98,13 +111,13 @@ function Member_info_fix() {
 
     return (
         <div className="Member_info_fix">
-            <div className="header">
+            <HeaderContainer>
                 <FaArrowLeft
-                    style={{ fontSize: '25px', strokeWidth: '0.1', cursor: 'pointer', marginLeft: '15px' }}
-                    onClick={() => navigate(-1)}
+                    style={{fontSize: '24px', cursor: 'pointer'}}
+                    onClick={() => navigate(`/clubs/${id}/memberInfoFixList`)}
                 />
-                <p>회원 정보 수정</p>
-            </div>
+                <div style={{fontSize: '20px', fontWeight: "bold", textAlign: "left", marginRight: "110px"}}>회원 정보 수정</div>
+            </HeaderContainer>
             {member && (
                 <div className="member_info_detail">
                     <img src={member.memberImageurl} alt={member.name} />

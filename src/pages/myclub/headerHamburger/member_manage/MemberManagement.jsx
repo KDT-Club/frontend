@@ -1,19 +1,31 @@
-import React, { useState } from 'react';
+import React, {useCallback, useState} from 'react';
 import { useNavigate } from "react-router-dom";
 import { MdOutlineManageAccounts, MdKeyboardArrowRight, MdKeyboardArrowDown } from "react-icons/md";
+import Modal_ok from "../../../components/modal/Modal_ok.jsx";
 
 function MemberManagement({ id, isClubPresident }) {
     const navigate = useNavigate();
     const [isMemberManageOpen, setIsMemberManageOpen] = useState(false);
+    const [showOkModal, setShowOkModel] = useState(false);
+    const [modalMessage, setModalMessage] = useState("");
+    const [onConfirm, setOnConfirm] = useState(() => () => {});
 
     const toggleMemberManage = (e) => {
         e.stopPropagation();
         if (isClubPresident) {
             setIsMemberManageOpen(!isMemberManageOpen);
         } else {
-            alert("동아리 회장만 접근 가능합니다.");
+            handleOpenOkModal("동아리 회장만 접근 가능합니다.", () => {});
         }
     };
+
+    const handleOpenOkModal = useCallback((message, confirmCallback) => {
+        setModalMessage(message);
+        setOnConfirm(() => confirmCallback);
+        setShowOkModel(true);
+    }, []);
+
+    const handleCloseOkModal = () => setShowOkModel(false);
 
     return (
         <>
@@ -35,6 +47,7 @@ function MemberManagement({ id, isClubPresident }) {
                     <div className="manage-item" onClick={() => navigate(`/clubs/${id}/joinRequest`)}>가입 신청 현황</div>
                 </div>
             )}
+            {showOkModal && <Modal_ok onClose={handleCloseOkModal} message={modalMessage} onConfirm={onConfirm} />}
         </>
     );
 }
