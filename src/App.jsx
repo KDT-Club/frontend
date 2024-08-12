@@ -10,22 +10,20 @@ import Mypage from './pages/mypage/mypage_main/Mypage.jsx';
 import Written_post from "./pages/mypage/written_post/Written_post.jsx";
 import Written_post_detail from "./pages/mypage/written_post/Written_post_detail.jsx";
 import Edit_info from "./pages/mypage/edit_info/Edit_info.jsx";
-import Member_info_fix_list from "./pages/myclub/member_manage/member_info_fix_list/Member_info_fix_list.jsx";
-import Member_info_fix from "./pages/myclub/member_manage/member_info_fix/Member_info_fix.jsx";
+import Member_info_fix_list from "./pages/myclub/headerHamburger/member_manage/member_info_fix_list/Member_info_fix_list.jsx";
+import Member_info_fix from "./pages/myclub/headerHamburger/member_manage/member_info_fix/Member_info_fix.jsx";
 import MainPage from './pages/main/MainPage.jsx'
 import ClubDetailPage from "./pages/main/ClubDetailPage.jsx";
 import Community_Main from "./pages/community/Community_Main.jsx";
 import PostDetail from "./pages/community/PostDetail.jsx";
 import ActivityPage from "./pages/community/activity/ActivityPage.jsx";
 import ActivityDetailPage from "./pages/community/activity/ActivityDetailPage.jsx";
-import Member_request from "./pages/myclub/member_manage/member_request/Member_request.jsx";
-import Member_request_detail from "./pages/myclub/member_manage/member_request/Member_request_detail.jsx";
+import Member_request from "./pages/myclub/headerHamburger/member_manage/member_request/Member_request.jsx";
+import Member_request_detail from "./pages/myclub/headerHamburger/member_manage/member_request/Member_request_detail.jsx";
 import MyclubMain from "./pages/myclub/MyclubMain.jsx";
 import MyclubDetail from "./pages/myclub/MyclubDetail.jsx";
 import Etc1 from "./pages/myclub/etc/Etc1.jsx";
 import Atd from "./pages/myclub/etc/Atd.jsx";
-import Etc2 from "./pages/myclub/etc/Etc2.jsx";
-import Etc3 from "./pages/myclub/etc/Etc3.jsx";
 import NoticeList from "./pages/myclub/notice/NoticeList.jsx";
 import NoticeWrite from "./pages/myclub/notice/NoticeWrite.jsx";
 import FreeBoardList from "./pages/myclub/freeboard/FreeBoardList.jsx";
@@ -103,8 +101,6 @@ function App() {
                             <Route path="/clubs/:clubId/board/:boardId/posts/:postId/edit" element={<PostEdit />} />
                             <Route path="/clubs/etc1" element={<Etc1 />} />
                             <Route path="/clubs/etc1/atd" element={<Atd />} />
-                            <Route path="/clubs/etc2" element={<Etc2 />} />
-                            <Route path="/clubs/etc3" element={<Etc3 />} />
                             <Route path="/clubs/:id/changeclubinfo" element={<ClubInfoEdit />} />
                         </Routes>
                     </div>
