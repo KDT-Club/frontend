@@ -56,12 +56,13 @@ function Written_post() {
             </HeaderContainer>
             <div className="written_post_list">
                 {
-                    list.map((post, i) => {
-                        console.log(post)
-                        return (
+                    list.length > 0 ? (
+                        list.map((post, i) => (
                             <List key={i} title={post.title} content={post.content} updatedAt={post.updatedAt} memberId={memberId} postId={post.id} />
-                        )
-                    })
+                        ))
+                    ) : (
+                        <p style={{marginTop: "10px"}}>작성한 글이 없습니다.</p>
+                    )
                 }
             </div>
         </div>

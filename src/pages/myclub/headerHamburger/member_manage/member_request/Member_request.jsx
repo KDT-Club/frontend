@@ -3,12 +3,25 @@ import './member_request.css';
 import {useNavigate, useParams} from "react-router-dom";
 import {FaArrowLeft} from "react-icons/fa";
 import axios from "axios";
+import styled from "styled-components";
 
 function Member_request() {
     let { id } = useParams();
     const navigate = useNavigate();
     const [list, setList] = useState([]);
     const [memberId, setMemberId] = useState('');
+
+    const HeaderContainer = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 47.5px;
+    background-color: white;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    padding-left: 25px;
+    padding-right: 25px;
+    margin-bottom: 0px;
+`;
 
     const apiClient = axios.create({
         baseURL: 'https://zmffjq.store',
@@ -51,13 +64,13 @@ function Member_request() {
 
     return (
         <div className="Member_request">
-            <div className="header">
+            <HeaderContainer>
                 <FaArrowLeft
-                    style={{fontSize: '25px', strokeWidth: '0.1', cursor: 'pointer', marginLeft: '15px'}}
-                    onClick={() => navigate(-1)}
+                    style={{fontSize: '24px', cursor: 'pointer'}}
+                    onClick={() => navigate(`/clubs/${id}/myclub`)}
                 />
-                <p>가입 신청 현황</p>
-            </div>
+                <div style={{fontSize: '20px', fontWeight: "bold", textAlign: "left", marginRight: "110px"}}>가입 신청 현황</div>
+            </HeaderContainer>
             <div className="request_member_list">
                 {
                     list.length > 0 ? (
@@ -72,7 +85,7 @@ function Member_request() {
                             />
                         ))
                     ) : (
-                        <p>가입 신청 정보가 없습니다.</p>
+                        <p style={{marginTop: "10px"}}>가입 신청 정보가 없습니다.</p>
                     )
                 }
             </div>
