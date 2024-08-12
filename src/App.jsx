@@ -22,15 +22,15 @@ import Member_request from "./pages/myclub/headerHamburger/member_manage/member_
 import Member_request_detail from "./pages/myclub/headerHamburger/member_manage/member_request/Member_request_detail.jsx";
 import MyclubMain from "./pages/myclub/MyclubMain.jsx";
 import MyclubDetail from "./pages/myclub/MyclubDetail.jsx";
-import Etc1 from "./pages/myclub/etc/Etc1.jsx";
-import Atd from "./pages/myclub/etc/Atd.jsx";
-import NoticeList from "./pages/myclub/notice/NoticeList.jsx";
-import NoticeWrite from "./pages/myclub/notice/NoticeWrite.jsx";
-import FreeBoardList from "./pages/myclub/freeboard/FreeBoardList.jsx";
-import FreeBoardWrite from "./pages/myclub/freeboard/FreeBoardWrite.jsx";
+import Etc1 from "./pages/myclub/attendance/Etc1.jsx";
+import Atd from "./pages/myclub/attendance/Atd.jsx";
+import NoticeList from "./pages/myclub/noticeBoard/NoticeList.jsx";
+import NoticeWrite from "./pages/myclub/noticeBoard/NoticeWrite.jsx";
+import FreeBoardList from "./pages/myclub/freeBoard/FreeBoardList.jsx";
+import FreeBoardWrite from "./pages/myclub/freeBoard/FreeBoardWrite.jsx";
 import ClubInfoEdit from "./pages/myclub/headerHamburger/club_manage/ClubInfoEdit.jsx";
 import BoardEdit from "./pages/mypage/written_post/BoardEdit.jsx";
-import ActivityList from "./pages/myclub/etc/ActivityList.jsx";
+import ActivityList from "./pages/myclub/activityBoard/ActivityList.jsx";
 import PostEdit from "./pages/myclub/component/PostEdit.jsx";
 import BoardDetail from "./pages/myclub/component/BoardDetail.jsx";
 function App() {

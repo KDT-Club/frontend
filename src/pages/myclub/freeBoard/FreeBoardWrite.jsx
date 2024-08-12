@@ -1,7 +1,7 @@
 import React, {useEffect, useState, useRef} from 'react';
 import axios from 'axios';
 import '../headerHamburger/slide.css'
-import '../notice/noticewrite.css';
+import '../noticeBoard/noticewrite.css';
 import {useNavigate, useParams} from "react-router-dom";
 import { FiX, FiCheck } from "react-icons/fi";
 import { LuImagePlus } from "react-icons/lu";
