@@ -52,20 +52,24 @@
 .member_info_detail .phone, .member_info_detail .major {
     display: flex;
     flex-direction: column;
-    align-items: flex-start; /* Align text to the left */
+    align-items: flex-start;
 }
 
 .member_info_detail .phoneNum, .member_info_detail .majorName {
     background-color: rgba(0, 0, 0, 0.05);
-    width: 125px;
     height: 33px;
     padding-left: 10px;
+    padding-right: 10px;
     margin-top: 6px;
     margin-left: 0px;
     border-radius: 5px;
     padding-top: 4px;
     font-size: 16px;
     font-weight: normal;
+    display: inline-block;
+    width: auto;
+    max-width: 100%;
+    white-space: nowrap;
 }
 
 .member_info_detail .phone {

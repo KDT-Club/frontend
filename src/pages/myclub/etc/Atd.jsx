@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import { FaArrowLeft } from "react-icons/fa6";
 import { useNavigate, useLocation } from "react-router-dom";
 import { IoIosCheckmarkCircleOutline, IoIosCheckmarkCircle } from "react-icons/io";
 import './atd.css';
+import Modal_ok from "../../../components/modal/Modal_ok.jsx";
 
 function Atd() {
     const navigate = useNavigate();
@@ -11,6 +12,10 @@ function Atd() {
 
     const [members, setMembers] = useState([]);
     const [message, setMessage] = useState('');
+
+    const [showOkModal, setShowOkModel] = useState(false);
+    const [modalMessage, setModalMessage] = useState("");
+    const [onConfirm, setOnConfirm] = useState(() => () => {});
 
     useEffect(() => {
         const savedMembers = localStorage.getItem(`attendance_${date}`);
@@ -41,9 +46,17 @@ function Atd() {
 
     const saveAttendance = () => {
         localStorage.setItem(`attendance_${date}`, JSON.stringify(members));
-        alert('출석 상태가 저장되었습니다.');
+        handleOpenOkModal("출석 상태가 저장되었습니다.", () => navigate(-1));
         //setTimeout(() => setMessage(''), 2000);
     };
+
+    const handleOpenOkModal = useCallback((message, confirmCallback) => {
+        setModalMessage(message);
+        setOnConfirm(() => confirmCallback);
+        setShowOkModel(true);
+    }, []);
+
+    const handleCloseOkModal = () => setShowOkModel(false);
 
     return (
         <div>
@@ -72,6 +85,7 @@ function Atd() {
                 ))}
             </div>
             <button className="att-complete-button" onClick={saveAttendance}>완료</button>
+            {showOkModal && <Modal_ok onClose={handleCloseOkModal} message={modalMessage} onConfirm={onConfirm} />}
         </div>
     );
 }

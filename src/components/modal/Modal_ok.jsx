@@ -5,7 +5,7 @@ const Modal_ok = ({message, onClose, onConfirm}) => {
     return (
         <div className="Modal_ok">
             <div className="modal_ok_content">
-                <p dangerouslySetInnerHTML={{__html: message}}></p>
+                <p dangerouslySetInnerHTML={{__html: message}} style={{marginBottom: "0px"}}></p>
                 <div className="modal_ok_button">
                     <button onClick={() => {onConfirm(); onClose();}} className="ok_button">OK</button>
                 </div>
