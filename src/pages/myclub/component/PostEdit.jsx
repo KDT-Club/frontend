@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { FiX, FiCheck } from "react-icons/fi";
 import { LuImagePlus } from "react-icons/lu";
+import Modal_ok from "../../../components/modal/Modal_ok.jsx";
 
 function PostEdit() {
     const navigate = useNavigate();
@@ -12,6 +13,9 @@ function PostEdit() {
     const [attachmentNames, setAttachmentNames] = useState([]);
     const [memberId, setMemberId] = useState(null);
     const [deletedAttachments, setDeletedAttachments] = useState([]);
+    const [showOkModal, setShowOkModel] = useState(false);
+    const [modalMessage, setModalMessage] = useState("");
+    const [onConfirm, setOnConfirm] = useState(() => () => {});
 
     const apiClient = axios.create({
         baseURL: 'https://zmffjq.store',
@@ -118,8 +122,7 @@ function PostEdit() {
                 for (const deletedAttachment of deletedAttachments) {
                     await apiClient.delete(`/attachments/${deletedAttachment}`);
                 }
-                alert('수정 완료');
-                navigate(-1);
+                handleOpenOkModal("수정이 완료되었습니다.", () => navigate(-1));
             }
         } catch (error) {
             console.error('수정 중 오류 발생:', error);
@@ -130,6 +133,14 @@ function PostEdit() {
     const handleBackClick = () => {
         navigate(-1);
     };
+
+    const handleOpenOkModal = useCallback((message, confirmCallback) => {
+        setModalMessage(message);
+        setOnConfirm(() => confirmCallback);
+        setShowOkModel(true);
+    }, []);
+
+    const handleCloseOkModal = () => setShowOkModel(false);
 
     return (
         <div>
@@ -197,6 +208,7 @@ function PostEdit() {
                     ))}
                 </div>
             </div>
+            {showOkModal && <Modal_ok onClose={handleCloseOkModal} message={modalMessage} onConfirm={onConfirm} />}
         </div>
     );
 }

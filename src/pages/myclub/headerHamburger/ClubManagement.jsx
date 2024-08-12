@@ -1,17 +1,21 @@
-import React, { useState } from 'react';
+import React, {useCallback, useState} from 'react';
 import { useNavigate } from "react-router-dom";
 import { MdOutlineSettings, MdKeyboardArrowRight, MdKeyboardArrowDown } from "react-icons/md";
+import Modal_ok from "../../../components/modal/Modal_ok.jsx";
 
 function ClubManagement({ id, isClubPresident }) {
     const navigate = useNavigate();
     const [isClubManageOpen, setIsClubManageOpen] = useState(false);
+    const [showOkModal, setShowOkModel] = useState(false);
+    const [modalMessage, setModalMessage] = useState("");
+    const [onConfirm, setOnConfirm] = useState(() => () => {});
 
     const toggleClubManage = (e) => {
         e.stopPropagation();
         if (isClubPresident) {
             setIsClubManageOpen(!isClubManageOpen);
         } else {
-            alert("동아리 회장만 접근 가능합니다.");
+            handleOpenOkModal("동아리 회장만 접근 가능합니다.", () => {});
         }
     };
 
@@ -24,6 +28,14 @@ function ClubManagement({ id, isClubPresident }) {
     const handleClubDelete = () => {
         // 구현
     };
+
+    const handleOpenOkModal = useCallback((message, confirmCallback) => {
+        setModalMessage(message);
+        setOnConfirm(() => confirmCallback);
+        setShowOkModel(true);
+    }, []);
+
+    const handleCloseOkModal = () => setShowOkModel(false);
 
     return (
         <>
@@ -44,6 +56,7 @@ function ClubManagement({ id, isClubPresident }) {
                     <div className="manage-item" onClick={handleClubDelete}>동아리 삭제</div>
                 </div>
             )}
+            {showOkModal && <Modal_ok onClose={handleCloseOkModal} message={modalMessage} onConfirm={onConfirm} />}
         </>
     );
 }

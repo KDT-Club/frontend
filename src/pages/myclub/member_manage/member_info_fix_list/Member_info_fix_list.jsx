@@ -6,6 +6,7 @@ import member_info_data from "../../../../data/member_info_data.jsx";
 import { FaPlus } from "react-icons/fa6";
 import memberInfo from "../memberInfo.jsx";
 import axios from "axios";
+import styled from "styled-components";
 
 function Member_info_fix_list() {
     const navigate = useNavigate();
@@ -13,6 +14,18 @@ function Member_info_fix_list() {
     const [list, setList] = useState([]);
 //    const { memberId } = useParams();
     const { id } = useParams();
+
+    const HeaderContainer = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 47.5px;
+    background-color: white;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    padding-left: 25px;
+    padding-right: 25px;
+    margin-bottom: 0px;
+`;
 
     const apiClient = axios.create({
         baseURL: 'https://zmffjq.store', // .env 파일에서 API URL 가져오기
@@ -35,13 +48,13 @@ function Member_info_fix_list() {
 
     return (
         <div className="Member_info_fix">
-            <div className="header">
+            <HeaderContainer>
                 <FaArrowLeft
-                    style={{fontSize: '25px', strokeWidth: '0.1', cursor: 'pointer', marginLeft: '15px'}}
-                    onClick={() => navigate(-1)}
+                    style={{fontSize: '24px', cursor: 'pointer'}}
+                    onClick={() => navigate(`/clubs/${id}/myclub`)}
                 />
-                <p>회원 정보 수정</p>
-            </div>
+                <div style={{fontSize: '20px', fontWeight: "bold", textAlign: "left", marginRight: "110px"}}>회원 정보 수정</div>
+            </HeaderContainer>
             <div className="member_info_list">
                 <h2>멤버 리스트</h2>
                 {
