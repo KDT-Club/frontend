@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import "./member_info_fix.css";
 import { useNavigate, useParams } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa6";
-import Modal_confirm from "../../../../components/modal/Modal_confirm.jsx";
-import Modal_ok from "../../../../components/modal/Modal_ok.jsx";
+import Modal_confirm from "../../../../../components/modal/Modal_confirm.jsx";
+import Modal_ok from "../../../../../components/modal/Modal_ok.jsx";
 import axios from "axios";
 import styled from "styled-components";
 

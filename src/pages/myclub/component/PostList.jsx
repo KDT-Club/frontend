@@ -67,8 +67,8 @@ const Content = styled.p`
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
-    -webkit-line-clamp: 2; // 표시할 줄 수
     -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
 `;
 
 const Post = styled.div`
@@ -91,6 +91,10 @@ const Title = styled.p`
     font-size: 18.6px;
     text-align: left;
     margin: 0px 10px 6px 8px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    -webkit-line-clamp: 1;
 `;
 
 const CreatedAt = styled.p`
@@ -129,7 +133,7 @@ const PostList = ({ boardType, boardId, title }) => {
                 setIsPresident(loggedInMember?.status === "CLUB_PRESIDENT");
             }
         } catch (error) {
-            console.error('Error fetching user data:', error);
+            console.error('회원정보 가져오는 중 에러 발생:', error);
         } finally {
             setIsLoading(false);
         }

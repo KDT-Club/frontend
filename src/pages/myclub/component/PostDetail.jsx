@@ -77,6 +77,7 @@ const PostTitle = styled.p`
     width: 100%;
     margin-top: 8px;
     margin-left: 10px;
+    padding-right: 10px;
 `;
 
 const PostContent = styled.p`
