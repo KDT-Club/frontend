@@ -1,8 +1,8 @@
 import React from 'react';
-import PostList from '../component/PostList';
+import PostsList from '../component/PostsList';
 
 function FreeBoardList() {
-    return <PostList boardType="freeboard" boardId="4" title="자유게시판" />;
+    return <PostsList boardType="freeboard" boardId="4" title="자유게시판" />;
 }
 
 export default FreeBoardList;
