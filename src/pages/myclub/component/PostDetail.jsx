@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import { FaArrowLeft } from 'react-icons/fa6';
 import { FiMoreVertical } from "react-icons/fi";
-import Modal_post from "../../../components/modal/Modal_post.jsx";
 import { formatDate } from "../component/Date";
+import Modal_post from "../../../components/modal/Modal_post.jsx";
 import Modal_post_complain from "../../../components/modal/Modal_post_complain.jsx";
 import styled from 'styled-components';
 import CommentSection from "./CommentSection.jsx";

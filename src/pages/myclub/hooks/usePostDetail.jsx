@@ -13,7 +13,6 @@ const apiClient = axios.create({
 });
 
 function usePostDetail() {
-    // const { clubId, postId } = useParams();
     const { clubId, boardId,postId } = useParams();
     const navigate = useNavigate();
     const [memberId, setMemberId] = useState(null);

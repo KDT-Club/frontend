@@ -33,6 +33,7 @@ import BoardEdit from "./pages/mypage/written_post/BoardEdit.jsx";
 import ActivityList from "./pages/myclub/activityBoard/ActivityList.jsx";
 import PostEdit from "./pages/myclub/component/PostEdit.jsx";
 import BoardDetail from "./pages/myclub/component/BoardDetail.jsx";
+import ActivityDetail from "./pages/myclub/activityBoard/ActivityDetail.jsx";
 function App() {
     const [showLogo, setShowLogo] = React.useState(true);
 
@@ -99,8 +100,8 @@ function App() {
                             <Route path="/clubs/:id/freeboardlist/freeboardwrite" element={<FreeBoardWrite />} />
                             {/*<Route path="/clubs/:id/activitylist/activitywrite" element={<ActivityWrite />} />*/}
                             <Route path="/clubs/:clubId/board/:boardId/posts/:postId" element={<BoardDetail />} />
+                            <Route path="/clubs/:clubId/activity/:postId" element={<ActivityDetail />} />
                             <Route path="/clubs/:clubId/board/:boardId/posts/:postId/edit" element={<PostEdit />} />
-                            {/*<Route path="/clubs/:id/activity/:postId" element={<ActivityDetail />} />*/}
                             {/*<Route path="/clubs/:id/activity/:postId/edit" element={<ActivityEdit />} />*/}
                             <Route path="/clubs/etc1" element={<Etc1 />} />
                             <Route path="/clubs/etc1/atd" element={<Atd />} />

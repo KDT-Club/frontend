@@ -147,28 +147,29 @@ const PostsList = ({ boardType, boardId, title }) => {
                 }
 
                 if (response.status === 200) {
-                    let postsWithAuthors;
-                    if (boardType === 'activity') {
-                        postsWithAuthors = response.data;
-                    } else {
-                        postsWithAuthors = await Promise.all(
-                            response.data.map(async (post) => {
-                                try {
+                    let postsWithAuthors = await Promise.all(
+                        response.data.map(async (post) => {
+                            try {
+                                let authorName;
+                                if (boardType === 'activity') {
+                                    // activity 게시판의 경우 memberId를 사용하여 작성자 정보 가져오기
+                                    const memberResponse = await apiClient.get(`/members/${post.memberId}`);
+                                    authorName = memberResponse.data.name;
+                                } else {
+                                    // 기존 다른 게시판 타입의 경우
                                     const detailResponse = await apiClient.get(`/clubs/${id}/board/${boardId}/posts/${post.postId}`);
-                                    if (detailResponse.status === 200) {
-                                        const detailData = detailResponse.data.post;
-                                        return {
-                                            ...post,
-                                            authorName: detailData.member.name,
-                                        };
-                                    }
-                                } catch (error) {
-                                    console.error(`게시글 ${post.postId}의 상세 정보 조회 중 에러 발생`, error);
+                                    authorName = detailResponse.data.post.member.name;
                                 }
+                                return {
+                                    ...post,
+                                    authorName: authorName,
+                                };
+                            } catch (error) {
+                                console.error(`게시글 ${post.postId}의 작성자 정보 조회 중 에러 발생`, error);
                                 return post;
-                            })
-                        );
-                    }
+                            }
+                        })
+                    );
                     const sortedPosts = postsWithAuthors.sort((a, b) =>
                         new Date(b.createdAt) - new Date(a.createdAt)
                     );
@@ -226,8 +227,9 @@ const PostsList = ({ boardType, boardId, title }) => {
                                     <Title>{post.title}</Title>
                                     <Content>{post.content}</Content>
                                     <CreatedAt>
-                                        {boardType !== 'activity' && `${post.authorName} | `}
-                                        {formatDate(post.createdAt)}
+                                        {/*{boardType !== 'activity' && `${post.authorName} | `}*/}
+                                        {/*{formatDate(post.createdAt)}*/}
+                                        {post.authorName} | {formatDate(post.createdAt)}
                                     </CreatedAt>
                                 </Link>
                             </Post>
