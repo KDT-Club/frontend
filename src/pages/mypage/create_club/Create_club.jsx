@@ -5,12 +5,25 @@ import Modal_ok from "../../../components/modal/Modal_ok.jsx";
 import { useNavigate, useParams } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa6";
 import { CiCirclePlus } from "react-icons/ci";
+import styled from "styled-components";
 
 function Create_club() {
     const navigate = useNavigate();
     const { memberId } = useParams();
     const category_id = ["SPORT", "ACADEMIC", "CULTURE", "SERVICE", "NEW"];
     const category_list = ["체육", "학술", "문화", "봉사", "신설"];
+
+    const HeaderContainer = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 47.5px;
+    background-color: white;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    padding-left: 25px;
+    padding-right: 25px;
+    margin-bottom: 0px;
+`;
 
     const apiClient = axios.create({
         baseURL: 'https://zmffjq.store',
@@ -101,13 +114,13 @@ function Create_club() {
 
     return (
         <div className="Create_club">
-            <div className="header">
+            <HeaderContainer>
                 <FaArrowLeft
-                    style={{ fontSize: '25px', strokeWidth: '0.1', cursor: 'pointer', marginLeft: '25px' }}
-                    onClick={() => navigate(-1)}
+                    style={{fontSize: '24px', cursor: 'pointer'}}
+                    onClick={() => navigate(`/members/${memberId}`)}
                 />
-                <p>동아리 만들기</p>
-            </div>
+                <div style={{fontSize: '20px', fontWeight: "bold", textAlign: "left", marginRight: "110px"}}>동아리 만들기</div>
+            </HeaderContainer>
             <div className="form">
                 <div className="image">
                     <input

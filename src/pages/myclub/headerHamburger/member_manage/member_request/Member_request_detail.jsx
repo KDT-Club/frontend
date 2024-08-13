@@ -4,6 +4,7 @@ import {FaArrowLeft} from "react-icons/fa6";
 import Modal_ok from "../../../../../components/modal/Modal_ok.jsx";
 import {useNavigate, useParams} from "react-router-dom";
 import axios from "axios";
+import styled from "styled-components";
 
 function Member_request_detail() {
     const navigate = useNavigate();
@@ -15,6 +16,18 @@ function Member_request_detail() {
     const [showOkModal, setShowOkModel] = useState(false);
     const [modalMessage, setModalMessage] = useState("");
     const [onConfirm, setOnConfirm] = useState(() => () => {});
+
+    const HeaderContainer = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 47.5px;
+    background-color: white;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    padding-left: 25px;
+    padding-right: 25px;
+    margin-bottom: 0px;
+`;
 
     const apiClient = axios.create({
         baseURL: 'https://zmffjq.store',
@@ -98,13 +111,13 @@ function Member_request_detail() {
 
     return (
         <div className="Member_request_detail">
-            <div className="header">
+            <HeaderContainer>
                 <FaArrowLeft
-                    style={{fontSize: '25px', strokeWidth: '0.1', cursor: 'pointer', marginLeft: '15px'}}
-                    onClick={() => navigate(-1)}
+                    style={{fontSize: '24px', cursor: 'pointer'}}
+                    onClick={() => navigate(`/clubs/${id}/joinRequest`)}
                 />
-                <p>가입 신청 현황</p>
-            </div>
+                <div style={{fontSize: '20px', fontWeight: "bold", textAlign: "left", marginRight: "110px"}}>가입 신청 현황</div>
+            </HeaderContainer>
             <div className="member_request_info">
                 <img src={memberDetail.memberImageURL} alt="Profile"/>
                 <div className="info_detail">
