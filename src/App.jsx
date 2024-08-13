@@ -97,8 +97,11 @@ function App() {
                             <Route path="/clubs/:id/freeboardlist" element={<FreeBoardList />} />
                             <Route path="/clubs/:id/noticelist/noticewrite" element={<NoticeWrite />} />
                             <Route path="/clubs/:id/freeboardlist/freeboardwrite" element={<FreeBoardWrite />} />
+                            {/*<Route path="/clubs/:id/activitylist/activitywrite" element={<ActivityWrite />} />*/}
                             <Route path="/clubs/:clubId/board/:boardId/posts/:postId" element={<BoardDetail />} />
                             <Route path="/clubs/:clubId/board/:boardId/posts/:postId/edit" element={<PostEdit />} />
+                            {/*<Route path="/clubs/:id/activity/:postId" element={<ActivityDetail />} />*/}
+                            {/*<Route path="/clubs/:id/activity/:postId/edit" element={<ActivityEdit />} />*/}
                             <Route path="/clubs/etc1" element={<Etc1 />} />
                             <Route path="/clubs/etc1/atd" element={<Atd />} />
                             <Route path="/clubs/:id/changeclubinfo" element={<ClubInfoEdit />} />

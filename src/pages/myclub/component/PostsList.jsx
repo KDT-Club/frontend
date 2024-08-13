@@ -59,18 +59,6 @@ const EmptyMessage = styled.p`
     text-align: center;
 `;
 
-const Content = styled.p`
-    font-size: 16px;
-    color: #666;
-    text-align: left;
-    margin: 5px 10px 5px 8px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 1;
-`;
-
 const Post = styled.div`
     display: flex;
     flex-direction: column;
@@ -93,7 +81,20 @@ const Title = styled.p`
     margin: 0px 10px 6px 8px;
     overflow: hidden;
     text-overflow: ellipsis;
-    white-space: nowrap;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+`;
+
+const Content = styled.p`
+    font-size: 16px;
+    color: #666;
+    text-align: left;
+    margin: 5px 10px 5px 8px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
 `;
 
@@ -104,7 +105,7 @@ const CreatedAt = styled.p`
     margin: 5px 10px 0 8px;
 `;
 
-const PostList = ({ boardType, boardId, title }) => {
+const PostsList = ({ boardType, boardId, title }) => {
     const { id } = useParams();
     const navigate = useNavigate();
     const [list, setList] = useState([]);
@@ -115,20 +116,16 @@ const PostList = ({ boardType, boardId, title }) => {
 
     const fetchUserDataAndCheckStatus = async () => {
         try {
-            // 사용자의 memberId 가져오기
             const userResponse = await apiClient.get('/getUserId', { withCredentials: true });
             const userMemberId = userResponse.data.message;
             setMemberId(userMemberId);
 
-            // 회원 정보 조회
             const memberResponse = await apiClient.get(`/members/${userMemberId}`);
             setStudentId(memberResponse.data.studentId);
 
-            // 클럽 회원 목록 가져오기
             const membersResponse = await apiClient.get(`/clubs/${id}/clubMember`);
             if (membersResponse.status === 200) {
                 const members = membersResponse.data;
-                // 로그인 중인 멤버의 상태를 찾아 회장 여부를 확인
                 const loggedInMember = members.find(member => member.studentId === memberResponse.data.studentId);
                 setIsPresident(loggedInMember?.status === "CLUB_PRESIDENT");
             }
@@ -142,25 +139,36 @@ const PostList = ({ boardType, boardId, title }) => {
     useEffect(() => {
         const fetchPosts = async () => {
             try {
-                const response = await apiClient.get(`/clubs/${id}/board/${boardId}/posts`);
+                let response;
+                if (boardType === 'activity') {
+                    response = await apiClient.get(`/board/3/clubs/${id}/posts`);
+                } else {
+                    response = await apiClient.get(`/clubs/${id}/board/${boardId}/posts`);
+                }
+
                 if (response.status === 200) {
-                    const postsWithAuthors = await Promise.all(
-                        response.data.map(async (post) => {
-                            try {
-                                const detailResponse = await apiClient.get(`/clubs/${id}/board/${boardId}/posts/${post.postId}`);
-                                if (detailResponse.status === 200) {
-                                    const detailData = detailResponse.data.post;
-                                    return {
-                                        ...post,
-                                        authorName: detailData.member.name,
-                                    };
+                    let postsWithAuthors;
+                    if (boardType === 'activity') {
+                        postsWithAuthors = response.data;
+                    } else {
+                        postsWithAuthors = await Promise.all(
+                            response.data.map(async (post) => {
+                                try {
+                                    const detailResponse = await apiClient.get(`/clubs/${id}/board/${boardId}/posts/${post.postId}`);
+                                    if (detailResponse.status === 200) {
+                                        const detailData = detailResponse.data.post;
+                                        return {
+                                            ...post,
+                                            authorName: detailData.member.name,
+                                        };
+                                    }
+                                } catch (error) {
+                                    console.error(`게시글 ${post.postId}의 상세 정보 조회 중 에러 발생`, error);
                                 }
-                            } catch (error) {
-                                console.error(`게시글 ${post.postId}의 상세 정보 조회 중 에러 발생`, error);
-                            }
-                            return post;
-                        })
-                    );
+                                return post;
+                            })
+                        );
+                    }
                     const sortedPosts = postsWithAuthors.sort((a, b) =>
                         new Date(b.createdAt) - new Date(a.createdAt)
                     );
@@ -175,7 +183,11 @@ const PostList = ({ boardType, boardId, title }) => {
     }, [id, boardId, boardType]);
 
     const handleWriteClick = () => {
-        navigate(`/clubs/${id}/${boardType}list/${boardType}write`);
+        if (boardType === 'activity') {
+            navigate(`/clubs/${id}/activitywrite`);
+        } else {
+            navigate(`/clubs/${id}/${boardType}list/${boardType}write`);
+        }
     };
 
     const handleBackClick = () => {
@@ -185,8 +197,6 @@ const PostList = ({ boardType, boardId, title }) => {
     if (isLoading) {
         return <div>로딩 중...</div>;
     }
-
-    //const shouldShowWriteButton = boardType !== 'notice' || isPresident;
 
     return (
         <Whole>
@@ -209,16 +219,24 @@ const PostList = ({ boardType, boardId, title }) => {
                     {list.length > 0 ? (
                         list.map((post, index) => (
                             <Post key={index}>
-                                <Link to={`/clubs/${id}/board/${boardId}/posts/${post.postId}?memberId=${memberId}`}>
+                                <Link to={boardType === 'activity'
+                                    ? `/clubs/${id}/activity/${post.postId}`
+                                    : `/clubs/${id}/board/${boardId}/posts/${post.postId}?memberId=${memberId}`
+                                }>
                                     <Title>{post.title}</Title>
                                     <Content>{post.content}</Content>
-                                    <CreatedAt>{post.authorName} | {formatDate(post.createdAt)}</CreatedAt>
+                                    <CreatedAt>
+                                        {boardType !== 'activity' && `${post.authorName} | `}
+                                        {formatDate(post.createdAt)}
+                                    </CreatedAt>
                                 </Link>
                             </Post>
                         ))
                     ) : (
                         <EmptyMessageContainer>
-                            <EmptyMessage>작성된 글이 없습니다.</EmptyMessage>
+                            <EmptyMessage>
+                                {boardType === 'activity' ? '작성된 활동내용이 없습니다.' : '작성된 글이 없습니다.'}
+                            </EmptyMessage>
                         </EmptyMessageContainer>
                     )}
                 </PostListContainer>
@@ -227,4 +245,5 @@ const PostList = ({ boardType, boardId, title }) => {
     );
 };
 
-export default PostList;
+export default PostsList;
+
