@@ -207,13 +207,14 @@ const PostsList = ({ boardType, boardId, title }) => {
                     onClick={handleBackClick}
                 />
                 <div style={{fontSize: '20px', fontWeight: "bold"}}>{title}</div>
-                {(boardType !== 'notice' || isPresident) && (
+                {((boardType === 'notice' || boardType === 'activity') && isPresident) || (boardType !== 'notice' && boardType !== 'activity') ? (
                     <FiEdit
                         style={{fontSize: '24px', cursor: 'pointer'}}
                         onClick={handleWriteClick}
                     />
+                ) : (
+                    <div style={{width: '24px'}}></div>
                 )}
-                {(boardType === 'notice' && !isPresident) && <div style={{width: '24px'}}></div>}
             </HeaderContainer>
             <ScrollContainer>
                 <PostListContainer>
@@ -227,8 +228,6 @@ const PostsList = ({ boardType, boardId, title }) => {
                                     <Title>{post.title}</Title>
                                     <Content>{post.content}</Content>
                                     <CreatedAt>
-                                        {/*{boardType !== 'activity' && `${post.authorName} | `}*/}
-                                        {/*{formatDate(post.createdAt)}*/}
                                         {post.authorName} | {formatDate(post.createdAt)}
                                     </CreatedAt>
                                 </Link>

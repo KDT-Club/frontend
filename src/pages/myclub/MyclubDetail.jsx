@@ -4,6 +4,64 @@ import "./myclubdetail.css";
 import Footer from '../../components/footer/Footer.jsx';
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import Slide from "./headerHamburger/Slide.jsx"
+import styled from 'styled-components';
+
+const ActivityBoxSection = styled.section`
+  display: flex;
+  width: calc(100vw - 30px);
+  overflow-x: auto;
+  padding: 10px;
+  gap: 10px;
+  margin-bottom: 20px;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
+const ActivityBoxItem = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-width: 190px;
+  max-width: 190px;
+  height: 215px;
+  padding: 15px;
+  border: 1.5px solid #597CA5;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  overflow: hidden;
+
+  h3 {
+    font-size: 14.5px;
+    font-weight: bold;
+    margin: 0 0 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+  }
+
+  img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+  }
+
+  p {
+    font-size: 12.5px;
+    margin: 10px 0 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    width: 100%;
+  }
+`;
 
 function MyclubDetail() {
     const { id } = useParams();
@@ -98,7 +156,7 @@ function MyclubDetail() {
     };
 
     const handleActivityClick = () => {
-        navigate(`/clubs/${id}/activeList`);
+        navigate(`/clubs/${id}/activityList`);
     };
 
     const etc1handleMoreClick = () => {
@@ -150,22 +208,22 @@ function MyclubDetail() {
                         <h2>동아리 활동</h2>
                         <p onClick={handleActivityClick}>더보기</p>
                     </div>
-                    <section className="box-section">
+                    <ActivityBoxSection>
                         {activityPosts.length > 0 ? (
                             activityPosts.map((item, index) => (
-                                <div className="box-item" key={index}>
+                                <ActivityBoxItem key={index}>
                                     <h3>{item.title}</h3>
                                     {item.imageUrl ? (
-                                        <img src={item.imageUrl} alt="첨부 이미지" style={{maxWidth: '100%'}}/>
+                                        <img src={item.imageUrl} alt="첨부 이미지"/>
                                     ) : (
-                                        <p>{item.content}</p> // 이미지가 없는 경우 content를 표시
+                                        <p>{item.content}</p>
                                     )}
-                                </div>
+                                </ActivityBoxItem>
                             ))
                         ) : (
                             <p className="no-posts-message">작성된 활동내용이 없습니다</p>
                         )}
-                    </section>
+                    </ActivityBoxSection>
                 </div>
                 <div className="item-container">
                     <div className="headerrcontainer">
