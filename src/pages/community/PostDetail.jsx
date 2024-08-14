@@ -1,420 +1,456 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import "./community_styles/post_detail.css";
 import '../../styles/App.css';
-import { FaArrowLeft } from "react-icons/fa6";
-import Modal_delete from '../../components/modal/Modal_delete.jsx';
 import axios from "axios";
+import styled from 'styled-components';
+import { FaArrowLeft } from "react-icons/fa6";
+import { FiMoreVertical, FiSend } from "react-icons/fi";
+import { MdOutlineCancel } from "react-icons/md";
+import Modal_delete from '../../components/modal/Modal_delete.jsx';
+import Modal_post from '../../components/modal/Modal_post.jsx';
+import Modal_post_complain from '../../components/modal/Modal_post_complain.jsx';
+import Modal_comment from '../../components/modal/Modal_comment.jsx';
 
-// SVG 아이콘 컴포넌트
-const UploadIcon = () => (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 5V13.17L15.58 16.75L16.75 15.58L13 11.83V5H11V11.83L7.42 15.42L8.58 16.58L12 13.17V5H12ZM4 18H20V20H4V18ZM20 2H4C2.9 2 2 2.9 2 4V20C2 21.1 2.9 22 4 22H20C21.1 22 22 21.1 22 20V4C22 2.9 21.1 2 20 2Z" fill="currentColor"/>
-    </svg>
-);
+const apiClient = axios.create({
+    baseURL: 'https://zmffjq.store',
+    timeout: 10000,
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    withCredentials: true,
+});
 
-function WriteModal({ onClose, onEdit, onDelete }) {
-    return (
-        <div className="modal-overlay">
-            <div className="modal-content">
-                <div className="modal-header">
-                    <p style={{ marginBottom: '0px', padding: '3px' }}></p>
-                    <hr style={{ marginLeft: '-20px', width: '120%' }}/>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '-5px' }}>
-                        <button onClick={onEdit} style={{ padding: '3px', borderRight: '1px solid #ccc', height: '50px' }}>수정</button>
-                        <button onClick={onDelete} style={{ padding: '5px' }}>삭제</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
-}
+const Whole = styled.div`
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+`;
+
+const HeaderContainer = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 47.5px;
+    background-color: white;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    padding-left: 25px;
+    padding-right: 25px;
+    margin-bottom: 0px;
+`;
+
+const ScrollContainer = styled.div`
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: darkgray white;
+`;
+
+const Title = styled.div`
+    font-size: 20px;
+    font-weight: bold;
+`;
+
+const PostContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: 20px;
+    margin-left: 20px;
+    margin-right: 10px;
+`;
+
+const PostAuthorContainer = styled.div`
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+`;
+
+const ProfileImage = styled.img`
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    margin-right: 10px;
+`;
+
+const PostAuthorDate = styled.p`
+    font-size: 16.6px;
+    color: gray;
+    font-weight: bold;
+    margin: 0;
+`;
+
+const PostTitle = styled.p`
+    font-size: 20px;
+    font-weight: bold;
+    padding-bottom: 12px;
+    text-align: start;
+    width: 100%;
+    margin-top: 8px;
+    margin-left: 10px;
+    padding-right: 10px;
+`;
+
+const PostContent = styled.p`
+    font-size: 17.8px;
+    margin-top: 5px;
+    margin-left: 10px;
+    text-align: start;
+`;
+
+const ImageContainer = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    box-sizing: border-box;
+    img {
+        width: 100%;
+        max-width: 200px;
+        min-width: 200px;
+        height: auto;
+        border-radius: 8px;
+        margin-bottom: 10px;
+    }
+`;
+
+const Divider = styled.div`
+    border-bottom: 1.5px solid dimgrey;
+    margin-top: 10px;
+`;
+
+const CommentContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    margin-top: 12px;
+    padding-bottom: 60px;
+`;
+
+const CommentLine = styled.div`
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 10px;
+`;
+
+const CommentHeader = styled.div`
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+`;
+
+const CommentAuthorDate = styled.p`
+    font-size: 16.5px;
+    color: gray;
+    margin-left: 30px;
+    margin-bottom: 2px;
+`;
+
+const CommentContent = styled.p`
+    font-size: 17px;
+    margin-left: 30px;
+    margin-bottom: 12px;
+`;
+
+const CommentDivider = styled.div`
+    border-bottom: 1px solid gray;
+    width: 100%;
+`;
+
+const Form = styled.form`
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+`;
+
+const SubmitCommentContainer = styled.div`
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px;
+    background-color: white;
+    box-sizing: border-box;
+`;
+
+const CommentInput = styled.input`
+    width: calc(100% - 50px);
+    flex: 1;
+    font-size: 16.5px;
+    text-align: center;
+    border-radius: 7px;
+    border: 1.5px solid darkgray;
+    height: 47px;
+    padding: 0 15px;
+    margin-right: 2px;
+    &:focus {
+        outline: none;
+        border: 1.5px solid #597CA5;
+    }
+`;
+
+const SubmitButton = styled.button`
+    width: 2%;
+    text-align: center;
+    cursor: pointer;
+    color: #5c5c5c;
+    margin-right: 15px;
+    margin-left: 0px;
+`;
 
 function PostDetail() {
-    const { postId } = useParams();
+    const { clubId, postId } = useParams();
+    const navigate = useNavigate();
     const [showDeleteCommentModal, setShowDeleteCommentModal] = useState(false);
-    const [showWriteModal, setShowWriteModal] = useState(false);
+    const [showPostModal, setShowPostModal] = useState(false);
+    const [showComplainModal, setShowComplainModal] = useState(false);
+    const [showCommentModal, setShowCommentModal] = useState(false);
+    const [modalPosition, setModalPosition] = useState({ top: '0px', left: '0px' });
     const [post, setPost] = useState(null);
     const [comments, setComments] = useState([]);
     const [deleteCommentId, setDeleteCommentId] = useState(null);
     const [newComment, setNewComment] = useState("");
-    const [isEditing, setIsEditing] = useState(false);
-    const [editedTitle, setEditedTitle] = useState("");
-    const [editedContent, setEditedContent] = useState("");
     const [editingCommentId, setEditingCommentId] = useState(null);
     const [editedCommentContent, setEditedCommentContent] = useState("");
-    const [editedImages, setEditedImages] = useState([]);
     const [memberId, setMemberId] = useState(null);
-    const navigate = useNavigate();
-    const fileInputRef = useRef(null);
+    const [selectedCommentId, setSelectedCommentId] = useState(null);
+    const [selectedCommentContent, setSelectedCommentContent] = useState('');
+    const [commentInputValue, setCommentInputValue] = useState("");
 
-    const axiosInstance = axios.create({
-        withCredentials: true
-    });
-
-    const handleFileChange = (e) => {
-        setEditedImages([...e.target.files]);
-    };
-
-    const uploadFileToS3 = async (file) => {
-        try {
-            const filename = encodeURIComponent(file.name);
-            const response = await fetch(`https://zmffjq.store/presigned-url?filename=${filename}`);
-            if (!response.ok) {
-                throw new Error('Failed to get presigned URL');
-            }
-            const presignedUrl = await response.text();
-
-            const uploadResponse = await fetch(presignedUrl, {
-                method: 'PUT',
-                headers: { 'Content-Type': file.type },
-                body: file
-            });
-
-            if (uploadResponse.ok) {
-                return presignedUrl.split('?')[0]; // 업로드된 파일의 URL 반환
-            } else {
-                throw new Error('S3 upload failed with status: ' + uploadResponse.status);
-            }
-        } catch (error) {
-            console.error('Error uploading file:', error);
-            throw error;
-        }
-    };
+    useEffect(() => {
+        fetchPost();
+        fetchComments();
+        fetchUserId();
+    }, [clubId, postId]);
 
     const fetchUserId = async () => {
         try {
-            const response = await axiosInstance.get("https://zmffjq.store/getUserId", {
-                withCredentials: true
-            });
+            const response = await apiClient.get("/getUserId");
             setMemberId(response.data.message);
         } catch (error) {
-            if (error.response && error.response.status === 401) {
-                alert('Unauthorized access. Please log in.');
-            } else {
-                console.error('유저 아이디를 불러오는 중 에러 발생:', error);
-                alert('유저 아이디를 불러오는 중 에러가 발생했습니다.');
-            }
+            console.error('Error fetching user ID:', error);
         }
     };
 
-    useEffect(() => {
-        fetchUserId();
-    }, []);
-
-    useEffect(() => {
-        const fetchPostAndComments = async () => {
-            try {
-                const response = await axiosInstance.get(`https://zmffjq.store/board/1/posts/${postId}`);
-                const { post } = response.data;
-
-                const attachmentNames = post.attachment_names || [];
-
-                setPost({
-                    ...response.data.post,
-                    attachmentNames: response.data.attachmentNames
-                });
-
-                setEditedTitle(post.title);
-                setEditedContent(post.content);
-
-                const commentsResponse = await axiosInstance.get(`https://zmffjq.store/posts/${postId}/comments`);
-                setComments(commentsResponse.data);
-            } catch (error) {
-                console.error("Error fetching data:", error);
-            }
-        };
-
-        fetchPostAndComments();
-    }, [postId]);
-
-    const handleEdit = () => {
-        setIsEditing(true);
-        setShowWriteModal(false);
-    };
-
-    const handleSaveEdit = async () => {
+    const fetchPost = async () => {
         try {
-            const uploadPromises = editedImages.map(file => uploadFileToS3(file));
-            const fileUrls = await Promise.all(uploadPromises);
-
-            await axiosInstance.put(`https://zmffjq.store/posts/${postId}`, {
-                title: editedTitle,
-                content: editedContent,
-                attachment_names: fileUrls,
-            });
-
-            setPost(prevPost => ({
-                ...prevPost,
-                title: editedTitle,
-                content: editedContent,
-                attachmentNames: fileUrls,
-            }));
-
-            setIsEditing(false);
+            const response = await apiClient.get(`/board/1/posts/${postId}`);
+            setPost(response.data.post);
         } catch (error) {
-            console.error("Error updating post:", error);
+            console.error('Error fetching post:', error);
         }
     };
 
-    const handleCancelEdit = () => {
-        setIsEditing(false);
+    const fetchComments = async () => {
+        try {
+            const response = await apiClient.get(`/posts/${postId}/comments`);
+            setComments(response.data);
+        } catch (error) {
+            console.error('Error fetching comments:', error);
+        }
     };
 
     const handleBack = () => {
         navigate('/community');
     };
 
-    const handleDeleteCommentModalOpen = (commentId) => {
-        setDeleteCommentId(commentId);
-        setShowDeleteCommentModal(true);
+    const handlePostDotClick = () => {
+        if (parseInt(post.member.id) === parseInt(memberId)) {
+            setShowPostModal(true);
+        } else {
+            setShowComplainModal(true);
+        }
     };
 
-    const handleDeleteCommentModalClose = () => {
-        setDeleteCommentId(null);
-        setShowDeleteCommentModal(false);
+    const handleCommentDotClick = (e, commentId, content) => {
+        setModalPosition({
+            top: e.clientY + 3 + 'px'
+        });
+        setShowCommentModal(true);
+        setSelectedCommentId(commentId);
+        setSelectedCommentContent(content);
     };
 
-    const handleDeleteCommentConfirm = async () => {
-        if (deleteCommentId) {
+    const handleCommentEdit = (commentId, content) => {
+        setEditingCommentId(commentId);
+        setCommentInputValue(content);
+        setShowCommentModal(false);
+    };
+
+    const handleSaveEditedComment = async (e) => {
+        e.preventDefault();
+        if (editingCommentId && commentInputValue.trim()) {
             try {
-                await axiosInstance.delete(`https://zmffjq.store/posts/${postId}/${deleteCommentId}`);
-                setComments(comments.filter(comment => comment.commentId !== deleteCommentId));
-                handleDeleteCommentModalClose();
+                const response = await apiClient.put(`/posts/${postId}/${editingCommentId}`, {
+                    content: commentInputValue
+                });
+                if (response.status === 200) {
+                    await fetchComments();
+                    setEditingCommentId(null);
+                    setCommentInputValue("");
+                }
             } catch (error) {
-                console.error("Error deleting comment:", error);
+                console.error('Error saving edited comment:', error);
+                alert('댓글 수정 중 오류가 발생했습니다. 다시 시도해주세요.');
             }
         }
     };
 
-    const handleCommentChange = (e) => {
-        setNewComment(e.target.value);
-    };
-
-    const handleAddComment = async (e) => {
+    const handleCommentSubmit = async (e) => {
         e.preventDefault();
-        if (newComment.trim() === "") return;
-
-        try {
-            const response = await axiosInstance.post(`https://zmffjq.store/posts/${postId}/comments`, {
-                memberId: memberId,
-                content: newComment
-            });
-            setComments([...comments, response.data]);
-            setNewComment("");
-        } catch (error) {
-            console.error("Error adding comment:", error);
+        if (editingCommentId) {
+            await handleSaveEditedComment(e);
+        } else if (commentInputValue.trim() && memberId) {
+            try {
+                const response = await apiClient.post(`/posts/${postId}/comments`, {
+                    memberId: memberId,
+                    content: commentInputValue
+                });
+                if (response.data.message === '성공') {
+                    await fetchComments();
+                    setCommentInputValue('');
+                }
+            } catch (error) {
+                console.error('Error submitting comment:', error);
+                alert('댓글 작성 중 오류가 발생했습니다. 다시 시도해주세요.');
+            }
         }
     };
 
-    const handleEditComment = (commentId, content) => {
-        setEditingCommentId(commentId);
-        setEditedCommentContent(content);
-    };
-
-    const handleSaveCommentEdit = async (commentId) => {
+    const handleDeleteComment = async (commentId) => {
         try {
-            await axiosInstance.put(`https://zmffjq.store/posts/${postId}/${commentId}`, {
-                content: editedCommentContent
-            });
-            setComments(comments.map(comment =>
-                comment.commentId === commentId
-                    ? { ...comment, content: editedCommentContent }
-                    : comment
-            ));
-            setEditingCommentId(null);
+            await apiClient.delete(`/posts/${postId}/${commentId}`);
+            await fetchComments();
         } catch (error) {
-            console.error("Error updating comment:", error);
+            console.error('Error deleting comment:', error);
+            alert('댓글 삭제 중 오류가 발생했습니다. 다시 시도해주세요.');
         }
     };
 
-    const handleWriteModalOpen = () => {
-        setShowWriteModal(true);
-    };
-
-    const handleWriteModalClose = () => {
-        setShowWriteModal(false);
-    };
-
-    const handleDeletePost = async () => {
-        try {
-            await axiosInstance.delete(`https://zmffjq.store/posts/${postId}`);
-            navigate('/community');
-        } catch (error) {
-            console.error("Error deleting post:", error);
-        }
-    };
-
-    const handleFileInputClick = () => {
-        fileInputRef.current.click();
+    const handleCancelEdit = () => {
+        setEditingCommentId(null);
+        setCommentInputValue("");
     };
 
     if (!post) {
         return <div>Loading...</div>;
     }
 
-    if (isEditing) {
-        return (
-            <div className="post-edit">
-                <header className="edit-header">
-                    <span onClick={handleCancelEdit} className="edit-cancel">X</span>
-                    <h2 className="edit-title">글 수정하기</h2>
-                    <span onClick={handleSaveEdit} className="edit-save">✓</span>
-                </header>
-                <hr style={{ marginTop: '-30px' }}/>
-                <div className="edit-form">
-                    <input
-                        type="text"
-                        value={editedTitle}
-                        onChange={(e) => setEditedTitle(e.target.value)}
-                        style={{ fontWeight: 'bold', fontSize: '18px', width: '100%', marginBottom: '10px', padding: '5px' }}
-                    />
-                    <textarea
-                        value={editedContent}
-                        onChange={(e) => setEditedContent(e.target.value)}
-                        style={{ fontSize: '16px', width: '100%', height: '200px', padding: '5px' }}
-                    />
-                    <input
-                        type="file"
-                        multiple
-                        onChange={handleFileChange}
-                        accept="image/*"
-                        style={{ display: 'none' }}  // 숨깁니다.
-                        ref={fileInputRef}
-                    />
-                    <div className="new-images">
-                        {editedImages && Array.from(editedImages).map((file, index) => (
+    return (
+        <Whole>
+            <HeaderContainer>
+                <FaArrowLeft style={{fontSize: '24px', cursor: 'pointer'}} onClick={handleBack}/>
+                <Title>자유게시판</Title>
+                <FiMoreVertical style={{fontSize: '24px', cursor: 'pointer'}} onClick={handlePostDotClick}/>
+            </HeaderContainer>
+            <ScrollContainer>
+                <PostContainer>
+                    <PostAuthorContainer>
+                        <ProfileImage src={post.member.memberImageURL || "/default-profile.png"} alt="" />
+                        <PostAuthorDate>{post.member.name} | {new Date(post.createdAt).toLocaleDateString()}</PostAuthorDate>
+                    </PostAuthorContainer>
+                    <PostTitle>{post.title}</PostTitle>
+                    <PostContent>{post.content}</PostContent>
+                    <ImageContainer>
+                        {post.attachmentNames && post.attachmentNames.map((url, index) => (
                             <img
                                 key={index}
-                                src={URL.createObjectURL(file)}
-                                alt={`New attachment ${index + 1}`}
-                                style={{ width: '100px', height: '100px', objectFit: 'cover', margin: '5px' }}
+                                src={url}
+                                alt={`첨부 이미지 ${index + 1}`}
+                                onError={(e) => {
+                                    console.error(`이미지 로딩 오류 ${index}:`, e);
+                                    e.target.style.display = 'none';
+                                }}
                             />
                         ))}
-                    </div>
-                    <button onClick={handleFileInputClick} style={{ cursor: 'pointer', marginTop: '10px' }}>
-                        <UploadIcon />
-                        <p style={{ marginLeft: '-100px', marginTop:'-25px'}}>이미지 업로드</p>
-                    </button>
-                </div>
-            </div>
-        );
-    }
-
-    return (
-        <div className="post-detail">
-            <div className="header">
-                <FaArrowLeft
-                    style={{ fontSize: '25px', strokeWidth: '0.1', cursor: 'pointer', marginLeft: '15px' }}
-                    onClick={handleBack}/>
-                <p>게시물 내용</p>
-                <button style={{ fontWeight: 'bold', fontSize: '20px', textAlign: 'right' }} onClick={handleWriteModalOpen}>:
-                </button>
-                {showWriteModal && (
-                    <WriteModal
-                        onClose={handleWriteModalClose}
-                        onEdit={handleEdit}
-                        onDelete={handleDeletePost}
-                    />
-                )}
-            </div>
-            <hr style={{marginTop: '-30px'}}/>
-            <div className="post-content">
-                <p style={{textAlign: 'left', marginLeft: '20px', marginTop: '40px', fontSize: '18px', color: 'gray'}}>
-                    {post && post.member && post.member.name} | {new Date(post.createdAt).toLocaleDateString()}
-                </p>
-                <h3 style={{
-                    textAlign: 'left',
-                    fontSize: '20px',
-                    marginLeft: '20px',
-                    marginBottom: '40px',
-                    marginTop:'10px',
-                    fontWeight: 'bold'
-                }}>{post.title}</h3>
-                <p style={{textAlign: 'left', marginLeft: '20px'}}>{post.content}</p>
-                <div className="post-photos" style={{marginLeft: '0px', marginTop: '20px'}}>
-                    {post.attachmentNames && post.attachmentNames.length > 0 ? (
-                        post.attachmentNames.map((fileName, index) => {
-                            const isImage = /\.(jpg|jpeg|png|gif)$/i.test(fileName);
-
-                            return isImage ? (
-                                <img
-                                    key={index}
-                                    src={fileName}
-                                    alt={`Post photo ${index + 1}`}
-                                    style={{width: '390px', maxWidth: '400px', height: 'auto', marginBottom: '20px'}}
-                                    onError={(e) => {
-                                        console.error(`이미지 로딩 오류 ${index}:`, e);
-                                        e.target.style.display = 'none';
-                                    }}
-                                />
-                            ) : (
-                                <p key={index}>첨부된 파일: {fileName}</p>
-                            )
-                        })
+                    </ImageContainer>
+                </PostContainer>
+                <Divider />
+                <CommentContainer>
+                    {comments.length > 0 ? (
+                        comments.map(comment => (
+                            <CommentLine key={comment.commentId}>
+                                <CommentHeader>
+                                    <CommentAuthorDate>{comment.memberName} | {new Date(comment.createdAt).toLocaleDateString()}</CommentAuthorDate>
+                                    <FiMoreVertical
+                                        style={{fontSize: '20px', cursor: 'pointer', marginRight: '20px'}}
+                                        onClick={(e) => handleCommentDotClick(e, comment.commentId, comment.content)}
+                                    />
+                                </CommentHeader>
+                                <CommentContent>{comment.content}</CommentContent>
+                                <CommentDivider />
+                            </CommentLine>
+                        ))
                     ) : (
-                        <p>첨부된 파일이 없습니다.</p>
+                        <p style={{fontSize: '18px'}}>댓글이 없습니다.</p>
                     )}
-                </div>
-            </div>
-            <hr/>
-            <div className="comments-section">
-                {comments.map((comment) => (
-                    <div key={comment.commentId} className="comment" style={{textAlign: 'left', marginLeft: '20px'}}>
-                        <p style={{
-                            color: 'gray',
-                            fontWeight: 'bold'
-                        }}>{comment.memberName} | {new Date(comment.createdAt).toLocaleDateString()}</p>
-                        {editingCommentId === comment.commentId ? (
-                            <div>
-                                <input
-                                    type="text"
-                                    value={editedCommentContent}
-                                    onChange={(e) => setEditedCommentContent(e.target.value)}
-                                    style={{marginRight: '10px'}}
-                                />
-                                <button onClick={() => handleSaveCommentEdit(comment.commentId)}>저장</button>
-                            </div>
-                        ) : (
-                            <p>{comment.content}</p>
+                </CommentContainer>
+                <Form onSubmit={handleCommentSubmit}>
+                    <SubmitCommentContainer>
+                        <CommentInput
+                            type="text"
+                            value={commentInputValue}
+                            onChange={(e) => setCommentInputValue(e.target.value)}
+                            placeholder={editingCommentId ? "댓글을 수정하세요" : "댓글을 입력하세요"}
+                        />
+                        <SubmitButton type="submit">
+                            <FiSend style={{textAlign: "center", fontSize: "27px"}}/>
+                        </SubmitButton>
+                        {editingCommentId && (
+                            <MdOutlineCancel
+                                style={{fontSize: "27px", marginLeft: '5px', marginRight: "10px", color: "#5c5c5c", cursor: 'pointer'}}
+                                onClick={handleCancelEdit}
+                            />
                         )}
-                        <div style={{display: "flex", marginTop: '10px'}}>
-                            {editingCommentId !== comment.commentId && (
-                                <>
-                                    <button className="modify-button" style={{textAlign: 'right', marginRight: '20px'}}
-                                            onClick={() => handleEditComment(comment.commentId, comment.content)}>수정
-                                    </button>
-                                    <button className="delete-button" style={{textAlign: 'right'}}
-                                            onClick={() => handleDeleteCommentModalOpen(comment.commentId)}>🗑️
-                                    </button>
-                                </>
-                            )}
-                        </div>
-                        <hr style={{marginTop: '10px', marginLeft: '-20px', width: '1000px'}}/>
-                    </div>
-                ))}
-                <form className="comment-input" onSubmit={handleAddComment}
-                      style={{marginTop: '20px', marginLeft: '20px', display: 'flex', alignItems: 'center'}}>
-                    <input
-                        type="text"
-                        placeholder="댓글"
-                        value={newComment}
-                        onChange={handleCommentChange}
-                        style={{marginRight: '10px', padding: '10px', width:'500%'}}
-                    />
-                    <button type="submit"
-                            style={{height:'45px',color:'white',fontWeight:'bold',backgroundColor:'#567cac',border: '1px solid rgb(204, 204, 204, 0.7)', padding: '10px 10px',marginRight:'15px'}}>작성
-                    </button>
-                </form>
-            </div>
+                    </SubmitCommentContainer>
+                </Form>
+            </ScrollContainer>
 
             {showDeleteCommentModal && (
                 <Modal_delete
-                    onClose={handleDeleteCommentModalClose}
-                    onConfirm={handleDeleteCommentConfirm}
+                    onClose={() => setShowDeleteCommentModal(false)}
+                    onConfirm={() => {
+                        handleDeleteComment(deleteCommentId);
+                        setShowDeleteCommentModal(false);
+                    }}
                 />
             )}
-        </div>
+            {showPostModal && (
+                <Modal_post
+                    onClose={() => setShowPostModal(false)}
+                    onEdit={() => {/* Handle edit post */}}
+                    onDelete={() => {/* Handle delete post */}}
+                />
+            )}
+            {showComplainModal && (
+                <Modal_post_complain onClose={() => setShowComplainModal(false)} />
+            )}
+            {showCommentModal && (
+                <Modal_comment
+                    onClose={() => setShowCommentModal(false)}
+                    position={modalPosition}
+                    onEdit={() => handleCommentEdit(selectedCommentId, selectedCommentContent)}
+                    postId={postId}
+                    commentId={selectedCommentId}
+                    onDelete={() => {
+                        setDeleteCommentId(selectedCommentId);
+                        setShowDeleteCommentModal(true);
+                        setShowCommentModal(false);
+                    }}
+                    content={selectedCommentContent}
+                />
+            )}
+        </Whole>
     );
 }
 
