@@ -101,21 +101,39 @@ const PostContent = styled.p`
     text-align: start;
 `;
 
+// const ImageContainer = styled.div`
+//     width: 100%;
+//     display: flex;
+//     flex-direction: column;
+//     align-items: center;
+//     padding: 10px;
+//     box-sizing: border-box;
+//     img {
+//         width: 100%;
+//         max-width: 200px;
+//         min-width: 200px;
+//         height: auto;
+//         border-radius: 8px;
+//         margin-bottom: 10px;
+//     }
+// `;
+
 const ImageContainer = styled.div`
     width: 100%;
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
     padding: 10px;
     box-sizing: border-box;
-    img {
-        width: 100%;
-        max-width: 200px;
-        min-width: 200px;
-        height: auto;
-        border-radius: 8px;
-        margin-bottom: 10px;
-    }
+`;
+
+const StyledImage = styled.img`
+    width: 100%;
+    max-width: 200px;
+    height: auto;
+    border-radius: 8px;
+    object-fit: cover;
 `;
 
 const Divider = styled.div`
@@ -208,7 +226,7 @@ const SubmitButton = styled.button`
     margin-left: 0px;
 `;
 
-function PostDetail() {
+function CommunityPostDetail() {
     const { clubId, postId } = useParams();
     const navigate = useNavigate();
     const [showDeleteCommentModal, setShowDeleteCommentModal] = useState(false);
@@ -342,6 +360,10 @@ function PostDetail() {
         setCommentInputValue("");
     };
 
+    const handleEditPost = () => {
+        navigate(`/board/1/posts/${postId}/edit`);
+    };
+
     if (!post) {
         return <div>Loading...</div>;
     }
@@ -362,21 +384,17 @@ function PostDetail() {
                     <PostTitle>{post.title}</PostTitle>
                     <PostContent>{post.content}</PostContent>
                     <ImageContainer>
-                        {attachmentNames.length > 0 ? (
-                            attachmentNames.map((url, index) => (
-                                <img
-                                    key={index}
-                                    src={url}
-                                    alt={`첨부 이미지 ${index + 1}`}
-                                    onError={(e) => {
-                                        console.error(`이미지 로딩 오류 ${index}:`, e);
-                                        e.target.style.display = 'none';
-                                    }}
-                                />
-                            ))
-                        ) : (
-                            <p></p>
-                        )}
+                        {attachmentNames.map((url, index) => (
+                            <StyledImage
+                                key={index}
+                                src={url}
+                                alt={`첨부 이미지 ${index + 1}`}
+                                onError={(e) => {
+                                    console.error(`이미지 로딩 오류 ${index}:`, e);
+                                    e.target.style.display = 'none';
+                                }}
+                            />
+                        ))}
                     </ImageContainer>
                 </PostContainer>
                 <Divider />
@@ -432,7 +450,7 @@ function PostDetail() {
             {showPostModal && (
                 <Modal_post
                     onClose={() => setShowPostModal(false)}
-                    onEdit={() => {/* Handle edit post */}}
+                    onEdit={handleEditPost}
                     onDelete={() => {/* Handle delete post */}}
                 />
             )}
@@ -458,4 +476,4 @@ function PostDetail() {
     );
 }
 
-export default PostDetail;
+export default CommunityPostDetail;

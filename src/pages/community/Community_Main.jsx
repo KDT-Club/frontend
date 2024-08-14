@@ -160,6 +160,11 @@ function CommunityMain() {
         }
     };
 
+    const handlePostCreated = () => {
+        fetchPosts(); // Fetch posts after a new post is created
+        setIsWriteModalOpen(false);
+    };
+
     const handleWritePost = async (newPost) => {
         try {
             const response = await apiClient.post(`/board/${clubId}/posts`, newPost);
@@ -231,7 +236,7 @@ function CommunityMain() {
             <WritePostModal
                 isOpen={isWriteModalOpen}
                 onClose={() => setIsWriteModalOpen(false)}
-                onSubmit={handleWritePost}
+                onSubmit={handlePostCreated}
             />
             <Footer />
         </Whole>

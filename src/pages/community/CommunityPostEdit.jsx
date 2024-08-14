@@ -1,8 +1,19 @@
-import React, { useState, useRef } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { FiX, FiCheck } from 'react-icons/fi';
-import { LuImagePlus } from 'react-icons/lu';
+import axios from 'axios';
+import { FaArrowLeft } from "react-icons/fa6";
+import { FiX, FiCheck } from "react-icons/fi";
+import { LuImagePlus } from "react-icons/lu";
+
+const apiClient = axios.create({
+    baseURL: 'https://zmffjq.store',
+    timeout: 10000,
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    withCredentials: true,
+});
 
 const Whole = styled.div`
     width: 100%;
@@ -112,19 +123,35 @@ const DeleteIcon = styled(FiX)`
     padding: 2px;
 `;
 
-function WritePostModal({ isOpen, onClose, onSubmit }) {
+function CommunityPostEdit() {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [files, setFiles] = useState([]);
     const [attachmentNames, setAttachmentNames] = useState([]);
     const [previewImages, setPreviewImages] = useState([]);
-    const fileInputRef = useRef(null);
+    const [deletedAttachments, setDeletedAttachments] = useState([]);
+    const navigate = useNavigate();
+    const { postId } = useParams();
 
-    if (!isOpen) return null;
+    useEffect(() => {
+        fetchPostDetails();
+    }, [postId]);
+
+    const fetchPostDetails = async () => {
+        try {
+            const response = await apiClient.get(`/board/1/posts/${postId}`);
+            setTitle(response.data.post.title);
+            setContent(response.data.post.content);
+            setAttachmentNames(response.data.attachmentNames || []);
+            setPreviewImages(response.data.attachmentNames || []);
+        } catch (error) {
+            console.error('Error fetching post details:', error);
+        }
+    };
 
     const handleFileChange = async (e) => {
         const selectedFiles = Array.from(e.target.files);
-        setFiles(selectedFiles);
+        setFiles(prevFiles => [...prevFiles, ...selectedFiles]);
 
         const newPreviewImages = selectedFiles.map(file => URL.createObjectURL(file));
         setPreviewImages(prevImages => [...prevImages, ...newPreviewImages]);
@@ -153,37 +180,33 @@ function WritePostModal({ isOpen, onClose, onSubmit }) {
         }
     };
 
-    const handleSubmit = async () => {
+    const handleSubmit = async (e) => {
+        e.preventDefault();
         if (title && content) {
             try {
-                const postData = {
+                const response = await apiClient.put(`/posts/${postId}`, {
+                    postId: parseInt(postId),
                     title,
                     content,
-                    attachment_flag: files.length > 0 ? 'Y' : 'N',
-                    attachment_names: attachmentNames,
-                    club_name: '.' // 동아리 이름 대신 '.' 전송
-                };
-                const response = await fetch('https://zmffjq.store/board/1/posts', {
-                    method: 'POST',
-                    body: JSON.stringify(postData),
-                    headers: { 'Content-Type': 'application/json' },
-                    credentials: 'include'
+                    attachment_flag: attachmentNames.length > 0 ? 'Y' : 'N',
+                    attachment_names: attachmentNames,  // 'name'에서 'names'로 변경
                 });
 
-                if (response.ok) {
-                    const responseData = await response.json();
-                    console.log('Post created successfully:', responseData);
-                    setTitle('');
-                    setContent('');
-                    setFiles([]);
-                    setAttachmentNames([]);
-                    setPreviewImages([]);
-                    onSubmit(); // Call the onSubmit prop function to notify the parent component
+                if (response.status === 200 || response.status === 201) {
+                    console.log('Post updated successfully:', response.data);
+
+                    // 삭제된 첨부 파일 처리
+                    for (const deletedAttachment of deletedAttachments) {
+                        await apiClient.delete(`/attachments/${deletedAttachment}`);
+                    }
+
+                    navigate(`/board/1/posts/${postId}`);
                 } else {
-                    throw new Error('Failed to create post with status: ' + response.status);
+                    throw new Error('Failed to update post');
                 }
             } catch (error) {
-                console.error('Error submitting post:', error);
+                console.error('Error updating post:', error);
+                alert('글 수정 중 오류가 발생했습니다. 다시 시도해주세요.');
             }
         } else {
             alert('제목과 내용을 모두 입력해주세요.');
@@ -191,19 +214,20 @@ function WritePostModal({ isOpen, onClose, onSubmit }) {
     };
 
     const handleImageDelete = (index) => {
+        const deletedAttachment = attachmentNames[index];
+        setDeletedAttachments(prev => [...prev, deletedAttachment]);
+
         setPreviewImages(prevImages => prevImages.filter((_, i) => i !== index));
         setAttachmentNames(prevUrls => prevUrls.filter((_, i) => i !== index));
         setFiles(prevFiles => prevFiles.filter((_, i) => i !== index));
     };
 
-    const handleFileInputClick = () => fileInputRef.current.click();
-
     return (
         <Whole>
             <HeaderContainer>
-                <Icon as={FiX} onClick={onClose} />
-                <HeaderTitle>글쓰기</HeaderTitle>
-                <Icon as={FiCheck} onClick={handleSubmit} />
+                <Icon as={FiX} onClick={() => navigate(`/board/1/posts/${postId}`)} />
+                <HeaderTitle>글 수정</HeaderTitle>
+                <Icon as={FiCheck} onClick={(e) => handleSubmit(e)} />
             </HeaderContainer>
             <Title
                 type="text"
@@ -222,9 +246,9 @@ function WritePostModal({ isOpen, onClose, onSubmit }) {
                 onChange={handleFileChange}
                 accept="image/*"
                 style={{display: 'none'}}
-                ref={fileInputRef}
+                id="fileInput"
             />
-            <FileInputButton type="button" onClick={handleFileInputClick}>
+            <FileInputButton onClick={() => document.getElementById('fileInput').click()}>
                 <LuImagePlus style={{fontSize: '30px'}}/>
                 <span style={{marginLeft: "20px"}}>
                     첨부할 사진을 선택하세요.
@@ -242,4 +266,4 @@ function WritePostModal({ isOpen, onClose, onSubmit }) {
     );
 }
 
-export default WritePostModal;
+export default CommunityPostEdit;

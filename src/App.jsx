@@ -15,7 +15,7 @@ import Member_info_fix from "./pages/myclub/headerHamburger/member_manage/member
 import MainPage from './pages/main/MainPage.jsx'
 import ClubDetailPage from "./pages/main/ClubDetailPage.jsx";
 import Community_Main from "./pages/community/Community_Main.jsx";
-import PostDetail from "./pages/community/PostDetail.jsx";
+import CommunityPostDetail from "./pages/community/CommunityPostDetail.jsx";
 import ActivityPage from "./pages/community/activity/ActivityPage.jsx";
 import ActivityDetailPage from "./pages/community/activity/ActivityDetailPage.jsx";
 import Member_request from "./pages/myclub/headerHamburger/member_manage/member_request/Member_request.jsx";
@@ -36,6 +36,7 @@ import BoardDetail from "./pages/myclub/component/BoardDetail.jsx";
 import ActivityDetail from "./pages/myclub/activityBoard/ActivityDetail.jsx";
 import ActivityWrite from "./pages/myclub/activityBoard/ActivityWrite.jsx";
 import ActivityEdit from "./pages/myclub/activityBoard/ActivityEdit.jsx";
+import CommunityPostEdit from "./pages/community/CommunityPostEdit.jsx";
 
 function App() {
     const [showLogo, setShowLogo] = React.useState(true);
@@ -86,7 +87,8 @@ function App() {
                             <Route path="/main" element={<MainPage />} />
                             <Route path="/clubs/:clubName" element={<ClubDetailPage />} />
                             <Route path="/community" element={<Community_Main />} />
-                            <Route path="/board/1/posts/:postId" element={<PostDetail/>}/>
+                            <Route path="/board/1/posts/:postId" element={<CommunityPostDetail/>}/>
+                            <Route path="/board/1/posts/:postId/edit" element={<CommunityPostEdit />} />
                             <Route path="/board/3/clubs/:clubId/posts" element={<ActivityPage />} />
                             <Route path="/board/3/clubs/:clubId/posts/:postId" element={<ActivityDetailPage />} />
                             <Route path="/clubs/:id/joinRequest" element={<Member_request />} />
