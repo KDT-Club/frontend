@@ -25,11 +25,6 @@ const HeaderContainer = styled.div`
     margin-bottom: 0px;
 `;
 
-// const Container = styled.div`
-//   display: flex;
-//   flex-direction: column;
-// `;
-
 const HeaderTitle = styled.div`
   font-size: 19px;
   font-weight: bold;

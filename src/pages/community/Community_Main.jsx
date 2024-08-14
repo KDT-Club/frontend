@@ -1,16 +1,124 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import styled from 'styled-components';
 import Header_center from "../../components/header/Header_center.jsx";
 import Footer from "../../components/footer/Footer.jsx";
-import { useNavigate } from "react-router-dom";
-import "./community_styles/community.css";
 import Calendar from "./Calendar/Calendar.jsx";
-import ActivityPage from './activity/ActivityPage.jsx'
-import axios from "axios";
+import ActivityPage from './activity/ActivityPage.jsx';
 import WritePostModal from "./WritePostModal.jsx";
+import {formatDate} from "../myclub/component/Date.jsx";
+
+const Whole = styled.div`
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+`;
+
+const MenuContainer = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 10px 0px;
+`;
+
+const MenuScroll = styled.div`
+    display: inline-flex;
+`;
+
+const MenuItem = styled.div`
+    flex: 0 0 auto;
+    border: 2px solid ${props => props.active ? 'black' : 'lightgray'};
+    border-radius: 20px;
+    width: 114px;
+    padding: 5px;
+    margin: 10px 5px;
+    color: ${props => props.active ? 'black' : 'lightgray'};
+    font-weight: ${props => props.active ? '700' : '500'};
+    cursor: pointer;
+    text-align: center;
+`;
+
+const ContentContainer = styled.div`
+    flex: 1;
+    overflow-y: auto;
+    padding-bottom: 60px; // Footer 높이만큼 여백 추가
+    scrollbar-width: thin;
+    scrollbar-color: darkgray white;
+
+`;
+
+const PostListContainer = styled.div`
+    padding-bottom: 20px;
+`;
+
+const Post = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    border-bottom: 1px solid #ddd;
+    padding: 9.5px 20px;
+    cursor: pointer;
+`;
+
+const Title = styled.p`
+    font-weight: bold;
+    font-size: 18.6px;
+    text-align: left;
+    margin: 0px 10px 2px 8px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+`;
+
+const Content = styled.p`
+    font-size: 16px;
+    color: #666;
+    text-align: left;
+    margin: 5px 10px 2px 8px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+`;
+
+const CreatedAt = styled.p`
+    font-size: 16px;
+    color: gray;
+    text-align: left;
+    margin: 5px 10px 0 8px;
+`;
+
+const WriteButton = styled.button`
+    background-color: #7995b6;
+    width: 90px;
+    border-radius: 100px;
+    color: white;
+    font-weight: bold;
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    z-index: 1000;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    margin-bottom: 15px;
+`;
+
+const apiClient = axios.create({
+    baseURL: 'https://zmffjq.store',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+});
 
 function CommunityMain() {
     const [activeIndex, setActiveIndex] = useState(0);
-    const [expandedPosts, setExpandedPosts] = useState({});
     const [posts, setPosts] = useState([]);
     const [isWriteModalOpen, setIsWriteModalOpen] = useState(false);
     const navigate = useNavigate();
@@ -22,22 +130,51 @@ function CommunityMain() {
 
     const fetchPosts = async () => {
         try {
-            const response = await axios.get('https://zmffjq.store/board/1/posts');
-            setPosts(response.data);
+            const response = await apiClient.get(`/board/${clubId}/posts`);
+            if (response.status === 200) {
+                const postsWithAuthors = await Promise.all(
+                    response.data.map(async (post) => {
+                        try {
+                            const memberResponse = await apiClient.get(`/members/${post.memberId}`);
+                            return {
+                                ...post,
+                                authorName: memberResponse.data.name,
+                            };
+                        } catch (error) {
+                            console.error(`Error fetching author info for post ${post.postId}:`, error);
+                            return {
+                                ...post,
+                                authorName: '알 수 없음',
+                            };
+                        }
+                    })
+                );
+                const sortedPosts = postsWithAuthors.sort((a, b) =>
+                    new Date(b.createdAt) - new Date(a.createdAt)
+                );
+                setPosts(sortedPosts);
+            }
         } catch (error) {
-            console.log('에러 내용:', error);
+            console.error(`Error fetching posts:`, error);
+            alert('게시글 정보를 불러오는 데 실패했습니다. 다시 시도해 주세요.');
         }
+    };
+
+    const handlePostCreated = () => {
+        fetchPosts(); // Fetch posts after a new post is created
+        setIsWriteModalOpen(false);
     };
 
     const handleWritePost = async (newPost) => {
         try {
-            const response = await axios.post('https://zmffjq.store/board/1/posts', newPost);
+            const response = await apiClient.post(`/board/${clubId}/posts`, newPost);
             if(response.status === 200) {
                 fetchPosts();
             }
             setIsWriteModalOpen(false);
         } catch (error) {
-            console.log("에러 내용:", error);
+            console.log("게시글 작성 중 에러 발생:", error);
+            alert('게시글 작성에 실패했습니다. 다시 시도해 주세요.');
         }
     };
 
@@ -45,100 +182,28 @@ function CommunityMain() {
         setActiveIndex(index);
     };
 
-    const maxContentLength = 30;
-
-    const toggleContent = (postId) => {
-        setExpandedPosts(prev => ({ ...prev, [postId]: !prev[postId] }));
-    };
-
     const renderContent = () => {
         switch (activeIndex) {
             case 0:
                 return (
-                    <div className="posts-container">
-                        {posts && posts.length > 0 ? (
-                            posts.map((post) => {
-                                // null 체크 추가
-                                if (!post.title || !post.content) {
-                                    return null; // null인 게시글은 렌더링하지 않음
-                                }
-
-                                const isLongContent = post.content.length > maxContentLength;
-                                const showFullContent = expandedPosts[post.postId];
-
-                                return (
-                                    <div key={post.postId.toString()} className="post-item"
-                                         onClick={() => navigate(`/board/1/posts/${post.postId.toString()}`)}>
-                                        <h3 style={{
-                                            textAlign: "left",
-                                            marginLeft: "10px",
-                                            marginBottom: "5px",
-                                            fontWeight: "bold",
-                                            fontSize: "20px"
-                                        }}>{post.title}</h3>
-                                        <div style={{display: "flex", alignItems: "center", marginLeft: "10px"}}>
-                                            <p style={{
-                                                overflow: "hidden",
-                                                textOverflow: "ellipsis",
-                                                whiteSpace: showFullContent ? "normal" : "nowrap",
-                                                maxWidth: showFullContent ? "none" : "450px",
-                                                marginBottom: "5px"
-                                            }}>
-                                                {post.content}
-                                            </p>
-                                            {isLongContent && (
-                                                <button
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        toggleContent(post.postId);
-                                                    }}
-                                                    style={{
-                                                        color: "gray",
-                                                        cursor: "pointer",
-                                                        border: "none",
-                                                        background: "none",
-                                                        marginLeft: "-20px",
-                                                        padding: "0"
-                                                    }}
-                                                >
-                                                    {showFullContent ? "간략히" : "더 보기"}
-                                                </button>
-                                            )}
-                                        </div>
-                                        <p style={{
-                                            textAlign: "left",
-                                            marginLeft: "10px",
-                                            marginTop: "-5px",
-                                            color: "gray",
-                                            marginBottom:"10px"
-                                        }}>{new Date(post.createdAt).toLocaleDateString()}</p>
-                                    </div>
-                                );
-                            }).filter(Boolean) // null인 요소 제거
+                    <PostListContainer>
+                        {posts.length > 0 ? (
+                            posts.map((post) => (
+                                <Post key={post.postId.toString()} onClick={() => navigate(`/board/${clubId}/posts/${post.postId.toString()}`)}>
+                                    <Title>{post.title}</Title>
+                                    <Content>{post.content}</Content>
+                                    <CreatedAt>
+                                        {post.authorName} | {formatDate(post.createdAt)}
+                                    </CreatedAt>
+                                </Post>
+                            ))
                         ) : (
                             <p>게시글이 없습니다.</p>
                         )}
-                        <div>
-                            <button onClick={() => setIsWriteModalOpen(true)}
-                                    style={{
-                                        backgroundColor: "#7995b6",
-                                        width: '90px',
-                                        borderRadius: '100px',
-                                        marginTop: '50px',
-                                        color: 'white',
-                                        marginLeft: '100px',
-                                        fontWeight: 'bold',
-                                        position:'fixed',
-                                        bottom: '100px',
-                                        right: '20px',
-                                        zIndex: '1000'
-                                    }}>글쓰기
-                            </button>
-                        </div>
-                    </div>
+                    </PostListContainer>
                 );
             case 1:
-                return <Calendar/>
+                return <Calendar />;
             case 2:
                 return <ActivityPage clubId={clubId} />;
             default:
@@ -147,32 +212,34 @@ function CommunityMain() {
     };
 
     return (
-        <div>
+        <Whole>
             <Header_center />
-            <div className="menu-container">
-                <div className="menu-scroll">
+            <MenuContainer>
+                <MenuScroll>
                     {['자유게시판', '캘린더', '활동내용'].map((item, index) => (
-                        <div
+                        <MenuItem
                             key={index}
-                            className={`menu-all ${activeIndex === index ? 'active' : ''}`}
+                            active={activeIndex === index}
                             onClick={() => handleMenuClick(index)}
-                            style={{border: activeIndex === index ? '2px solid black' : '2px solid lightgray'
-                            ,  color: activeIndex === index ? 'black' : 'lightgray',
-                            fontWeight: activeIndex === index ? '700' : '500',
-                            width: '114px', marginTop:'20px'}}>
+                        >
                             <p>{item}</p>
-                        </div>
+                        </MenuItem>
                     ))}
-                </div>
-            </div>
-            {renderContent()}
+                </MenuScroll>
+            </MenuContainer>
+            <ContentContainer>
+                {renderContent()}
+            </ContentContainer>
+            <WriteButton onClick={() => setIsWriteModalOpen(true)}>
+                글쓰기
+            </WriteButton>
             <WritePostModal
                 isOpen={isWriteModalOpen}
                 onClose={() => setIsWriteModalOpen(false)}
-                onSubmit={handleWritePost}
+                onSubmit={handlePostCreated}
             />
             <Footer />
-        </div>
+        </Whole>
     );
 }
 
