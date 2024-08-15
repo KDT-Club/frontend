@@ -25,17 +25,23 @@ const MenuContainer = styled.div`
 
 const MenuScroll = styled.div`
     width: 100%;
-    display: inline-flex;
-    overflow-y: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    scrollbar-width: none;
+    &::-webkit-scrollbar {
+        display: none;
+    }
 `;
 
 const MenuItem = styled.div`
     flex: 0 0 auto;
     border: 2px solid ${props => props.active ? 'black' : 'lightgray'};
     border-radius: 20px;
-    width: 35%;
+    width: 30%;
     padding: 5px;
-    margin: 10px;
+    margin: 5px;
+    margin-bottom: 10px;
     color: ${props => props.active ? 'black' : 'lightgray'};
     font-weight: ${props => props.active ? '700' : '500'};
     cursor: pointer;
@@ -232,14 +238,18 @@ function CommunityMain() {
             <ContentContainer>
                 {renderContent()}
             </ContentContainer>
-            <WriteButton onClick={() => setIsWriteModalOpen(true)}>
-                글쓰기
-            </WriteButton>
-            <WritePostModal
-                isOpen={isWriteModalOpen}
-                onClose={() => setIsWriteModalOpen(false)}
-                onSubmit={handlePostCreated}
-            />
+            {activeIndex === 0 && (
+                <WriteButton onClick={() => setIsWriteModalOpen(true)}>
+                    글쓰기
+                </WriteButton>
+            )}
+            {activeIndex === 0 && (
+                <WritePostModal
+                    isOpen={isWriteModalOpen}
+                    onClose={() => setIsWriteModalOpen(false)}
+                    onSubmit={handlePostCreated}
+                />
+            )}
             <Footer />
         </Whole>
     );
