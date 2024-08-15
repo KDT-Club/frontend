@@ -20,20 +20,22 @@ const MenuContainer = styled.div`
     width: 100%;
     display: flex;
     justify-content: center;
-    padding: 10px 0px;
+    padding: 10px;
 `;
 
 const MenuScroll = styled.div`
+    width: 100%;
     display: inline-flex;
+    overflow-y: auto;
 `;
 
 const MenuItem = styled.div`
     flex: 0 0 auto;
     border: 2px solid ${props => props.active ? 'black' : 'lightgray'};
     border-radius: 20px;
-    width: 114px;
+    width: 35%;
     padding: 5px;
-    margin: 10px 5px;
+    margin: 10px;
     color: ${props => props.active ? 'black' : 'lightgray'};
     font-weight: ${props => props.active ? '700' : '500'};
     cursor: pointer;
