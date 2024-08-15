@@ -5,6 +5,8 @@ import { FaArrowLeft } from "react-icons/fa6";
 import { FiEdit } from "react-icons/fi";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+//import { FaHeart } from "react-icons/fa";
+import { FaRegThumbsUp } from "react-icons/fa6";
 
 const apiClient = axios.create({
     baseURL: 'https://zmffjq.store',
@@ -88,7 +90,7 @@ const Title = styled.p`
 
 const Content = styled.p`
     font-size: 16px;
-    color: #666;
+    color: #444;
     text-align: left;
     margin: 5px 10px 5px 8px;
     overflow: hidden;
@@ -98,11 +100,18 @@ const Content = styled.p`
     -webkit-line-clamp: 1;
 `;
 
-const CreatedAt = styled.p`
+const CreatedAt = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     font-size: 16px;
-    color: gray;
+    color: #666;
     text-align: left;
     margin: 5px 10px 0 8px;
+`;
+
+const Separator = styled.span`
+    color: darkgray; 
 `;
 
 const PostsList = ({ boardType, boardId, title }) => {
@@ -228,7 +237,9 @@ const PostsList = ({ boardType, boardId, title }) => {
                                     <Title>{post.title}</Title>
                                     <Content>{post.content}</Content>
                                     <CreatedAt>
-                                        {post.authorName} | {formatDate(post.createdAt)}
+                                        <FaRegThumbsUp style={{marginTop: "2px", marginRight: "2px" }}/>
+                                        <p>16</p>
+                                        &nbsp;<Separator>|</Separator>&nbsp;{post.authorName}&nbsp;<Separator>|</Separator>&nbsp;{formatDate(post.createdAt)}
                                     </CreatedAt>
                                 </Link>
                             </Post>

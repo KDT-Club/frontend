@@ -23,6 +23,7 @@ function usePostDetail() {
     const [newComment, setNewComment] = useState('');
     const [editingCommentId, setEditingCommentId] = useState(null);
     const [editedCommentContent, setEditedCommentContent] = useState('');
+    //const [commentCount, setCommentCount] = useState(0); //댓글 수 count
 
     useEffect(() => {
         fetchPost();
@@ -55,6 +56,7 @@ function usePostDetail() {
         try {
             const response = await apiClient.get(`/posts/${postId}/comments`);
             setComments(response.data);
+            //setCommentCount(response.data.length);
         } catch (error) {
             console.error('댓글 조회 에러 발생:', error);
         }
@@ -138,6 +140,7 @@ function usePostDetail() {
         handleSaveEditedComment,
         handleDeleteComment,
         memberId,
+        //commentCount,
     };
 }
 
