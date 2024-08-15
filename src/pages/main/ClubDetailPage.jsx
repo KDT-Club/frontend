@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { FaArrowLeft } from "react-icons/fa";
-import '../../styles/App.css';
-import './main_styles/main.css';
-import './main_styles/club_detail.css';
-import dm from '../../images/DM.png';
-import profile from '../../images/profile.jpeg';
+import styled from 'styled-components';
 import axios from 'axios';
 
 const ClubDetailPage = () => {
@@ -42,7 +38,6 @@ const ClubDetailPage = () => {
         if (storedUserInfo) {
             const parsedUserInfo = JSON.parse(storedUserInfo);
             setUserInfo(parsedUserInfo);
-            // 로컬 스토리지의 이미지 URL을 사용하되, 없다면 서버에서 가져오기
             if (parsedUserInfo.memberImageURL) {
                 setUserInfo(prevState => ({
                     ...prevState,
@@ -62,7 +57,6 @@ const ClubDetailPage = () => {
                     ...prevState,
                     memberImageURL: response.data.memberImageURL
                 }));
-                // 로컬 스토리지 업데이트
                 const updatedUserInfo = JSON.parse(localStorage.getItem('userInfo'));
                 updatedUserInfo.memberImageURL = response.data.memberImageURL;
                 localStorage.setItem('userInfo', JSON.stringify(updatedUserInfo));
@@ -122,97 +116,308 @@ const ClubDetailPage = () => {
 
     if (showJoinForm) {
         return (
-            <div className="join-form">
-                <div className="header">
+            <JoinForm>
+                <JoinFormHeader>
                     <FaArrowLeft
                         style={{ fontSize: '25px', strokeWidth: '0.1', cursor: 'pointer', marginLeft: '15px' }}
-                        onClick={() => setShowJoinForm(false)}/>
+                        onClick={() => setShowJoinForm(false)} />
                     <p>동아리 가입 신청</p>
-                </div>
-                <div className="user-info">
+                </JoinFormHeader>
+                <UserInfo>
                     <img src={userInfo.memberImageURL} alt="profile" />
-                    <div className="profile-info">
-                        <p style={{
-                            fontWeight: 'bold',
-                            fontSize: '20px',
-                            marginLeft: '10px',
-                        }}>{userInfo.name}</p>
-                        <p style={{
-                            marginLeft: '10px',
-                            color: 'gray'
-                        }}>학번: {userInfo.id}</p>
-                    </div>
-                </div>
-                <div className="reason-input">
+                    <ProfileInfo>
+                        <h4>{userInfo.name}</h4>
+                        <p>학번: {userInfo.id}</p>
+                    </ProfileInfo>
+                </UserInfo>
+                <ReasonInput>
                     <p>지원동기</p>
                     <textarea
                         placeholder="지원 동기를 작성해주세요."
                         value={motivation}
                         onChange={(e) => setMotivation(e.target.value)}
                     ></textarea>
-                </div>
-                <button className="submit-button" onClick={handleJoinSubmit}>가입 신청</button>
-            </div>
+                </ReasonInput>
+                <SubmitButton onClick={handleJoinSubmit}>가입 신청</SubmitButton>
+            </JoinForm>
         );
     }
 
     return (
-        <div className="club-detail-page">
-            <div className="header_container">
+        <ClubDetailPageContainer>
+            <Header>
                 <FaArrowLeft
-                    style={{fontSize: '24px', cursor: 'pointer'}}
-                    onClick={handleBackClick}/>
-                <p style={{fontSize: '20px', fontWeight: "bold"}}>동아리 소개</p>
-                <div></div>
-            </div>
-            <hr/>
-            <div className="club-info">
-                <img src={club.clubImgUrl} alt="club"/>
-                <div className="club-info-text">
-                    <h3 style={{textAlign: "left", marginLeft: '20px'}}>{club.clubName}</h3>
-                    <p className="info-des">{club.clubSlogan}</p>
-                    <div className="club-info-center">
+                    style={{ fontSize: '24px', cursor: 'pointer' }}
+                    onClick={handleBackClick} />
+                <p>동아리 소개</p>
+            </Header>
+            <hr />
+            <ClubInfo>
+                <img src={club.clubImgUrl} alt="club" />
+                <ClubInfoText>
+                    <h3>{club.clubName}</h3>
+                    <InfoDes>{club.clubSlogan}</InfoDes>
+                    <ClubInfoCenter>
                         <p>{club.description}</p>
                         {club.activities && club.activities.map((activity, index) => (
                             <p key={index}>{activity}</p>
                         ))}
-                    </div>
-                </div>
-            </div>
-            <div className="last-activity">
+                    </ClubInfoCenter>
+                </ClubInfoText>
+            </ClubInfo>
+            <LastActivity>
                 <h4>최근 활동</h4>
-                <div className="last-activity-text">
-                    <div className="uno-cards">
+                <LastActivityText>
+                    <UnoCards>
                         {lastActivityImage ? (
-                            <img src={lastActivityImage} alt="최근 활동"/>
+                            <img src={lastActivityImage} alt="최근 활동" />
                         ) : (
-                            <img src={club.clubImgUrl} alt="기본 이미지"/>
+                            <img src={club.clubImgUrl} alt="기본 이미지" />
                         )}
-                    </div>
-                </div>
-            </div>
-            <div className="leader-info">
+                    </UnoCards>
+                </LastActivityText>
+            </LastActivity>
+            <LeaderInfo>
                 <h4>동아리 회장 연락처</h4>
-                <div className="leader-info-text">
-                    <img src={club.member.memberImageURL} alt="club"/>
-                    <div className="leader-info-name">
-                        <p style={{
-                            fontSize: "18px",
-                            fontWeight: 'bold'
-                        }}>회장</p>
-                        <p style={{
-                            color: "black",
-                        }
-                        }>{club.member.name}</p>
-                    </div>
-                    <div className="leader-info-phone">
+                <LeaderInfoText>
+                    <img src={club.member.memberImageURL} alt="club" />
+                    <LeaderInfoName>
+                        <p>회장</p>
+                        <p>{club.member.name}</p>
+                    </LeaderInfoName>
+                    <LeaderInfoPhone>
                         <p>{club.member.phone}</p>
-                    </div>
-                </div>
-            </div>
-            <button className="join-button" onClick={handleJoinClick}>함께하기!</button>
-        </div>
+                    </LeaderInfoPhone>
+                </LeaderInfoText>
+            </LeaderInfo>
+            <JoinButton onClick={handleJoinClick}>함께하기!</JoinButton>
+        </ClubDetailPageContainer>
     );
 };
 
 export default ClubDetailPage;
+
+const ClubDetailPageContainer = styled.div`
+    font-family: Arial, sans-serif;
+    position: relative;
+    height: 100%;
+`;
+
+const Header = styled.div`
+    width: 100%;
+    display: flex;
+    font-size: 24px;
+    padding: 10px 0;
+    margin-top: 2%;
+    margin-left: 3%;
+    p {
+        margin-top: -1%;
+        margin-left: 5%;
+        align-items: center;
+    }
+`;
+
+const ClubInfo = styled.div`
+    padding: 20px;
+    margin-top: 10px;
+    display: flex;
+    align-items: flex-start;
+    height: 22%;
+
+    img {
+        box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+        object-fit: scale-down;
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        margin-bottom: 10px;
+    }
+
+    h3 {
+        border-bottom: dimgray 3px solid;
+        position: absolute;
+        margin-left: 20px;
+        font-weight: bold;
+        font-size: 25px;
+    }
+`;
+
+const ClubInfoText = styled.div`
+    flex: 1;
+`;
+
+const InfoDes = styled.p`
+    margin-top: 60px;
+    text-align: left;
+    margin-left: 20px;
+`;
+
+const ClubInfoCenter = styled.div`
+    text-align: left;
+    margin-top: 30px;
+    margin-left: -45px;
+    padding: 5px;
+    overflow-y: auto;
+`;
+
+const LastActivity = styled.div`
+    position: relative;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    font-size: 18px;
+`;
+
+const LastActivityText = styled.div`
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    overflow-x: auto;
+    width: 95%;
+    height: 50%;
+    object-fit: scale-down;
+    margin-left: 2%;
+`;
+
+const UnoCards = styled.div`
+    display: flex;
+    overflow-x: auto;
+    white-space: nowrap;
+    margin-bottom: 10px;
+    border-radius: 30px;
+
+    img {
+        border-radius: 10px;
+        width: 100%;
+        height: 250px;
+        margin-top: 10px;
+        margin-right: 10px;
+        margin-left: 10px;
+    }
+`;
+
+const LeaderInfo = styled.div`
+    padding: 20px;
+    height: 15%;
+    
+    h4 {
+        margin-top: -5%;
+        font-size: 24px;
+        text-align: left;
+        margin-bottom: 10px;
+    }
+`;
+
+const LeaderInfoText = styled.div`
+    display: flex;
+`;
+
+const LeaderInfoName = styled.div`
+    margin-left: 20px;
+`;
+
+const LeaderInfoPhone = styled.div`
+    margin-right: 5%;
+    display: flex;
+    flex-direction: column;
+    text-align: right;
+    margin-top: 5%;
+    font-size: 15px;
+    flex: 1;
+    position: relative;
+`;
+
+const JoinButton = styled.button`
+    width: 85%;
+    padding: 3%;
+    background-color: #567cac;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 18px;
+    cursor: pointer;
+    font-weight: bold;
+    height: 50px;
+`;
+
+const JoinForm = styled.div`
+    position: relative;
+`;
+
+const JoinFormHeader = styled.div`
+    width: 100%;
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 10px 0;
+
+    p {
+        margin-left: 10px;
+        font-size: 25px;
+        font-weight: bold;
+    }
+`;
+
+const UserInfo = styled.div`
+    display: flex;
+    align-items: flex-start;
+
+    img {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        margin-bottom: 10px;
+    }
+`;
+
+const ProfileInfo = styled.div`
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    
+    h4 {
+        font-size: 16px;
+        font-weight: bold;
+    }
+    
+`;
+
+const ReasonInput = styled.div`
+    margin-bottom: 20px;
+
+    p {
+        margin-left: 20px;
+        font-weight: bold;
+        text-align: left;
+        margin-bottom: 20px;
+        font-size: 25px;
+    }
+
+    textarea {
+        width: 90%;
+        height: 50vh;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+
+        &:focus {
+            outline: none;
+        }
+    }
+`;
+
+const SubmitButton = styled.button`
+    width: 330px;
+    padding: 10px;
+    background-color: #567cac;
+    display: flex;
+    font-weight: bold;
+    justify-content: center;
+    margin: 0 auto;
+    position: fixed;
+    left: 0;
+    right: 0;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 18px;
+    cursor: pointer;
+`;

@@ -1,12 +1,13 @@
 .login-container {
     width: 100%;
-    min-height: 90%;
-    padding-top: 20px;
+    min-height: 90vh;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
 h1 {
     font-size: 24px;
-    margin-top: 100px;
+    margin-top: 10vh;
     margin-bottom: 20px;
     font-weight: bold;
 }
@@ -21,11 +22,12 @@ input {
 }
 
 input:focus {
-    outline:none;
+    outline: none;
 }
 
 button, .social-login {
-    width: 330px;
+    width: 100%;
+    max-width: 330px;
     padding: 12px;
     margin: 0 auto;
     border: none;
@@ -43,15 +45,11 @@ button, .social-login {
 .social-login-container {
     padding: 10px;
     text-align: center;
-    margin-left: -9px;
 }
-
 
 .kakao-btn {
     background-color: #FEE500;
-    padding: 0;
     color: #000000;
-    margin-left: -20px;
 }
 
 .signup-link {
@@ -64,12 +62,13 @@ button, .social-login {
 .signup-text {
     font-size: 14px;
     color: #606770;
-    margin-bottom: 80px;
+    margin-bottom: 5vh;
 }
 
 .input-group {
     text-align: left;
-    width: 95%;
+    width: 100%;
+    max-width: 330px;
     margin: 0 auto 40px;
 }
 
@@ -80,7 +79,7 @@ button, .social-login {
 }
 
 .input-group input {
-    width: 330px;
+    width: 100%;
     padding: 12px;
     border: 1px solid #ddd;
     border-radius: 4px;
@@ -91,4 +90,46 @@ button, .social-login {
     font-size: 30px;
     font-weight: bold;
     margin-bottom: 40px;
+}
+
+@media (max-width: 768px) {
+    .login-container {
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 24px;
+        font-weight: bold;
+        margin-top: 10vh;
+    }
+
+    .input-group {
+        margin: 0 auto 40px;
+    }
+
+    .login_text {
+        font-size: 30px;
+        font-weight: bold;
+        margin-bottom: 40px;
+    }
+
+    .signup-text {
+        font-size: 14px;
+        color: #606770;
+        margin-bottom: 5vh;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 18px;
+    }
+
+    .login_text {
+        font-size: 22px;
+    }
+
+    button, .social-login {
+        height: 44px;
+    }
 }
