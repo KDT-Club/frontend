@@ -26,86 +26,95 @@ const HeaderContainer = styled.div`
 `;
 
 const HeaderTitle = styled.div`
-  font-size: 19px;
-  font-weight: bold;
+    font-size: 19px;
+    font-weight: bold;
 `;
 
 const Icon = styled.div`
-  font-size: 24px;
-  cursor: pointer;
+    font-size: 24px;
+    cursor: pointer;
 `;
 
 const Title = styled.input`
-  width: 100%;
-  height: 50px;
-  padding: 10px;
-  font-size: 20px;
-  margin-top: 35px;
-  margin-bottom: 20px;
-  border-left-width: 0;
-  border-right-width: 0;
-  border-top-width: 0;
-  border-bottom: 1.5px solid #ccc;
+    width: 100%;
+    height: 50px;
+    padding: 10px;
+    font-size: 20px;
+    margin-top: 35px;
+    margin-bottom: 20px;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom: 1.5px solid #ccc;
 
-  &:focus {
+    &:focus {
     outline: none;
     border-color: #597CA5;
-  }
+    }
 `;
 
 const Content = styled.textarea`
-  width: 100%;
-  padding: 10px;
-  font-size: 17px;
-  margin-bottom: 20px;
-  border: 1.5px solid #ccc;
-  border-radius: 4px;
+    width: 100%;
+    padding: 10px;
+    font-size: 17px;
+    margin-bottom: 20px;
+    border: 1.5px solid #ccc;
+    border-radius: 4px;
 
-  &:focus {
+    &:focus {
     outline: none;
     border-color: #597CA5;
-  }
+    }
 `;
 
 const FileInputButton = styled.button`
-  cursor: pointer;
-  margin-top: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: none;
-  border: none;
-  color: #414141;
+    cursor: pointer;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    color: #414141;
+    width: 100%;
+`;
+
+const IconWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
 `;
 
 const ImagePreviewContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
 `;
 
 const ImagePreview = styled.div`
-  position: relative;
-  width: 100px;
-  height: 100px;
+    position: relative;
+    width: 100px;
+    height: 100px;
 `;
 
 const PreviewImage = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border: 1px solid #ddd;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border: 1px solid #ddd;
 `;
 
 const DeleteIcon = styled(FiX)`
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  cursor: pointer;
-  background: white;
-  border-radius: 50%;
-  padding: 2px;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    cursor: pointer;
+    background: white;
+    border-radius: 50%;
+    padding: 2px;
 `;
 
 function PostWrite({ boardType, apiEndpoint, navigateBackPath }) {
@@ -242,10 +251,10 @@ function PostWrite({ boardType, apiEndpoint, navigateBackPath }) {
                     ref={fileInputRef}
                 />
                 <FileInputButton type="button" onClick={handleFileInputClick}>
-                    <LuImagePlus style={{fontSize: '30px'}}/>
-                    <span style={{marginLeft: "20px"}}>
+                    <IconWrapper>
+                        <LuImagePlus style={{fontSize: '30px', marginRight: "10px"}}/>
                         {uploading ? "이미지 업로드 중..." : "첨부할 사진을 선택하세요."}
-                    </span>
+                    </IconWrapper>
                 </FileInputButton>
             </form>
             <ImagePreviewContainer>
