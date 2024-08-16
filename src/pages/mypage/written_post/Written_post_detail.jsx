@@ -1,12 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import {useParams, useNavigate} from 'react-router-dom';
 import {FaArrowLeft} from 'react-icons/fa6';
-import { FiMoreVertical, FiSend } from "react-icons/fi";
+import {FiMoreVertical, FiSend} from "react-icons/fi";
 import axios from "axios";
 import Modal_post from "../../../components/modal/Modal_post.jsx";
 import Modal_comment from "../../../components/modal/Modal_comment.jsx";
 import styled from "styled-components";
+import {MdOutlineCancel} from "react-icons/md";
 axios.defaults.withCredentials = true;
+
+const Whole = styled.div`
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+`;
 
 const HeaderContainer = styled.div`
     display: flex;
@@ -18,6 +26,174 @@ const HeaderContainer = styled.div`
     padding-left: 25px;
     padding-right: 25px;
     margin-bottom: 0px;
+`;
+
+const ScrollContainer = styled.div`
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: darkgray white;
+`;
+
+const Title = styled.div`
+    font-size: 20px;
+    font-weight: bold;
+`;
+
+const PostContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: 20px;
+    margin-left: 20px;
+    margin-right: 10px;
+`;
+
+const PostAuthorContainer = styled.div`
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+`;
+
+const ProfileImage = styled.img`
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    margin-right: 10px;`;
+
+const PostAuthorDate = styled.p`
+    font-size: 16.6px;
+    color: gray;
+    font-weight: bold;
+    margin: 0;
+`;
+
+const PostTitle = styled.p`
+    font-size: 20px;
+    font-weight: bold;
+    padding-bottom: 12px;
+    text-align: start;
+    width: 100%;
+    margin-top: 8px;
+    margin-left: 10px;
+    padding-right: 10px;
+`;
+
+const PostContent = styled.p`
+    font-size: 17.8px;
+    margin-top: 5px;
+    margin-left: 10px;
+    text-align: start;
+`;
+
+const ImageContainer = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    box-sizing: border-box;
+    img {
+        width: 100%;
+        max-width: 200px;
+        min-width: 200px;
+        height: auto;
+        border-radius: 8px;
+        margin-bottom: 10px;
+    }
+`;
+
+const Divider = styled.div`
+    border-bottom: 1.5px solid dimgrey;
+    margin-top: 10px;
+`;
+
+const CommentContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    margin-top: 12px;
+    padding-bottom: 60px;
+`;
+
+const CommentLine = styled.div`
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 10px;
+`;
+
+const CommentHeader = styled.div`
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+`;
+
+const CommentAuthorDate = styled.p`
+    font-size: 16.5px;
+    color: gray;
+    margin-left: 30px;
+    margin-bottom: 2px;
+`;
+
+const CommentContent = styled.p`
+    font-size: 17px;
+    margin-left: 30px;
+    margin-bottom: 12px;
+`;
+
+const CommentDivider = styled.div`
+    border-bottom: 1px solid gray;
+    width: 100%;
+`;
+
+const Form = styled.form`
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+`;
+
+const SubmitCommentContainer = styled.div`
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px;
+    background-color: white;
+    box-sizing: border-box;
+`;
+
+const CommentInput = styled.input`
+    width: calc(100% - 50px);  // 전송 버튼 공간 확보
+    flex: 1;
+    font-size: 16.5px;
+    text-align: center;
+    border-radius: 7px;
+    border: 1.5px solid darkgray;
+    height: 47px;
+    padding: 0 15px;
+    margin-right: 2px;
+    &:focus {
+        outline: none;
+        border: 1.5px solid #597CA5;
+    }
+`;
+
+const SubmitButton = styled.button`
+    width: 2%;
+    text-align: center;
+    cursor: pointer;
+    color: #5c5c5c;
+    margin-right: 15px;
+    margin-left: 0px;
 `;
 
 function formatDate(dateString) {
@@ -39,7 +215,7 @@ function Written_post_detail() {
     const [post, setPost] = useState('');
     const [attachmentNames, setAttachmentNames] = useState([]);
     const [comments, setComments] = useState([]);
-    const [newComment, setNewComment] = useState(''); //댓글 입력
+    const [newComment, setNewComment] = useState('');
 
     //댓글 수정 상태 변수
     const [selectedCommentContent, setSelectedCommentContent] = useState('');
@@ -54,11 +230,11 @@ function Written_post_detail() {
         },
     });
 
-    //-------------------------------------------------------------------------
+    // 로그인한 memberId
     const fetchUserId = async () => {
         try {
             const response = await apiClient.get("/getUserId", {
-                withCredentials: true // Include this if the endpoint requires credentials
+                withCredentials: true
             });
             console.log(response.data);
             setMemberId(response.data.message); // memberId 상태 업데이트
@@ -132,36 +308,27 @@ function Written_post_detail() {
         }
     };
 
-    //댓글 POST
-    const handleCommentChange = (e) => {
-        setNewComment(e.target.value);
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        handleSaveEditedComment(editingCommentId, editedCommentContent);
     };
 
     //댓글 수정 상태 관리 함수
-    const handleCommentEdit = () => {
-        setEditedCommentContent(selectedCommentContent);  // 선택된 댓글 내용으로 수정
-        setShowCommentModal(false);
+    const handleCommentEdit = async (commentId, content) => {
+        setEditingCommentId(commentId);
+        setEditedCommentContent(content);
     };
 
-    //수정 내용 저장하는 함수
-    const handleSaveEditedComment = async () => {
-        if (editingCommentId && editedCommentContent.trim() && memberId) {
+    const handleSaveEditedComment = async (commentId, content) => {
+        if (commentId && content.trim()) {
             try {
-                const response = await apiClient.put(`/posts/${postId}/${editingCommentId}`, {
-                    content: editedCommentContent
+                const response = await apiClient.put(`/posts/${postId}/${commentId}`, {
+                    content: content
                 });
                 if (response.status === 200) {
-                    // 상태 업데이트: 기존 댓글 목록에서 수정된 댓글 내용 업데이트
-                    setComments(prevComments =>
-                        prevComments.map(comment =>
-                            comment.commentId === editingCommentId ? { ...comment, content: editedCommentContent } : comment
-                        )
-                    );
-                    // 수정 상태 초기화
+                    await fetchComments();
                     setEditingCommentId(null);
                     setEditedCommentContent('');
-                } else {
-                    console.error("댓글 수정 실패", response.status);
                 }
             } catch (error) {
                 console.error('댓글 수정 중 에러 발생', error);
@@ -170,120 +337,116 @@ function Written_post_detail() {
         }
     };
 
-    const handleDeleteComment = (commentId) => {
-        setComments(prevComments => prevComments.filter(comment => comment.commentId !== commentId));
+    const handleCancelEdit = () => {
+        handleCommentEdit(null, '');
+    };
+
+    const handleDeleteComment = async (commentId) => {
+        try {
+            await apiClient.delete(`/posts/${postId}/${commentId}`);
+            await fetchComments();
+        } catch (error) {
+            console.error('댓글 삭제 중 에러 발생', error);
+            if (error.response) {
+                console.error('Error data:', error.response.data);
+                console.error('Error status:', error.response.status);
+            }
+            alert('댓글 삭제 중 오류가 발생했습니다. 다시 시도해주세요.');
+        }
     };
 
     return (
-        <div>
+        <Whole>
             <HeaderContainer>
-                <FaArrowLeft
-                    style={{fontSize: '24px', cursor: 'pointer'}}
-                    onClick={handleBackClick}
-                />
-                <div style={{fontSize: '20px', fontWeight: "bold"}}>작성한 글 보기</div>
-                <FiMoreVertical
-                    style={{fontSize: '24px', cursor: 'pointer'}}
-                    onClick={handlePostDotClick}
-                />
+                <FaArrowLeft style={{ fontSize: '24px', cursor: 'pointer' }} onClick={handleBackClick} />
+                <Title>작성한 글 보기</Title>
+                <FiMoreVertical style={{ fontSize: '24px', cursor: 'pointer' }} onClick={handlePostDotClick} />
             </HeaderContainer>
-            {post && (
-                <div
-                    style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "flex-start",
-                        marginTop: "30px",
-                        marginLeft: "20px",
-                        marginRight: "10px"
-                    }}
-                >
-                    <p
-                        style={{
-                            fontSize: "16.6px",
-                            color: "gray",
-                            fontWeight: "bold",
-                            marginBottom: "5px"
-                        }}
-                    >{post.member.name} | {formatDate(post.createdAt)}</p>
-                    <p
-                        style={{
-                            fontSize: "20px",
-                            fontWeight: "bold",
-                            paddingBottom: "12px",
-                            textAlign: "start",
-                            width: "100%"
-                        }}
-                    >{post.title}</p>
-                    <p
-                        style={{
-                            fontSize: "17.8px",
-                            marginTop: "10px",
-                            textAlign: "start"
-                        }}
-                    >{post.content}</p>
-                    <div className="image-container">
-                        {attachmentNames.length > 0 ? (
-                            attachmentNames.map((url, index) => (
-                                <img
-                                    key={index}
-                                    src={url}
-                                    alt={`첨부 이미지 ${index + 1}`}
-                                    style={{
-                                        width: "100%",
-                                        maxWidth: "250px",
-                                        marginBottom: "10px",
-                                        borderRadius: "8px"
-                                    }}
-                                    onError={(e) => {
-                                        console.error(`이미지 로딩 오류 ${index}:`, e);
-                                        e.target.style.display = 'none';
-                                    }}
-                                />
-                            ))
-                        ) : (
-                            <p>이미지가 없습니다.</p>
-                        )}
-                    </div>
-                </div>
-            )}
-            <div style={{borderBottom: '1.5px solid dimgrey', marginTop: '24px'}}></div>
-            <div className="comment-container">
-                {comments.length > 0 ? (
-                    comments.map(comment => (
-                        <div key={comment.commentId} className="comment-oneline">
-                            <div style={{display: 'flex', justifyContent: 'space-between', width: '100%'}}>
-                                <p style={{fontSize: '16.5px', color: 'gray', marginLeft: "30px", marginBottom: "2px"}}>
-                                    {comment.memberName} | {formatDate(comment.createdAt)}
-                                </p>
-                                <FiMoreVertical
-                                    style={{fontSize: '20px', cursor: 'pointer', marginRight: '20px'}}
-                                    onClick={(e) => handleCommentDotClick(e, comment.commentId, comment.content)}
-                                />
-                            </div>
-                            <p style={{
-                                fontSize: '17px',
-                                marginLeft: "30px",
-                                marginBottom: "12px"
-                            }}>{comment.content}</p>
-                            <div style={{borderBottom: '1px solid gray', width: '100%'}}></div>
-                        </div>
-                    ))
-                ) : (
-                    <p style={{fontSize: '18px'}}>댓글이 없습니다.</p>
+            <ScrollContainer>
+                {post && (
+                    <PostContainer>
+                        <PostAuthorContainer>
+                            <ProfileImage src={post.member.memberImageURL} alt="" />
+                            <PostAuthorDate>{post.member.name} | {formatDate(post.createdAt)}</PostAuthorDate>
+                        </PostAuthorContainer>
+                        <PostTitle>{post.title}</PostTitle>
+                        <PostContent>{post.content}</PostContent>
+                        <ImageContainer>
+                            {attachmentNames.length > 0 ? (
+                                attachmentNames.map((url, index) => (
+                                    <img
+                                        key={index}
+                                        src={url}
+                                        alt={`첨부 이미지 ${index + 1}`}
+                                        onError={(e) => {
+                                            console.error(`이미지 로딩 오류 ${index}:`, e);
+                                            e.target.style.display = 'none';
+                                        }}
+                                    />
+                                ))
+                            ) : (
+                                <p></p>
+                            )}
+                        </ImageContainer>
+                    </PostContainer>
                 )}
-            </div>
-            {showPostModal && <Modal_post onClose={closeModal} onEdit={handleEditClick}/>}
-            {showCommentModal && <Modal_comment
-                onClose={closeModal}
-                position={modalPosition}
-                onEdit={handleCommentEdit}
-                postId={postId}
-                commentId={editingCommentId}
-                onDelete={handleDeleteComment}
-                content={selectedCommentContent}
-            />}
-        </div>
+                <Divider />
+                <CommentContainer>
+                    {comments.length > 0 ? (
+                        comments.map(comment => (
+                            <CommentLine key={comment.commentId}>
+                                <CommentHeader>
+                                    <CommentAuthorDate>{comment.memberName} | {formatDate(comment.createdAt)}</CommentAuthorDate>
+                                    <FiMoreVertical
+                                        style={{fontSize: '20px', cursor: 'pointer', marginRight: '20px'}}
+                                        onClick={(e) => handleCommentDotClick(e, comment.commentId, comment.content)}
+                                    />
+                                </CommentHeader>
+                                <CommentContent>{comment.content}</CommentContent>
+                                <CommentDivider />
+                            </CommentLine>
+                        ))
+                    ) : (
+                        <p style={{fontSize: '18px'}}>댓글이 없습니다.</p>
+                    )}
+                </CommentContainer>
+                <Form onSubmit={handleSubmit}>
+                    <SubmitCommentContainer>
+                        <CommentInput
+                            type="text"
+                            value={editingCommentId ? editedCommentContent : newComment}
+                            onChange={(e) =>
+                                editingCommentId
+                                    ? setEditedCommentContent(e.target.value)
+                                    : setNewComment(e.target.value)
+                            }
+                            placeholder="댓글을 입력하세요"
+                        />
+                        <SubmitButton type="submit">
+                            <FiSend style={{textAlign: "center", fontSize: "27px"}}/>
+                        </SubmitButton>
+                        {editingCommentId && (
+                            <MdOutlineCancel
+                                style={{fontSize: "27px", marginLeft: '5px', marginRight: "10px", color: "#5c5c5c"}}
+                                onClick={handleCancelEdit}
+                            />
+                        )}
+                    </SubmitCommentContainer>
+                </Form>
+                {showPostModal && <Modal_post onClose={closeModal} onEdit={handleEditClick} />}
+                {showCommentModal && (
+                    <Modal_comment
+                        onClose={closeModal}
+                        position={modalPosition}
+                        onEdit={handleCommentEdit}
+                        postId={postId}
+                        commentId={editingCommentId}
+                        onDelete={handleDeleteComment}
+                        content={selectedCommentContent}
+                    />
+                )}
+            </ScrollContainer>
+        </Whole>
     );
 }
 
