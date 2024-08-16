@@ -48,17 +48,6 @@ function ActivityDetailPage() {
         return <div>Loading...</div>;
     }
 
-    const formatDate = (dateString) => {
-        const date = new Date(dateString);
-        return date.toLocaleString('ko-KR', {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit'
-        });
-    }
-
     return (
         <div>
             <div className="header">
@@ -82,7 +71,7 @@ function ActivityDetailPage() {
                 {post.attachmentFlag === 'Y' && post.attachmentNames && post.attachmentNames.length > 0 && (
                     <div className="attachments">
                         {post.attachmentNames.map((url, index) => (
-                            <img key={index} src={url} alt={`첨부 이미지 ${index + 1}`} style={{ maxWidth: '100%', marginBottom: '10px' }} />
+                            <img key={index} src={url} alt={`첨부 이미지 ${index + 1}`} style={{ width: '100%', marginBottom: '10px' }} />
                         ))}
                     </div>
                 )}
