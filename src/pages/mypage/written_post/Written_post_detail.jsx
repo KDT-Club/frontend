@@ -397,10 +397,6 @@ function Written_post_detail() {
                             <CommentLine key={comment.commentId}>
                                 <CommentHeader>
                                     <CommentAuthorDate>{comment.memberName} | {formatDate(comment.createdAt)}</CommentAuthorDate>
-                                    <FiMoreVertical
-                                        style={{fontSize: '20px', cursor: 'pointer', marginRight: '20px'}}
-                                        onClick={(e) => handleCommentDotClick(e, comment.commentId, comment.content)}
-                                    />
                                 </CommentHeader>
                                 <CommentContent>{comment.content}</CommentContent>
                                 <CommentDivider />
@@ -410,29 +406,6 @@ function Written_post_detail() {
                         <p style={{fontSize: '18px'}}>댓글이 없습니다.</p>
                     )}
                 </CommentContainer>
-                <Form onSubmit={handleSubmit}>
-                    <SubmitCommentContainer>
-                        <CommentInput
-                            type="text"
-                            value={editingCommentId ? editedCommentContent : newComment}
-                            onChange={(e) =>
-                                editingCommentId
-                                    ? setEditedCommentContent(e.target.value)
-                                    : setNewComment(e.target.value)
-                            }
-                            placeholder="댓글을 입력하세요"
-                        />
-                        <SubmitButton type="submit">
-                            <FiSend style={{textAlign: "center", fontSize: "27px"}}/>
-                        </SubmitButton>
-                        {editingCommentId && (
-                            <MdOutlineCancel
-                                style={{fontSize: "27px", marginLeft: '5px', marginRight: "10px", color: "#5c5c5c"}}
-                                onClick={handleCancelEdit}
-                            />
-                        )}
-                    </SubmitCommentContainer>
-                </Form>
                 {showPostModal && <Modal_post onClose={closeModal} onEdit={handleEditClick} />}
                 {showCommentModal && (
                     <Modal_comment
