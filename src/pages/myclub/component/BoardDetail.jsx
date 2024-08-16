@@ -26,6 +26,7 @@ function BoardDetail() {
         handleSaveEditedComment,
         handleDeleteComment,
         memberId,
+        //commentCount
     } = usePostDetail();
 
     const handleEditClick = () => {
@@ -58,7 +59,8 @@ function BoardDetail() {
             setEditedCommentContent={setEditedCommentContent}
             showEditButton={isAuthor}
             memberId={memberId}
-            onEditClick={handleEditClick}//+
+            onEditClick={handleEditClick}
+            //commentCount={commentCount}
         />
     );
 }

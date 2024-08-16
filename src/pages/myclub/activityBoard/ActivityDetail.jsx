@@ -7,6 +7,7 @@ import axios from 'axios';
 import { formatDate } from '../component/Date';
 import Modal_post from "../../../components/modal/Modal_post.jsx";
 import Modal_post_complain from "../../../components/modal/Modal_post_complain.jsx";
+import { FaRegThumbsUp } from "react-icons/fa6";
 
 const apiClient = axios.create({
     baseURL: 'https://zmffjq.store',
@@ -106,6 +107,17 @@ const ImageContainer = styled.div`
         margin-bottom: 10px;
     }
 `;
+
+const HeartContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-left: 10px;
+    color: #555;
+    cursor: pointer;
+    font-size: 18px;
+`
 
 function ActivityDetail() {
     const { clubId, postId } = useParams();
@@ -207,6 +219,11 @@ function ActivityDetail() {
                             <p></p>
                         )}
                     </ImageContainer>
+                    <HeartContainer>
+                        <FaRegThumbsUp/>
+                        &nbsp;
+                        <p>16</p>
+                    </HeartContainer>
                 </PostContainer>
                 {showPostModal && <Modal_post
                     onClose={closeModal}

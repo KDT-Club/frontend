@@ -1,44 +1,130 @@
 import React from 'react';
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Header_center from "../../components/header/Header_center.jsx";
-import './login_styles/signup.css'
-import '../../styles/App.css'
-import {FaArrowLeft} from "react-icons/fa6";
+import styled from 'styled-components';
+import { FaArrowLeft } from "react-icons/fa6";
 
-function Modal({onClose}) {
-    return(
-        <div className="modal-overlay">
-            <div className="modal-content">
-                <div className="modal-header">
+const ModalOverlay = styled.div`
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
+
+const ModalContent = styled.div`
+    background-color: white;
+    width: 60%;
+    height: 15%;
+    padding: 20px;
+    border-radius: 8%;
+    text-align: center;
+`;
+
+const ModalHeader = styled.div`
+    margin-bottom: 7px;
+`;
+
+const Label = styled.label`
+  display: block;
+  margin-bottom: 5px;
+  font-size: 14px;
+`;
+
+const ModalButton = styled.button`
+    width: 60%;
+    margin-top: 5px;
+    padding: 5px 20px;
+    cursor: pointer;
+`;
+
+const HeaderContainer = styled.div`
+    display: flex;
+    box-sizing: border-box;
+    height: 100px;
+    margin-top: 20px;
+`;
+
+const SignupHeaderCenter = styled.div`
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+`;
+
+const SignupTitle = styled.div`
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 50px;
+    margin-top: 1%;
+`;
+
+const SignupContainer = styled.div`
+    width: 100%;
+    height: 75%;
+`;
+
+const InputGroup = styled.div`
+    text-align: left;
+    width: 100%;
+    max-width: 330px;
+    margin: 0 auto 2%;
+`;
+
+const InputWithButton = styled.div`
+    position: relative;
+    display: flex;
+    align-items: center;
+`;
+
+const Input = styled.input`
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+`;
+
+const SignupButton = styled.button`
+    width: 100%;
+    max-width: 330px;
+    padding: 12px;
+    margin: 5% auto 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    height: 50px;
+    background-color: #5a7ca5;
+    color: white;
+`;
+
+function Modal({ onClose }) {
+    return (
+        <ModalOverlay>
+            <ModalContent>
+                <ModalHeader>
                     <p>가입이 완료되었습니다!</p>
                     <p>로그인 화면으로 돌아갑니다.</p>
-                </div>
-                <hr/>
-                <button onClick={onClose}>OK</button>
-            </div>
-        </div>
+                </ModalHeader>
+                <hr />
+                <ModalButton onClick={onClose}>OK</ModalButton>
+            </ModalContent>
+        </ModalOverlay>
     )
 }
 
-
-function signup () {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+function Signup() {
     const [username, setUserName] = React.useState('');
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [name, setName] = React.useState('');
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [department, setDepartment] = React.useState('');
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [password, setPassword] = React.useState('');
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [confirmPassword, setConfirmPassword] = React.useState('');
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [duplicateId, setDuplicateId] = React.useState(false);
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const navigate = useNavigate();
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [showModal, setShowModal] = React.useState(false);
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [phone, setPhone] = React.useState('');
 
     const handleDuplicateCheck = () => {
@@ -49,11 +135,9 @@ function signup () {
         window.history.back();
     }
 
-
-    // 회원가입 API 나중에 개발.
     const handleSignUp = async () => {
         try {
-            if(password !== confirmPassword) {
+            if (password !== confirmPassword) {
                 alert('비밀번호가 일치하지 않습니다.');
                 return;
             }
@@ -70,14 +154,14 @@ function signup () {
                 body: formData
             });
 
-            if(response.status === 200) {
-                localStorage.setItem('userInfo', JSON.stringify({name, username}))
+            if (response.status === 200) {
+                localStorage.setItem('userInfo', JSON.stringify({ name, username }))
                 setShowModal(true);
             } else {
                 throw new Error('회원가입에 실패했습니다.');
             }
-        }catch(error){
-            console.log('회원가입 중 에러 발생:',error);
+        } catch (error) {
+            console.log('회원가입 중 에러 발생:', error);
             alert('회원가입 중 에러가 발생하였습니다.');
         }
     }
@@ -87,54 +171,54 @@ function signup () {
         navigate('/login');
     }
 
-    return(
+    return (
         <div>
-            <div className="header-container">
-                <FaArrowLeft onClick={handleBackClick} style={{ cursor: 'pointer', marginTop:'30px', marginLeft:'35px'}}/>
-                <div className="signup-header-center">
-                    <Header_center/>
-                </div>
-            </div>
-            <div className="signup-title">
+            <HeaderContainer>
+                <FaArrowLeft onClick={handleBackClick} style={{ cursor: 'pointer', marginTop: '30px', marginLeft: '35px' }} />
+                <SignupHeaderCenter>
+                    <Header_center />
+                </SignupHeaderCenter>
+            </HeaderContainer>
+            <SignupTitle>
                 회원가입
-            </div>
-            <div className="signup-container">
-                <div className="input-group">
-                    <label htmlFor="student-name">이름</label>
-                    <input
+            </SignupTitle>
+            <SignupContainer>
+                <InputGroup>
+                    <Label htmlFor="student-name">이름</Label>
+                    <Input
                         id="student-name"
                         type="text"
                         placeholder="이름을 입력해주세요."
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                     />
-                </div>
-                <div className="input-group">
-                    <label htmlFor="student-id">학번</label>
-                    <div className="input-with-button">
-                        <input
+                </InputGroup>
+                <InputGroup>
+                    <Label htmlFor="student-id">학번</Label>
+                    <InputWithButton>
+                        <Input
                             id="student-id"
                             type="id"
                             placeholder="학번을 입력해주세요."
                             value={username}
                             onChange={(e) => setUserName(e.target.value)}
                         />
-                    </div>
-                </div>
-                <div className="input-group">
-                    <label htmlFor="passowrd">비밀번호</label>
-                    <input
+                    </InputWithButton>
+                </InputGroup>
+                <InputGroup>
+                    <Label htmlFor="password">비밀번호</Label>
+                    <Input
                         id="password"
                         type="password"
                         placeholder="비밀번호를 입력해주세요."
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
-                </div>
-                <div className="input-group">
-                    <label htmlFor="password">비밀번호 확인</label>
-                    <input
-                        id="password"
+                </InputGroup>
+                <InputGroup>
+                    <Label htmlFor="confirm-password">비밀번호 확인</Label>
+                    <Input
+                        id="confirm-password"
                         type="password"
                         placeholder="비밀번호를 다시 입력해주세요."
                         value={confirmPassword}
@@ -144,34 +228,34 @@ function signup () {
                             borderWidth: password !== confirmPassword && confirmPassword !== '' ? '1px' : ''
                         }}
                     />
-                </div>
-                <div className="input-group">
-                    <label htmlFor="student-major">학과</label>
-                    <input
+                </InputGroup>
+                <InputGroup>
+                    <Label htmlFor="student-major">학과</Label>
+                    <Input
                         id="student-major"
                         type="text"
                         placeholder="학과를 입력해주세요."
                         value={department}
                         onChange={(e) => setDepartment(e.target.value)}
                     />
-                </div>
-                <div className="input-group">
-                    <label htmlFor="phone">핸드폰 번호</label>
-                    <input
+                </InputGroup>
+                <InputGroup>
+                    <Label htmlFor="phone">핸드폰 번호</Label>
+                    <Input
                         id="phone"
                         type="text"
                         placeholder="010-0000-0000"
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
                     />
-                </div>
-                <button type="submit" className="signup-btn" onClick={handleSignUp}>가입하기</button>
+                </InputGroup>
+                <SignupButton type="submit" onClick={handleSignUp}>가입하기</SignupButton>
                 {showModal && (
-                    <Modal onClose={handleModalClose}/>
+                    <Modal onClose={handleModalClose} />
                 )}
-            </div>
+            </SignupContainer>
         </div>
     )
 }
 
-export default signup;
+export default Signup;

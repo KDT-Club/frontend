@@ -6,6 +6,8 @@ import Modal_post from "../../../components/modal/Modal_post.jsx";
 import Modal_post_complain from "../../../components/modal/Modal_post_complain.jsx";
 import styled from 'styled-components';
 import CommentSection from "./CommentSection.jsx";
+//import { FaHeart } from "react-icons/fa";
+import { FaRegThumbsUp } from "react-icons/fa6";
 
 const Whole = styled.div`
     width: 100%;
@@ -82,7 +84,7 @@ const PostTitle = styled.p`
 
 const PostContent = styled.p`
     font-size: 17.8px;
-    margin-top: 5px;
+    margin-top: 0px;
     margin-left: 10px;
     text-align: start;
 `;
@@ -103,6 +105,17 @@ const ImageContainer = styled.div`
         margin-bottom: 10px;
     }
 `;
+
+const HeartContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-left: 10px;
+    color: #555;
+    cursor: pointer;
+    font-size: 18px;
+`
 
 const Divider = styled.div`
     border-bottom: 1.5px solid dimgrey;
@@ -125,7 +138,8 @@ function PostDetail({
                         editingCommentId,
                         editedCommentContent,
                         setEditedCommentContent,
-                        memberId
+                        memberId,
+                        commentCount
                     }) {
 
     const [showPostModal, setShowPostModal] = useState(false);
@@ -177,6 +191,11 @@ function PostDetail({
                                 <p></p>
                             )}
                         </ImageContainer>
+                        <HeartContainer>
+                            <FaRegThumbsUp/>
+                            &nbsp;
+                            <p>16</p>
+                        </HeartContainer>
                     </PostContainer>
                 )}
                 <Divider />

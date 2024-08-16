@@ -7,6 +7,13 @@ import axios from "axios";
 import Header_center from "../../components/header/Header_center.jsx";
 import styled from 'styled-components';
 
+const apiClient = axios.create({
+    baseURL: 'https://zmffjq.store',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+});
+
 const NoClubMessage = styled.div`
     display: flex;
     justify-content: center;
@@ -24,18 +31,15 @@ const MyclubMain = () => {
     useEffect(() => {
         const queryParams = new URLSearchParams(location.search);
         let memberId = queryParams.get('memberId') || localStorage.getItem('memberId');
-        if (!memberId) {
-            navigate('/login');
-            return;
-        } else {
-            localStorage.setItem('memberId', memberId);
-        }
+        localStorage.setItem('memberId', memberId);
 
         const fetchClubs = async () => {
             try {
-                const response = await axios.get(`https://zmffjq.store/clubs?memberId=${memberId}`, {
+                const response = await apiClient.get(`/clubs?memberId=${memberId}`, {
                     params: { memberId }
                 });
+                console.log("Server response:", response.data);
+
                 // 응답이 배열이고 유효한 클럽 데이터를 포함하고 있는지 확인
                 if (Array.isArray(response.data) && response.data.some(club => club.clubId)) {
                     setClubs(response.data);
