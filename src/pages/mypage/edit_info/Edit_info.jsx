@@ -82,29 +82,47 @@ function Edit_info() {
 
     const handleCloseOkModal = () => setShowOkModel(false);
 
-    const handleUpdateInfo = () => {
-        const requestBody = {
-            id: data.id,
-            name: data.name,
-            department: data.department,
-            studentId: data.studentId,
-            password: data.password,
-            memberImageURL: data.memberImageURL,
-            phone: data.phone
-        };
-        apiClient.post(`/members/${memberId}`, requestBody)
-            .then(response => {
-                // 로컬 스토리지의 userInfo 업데이트
-                const updatedUserInfo = JSON.parse(localStorage.getItem('userInfo'));
-                updatedUserInfo.memberImageURL = data.memberImageURL;
-                localStorage.setItem('userInfo', JSON.stringify(updatedUserInfo));
+    const uploadFileToS3 = async (file) => {
+        try {
+            const filename = encodeURIComponent(file.name);
+            const response = await apiClient.get(`/presigned-url?filename=${filename}`);
+            const presignedUrl = response.data;
 
-                handleOpenOkModal("수정이 완료되었습니다.", () => navigate(-1));
-            })
-            .catch(error => {
-                console.error('회원 정보 수정 중 오류 발생:', error);
-                handleOpenOkModal("수정에 실패했습니다.<br>다시 시도해주세요.", () => {});
+            await axios.put(presignedUrl, file, {
+                headers: { 'Content-Type': file.type },
+                withCredentials: false
             });
+            return presignedUrl.split("?")[0];
+        } catch (error) {
+            console.error('Presigned URL 요청 또는 이미지 업로드 실패:', error);
+            throw error;
+        }
+    };
+
+    const handleUpdateInfo = async () => {
+        try {
+            let memberImageURL = data.memberImageURL;
+
+            if (selectedFile) {
+                memberImageURL = await uploadFileToS3(selectedFile);
+            }
+
+            const requestBody = {
+                id: data.id,
+                name: data.name,
+                department: data.department,
+                studentId: data.studentId,
+                password: data.password,
+                memberImageURL,
+                phone: data.phone
+            };
+
+            await apiClient.post(`/members/${memberId}`, requestBody);
+            handleOpenOkModal("수정이 완료되었습니다.", () => navigate(-1));
+        } catch (error) {
+            console.error('회원 정보 수정 중 오류 발생:', error);
+            handleOpenOkModal("수정에 실패했습니다.<br>다시 시도해주세요.", () => {});
+        }
     };
 
     const handleFileChange = (e) => {
@@ -112,7 +130,7 @@ function Edit_info() {
         setSelectedFile(file);
         setData(prevData => ({
             ...prevData,
-            memberImageURL: URL.createObjectURL(file)  // 선택한 이미지 파일의 URL 생성
+            memberImageURL: URL.createObjectURL(file)
         }));
     };
 
