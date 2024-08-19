@@ -7,7 +7,11 @@ import { MdOutlineCameraAlt } from "react-icons/md";
 import Modal_ok from "../../../components/modal/Modal_ok.jsx";
 import styled from "styled-components";
 
-const HeaderContainer = styled.div`
+function Edit_info() {
+    const navigate = useNavigate();
+    const { memberId } = useParams();
+
+    const HeaderContainer = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -18,10 +22,6 @@ const HeaderContainer = styled.div`
     padding-right: 25px;
     margin-bottom: 0px;
 `;
-
-function Edit_info() {
-    const navigate = useNavigate();
-    const { memberId } = useParams();
 
     const apiClient = axios.create({
         baseURL: 'https://zmffjq.store',
@@ -103,7 +103,7 @@ function Edit_info() {
             })
             .catch(error => {
                 console.error('회원 정보 수정 중 오류 발생:', error);
-                handleOpenOkModal("수정에 실패했습니다. 다시 시도해주세요.", () => {});
+                handleOpenOkModal("수정에 실패했습니다.<br>다시 시도해주세요.", () => {});
             });
     };
 
@@ -121,10 +121,9 @@ function Edit_info() {
             <HeaderContainer>
                 <FaArrowLeft
                     style={{fontSize: '24px', cursor: 'pointer'}}
-                    onClick={() => navigate(-1)}
+                    onClick={() => navigate(`/members/${memberId}`)}
                 />
-                <div style={{fontSize: '20px', fontWeight: "bold"}}>정보 수정</div>
-                <div style={{width: '24px'}}></div>
+                <div style={{fontSize: '20px', fontWeight: "bold", textAlign: "left", marginRight: "123px"}}>정보 수정</div>
             </HeaderContainer>
             <div className="edit">
                 <input
