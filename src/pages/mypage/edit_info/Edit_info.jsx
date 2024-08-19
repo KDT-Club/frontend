@@ -124,6 +124,7 @@ function Edit_info() {
                     onClick={() => navigate(`/members/${memberId}`)}
                 />
                 <div style={{fontSize: '20px', fontWeight: "bold", textAlign: "left", marginRight: "110px"}}>정보 수정</div>
+                <div style={{width: '24px'}}></div>
             </HeaderContainer>
             <div className="edit">
                 <input

@@ -181,7 +181,7 @@ function MyclubDetail() {
                                 </div>
                             ))
                         ) : (
-                            <p className="no-posts-message">작성된 글이 없습니다</p>
+                            <p className="no-posts-message">작성된 글이 없습니다.</p>
                         )}
                     </section>
                 </div>
@@ -199,7 +199,7 @@ function MyclubDetail() {
                                 </div>
                             ))
                         ) : (
-                            <p className="no-posts-message">작성된 글이 없습니다</p>
+                            <p className="no-posts-message">작성된 글이 없습니다.</p>
                         )}
                     </section>
                 </div>
@@ -221,7 +221,7 @@ function MyclubDetail() {
                                 </ActivityBoxItem>
                             ))
                         ) : (
-                            <p className="no-posts-message">작성된 활동내용이 없습니다</p>
+                            <p className="no-posts-message">작성된 글이 없습니다.</p>
                         )}
                     </ActivityBoxSection>
                 </div>
