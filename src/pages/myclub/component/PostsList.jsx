@@ -247,7 +247,7 @@ const PostsList = ({ boardType, boardId, title }) => {
                     ) : (
                         <EmptyMessageContainer>
                             <EmptyMessage>
-                                {boardType === 'activity' ? '작성된 활동내용이 없습니다.' : '작성된 글이 없습니다.'}
+                                작성된 글이 없습니다.
                             </EmptyMessage>
                         </EmptyMessageContainer>
                     )}
