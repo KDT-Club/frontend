@@ -37,7 +37,7 @@ function BoardDetail() {
     const isAuthor = postAuthor && memberId && parseInt(postAuthor) === parseInt(memberId);
 
     if (!post) {
-        return <div>로딩중...</div>;
+        return <div>로딩 중...</div>;
     }
 
     return (

@@ -6,117 +6,6 @@ import { LuImagePlus } from "react-icons/lu";
 import Modal_ok from "../../../components/modal/Modal_ok.jsx";
 import styled from "styled-components";
 
-const Whole = styled.div`
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-`;
-
-const HeaderContainer = styled.div`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 47.5px;
-    background-color: white;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    padding-left: 25px;
-    padding-right: 25px;
-    margin-bottom: 0px;
-`;
-
-const HeaderTitle = styled.div`
-    font-size: 19px;
-    font-weight: bold;
-`;
-
-const Icon = styled.div`
-    font-size: 24px;
-    cursor: pointer;
-`;
-
-const Title = styled.input`
-    width: 100%;
-    height: 50px;
-    padding: 10px;
-    font-size: 20px;
-    margin-top: 35px;
-    margin-bottom: 20px;
-    border-left-width: 0;
-    border-right-width: 0;
-    border-top-width: 0;
-    border-bottom: 1.5px solid #ccc;
-
-    &:focus {
-    outline: none;
-    border-color: #597CA5;
-    }
-`;
-
-const Content = styled.textarea`
-    width: 100%;
-    padding: 10px;
-    font-size: 17px;
-    margin-bottom: 20px;
-    border: 1.5px solid #ccc;
-    border-radius: 4px;
-
-    &:focus {
-    outline: none;
-    border-color: #597CA5;
-    }
-`;
-
-const FileInputButton = styled.button`
-    cursor: pointer;
-    margin-top: 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: none;
-    border: none;
-    color: #414141;
-    width: 100%;
-`;
-
-const IconWrapper = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 10px;
-`;
-
-const ImagePreviewContainer = styled.div`
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 20px;
-`;
-
-const ImagePreview = styled.div`
-    position: relative;
-    width: 100px;
-    height: 100px;
-`;
-
-const PreviewImage = styled.img`
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border: 1px solid #ddd;
-`;
-
-const DeleteIcon = styled(FiX)`
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    cursor: pointer;
-    background: white;
-    border-radius: 50%;
-    padding: 2px;
-`;
-
 function PostWrite({ boardType, apiEndpoint, navigateBackPath }) {
     const apiClient = axios.create({
         baseURL: 'https://zmffjq.store',
@@ -275,5 +164,116 @@ function PostWrite({ boardType, apiEndpoint, navigateBackPath }) {
         </Whole>
     );
 }
+
+const Whole = styled.div`
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+`;
+
+const HeaderContainer = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 47.5px;
+    background-color: white;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    padding-left: 25px;
+    padding-right: 25px;
+    margin-bottom: 0px;
+`;
+
+const HeaderTitle = styled.div`
+    font-size: 19px;
+    font-weight: bold;
+`;
+
+const Icon = styled.div`
+    font-size: 24px;
+    cursor: pointer;
+`;
+
+const Title = styled.input`
+    width: 100%;
+    height: 50px;
+    padding: 10px;
+    font-size: 20px;
+    margin-top: 35px;
+    margin-bottom: 20px;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom: 1.5px solid #ccc;
+
+    &:focus {
+    outline: none;
+    border-color: #597CA5;
+    }
+`;
+
+const Content = styled.textarea`
+    width: 100%;
+    padding: 10px;
+    font-size: 17px;
+    margin-bottom: 20px;
+    border: 1.5px solid #ccc;
+    border-radius: 4px;
+
+    &:focus {
+    outline: none;
+    border-color: #597CA5;
+    }
+`;
+
+const FileInputButton = styled.button`
+    cursor: pointer;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    color: #414141;
+    width: 100%;
+`;
+
+const IconWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+`;
+
+const ImagePreviewContainer = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+`;
+
+const ImagePreview = styled.div`
+    position: relative;
+    width: 100px;
+    height: 100px;
+`;
+
+const PreviewImage = styled.img`
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border: 1px solid #ddd;
+`;
+
+const DeleteIcon = styled(FiX)`
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    cursor: pointer;
+    background: white;
+    border-radius: 50%;
+    padding: 2px;
+`;
 
 export default PostWrite;

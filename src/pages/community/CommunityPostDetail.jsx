@@ -7,6 +7,7 @@ import { FaArrowLeft } from "react-icons/fa6";
 import { FiMoreVertical, FiSend } from "react-icons/fi";
 import { MdOutlineCancel } from "react-icons/md";
 import { FaRegThumbsUp } from "react-icons/fa6";
+import { formatDate } from "../../pages/myclub/component/Date";
 import Modal_delete from '../../components/modal/Modal_delete.jsx';
 import Modal_post from '../../components/modal/Modal_post.jsx';
 import Modal_post_complain from '../../components/modal/Modal_post_complain.jsx';
@@ -20,212 +21,6 @@ const apiClient = axios.create({
     },
     withCredentials: true,
 });
-
-const Whole = styled.div`
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-`;
-
-const HeaderContainer = styled.div`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 47.5px;
-    background-color: white;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    padding-left: 25px;
-    padding-right: 25px;
-    margin-bottom: 0px;
-`;
-
-const ScrollContainer = styled.div`
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: darkgray white;
-`;
-
-const Title = styled.div`
-    font-size: 20px;
-    font-weight: bold;
-`;
-
-const PostContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    margin-top: 20px;
-    margin-left: 20px;
-    margin-right: 10px;
-`;
-
-const PostAuthorContainer = styled.div`
-    display: flex;
-    align-items: center;
-    margin-bottom: 8px;
-`;
-
-const ProfileImage = styled.img`
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    margin-right: 10px;
-`;
-
-const PostAuthorDate = styled.p`
-    font-size: 16.6px;
-    color: gray;
-    font-weight: bold;
-    margin: 0;
-`;
-
-const PostTitle = styled.p`
-    font-size: 20px;
-    font-weight: bold;
-    padding-bottom: 12px;
-    text-align: start;
-    width: 100%;
-    margin-top: 8px;
-    margin-left: 10px;
-    padding-right: 10px;
-`;
-
-const PostContent = styled.p`
-    font-size: 17.8px;
-    margin-top: 5px;
-    margin-left: 10px;
-    text-align: start;
-`;
-
-// const ImageContainer = styled.div`
-//     width: 100%;
-//     display: flex;
-//     flex-direction: column;
-//     align-items: center;
-//     padding: 10px;
-//     box-sizing: border-box;
-//     img {
-//         width: 100%;
-//         max-width: 200px;
-//         min-width: 200px;
-//         height: auto;
-//         border-radius: 8px;
-//         margin-bottom: 10px;
-//     }
-// `;
-
-const ImageContainer = styled.div`
-    width: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
-    padding: 10px;
-    box-sizing: border-box;
-`;
-
-const StyledImage = styled.img`
-    width: 100%;
-    max-width: 200px;
-    height: auto;
-    border-radius: 8px;
-    object-fit: cover;
-`;
-
-const Divider = styled.div`
-    border-bottom: 1.5px solid dimgrey;
-    margin-top: 10px;
-`;
-
-const CommentContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    margin-top: 12px;
-    padding-bottom: 60px;
-`;
-
-const CommentLine = styled.div`
-    display: flex;
-    width: 100%;
-    flex-direction: column;
-    align-items: flex-start;
-    margin-bottom: 10px;
-`;
-
-const CommentHeader = styled.div`
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-`;
-
-const CommentAuthorDate = styled.p`
-    font-size: 16.5px;
-    color: gray;
-    margin-left: 30px;
-    margin-bottom: 2px;
-`;
-
-const CommentContent = styled.p`
-    font-size: 17px;
-    margin-left: 30px;
-    margin-bottom: 12px;
-`;
-
-const CommentDivider = styled.div`
-    border-bottom: 1px solid gray;
-    width: 100%;
-`;
-
-const Form = styled.form`
-    margin-top: 15px;
-    display: flex;
-    align-items: center;
-`;
-
-const SubmitCommentContainer = styled.div`
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    padding: 10px;
-    background-color: white;
-    box-sizing: border-box;
-`;
-
-const CommentInput = styled.input`
-    width: calc(100% - 50px);
-    flex: 1;
-    font-size: 16.5px;
-    text-align: center;
-    border-radius: 7px;
-    border: 1.5px solid darkgray;
-    height: 47px;
-    padding: 0 15px;
-    margin-right: 2px;
-    &:focus {
-        outline: none;
-        border: 1.5px solid #597CA5;
-    }
-`;
-
-const SubmitButton = styled.button`
-    width: 2%;
-    text-align: center;
-    cursor: pointer;
-    color: #5c5c5c;
-    margin-right: 15px;
-    margin-left: 0px;
-`;
 
 function CommunityPostDetail() {
     const { clubId, postId } = useParams();
@@ -366,7 +161,7 @@ function CommunityPostDetail() {
     };
 
     if (!post) {
-        return <div>Loading...</div>;
+        return <div>로딩 중...</div>;
     }
 
     return (
@@ -380,7 +175,7 @@ function CommunityPostDetail() {
                 <PostContainer>
                     <PostAuthorContainer>
                         <ProfileImage src={post.member.memberImageURL || "/default-profile.png"} alt="" />
-                        <PostAuthorDate>{post.member.name} | {new Date(post.createdAt).toLocaleDateString()}</PostAuthorDate>
+                        <PostAuthorDate>{post.member.name} | {formatDate(post.createdAt)}</PostAuthorDate>
                     </PostAuthorContainer>
                     <PostTitle>{post.title}</PostTitle>
                     <PostContent>{post.content}</PostContent>
@@ -397,6 +192,11 @@ function CommunityPostDetail() {
                             />
                         ))}
                     </ImageContainer>
+                    <HeartContainer>
+                        <FaRegThumbsUp/>
+                        &nbsp;
+                        <p>16</p>
+                    </HeartContainer>
                 </PostContainer>
                 <Divider />
                 <CommentContainer>
@@ -476,5 +276,205 @@ function CommunityPostDetail() {
         </Whole>
     );
 }
+
+const Whole = styled.div`
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+`;
+
+const HeaderContainer = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 47.5px;
+    background-color: white;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    padding-left: 25px;
+    padding-right: 25px;
+    margin-bottom: 0px;
+`;
+
+const ScrollContainer = styled.div`
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: darkgray white;
+`;
+
+const Title = styled.div`
+    font-size: 20px;
+    font-weight: bold;
+`;
+
+const PostContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: 20px;
+    margin-left: 20px;
+    margin-right: 10px;
+`;
+
+const PostAuthorContainer = styled.div`
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+`;
+
+const ProfileImage = styled.img`
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    margin-right: 10px;
+`;
+
+const PostAuthorDate = styled.p`
+    font-size: 16.6px;
+    color: gray;
+    font-weight: bold;
+    margin: 0;
+`;
+
+const PostTitle = styled.p`
+    font-size: 20px;
+    font-weight: bold;
+    padding-bottom: 12px;
+    text-align: start;
+    width: 100%;
+    margin-top: 8px;
+    margin-left: 10px;
+    padding-right: 10px;
+`;
+
+const PostContent = styled.p`
+    font-size: 17.8px;
+    margin-top: 5px;
+    margin-left: 10px;
+    text-align: start;
+`;
+
+const ImageContainer = styled.div`
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px;
+    box-sizing: border-box;
+`;
+
+const StyledImage = styled.img`
+    width: 100%;
+    max-width: 200px;
+    height: auto;
+    border-radius: 8px;
+    object-fit: cover;
+`;
+
+const CommentContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    margin-top: 12px;
+    padding-bottom: 60px;
+`;
+
+const CommentLine = styled.div`
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 10px;
+`;
+
+const CommentHeader = styled.div`
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+`;
+
+const CommentAuthorDate = styled.p`
+    font-size: 16.5px;
+    color: gray;
+    margin-left: 30px;
+    margin-bottom: 2px;
+`;
+
+const CommentContent = styled.p`
+    font-size: 17px;
+    margin-left: 30px;
+    margin-bottom: 12px;
+`;
+
+const CommentDivider = styled.div`
+    border-bottom: 1px solid gray;
+    width: 100%;
+`;
+
+const Form = styled.form`
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+`;
+
+const SubmitCommentContainer = styled.div`
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px;
+    background-color: white;
+    box-sizing: border-box;
+`;
+
+const CommentInput = styled.input`
+    width: calc(100% - 50px);
+    flex: 1;
+    font-size: 16.5px;
+    text-align: center;
+    border-radius: 7px;
+    border: 1.5px solid darkgray;
+    height: 47px;
+    padding: 0 15px;
+    margin-right: 2px;
+    &:focus {
+        outline: none;
+        border: 1.5px solid #597CA5;
+    }
+`;
+
+const SubmitButton = styled.button`
+    width: 2%;
+    text-align: center;
+    cursor: pointer;
+    color: #5c5c5c;
+    margin-right: 15px;
+    margin-left: 0px;
+`;
+
+const HeartContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-left: 10px;
+    color: #555;
+    cursor: pointer;
+    font-size: 17.3px;
+`
+
+const Divider = styled.div`
+    border-bottom: 1.5px solid dimgrey;
+    margin-top: 10px;
+`;
 
 export default CommunityPostDetail;

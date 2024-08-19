@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import {React, useState} from 'react';
 import { FaArrowLeft } from 'react-icons/fa6';
 import { FiMoreVertical } from "react-icons/fi";
 import { formatDate } from "../component/Date";
@@ -6,8 +6,107 @@ import Modal_post from "../../../components/modal/Modal_post.jsx";
 import Modal_post_complain from "../../../components/modal/Modal_post_complain.jsx";
 import styled from 'styled-components';
 import CommentSection from "./CommentSection.jsx";
-//import { FaHeart } from "react-icons/fa";
 import { FaRegThumbsUp } from "react-icons/fa6";
+
+function PostDetail({
+                        title,
+                        post,
+                        comments,
+                        attachmentNames,
+                        onBackClick,
+                        onPostDotClick,
+                        onCommentSubmit,
+                        onCommentEdit,
+                        onSaveEditedComment,
+                        onCommentDelete,
+                        newComment,
+                        setNewComment,
+                        editingCommentId,
+                        editedCommentContent,
+                        setEditedCommentContent,
+                        memberId,
+                        commentCount
+                    }) {
+
+    const [showPostModal, setShowPostModal] = useState(false);
+    const [showComplainModal, setShowComplainModal] = useState(false);
+
+    const handlePostDotClick = () => {
+        if (parseInt(post.member.id) === parseInt(memberId)) {
+            setShowPostModal(true);
+        } else {
+            setShowComplainModal(true);
+        }
+    };
+
+    const closeModal = () => {
+        setShowPostModal(false);
+        setShowComplainModal(false);
+    };
+
+    return (
+        <Whole>
+            <HeaderContainer>
+                <FaArrowLeft style={{fontSize: '24px', cursor: 'pointer'}} onClick={onBackClick}/>
+                <Title>{title}</Title>
+                <FiMoreVertical style={{fontSize: '24px', cursor: 'pointer'}} onClick={handlePostDotClick}/>
+            </HeaderContainer>
+            <ScrollContainer>
+                {post && (
+                    <PostContainer>
+                        <PostAuthorContainer>
+                            <ProfileImage src={post.member.memberImageURL} alt="" />
+                            <PostAuthorDate>{post.member.name} | {formatDate(post.createdAt)}</PostAuthorDate>
+                        </PostAuthorContainer>
+                        <PostTitle>{post.title}</PostTitle>
+                        <PostContent>{post.content}</PostContent>
+                        <ImageContainer>
+                            {attachmentNames.length > 0 ? (
+                                attachmentNames.map((url, index) => (
+                                    <img
+                                        key={index}
+                                        src={url}
+                                        alt={`첨부 이미지 ${index + 1}`}
+                                        onError={(e) => {
+                                            console.error(`이미지 로딩 오류 ${index}:`, e);
+                                            e.target.style.display = 'none';
+                                        }}
+                                    />
+                                ))
+                            ) : (
+                                <p></p>
+                            )}
+                        </ImageContainer>
+                        <HeartContainer>
+                            <FaRegThumbsUp/>
+                            &nbsp;
+                            <p>16</p>
+                        </HeartContainer>
+                    </PostContainer>
+                )}
+                <Divider />
+                <CommentSection
+                    comments={comments}
+                    postId={post.postId}
+                    newComment={newComment}
+                    setNewComment={setNewComment}
+                    editingCommentId={editingCommentId}
+                    editedCommentContent={editedCommentContent}
+                    setEditedCommentContent={setEditedCommentContent}
+                    onCommentSubmit={onCommentSubmit}
+                    onCommentEdit={onCommentEdit}
+                    onSaveEditedComment={onSaveEditedComment}
+                    onCommentDelete={onCommentDelete}
+                />
+                {showPostModal && <Modal_post
+                    onClose={closeModal}
+                    onEdit={onPostDotClick}
+                />}
+                {showComplainModal && <Modal_post_complain onClose={closeModal} />}
+            </ScrollContainer>
+        </Whole>
+    );
+}
 
 const Whole = styled.div`
     width: 100%;
@@ -114,112 +213,12 @@ const HeartContainer = styled.div`
     margin-left: 10px;
     color: #555;
     cursor: pointer;
-    font-size: 18px;
+    font-size: 17.3px;
 `
 
 const Divider = styled.div`
     border-bottom: 1.5px solid dimgrey;
     margin-top: 10px;
 `;
-
-function PostDetail({
-                        title,
-                        post,
-                        comments,
-                        attachmentNames,
-                        onBackClick,
-                        onPostDotClick,
-                        onCommentSubmit,
-                        onCommentEdit,
-                        onSaveEditedComment,
-                        onCommentDelete,
-                        newComment,
-                        setNewComment,
-                        editingCommentId,
-                        editedCommentContent,
-                        setEditedCommentContent,
-                        memberId,
-                        commentCount
-                    }) {
-
-    const [showPostModal, setShowPostModal] = useState(false);
-    const [showComplainModal, setShowComplainModal] = useState(false);
-
-    const handlePostDotClick = () => {
-        if (parseInt(post.member.id) === parseInt(memberId)) {
-            setShowPostModal(true);
-        } else {
-            setShowComplainModal(true);
-        }
-    };
-
-    const closeModal = () => {
-        setShowPostModal(false);
-        setShowComplainModal(false);
-    };
-
-    return (
-        <Whole>
-            <HeaderContainer>
-                <FaArrowLeft style={{fontSize: '24px', cursor: 'pointer'}} onClick={onBackClick}/>
-                <Title>{title}</Title>
-                <FiMoreVertical style={{fontSize: '24px', cursor: 'pointer'}} onClick={handlePostDotClick}/>
-            </HeaderContainer>
-            <ScrollContainer>
-                {post && (
-                    <PostContainer>
-                        <PostAuthorContainer>
-                            <ProfileImage src={post.member.memberImageURL} alt="" />
-                            <PostAuthorDate>{post.member.name} | {formatDate(post.createdAt)}</PostAuthorDate>
-                        </PostAuthorContainer>
-                        <PostTitle>{post.title}</PostTitle>
-                        <PostContent>{post.content}</PostContent>
-                        <ImageContainer>
-                            {attachmentNames.length > 0 ? (
-                                attachmentNames.map((url, index) => (
-                                    <img
-                                        key={index}
-                                        src={url}
-                                        alt={`첨부 이미지 ${index + 1}`}
-                                        onError={(e) => {
-                                            console.error(`이미지 로딩 오류 ${index}:`, e);
-                                            e.target.style.display = 'none';
-                                        }}
-                                    />
-                                ))
-                            ) : (
-                                <p></p>
-                            )}
-                        </ImageContainer>
-                        <HeartContainer>
-                            <FaRegThumbsUp/>
-                            &nbsp;
-                            <p>16</p>
-                        </HeartContainer>
-                    </PostContainer>
-                )}
-                <Divider />
-                <CommentSection
-                    comments={comments}
-                    postId={post.postId}
-                    newComment={newComment}
-                    setNewComment={setNewComment}
-                    editingCommentId={editingCommentId}
-                    editedCommentContent={editedCommentContent}
-                    setEditedCommentContent={setEditedCommentContent}
-                    onCommentSubmit={onCommentSubmit}
-                    onCommentEdit={onCommentEdit}
-                    onSaveEditedComment={onSaveEditedComment}
-                    onCommentDelete={onCommentDelete}
-                />
-                {showPostModal && <Modal_post
-                    onClose={closeModal}
-                    onEdit={onPostDotClick}
-                />}
-                {showComplainModal && <Modal_post_complain onClose={closeModal} />}
-            </ScrollContainer>
-        </Whole>
-    );
-}
 
 export default PostDetail;
