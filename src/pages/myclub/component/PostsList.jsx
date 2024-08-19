@@ -5,7 +5,6 @@ import { FaArrowLeft } from "react-icons/fa6";
 import { FiEdit } from "react-icons/fi";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-//import { FaHeart } from "react-icons/fa";
 import { FaRegThumbsUp } from "react-icons/fa6";
 
 const apiClient = axios.create({
@@ -14,105 +13,6 @@ const apiClient = axios.create({
         'Content-Type': 'application/json',
     },
 });
-
-const Whole = styled.div`
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-`;
-
-const HeaderContainer = styled.div`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 47.5px;
-    background-color: white;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    padding-left: 25px;
-    padding-right: 25px;
-    margin-bottom: 0px;
-`;
-
-const ScrollContainer = styled.div`
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-`;
-
-const PostListContainer = styled.div`
-    flex: 1;
-    overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: darkgray white;
-`;
-
-const EmptyMessageContainer = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-`;
-
-const EmptyMessage = styled.p`
-    font-size: 18px;
-    color: gray;
-    text-align: center;
-`;
-
-const Post = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    border-bottom: 1px solid #ddd;
-    padding: 11px 20px;
-
-    a {
-        text-decoration: none;
-        color: inherit;
-        width: 100%;
-    }
-`;
-
-const Title = styled.p`
-    font-weight: bold;
-    font-size: 18.6px;
-    text-align: left;
-    margin: 0px 10px 6px 8px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 1;
-`;
-
-const Content = styled.p`
-    font-size: 16px;
-    color: #444;
-    text-align: left;
-    margin: 5px 10px 5px 8px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 1;
-`;
-
-const CreatedAt = styled.div`
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    font-size: 16px;
-    color: #666;
-    text-align: left;
-    margin: 5px 10px 0 8px;
-`;
-
-const Separator = styled.span`
-    color: darkgray; 
-`;
 
 const PostsList = ({ boardType, boardId, title }) => {
     const { id } = useParams();
@@ -256,6 +156,105 @@ const PostsList = ({ boardType, boardId, title }) => {
         </Whole>
     );
 };
+
+const Whole = styled.div`
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+`;
+
+const HeaderContainer = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 47.5px;
+    background-color: white;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    padding-left: 25px;
+    padding-right: 25px;
+    margin-bottom: 0px;
+`;
+
+const ScrollContainer = styled.div`
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+`;
+
+const PostListContainer = styled.div`
+    flex: 1;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: darkgray white;
+`;
+
+const EmptyMessageContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+`;
+
+const EmptyMessage = styled.p`
+    font-size: 18px;
+    color: gray;
+    text-align: center;
+`;
+
+const Post = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    border-bottom: 1px solid #ddd;
+    padding: 11px 20px;
+
+    a {
+        text-decoration: none;
+        color: inherit;
+        width: 100%;
+    }
+`;
+
+const Title = styled.p`
+    font-weight: bold;
+    font-size: 18.6px;
+    text-align: left;
+    margin: 0px 10px 6px 8px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+`;
+
+const Content = styled.p`
+    font-size: 16.3px;
+    color: #333;
+    text-align: left;
+    margin: 2px 10px 2px 8px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+`;
+
+const CreatedAt = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-size: 15px;
+    color: #666;
+    text-align: left;
+    margin: 5px 10px 0 8px;
+`;
+
+const Separator = styled.span`
+    color: darkgray; 
+`;
 
 export default PostsList;
 

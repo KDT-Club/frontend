@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { FaArrowLeft } from "react-icons/fa";
+import { FaArrowLeft } from "react-icons/fa6";
 import styled from 'styled-components';
 import axios from 'axios';
 
@@ -117,12 +117,14 @@ const ClubDetailPage = () => {
     if (showJoinForm) {
         return (
             <JoinForm>
-                <JoinFormHeader>
+                <HeaderContainer>
                     <FaArrowLeft
-                        style={{ fontSize: '25px', strokeWidth: '0.1', cursor: 'pointer', marginLeft: '15px' }}
-                        onClick={() => setShowJoinForm(false)} />
-                    <p>동아리 가입 신청</p>
-                </JoinFormHeader>
+                        style={{fontSize: '24px', cursor: 'pointer'}}
+                        onClick={() => setShowJoinForm(false)}
+                    />
+                    <div style={{fontSize: '20px', fontWeight: "bold"}}>동아리 가입 신청</div>
+                    <div style={{width: '24px'}}></div>
+                </HeaderContainer>
                 <UserInfo>
                     <img src={userInfo.memberImageURL} alt="profile" />
                     <ProfileInfo>
@@ -145,12 +147,14 @@ const ClubDetailPage = () => {
 
     return (
         <ClubDetailPageContainer>
-            <Header>
+            <HeaderContainer>
                 <FaArrowLeft
-                    style={{ fontSize: '24px', cursor: 'pointer' }}
-                    onClick={handleBackClick} />
-                <p>동아리 소개</p>
-            </Header>
+                    style={{fontSize: '24px', cursor: 'pointer'}}
+                    onClick={handleBackClick}
+                />
+                <div style={{fontSize: '20px', fontWeight: "bold"}}>동아리 소개</div>
+                <div style={{width: '24px'}}></div>
+            </HeaderContainer>
             <hr />
             <ClubInfo>
                 <img src={club.clubImgUrl} alt="club" />
@@ -198,23 +202,21 @@ const ClubDetailPage = () => {
 export default ClubDetailPage;
 
 const ClubDetailPageContainer = styled.div`
-    font-family: Arial, sans-serif;
+    //font-family: Arial, sans-serif;
     position: relative;
     height: 100%;
 `;
 
-const Header = styled.div`
-    width: 100%;
+const HeaderContainer = styled.div`
     display: flex;
-    font-size: 24px;
-    padding: 10px 0;
-    margin-top: 2%;
-    margin-left: 3%;
-    p {
-        margin-top: -1%;
-        margin-left: 5%;
-        align-items: center;
-    }
+    justify-content: space-between;
+    align-items: center;
+    height: 47.5px;
+    background-color: white;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    padding-left: 25px;
+    padding-right: 25px;
+    margin-bottom: 0px;
 `;
 
 const ClubInfo = styled.div`
@@ -297,7 +299,7 @@ const UnoCards = styled.div`
 const LeaderInfo = styled.div`
     padding: 20px;
     height: 15%;
-    
+
     h4 {
         margin-top: -5%;
         font-size: 24px;
@@ -372,12 +374,12 @@ const ProfileInfo = styled.div`
     display: flex;
     flex-direction: column;
     text-align: left;
-    
+
     h4 {
         font-size: 16px;
         font-weight: bold;
     }
-    
+
 `;
 
 const ReasonInput = styled.div`

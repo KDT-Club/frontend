@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import '../../styles/App.css';
 import axios from "axios";
@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { FaArrowLeft } from "react-icons/fa6";
 import { FiMoreVertical, FiSend } from "react-icons/fi";
 import { MdOutlineCancel } from "react-icons/md";
+import { FaRegThumbsUp } from "react-icons/fa6";
 import Modal_delete from '../../components/modal/Modal_delete.jsx';
 import Modal_post from '../../components/modal/Modal_post.jsx';
 import Modal_post_complain from '../../components/modal/Modal_post_complain.jsx';

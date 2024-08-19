@@ -60,9 +60,9 @@ const Calendar = () => {
         <CalendarContainer>
             <CalendarContent>
                 <CalendarHeader>
-                    <button onClick={() => changeMonth(-1)}>&lt;</button>
-                    <h2>{currentYear}년 {monthNames[currentMonth]}</h2>
-                    <button onClick={() => changeMonth(1)}>&gt;</button>
+                    <button style={{marginRight: "17px"}} onClick={() => changeMonth(-1)}>&lt;</button>
+                    <h2 style={{fontSize: "22.5px"}}>{currentYear}년 {monthNames[currentMonth]}</h2>
+                    <button style={{marginLeft: "17px"}}  onClick={() => changeMonth(1)}>&gt;</button>
                     <AddEventButton>+</AddEventButton>
                 </CalendarHeader>
                 <Weekdays>
@@ -100,11 +100,11 @@ const CalendarContent = styled.div`
 
 const CalendarHeader = styled.div`
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
+    margin-top: 5px;
+    margin-bottom: 15px;
     margin-left: 15%;
-    margin-bottom: 5%;
-    
     button {
         background: none;
         border: none;
