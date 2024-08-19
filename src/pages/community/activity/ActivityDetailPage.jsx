@@ -3,7 +3,19 @@ import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import './activity.css';
 import { FaArrowLeft } from "react-icons/fa6";
-import dm from "../../../images/DM.png";
+import styled from "styled-components";
+
+const HeaderContainer = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 47.5px;
+    background-color: white;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    padding-left: 25px;
+    padding-right: 25px;
+    margin-bottom: 0px;
+`;
 
 function ActivityDetailPage() {
     const navigate = useNavigate();
@@ -50,12 +62,14 @@ function ActivityDetailPage() {
 
     return (
         <div>
-            <div className="header">
+            <HeaderContainer>
                 <FaArrowLeft
-                    style={{ fontSize: '25px', strokeWidth: '0.1', cursor: 'pointer', marginLeft: '15px' }}
-                    onClick={handleBack}/>
-                <p>활동 내용</p>
-            </div>
+                    style={{fontSize: '24px', cursor: 'pointer'}}
+                    onClick={handleBack}
+                />
+                <div style={{fontSize: '20px', fontWeight: "bold"}}>활동 내용</div>
+                <div style={{width: '24px'}}></div>
+            </HeaderContainer>
             <div className="detail-info">
                 <img src={clubImgUrl} alt="club" className="clubs-logo" />
                 <h2 style={{
