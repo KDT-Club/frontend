@@ -1,67 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import "./myclubdetail.css";
 import Footer from '../../components/footer/Footer.jsx';
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import Slide from "./headerHamburger/Slide.jsx"
 import styled from 'styled-components';
-
-const ActivityBoxSection = styled.section`
-  display: flex;
-  width: calc(100vw - 30px);
-  overflow-x: auto;
-  padding: 10px;
-  gap: 10px;
-  margin-bottom: 20px;
-  scrollbar-width: none;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
-`;
-
-const ActivityBoxItem = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  min-width: 190px;
-  max-width: 190px;
-  height: 215px;
-  padding: 15px;
-  border: 1.5px solid #597CA5;
-  border-radius: 8px;
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  overflow: hidden;
-
-  h3 {
-    font-size: 14.5px;
-    font-weight: bold;
-    margin: 0 0 10px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    width: 100%;
-  }
-
-  img {
-    width: 100%;
-    height: 150px;
-    object-fit: cover;
-  }
-
-  p {
-    font-size: 12.5px;
-    margin: 10px 0 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    width: 100%;
-  }
-`;
 
 function MyclubDetail() {
     const { id } = useParams();
@@ -164,50 +106,50 @@ function MyclubDetail() {
     }; //출석 화면으로 이동
 
     return (
-        <div className="myclub-detail-container">
+        <MyclubDetailContainer>
             <Slide clubName={clubName} />
-            <div className="scroll-container">
-                <div className="item-container">
-                    <div className="headerrcontainer">
+            <ScrollContainer>
+                <ItemContainer>
+                    <HeaderContainer>
                         <h2>공지사항</h2>
                         <p onClick={() => handleNoticeClick()}>더보기</p>
-                    </div>
-                    <section className="box-section">
+                    </HeaderContainer>
+                    <BoxSection>
                         {noticePosts.length > 0 ? (
                             noticePosts.map((item, index) => (
-                                <div className="box-item" key={index}>
+                                <BoxItem key={index}>
                                     <h3>{item.title}</h3>
                                     <p>{item.content}</p>
-                                </div>
+                                </BoxItem>
                             ))
                         ) : (
                             <p className="no-posts-message">작성된 글이 없습니다.</p>
                         )}
-                    </section>
-                </div>
-                <div className="item-container">
-                    <div className="headerrcontainer">
+                    </BoxSection>
+                </ItemContainer>
+                <ItemContainer>
+                    <HeaderContainer>
                         <h2>자유게시판</h2>
                         <p onClick={() => handleFreeboardClick()}>더보기</p>
-                    </div>
-                    <section className="box-section">
+                    </HeaderContainer>
+                    <BoxSection>
                         {freeboardPosts.length > 0 ? (
                             freeboardPosts.map((item, index) => (
-                                <div className="box-item" key={index}>
+                                <BoxItem key={index}>
                                     <h3>{item.title}</h3>
                                     <p>{item.content}</p>
-                                </div>
+                                </BoxItem>
                             ))
                         ) : (
                             <p className="no-posts-message">작성된 글이 없습니다.</p>
                         )}
-                    </section>
-                </div>
-                <div className="item-container">
-                    <div className="headerrcontainer">
+                    </BoxSection>
+                </ItemContainer>
+                <ItemContainer>
+                    <HeaderContainer>
                         <h2>동아리 활동</h2>
                         <p onClick={handleActivityClick}>더보기</p>
-                    </div>
+                    </HeaderContainer>
                     <ActivityBoxSection>
                         {activityPosts.length > 0 ? (
                             activityPosts.map((item, index) => (
@@ -224,54 +166,209 @@ function MyclubDetail() {
                             <p className="no-posts-message">작성된 글이 없습니다.</p>
                         )}
                     </ActivityBoxSection>
-                </div>
-                <div className="item-container">
-                    <div className="headerrcontainer">
+                </ItemContainer>
+                <ItemContainer>
+                    <HeaderContainer>
                         <h2>출석</h2>
                         <p onClick={etc1handleMoreClick}>더보기</p>
-                    </div>
-                    <section className="box-section">
-                        <div className="box-item"
-                             style={{minWidth: "190px", border: "1.5px solid black"}}
-                        >
+                    </HeaderContainer>
+                    <BoxSection>
+                        <AtdBoxItem>
                             <p
                                 style={{fontSize: "15px"}}
                             >2024/07/30 (일)<br/>정기 모임</p>
-                        </div>
-                        <div className="box-item"
-                             style={{minWidth: "190px", border: "1.5px solid black"}}
-                        >
+                        </AtdBoxItem>
+                        <AtdBoxItem>
                             <p
                                 style={{fontSize: "15px"}}
                             >2024/07/19 (금)<br/>회식</p>
-                        </div>
-                        <div className="box-item"
-                             style={{minWidth: "190px", border: "1.5px solid black"}}
-                        >
+                        </AtdBoxItem>
+                        <AtdBoxItem>
                             <p
                                 style={{fontSize: "15px"}}
                             >2024/06/10 (월)<br/>MT</p>
-                        </div>
-                        <div className="box-item"
-                             style={{minWidth: "190px", border: "1.5px solid black"}}
-                        >
+                        </AtdBoxItem>
+                        <AtdBoxItem>
                             <p
                                 style={{fontSize: "15px"}}
                             >2024/06/03 (월)<br/>정기 모임</p>
-                        </div>
-                        <div className="box-item"
-                             style={{minWidth: "190px", border: "1.5px solid black"}}
-                        >
+                        </AtdBoxItem>
+                        <AtdBoxItem>
                             <p
                                 style={{fontSize: "15px"}}
                             >2024/05/21 (화)<br/>오리엔테이션</p>
-                        </div>
-                    </section>
-                </div>
-            </div>
+                        </AtdBoxItem>
+                    </BoxSection>
+                </ItemContainer>
+            </ScrollContainer>
             <Footer style={{height: "72.5px", marginTop: "0"}}/>
-        </div>
+        </MyclubDetailContainer>
     );
 }
+
+const MyclubDetailContainer = styled.div`
+  position: fixed;
+  width: calc(var(--vw, 1vw) * 100);
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  height: 100vh;
+  padding-bottom: 10px;
+`;
+
+const ScrollContainer = styled.div`
+  flex: 1;
+  overflow-y: auto;
+  margin-left: 10px;
+  scrollbar-width: thin;
+  scrollbar-color: darkgray white;
+  padding-bottom: 110px;
+`;
+
+const ItemContainer = styled.div`
+  margin-top: 10px;
+  margin-bottom: 20px;
+`;
+
+const HeaderContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 20px 20px 0 10px;
+  border-bottom: 1px solid grey;
+
+  h2 {
+    font-size: 21.3px;
+    font-weight: bold;
+    margin-left: 3px;
+  }
+
+  p {
+    font-size: 17px;
+    cursor: pointer;
+    line-height: 35px;
+    margin-right: 5px;
+    color: gray;
+    font-weight: bold;
+  }
+`;
+
+const BoxSection = styled.section`
+  display: flex;
+  width: calc(100vw - 30px);
+  overflow-x: auto;
+  padding: 10px;
+  gap: 10px;
+  margin-bottom: 20px;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
+const BoxItem = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 190px;
+  max-width: 190px;
+  padding: 15px;
+  border: 1.5px solid #597CA5;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+
+  h3 {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0 0 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+  }
+
+  p {
+    font-size: 13.8px;
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+  }
+`;
+
+const ActivityBoxSection = styled.section`
+  display: flex;
+  width: calc(100vw - 30px);
+  overflow-x: auto;
+  padding: 10px;
+  gap: 10px;
+  margin-bottom: 20px;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
+const ActivityBoxItem = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-width: 190px;
+  max-width: 190px;
+  height: 215px;
+  padding: 15px;
+  border: 1.5px solid #597CA5;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  overflow: hidden;
+
+  h3 {
+    font-size: 14.5px;
+    font-weight: bold;
+    margin: 0 0 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+  }
+
+  img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+  }
+
+  p {
+    font-size: 12.5px;
+    margin: 10px 0 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    width: 100%;
+  }
+`;
+
+const AtdBoxItem = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 190px;
+  max-width: 190px;
+  padding: 15px;
+  border: 1.5px solid darkgrey;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  `;
 
 export default MyclubDetail;

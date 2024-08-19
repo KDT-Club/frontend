@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useParams, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import '../../styles/App.css'
-import './myclubmain.css';
 import Footer from '../../components/footer/Footer.jsx';
 import axios from "axios";
 import Header_center from "../../components/header/Header_center.jsx";
@@ -13,15 +12,6 @@ const apiClient = axios.create({
         'Content-Type': 'application/json',
     },
 });
-
-const NoClubMessage = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    font-size: 1.2rem;
-    color: #666;
-`;
 
 const MyclubMain = () => {
     const [clubs, setClubs] = useState([]);
@@ -62,29 +52,90 @@ const MyclubMain = () => {
     };
 
     return (
-        <div className="myclub-detail-container">
+        <MyclubDetailContainer>
             <Header_center/>
             {clubs.length > 0 && clubs.some(club => club.clubId) ? (
-                <div className="myclub-main-container">
-                    <div className="club-list">
+                <MyclubMainContainer>
+                    <hr style={{borderTop: "1px solid #ccc", marginTop: "15px"}}/>
+                    <ClubList>
                         {clubs.map(club => (
                             club.clubId && (
-                                <li key={club.clubId} className="club-item" onClick={() => handleClubClick(club.clubId)}>
-                                    <div className="club-image">
+                                <ClubItem key={club.clubId} onClick={() => handleClubClick(club.clubId)}>
+                                    <ClubImage>
                                         <img src={club.clubImgUrl} alt={club.clubName}/>
-                                    </div>
-                                    <span className="club-name">{club.clubName}</span>
-                                </li>
+                                    </ClubImage>
+                                    <ClubName>{club.clubName}</ClubName>
+                                </ClubItem>
                             )
                         ))}
-                    </div>
-                </div>
+                    </ClubList>
+                </MyclubMainContainer>
             ) : (
                 <NoClubMessage>가입한 동아리가 없습니다</NoClubMessage>
             )}
             <Footer />
-        </div>
+        </MyclubDetailContainer>
     );
 }
+
+const MyclubDetailContainer = styled.div`
+    width: calc(var(--vw, 1vw) * 100);
+    height: calc(var(--vh, 1vh) * 100);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+`;
+
+const MyclubMainContainer = styled.div`
+    width: calc(var(--vw, 1vw) * 100);
+    height: calc(var(--vh, 1vh) * 100);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+`;
+
+const ClubList = styled.ul`
+    width: 100%;
+    list-style: none;
+    padding: 0;
+    margin-top: 0px;
+`;
+
+const ClubItem = styled.li`
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+    cursor: pointer;
+`;
+
+const ClubImage = styled.div`
+    width: 50px;
+    height: 50px;
+    background-color: #e0e0e0;
+    margin-right: 20px;
+    flex-shrink: 0;
+    margin-left: 20px;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+`;
+
+const ClubName = styled.span`
+    font-size: 18.5px;
+    font-weight: bold;
+`;
+
+const NoClubMessage = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-size: 1.2rem;
+    color: #666;
+`;
 
 export default MyclubMain;

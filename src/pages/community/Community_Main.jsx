@@ -8,6 +8,7 @@ import Calendar from "./Calendar/Calendar.jsx";
 import ActivityPage from './activity/ActivityPage.jsx';
 import WritePostModal from "./WritePostModal.jsx";
 import {formatDate} from "../myclub/component/Date.jsx";
+import { FaRegThumbsUp } from "react-icons/fa6";
 
 const Whole = styled.div`
     width: 100%;
@@ -84,10 +85,10 @@ const Title = styled.p`
 `;
 
 const Content = styled.p`
-    font-size: 16px;
-    color: #666;
+    font-size: 16.3px;
+    color: #333;
     text-align: left;
-    margin: 5px 10px 2px 8px;
+    margin: 2px 10px 2px 8px;
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
@@ -95,11 +96,14 @@ const Content = styled.p`
     -webkit-line-clamp: 1;
 `;
 
-const CreatedAt = styled.p`
-    font-size: 16px;
-    color: gray;
+const CreatedAt = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-size: 15px;
+    color: #666;
     text-align: left;
-    margin: 5px 10px 0 8px;
+    margin: 2px 10px 0 8px;
 `;
 
 const WriteButton = styled.button`
@@ -116,6 +120,10 @@ const WriteButton = styled.button`
     padding: 10px;
     cursor: pointer;
     margin-bottom: 15px;
+`;
+
+const Separator = styled.span`
+    color: darkgray; 
 `;
 
 const apiClient = axios.create({
@@ -173,6 +181,7 @@ function CommunityMain() {
         setIsWriteModalOpen(false);
     };
 
+    /*
     const handleWritePost = async (newPost) => {
         try {
             const response = await apiClient.post(`/board/${clubId}/posts`, newPost);
@@ -184,7 +193,7 @@ function CommunityMain() {
             console.log("게시글 작성 중 에러 발생:", error);
             alert('게시글 작성에 실패했습니다. 다시 시도해 주세요.');
         }
-    };
+    };*/
 
     const handleMenuClick = (index) => {
         setActiveIndex(index);
@@ -201,7 +210,9 @@ function CommunityMain() {
                                     <Title>{post.title}</Title>
                                     <Content>{post.content}</Content>
                                     <CreatedAt>
-                                        {post.authorName} | {formatDate(post.createdAt)}
+                                        <FaRegThumbsUp style={{marginTop: "2px", marginRight: "2px" }}/>
+                                        <p>16</p>
+                                        &nbsp;<Separator>|</Separator>&nbsp;{post.authorName}&nbsp;<Separator>|</Separator>&nbsp;{formatDate(post.createdAt)}
                                     </CreatedAt>
                                 </Post>
                             ))
