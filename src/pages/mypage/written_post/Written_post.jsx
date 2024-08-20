@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import axios from "axios";
 import './written_post.css'
 import {Link, useNavigate, useParams} from "react-router-dom";
-import { FaArrowLeft } from "react-icons/fa6";
+import {FaArrowLeft, FaRegThumbsUp} from "react-icons/fa6";
 import styled from "styled-components";
 
 const Whole = styled.div`
@@ -90,11 +90,18 @@ const Content = styled.p`
     -webkit-line-clamp: 1;
 `;
 
-const CreatedAt = styled.p`
-    font-size: 16px;
-    color: gray;
+const CreatedAt = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-size: 15px;
+    color: #666;
     text-align: left;
     margin: 5px 10px 0 8px;
+`;
+
+const Separator = styled.span`
+    color: darkgray; 
 `;
 
 function formatDate(dateString) {
@@ -149,7 +156,9 @@ function Written_post() {
                                     <Title>{post.title}</Title>
                                     <Content>{post.content}</Content>
                                     <CreatedAt>
-                                        {formatDate(post.createdAt)}
+                                        <FaRegThumbsUp style={{marginTop: "2px", marginRight: "2px" }}/>
+                                        <p>16</p>
+                                        &nbsp;<Separator>|</Separator>&nbsp;{formatDate(post.createdAt)}
                                     </CreatedAt>
                                 </Link>
                             </Post>
