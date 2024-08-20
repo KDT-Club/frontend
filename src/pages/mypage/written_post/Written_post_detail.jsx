@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {useParams, useNavigate} from 'react-router-dom';
-import {FaArrowLeft} from 'react-icons/fa6';
+import {FaArrowLeft, FaRegThumbsUp} from 'react-icons/fa6';
 import {FiMoreVertical, FiSend} from "react-icons/fi";
 import axios from "axios";
 import Modal_post from "../../../components/modal/Modal_post.jsx";
@@ -106,6 +106,17 @@ const ImageContainer = styled.div`
     }
 `;
 
+const HeartContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-left: 10px;
+    color: #555;
+    cursor: pointer;
+    font-size: 17.3px;
+`
+
 const Divider = styled.div`
     border-bottom: 1.5px solid dimgrey;
     margin-top: 10px;
@@ -148,52 +159,6 @@ const CommentContent = styled.p`
 const CommentDivider = styled.div`
     border-bottom: 1px solid gray;
     width: 100%;
-`;
-
-const Form = styled.form`
-    margin-top: 15px;
-    display: flex;
-    align-items: center;
-`;
-
-const SubmitCommentContainer = styled.div`
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    padding: 10px;
-    background-color: white;
-    box-sizing: border-box;
-`;
-
-const CommentInput = styled.input`
-    width: calc(100% - 50px);  // 전송 버튼 공간 확보
-    flex: 1;
-    font-size: 16.5px;
-    text-align: center;
-    border-radius: 7px;
-    border: 1.5px solid darkgray;
-    height: 47px;
-    padding: 0 15px;
-    margin-right: 2px;
-    &:focus {
-        outline: none;
-        border: 1.5px solid #597CA5;
-    }
-`;
-
-const SubmitButton = styled.button`
-    width: 2%;
-    text-align: center;
-    cursor: pointer;
-    color: #5c5c5c;
-    margin-right: 15px;
-    margin-left: 0px;
 `;
 
 function formatDate(dateString) {
@@ -388,6 +353,11 @@ function Written_post_detail() {
                                 <p></p>
                             )}
                         </ImageContainer>
+                        <HeartContainer>
+                            <FaRegThumbsUp/>
+                            &nbsp;
+                            <p>16</p>
+                        </HeartContainer>
                     </PostContainer>
                 )}
                 <Divider />
