@@ -107,7 +107,14 @@ function Login() {
 
             const data = response.data;
 
-            if (data.message === '성공') {
+            // 24.08.21 response.status === 200이면 로그인 성공하다록 수정 (이정훈)
+            // 이 방법은 로그인 실패 시에도 로그인이 되서 추후 개선이 필요함
+            // if (data.message === '성공') {
+            //     localStorage.setItem('memberId', data.memberId);
+            //     console.log('로그인 성공, 메인 페이지로 이동합니다.');
+            //     navigate('/main');
+            // }
+            if (response.status === 200) {
                 localStorage.setItem('memberId', data.memberId);
                 console.log('로그인 성공, 메인 페이지로 이동합니다.');
                 navigate('/main');
