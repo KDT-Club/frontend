@@ -6,12 +6,53 @@ import axios from 'axios';
 
 const ClubDetailPage = () => {
     const { clubName } = useParams();
+    const [member, setMember] = useState(null);
+    const [memberId, setMemberId] = useState(null);
     const [club, setClub] = useState(null);
     const [showJoinForm, setShowJoinForm] = useState(false);
     const [motivation, setMotivation] = useState('');
     const [userInfo, setUserInfo] = useState({ name: '', username: '', id: '', memberImageURL: '' });
     const [lastActivityImage, setLastActivityImage] = useState(null);
     const navigate = useNavigate();
+
+    const apiClient = axios.create({
+        baseURL: 'https://zmffjq.store', // .env 파일에서 API URL 가져오기
+        timeout: 10000, // 요청 타임아웃 설정 (10초)
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+
+    useEffect(() => {
+        const fetchUserId = async () => {
+            try {
+                const response = await axios.get("https://zmffjq.store/getUserId", {
+                    withCredentials: true
+                });
+                console.log(response.data);
+                setMemberId(response.data.message);
+            } catch (error) {
+                if (error.response && error.response.status === 401) {
+                    alert('Unauthorized access. Please log in.');
+                } else {
+                    console.error('유저 아이디를 불러오는 중 에러 발생:', error);
+                    alert('유저 아이디를 불러오는 중 에러가 발생했습니다.');
+                }
+            }
+        };
+
+        fetchUserId();
+    }, []);
+
+    useEffect(() => {
+        apiClient.get(`/members/${memberId}`)
+            .then(response => {
+                setMember(response.data);
+            })
+            .catch(error => {
+                console.error('Error fetching member data:', error);
+            });
+    }, [memberId]);
 
     useEffect(() => {
         const fetchClubDetails = async () => {
@@ -126,10 +167,10 @@ const ClubDetailPage = () => {
                     <div style={{width: '24px'}}></div>
                 </HeaderContainer>
                 <UserInfo>
-                    <img src={userInfo.memberImageURL} alt="profile" />
+                    <img src={member.memberImageURL} alt="profile" />
                     <ProfileInfo>
-                        <h4>{userInfo.name}</h4>
-                        <p>학번: {userInfo.id}</p>
+                        <h4>{member.name}</h4>
+                        <p>학번: {member.studentId}</p>
                     </ProfileInfo>
                 </UserInfo>
                 <ReasonInput>
@@ -161,16 +202,16 @@ const ClubDetailPage = () => {
                 <ClubInfoText>
                     <h3>{club.clubName}</h3>
                     <InfoDes>{club.clubSlogan}</InfoDes>
-                    <ClubInfoCenter>
-                        <p>{club.description}</p>
-                        {club.activities && club.activities.map((activity, index) => (
-                            <p key={index}>{activity}</p>
-                        ))}
-                    </ClubInfoCenter>
                 </ClubInfoText>
             </ClubInfo>
+            <ClubInfoCenter>
+                <p>{club.description}</p>
+                {club.activities && club.activities.map((activity, index) => (
+                    <p key={index}>{activity}</p>
+                ))}
+            </ClubInfoCenter>
             <LastActivity>
-                <h4>최근 활동</h4>
+                <h4 style={{fontSize: "19px", textAlign: "left", fontWeight: "bold", marginBottom: "10px", marginLeft: "20px"}}>최근 활동</h4>
                 <LastActivityText>
                     <UnoCards>
                         {lastActivityImage ? (
@@ -184,9 +225,8 @@ const ClubDetailPage = () => {
             <LeaderInfo>
                 <h4>동아리 회장 연락처</h4>
                 <LeaderInfoText>
-                    <img src={club.member.memberImageURL} alt="club" />
+                    <img src={club.member.memberImageURL} alt="club" style={{width: "55px", height: "55px", borderRadius: "50%"}}/>
                     <LeaderInfoName>
-                        <p>회장</p>
                         <p>{club.member.name}</p>
                     </LeaderInfoName>
                     <LeaderInfoPhone>
@@ -221,10 +261,10 @@ const HeaderContainer = styled.div`
 
 const ClubInfo = styled.div`
     padding: 20px;
+    height: 17%;
     margin-top: 10px;
     display: flex;
     align-items: flex-start;
-    height: 22%;
 
     img {
         box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
@@ -255,16 +295,15 @@ const InfoDes = styled.p`
 `;
 
 const ClubInfoCenter = styled.div`
+    width: 100%;
+    margin-bottom: 20px;
+    padding: 5px 15px;
     text-align: left;
-    margin-top: 30px;
-    margin-left: -45px;
-    padding: 5px;
-    overflow-y: auto;
 `;
 
 const LastActivity = styled.div`
     position: relative;
-    margin-top: 10px;
+    margin-top: 30px;
     margin-bottom: 20px;
     font-size: 18px;
 `;
@@ -273,10 +312,10 @@ const LastActivityText = styled.div`
     border: 1px solid #ccc;
     border-radius: 20px;
     overflow-x: auto;
-    width: 95%;
+    width: 93%;
     height: 50%;
     object-fit: scale-down;
-    margin-left: 2%;
+    margin-left: 3.5%;
 `;
 
 const UnoCards = styled.div`
@@ -288,8 +327,8 @@ const UnoCards = styled.div`
 
     img {
         border-radius: 10px;
-        width: 100%;
-        height: 250px;
+        width: 93%;
+        height: 200px;
         margin-top: 10px;
         margin-right: 10px;
         margin-left: 10px;
@@ -301,10 +340,10 @@ const LeaderInfo = styled.div`
     height: 15%;
 
     h4 {
-        margin-top: -5%;
-        font-size: 24px;
+        font-size: 19px;
+        font-weight: bold;
         text-align: left;
-        margin-bottom: 10px;
+        margin-bottom: 13px;
     }
 `;
 
@@ -314,6 +353,11 @@ const LeaderInfoText = styled.div`
 
 const LeaderInfoName = styled.div`
     margin-left: 20px;
+    
+    p {
+        padding-top: 12px;
+        font-size: 19px;
+    }
 `;
 
 const LeaderInfoPhone = styled.div`
@@ -321,14 +365,19 @@ const LeaderInfoPhone = styled.div`
     display: flex;
     flex-direction: column;
     text-align: right;
-    margin-top: 5%;
+    margin-top: 3%;
     font-size: 15px;
     flex: 1;
     position: relative;
+
+    p {
+        font-size: 19px;
+    }
 `;
 
 const JoinButton = styled.button`
-    width: 85%;
+    width: 92%;
+    bottom: 0;
     padding: 3%;
     background-color: #567cac;
     color: white;
@@ -338,35 +387,26 @@ const JoinButton = styled.button`
     cursor: pointer;
     font-weight: bold;
     height: 50px;
+    position: fixed;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
 `;
 
 const JoinForm = styled.div`
     position: relative;
 `;
 
-const JoinFormHeader = styled.div`
-    width: 100%;
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-    padding: 10px 0;
-
-    p {
-        margin-left: 10px;
-        font-size: 25px;
-        font-weight: bold;
-    }
-`;
-
 const UserInfo = styled.div`
     display: flex;
     align-items: flex-start;
+    margin-top: 15px;
 
     img {
-        width: 80px;
-        height: 80px;
+        width: 65px;
+        height: 65px;
         border-radius: 50%;
-        margin-bottom: 10px;
+        margin: 20px;
     }
 `;
 
@@ -376,26 +416,29 @@ const ProfileInfo = styled.div`
     text-align: left;
 
     h4 {
-        font-size: 16px;
+        margin-top: 27px;
+        font-size: 19px;
         font-weight: bold;
     }
 
 `;
 
 const ReasonInput = styled.div`
+    margin-top: 30px;
     margin-bottom: 20px;
 
     p {
-        margin-left: 20px;
+        margin-top: 10px;
+        margin-left: 21px;
         font-weight: bold;
         text-align: left;
-        margin-bottom: 20px;
-        font-size: 25px;
+        margin-bottom: 10px;
+        font-size: 22px;
     }
 
     textarea {
         width: 90%;
-        height: 50vh;
+        height: 40vh;
         padding: 10px;
         border: 1px solid #ccc;
         border-radius: 5px;
@@ -407,7 +450,7 @@ const ReasonInput = styled.div`
 `;
 
 const SubmitButton = styled.button`
-    width: 330px;
+    width: 91%;
     padding: 10px;
     background-color: #567cac;
     display: flex;
@@ -415,8 +458,9 @@ const SubmitButton = styled.button`
     justify-content: center;
     margin: 0 auto;
     position: fixed;
-    left: 0;
-    right: 0;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
     color: white;
     border: none;
     border-radius: 10px;
