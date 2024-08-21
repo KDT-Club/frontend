@@ -44,9 +44,14 @@ const ModalButton = styled.button`
 
 const HeaderContainer = styled.div`
     display: flex;
-    box-sizing: border-box;
-    height: 100px;
-    margin-top: 20px;
+    justify-content: space-between;
+    align-items: center;
+    height: 47.5px;
+    background-color: white;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    padding-left: 25px;
+    padding-right: 25px;
+    margin-bottom: 0px;
 `;
 
 const SignupHeaderCenter = styled.div`
@@ -58,6 +63,7 @@ const SignupHeaderCenter = styled.div`
 const SignupTitle = styled.div`
     font-size: 30px;
     font-weight: bold;
+    padding-top: 50px;
     margin-bottom: 50px;
     margin-top: 1%;
 `;
@@ -94,7 +100,7 @@ const SignupButton = styled.button`
     padding: 12px;
     margin: 5% auto 0;
     border: none;
-    border-radius: 4px;
+    border-radius: 10px;
     cursor: pointer;
     height: 50px;
     background-color: #5a7ca5;
@@ -126,14 +132,6 @@ function Signup() {
     const navigate = useNavigate();
     const [showModal, setShowModal] = React.useState(false);
     const [phone, setPhone] = React.useState('');
-
-    const handleDuplicateCheck = () => {
-        setDuplicateId(true);
-    }
-
-    const handleBackClick = () => {
-        window.history.back();
-    }
 
     const handleSignUp = async () => {
         try {
@@ -174,10 +172,11 @@ function Signup() {
     return (
         <div>
             <HeaderContainer>
-                <FaArrowLeft onClick={handleBackClick} style={{ cursor: 'pointer', marginTop: '30px', marginLeft: '35px' }} />
-                <SignupHeaderCenter>
-                    <Header_center />
-                </SignupHeaderCenter>
+                <FaArrowLeft
+                    style={{fontSize: '24px', cursor: 'pointer'}}
+                    onClick={() => navigate("/")}
+                />
+                <div style={{fontSize: '20px', fontWeight: "bold", textAlign: "left", marginRight: "123px"}}>회원 가입</div>
             </HeaderContainer>
             <SignupTitle>
                 회원가입
