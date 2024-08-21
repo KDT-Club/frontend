@@ -9,7 +9,7 @@ axios.defaults.withCredentials = true;
 
 function ClubInfoEdit() {
     const apiClient = axios.create({
-        baseURL: 'https://zmffjq.store',
+        baseURL: '/api',
         timeout: 10000,
     });
 

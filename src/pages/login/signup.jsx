@@ -147,7 +147,7 @@ function Signup() {
             formData.append('department', department);
             formData.append('phone', phone);
 
-            const response = await fetch('https://zmffjq.store/signup', {
+            const response = await fetch('/api/signup', {
                 method: 'POST',
                 body: formData
             });

@@ -14,7 +14,7 @@ import Modal_post_complain from '../../components/modal/Modal_post_complain.jsx'
 import Modal_comment from '../../components/modal/Modal_comment.jsx';
 
 const apiClient = axios.create({
-    baseURL: 'https://zmffjq.store',
+    baseURL: '/api',
     timeout: 10000,
     headers: {
         'Content-Type': 'application/json',

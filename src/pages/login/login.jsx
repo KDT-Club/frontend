@@ -98,7 +98,7 @@ function Login() {
         formData.append('password', password);
 
         try {
-            const response = await axios.post('https://zmffjq.store/login', formData, {
+            const response = await axios.post('/api/login', formData, {
                 withCredentials: true
             });
 

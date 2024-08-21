@@ -7,7 +7,7 @@ import { FiX, FiCheck } from "react-icons/fi";
 import { LuImagePlus } from "react-icons/lu";
 
 const apiClient = axios.create({
-    baseURL: 'https://zmffjq.store',
+    baseURL: '/api',
     timeout: 10000,
     headers: {
         'Content-Type': 'application/json',
@@ -164,7 +164,7 @@ function CommunityPostEdit() {
     const uploadFileToS3 = async (file) => {
         try {
             const filename = encodeURIComponent(file.name);
-            const response = await axios.get(`https://zmffjq.store/presigned-url?filename=${filename}`);
+            const response = await axios.get(`/api/presigned-url?filename=${filename}`);
             const presignedUrl = response.data;
 
             await fetch(presignedUrl, {

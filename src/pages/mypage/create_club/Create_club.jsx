@@ -26,7 +26,7 @@ function Create_club() {
 `;
 
     const apiClient = axios.create({
-        baseURL: 'https://zmffjq.store',
+        baseURL: '/api',
         timeout: 10000, // 요청 타임아웃 설정 (10초)
         headers: {
             'Content-Type': 'application/json',

@@ -10,11 +10,11 @@ function ActivityPage() {
     useEffect(() => {
         const fetchAllClubActivities = async () => {
             try {
-                const clubsResponse = await axios.get('https://zmffjq.store/clubs');
+                const clubsResponse = await axios.get('/api/clubs');
                 const clubs = clubsResponse.data;
 
                 const activitiesPromises = clubs.map(club =>
-                    axios.get(`https://zmffjq.store/board/3/clubs/${club.clubId}/posts`)
+                    axios.get(`/api/board/3/clubs/${club.clubId}/posts`)
                 );
 
                 const activitiesResponses = await Promise.all(activitiesPromises);

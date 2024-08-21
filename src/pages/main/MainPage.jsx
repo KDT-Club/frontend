@@ -132,7 +132,7 @@ function MainPage() {
 
     const fetchAllClubs = async () => {
         try {
-            const response = await axios.get("https://zmffjq.store/clubs");
+            const response = await axios.get("/api/clubs");
             setAllClubs(response.data);
             setFilteredClubs([]);
         } catch (error) {
