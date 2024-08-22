@@ -10,7 +10,7 @@ import Modal_post_complain from "../../../components/modal/Modal_post_complain.j
 import { FaRegThumbsUp } from "react-icons/fa6";
 
 const apiClient = axios.create({
-    baseURL: 'https://zmffjq.store',
+    baseURL: '/api',
     headers: {
         'Content-Type': 'application/json',
     },

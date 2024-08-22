@@ -127,7 +127,7 @@ const Separator = styled.span`
 `;
 
 const apiClient = axios.create({
-    baseURL: 'https://zmffjq.store',
+    baseURL: '/api',
     headers: {
         'Content-Type': 'application/json',
     },

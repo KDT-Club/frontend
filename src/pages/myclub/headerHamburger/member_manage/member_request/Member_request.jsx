@@ -24,7 +24,7 @@ function Member_request() {
 `;
 
     const apiClient = axios.create({
-        baseURL: 'https://zmffjq.store',
+        baseURL: '/api',
         timeout: 10000,
         headers: {
             'Content-Type': 'application/json',
