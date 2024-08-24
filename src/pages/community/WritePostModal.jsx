@@ -137,7 +137,7 @@ function WritePostModal({ isOpen, onClose, onSubmit }) {
     const uploadFileToS3 = async (file) => {
         try {
             const filename = encodeURIComponent(file.name);
-            const response = await axios.get(`/api/presigned-url?filename=${filename}`);
+            const response = await axios.get(`http://localhost:8080/presigned-url?filename=${filename}`);
             const presignedUrl = response.data;
 
             await fetch(presignedUrl, {
@@ -163,7 +163,7 @@ function WritePostModal({ isOpen, onClose, onSubmit }) {
                     attachment_names: attachmentNames,
                     club_name: '.' // 동아리 이름 대신 '.' 전송
                 };
-                const response = await fetch('/api/board/1/posts', {
+                const response = await fetch('http://localhost:8080/board/1/posts', {
                     method: 'POST',
                     body: JSON.stringify(postData),
                     headers: { 'Content-Type': 'application/json' },

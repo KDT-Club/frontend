@@ -10,11 +10,11 @@ function ActivityPage() {
     useEffect(() => {
         const fetchAllClubActivities = async () => {
             try {
-                const clubsResponse = await axios.get('/api/clubs');
+                const clubsResponse = await axios.get('http://localhost:8080/clubs');
                 const clubs = clubsResponse.data;
 
                 const activitiesPromises = clubs.map(club =>
-                    axios.get(`/api/board/3/clubs/${club.clubId}/posts`)
+                    axios.get(`http://localhost:8080/board/3/clubs/${club.clubId}/posts`)
                 );
 
                 const activitiesResponses = await Promise.all(activitiesPromises);

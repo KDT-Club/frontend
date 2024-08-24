@@ -31,7 +31,7 @@ function Footer() {
     useEffect(() => {
         const fetchUserId = async () => {
             try {
-                const response = await axios.get("/api/getUserId", {
+                const response = await axios.get("http://localhost:8080/getUserId", {
                     withCredentials: true
                 });
                 console.log(response.data);

@@ -33,9 +33,9 @@ function MyclubDetail() {
             setError(null);
             try {
                 const [noticeResponse, freeboardResponse,activityResponse] = await Promise.all([
-                    axios.get(`/api/clubs/${id}/board/2/posts`),
-                    axios.get(`/api/clubs/${id}/board/4/posts`),
-                    axios.get(`/api/board/3/clubs/${id}/posts`)
+                    axios.get(`http://localhost:8080/clubs/${id}/board/2/posts`),
+                    axios.get(`http://localhost:8080/clubs/${id}/board/4/posts`),
+                    axios.get(`http://localhost:8080/board/3/clubs/${id}/posts`)
                 ]);
 
                 // 공지사항
@@ -56,12 +56,14 @@ function MyclubDetail() {
                         activityResponse.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
                             .map(async (post) => {
                                 try {
-                                    const imgResponse = await axios.get(`/api/board/3/clubs/${id}/posts/${post.postId}`);
-                                    const attachmentNames = imgResponse.data.attachmentNames || [];
+                                    const imgResponse = await axios.get(`http://localhost:8080/board/3/clubs/${id}/posts/${post.postId}`);
+                                    const attachments = imgResponse.data.attachmentNames || [];
+                                    const firstAttachment = attachments[0];
+                                    const imageUrl = firstAttachment ? firstAttachment.attachmentName : null;
                                     return {
                                         ...post,
-                                        imageUrl: attachmentNames[0] || null,
-                                        content: attachmentNames.length > 0 ? null : post.content // 이미지가 없으면 content를 설정
+                                        imageUrl: imageUrl,
+                                        content: imageUrl ? null : post.content // 이미지가 없으면 content를 설정
                                     };
                                 } catch (err) {
                                     console.error('활동 게시글 조회 중 에러 발생:', err);
@@ -75,7 +77,6 @@ function MyclubDetail() {
                     )
                     : [activityResponse.data];
                 setActivityPosts(sortedActivityPosts);
-
             } catch (error) {
                 console.error('API 호출 중 오류 발생:', error.response || error);
                 setError('게시글을 불러오는데 실패했습니다. 다시 시도해주세요.');
@@ -156,7 +157,10 @@ function MyclubDetail() {
                                 <ActivityBoxItem key={index}>
                                     <h3>{item.title}</h3>
                                     {item.imageUrl ? (
-                                        <img src={item.imageUrl} alt="첨부 이미지"/>
+                                        <img src={item.imageUrl} alt="첨부 이미지" onError={(e) => {
+                                            e.target.onerror = null;
+                                            e.target.src = '/path/to/fallback/image.jpg'; // 에러 시 대체 이미지
+                                        }}/>
                                     ) : (
                                         <p>{item.content}</p>
                                     )}

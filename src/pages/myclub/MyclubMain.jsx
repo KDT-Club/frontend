@@ -7,7 +7,7 @@ import Header_center from "../../components/header/Header_center.jsx";
 import styled from 'styled-components';
 
 const apiClient = axios.create({
-    baseURL: '/api',
+    baseURL: 'http://localhost:8080',
     headers: {
         'Content-Type': 'application/json',
     },

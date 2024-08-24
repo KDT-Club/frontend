@@ -188,7 +188,7 @@ function Written_post_detail() {
     const [editedCommentContent, setEditedCommentContent] = useState('');
 
     const apiClient = axios.create({
-        baseURL: '/api', // API URL
+        baseURL: 'http://localhost:8080', // API URL
         timeout: 10000, // 요청 타임아웃 설정 (10초)
         headers: {
             'Content-Type': 'application/json',

@@ -8,7 +8,7 @@ import axios from "axios";
 import { FaRegThumbsUp } from "react-icons/fa6";
 
 const apiClient = axios.create({
-    baseURL: '/api',
+    baseURL: 'http://localhost:8080',
     headers: {
         'Content-Type': 'application/json',
     },
