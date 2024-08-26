@@ -16,7 +16,7 @@ const Modal_post_complain = ({onClose, postId, memberId}) => {
 
     const [modalMessage, setModalMessage] = useState("");   // 모달창에 띄울 메세지 전달
     const [showDeleteModal, setShowDeleteModal] = useState(false);  // 네 / 아니오 모달창 띄우기
-    const [showOkModal, setShowOkModel] = useState(false);
+    const [showOkModal, setShowOkModal] = useState(false);
     const [onConfirm, setOnConfirm] = useState(() => () => {});
 
     const handleOpenModal = useCallback((message, confirmCallback) => {
@@ -27,13 +27,16 @@ const Modal_post_complain = ({onClose, postId, memberId}) => {
 
     const handleCloseModal = () => setShowDeleteModal(false);
 
-    const handleOpenOkModal = useCallback((message, confirmCallback) => {
+    const handleOpenOkModal = useCallback((message, confirmCallback = onClose) => {
         setModalMessage(message);
         setOnConfirm(() => confirmCallback);
-        setShowOkModel(true);
-    }, []);
+        setShowOkModal(true);
+    }, [onClose]);
 
-    const handleCloseOkModal = () => setShowOkModel(false);
+    const handleCloseOkModal = () => {
+        setShowOkModal(false);
+        onConfirm();
+    };
 
     const handleOverlayClick = (e) => {
         if (e.target === e.currentTarget) {
@@ -47,20 +50,21 @@ const Modal_post_complain = ({onClose, postId, memberId}) => {
                 params: { memberId }
             });
             console.log("게시물 신고가 완료되었습니다.", response.data);
-            onClose();
+            handleOpenOkModal(response.data);
         } catch (error) {
             if (error.response) {
+                handleOpenOkModal(error.response.data.message);
                 if (error.response.status === 500) {
-                    handleOpenOkModal("해당 게시글을 이미 신고하였습니다.", () => {});
                     console.error("서버 내부 오류가 발생했습니다. 나중에 다시 시도해주세요.", error.response.data);
                 } else {
                     console.error("신고 처리 중 오류가 발생했습니다:", error.response.data);
                 }
             } else {
+                handleOpenOkModal("신고 처리 중 오류가 발생했습니다: " + error.message);
                 console.error("신고 처리 중 오류가 발생했습니다:", error.message);
             }
         }
-    }
+    };
 
     return (
         <div className="Modal_post_complain" onClick={handleOverlayClick}>
@@ -70,7 +74,7 @@ const Modal_post_complain = ({onClose, postId, memberId}) => {
             {showDeleteModal && <Modal_confirm onClose={handleCloseModal} message={modalMessage} onConfirm={onConfirm} />}
             {showOkModal && <Modal_ok onClose={handleCloseOkModal} message={modalMessage} onConfirm={onConfirm} />}
         </div>
-    )
-}
+    );
+};
 
 export default Modal_post_complain;
