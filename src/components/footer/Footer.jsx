@@ -11,27 +11,10 @@ function Footer() {
     const location = useLocation();
     const [memberId, setMemberId] = useState(null);
 
-    // 현재 경로에 맞춰 활성화된 메뉴를 결정
-    const determineActiveMenu = () => {
-        if (location.pathname === "/main") {
-            return "/main";
-        } else if (location.pathname.startsWith("/community")) {
-            return "/community";
-        } else if (location.pathname.startsWith("/clubs")) {
-            return "/clubs";
-        } else if (location.pathname.startsWith("/members")) {
-            return `/members/${memberId}`;
-        } else {
-            return "/main";
-        }
-    };
-
-    const [activeMenu, setActiveMenu] = useState(determineActiveMenu());
-
     useEffect(() => {
         const fetchUserId = async () => {
             try {
-                const response = await axios.get("/api/getUserId", {
+                const response = await axios.get("http://localhost:8080/getUserId", {
                     withCredentials: true
                 });
                 console.log(response.data);
@@ -48,6 +31,23 @@ function Footer() {
 
         fetchUserId();
     }, []);
+
+    // 현재 경로에 맞춰 활성화된 메뉴를 결정
+    const determineActiveMenu = () => {
+        if (location.pathname === "/main") {
+            return "/main";
+        } else if (location.pathname.startsWith("/community")) {
+            return "/community";
+        } else if (location.pathname.startsWith("/clubs")) {
+            return "/clubs";
+        } else if (location.pathname.startsWith("/members")) {
+            return `/members/${memberId}`;
+        } else {
+            return "/main";
+        }
+    };
+
+    const [activeMenu, setActiveMenu] = useState(determineActiveMenu());
 
     useEffect(() => {
         setActiveMenu(determineActiveMenu());

@@ -117,7 +117,7 @@ function Written_post() {
     const { memberId } = useParams();
 
     const apiClient = axios.create({
-        baseURL: '/api', // .env 파일에서 API URL 가져오기
+        baseURL: 'http://localhost:8080', // .env 파일에서 API URL 가져오기
         timeout: 10000, // 요청 타임아웃 설정 (10초)
         headers: {
             'Content-Type': 'application/json',

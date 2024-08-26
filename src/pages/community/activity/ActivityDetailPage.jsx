@@ -27,8 +27,8 @@ function ActivityDetailPage() {
         const fetchData = async () => {
             try {
                 const [postResponse, clubsResponse] = await Promise.all([
-                    axios.get(`/api/board/3/clubs/${clubId}/posts/${postId}`),
-                    axios.get('/api/clubs')
+                    axios.get(`http://localhost:8080/board/3/clubs/${clubId}/posts/${postId}`),
+                    axios.get('http://localhost:8080/clubs')
                 ]);
 
                 const postData = postResponse.data;

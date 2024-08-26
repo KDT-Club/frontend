@@ -29,7 +29,7 @@ function Slide({ clubName, clubImgUrl }) {
     const memberId = location.state?.memberId || localStorage.getItem('memberId');
 
     const apiClient = axios.create({
-        baseURL: '/api',
+        baseURL: 'http://localhost:8080',
         timeout: 10000,
         headers: {
             'Content-Type': 'application/json',

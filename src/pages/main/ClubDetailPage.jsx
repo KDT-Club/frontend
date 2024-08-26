@@ -16,7 +16,7 @@ const ClubDetailPage = () => {
     const navigate = useNavigate();
 
     const apiClient = axios.create({
-        baseURL: '/api', // .env 파일에서 API URL 가져오기
+        baseURL: 'http://localhost:8080', // .env 파일에서 API URL 가져오기
         timeout: 10000, // 요청 타임아웃 설정 (10초)
         headers: {
             'Content-Type': 'application/json',
@@ -26,7 +26,7 @@ const ClubDetailPage = () => {
     useEffect(() => {
         const fetchUserId = async () => {
             try {
-                const response = await axios.get("/api/getUserId", {
+                const response = await axios.get("http://localhost:8080/getUserId", {
                     withCredentials: true
                 });
                 console.log(response.data);
@@ -57,7 +57,7 @@ const ClubDetailPage = () => {
     useEffect(() => {
         const fetchClubDetails = async () => {
             try {
-                const response = await fetch(`/api/clubs/${clubName}`);
+                const response = await fetch(`http://localhost:8080/clubs/${clubName}`);
                 if (response.ok) {
                     const data = await response.json();
                     setClub(data);
@@ -92,7 +92,7 @@ const ClubDetailPage = () => {
 
     const fetchMemberDetails = async (memberId) => {
         try {
-            const response = await axios.get(`/api/members/${memberId}`);
+            const response = await axios.get(`http://localhost:8080/members/${memberId}`);
             if (response.data) {
                 setUserInfo(prevState => ({
                     ...prevState,
@@ -109,10 +109,10 @@ const ClubDetailPage = () => {
 
     const fetchLastActivityImage = async (clubId) => {
         try {
-            const response = await axios.get(`/api/board/3/clubs/${clubId}/posts`);
+            const response = await axios.get(`http://localhost:8080/board/3/clubs/${clubId}/posts`);
             if (response.data && response.data.length > 0) {
                 const lastPost = response.data[0];
-                const postResponse = await axios.get(`/api/board/3/clubs/${clubId}/posts/${lastPost.postId}`);
+                const postResponse = await axios.get(`http://localhost:8080/board/3/clubs/${clubId}/posts/${lastPost.postId}`);
                 const attachmentNames = postResponse.data.attachmentNames || [];
                 if (attachmentNames.length > 0) {
                     setLastActivityImage(attachmentNames[0]);
@@ -137,7 +137,7 @@ const ClubDetailPage = () => {
                 withCredentials: true
             };
 
-            const response = await axios.post(`/api/clubs/${clubName}/applications`, {
+            const response = await axios.post(`http://localhost:8080/clubs/${clubName}/applications`, {
                 motivation
             }, config);
 
