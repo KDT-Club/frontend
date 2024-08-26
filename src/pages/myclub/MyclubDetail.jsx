@@ -33,9 +33,9 @@ function MyclubDetail() {
             setError(null);
             try {
                 const [noticeResponse, freeboardResponse,activityResponse] = await Promise.all([
-                    axios.get(`/api/clubs/${id}/board/2/posts`),
-                    axios.get(`/api/clubs/${id}/board/4/posts`),
-                    axios.get(`/api/board/3/clubs/${id}/posts`)
+                    axios.get(`http://localhost:8080/clubs/${id}/board/2/posts`),
+                    axios.get(`http://localhost:8080/clubs/${id}/board/4/posts`),
+                    axios.get(`http://localhost:8080/board/3/clubs/${id}/posts`)
                 ]);
 
                 // 공지사항
@@ -56,7 +56,7 @@ function MyclubDetail() {
                         activityResponse.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
                             .map(async (post) => {
                                 try {
-                                    const imgResponse = await axios.get(`/api/board/3/clubs/${id}/posts/${post.postId}`);
+                                    const imgResponse = await axios.get(`http://localhost:8080/board/3/clubs/${id}/posts/${post.postId}`);
                                     const attachmentNames = imgResponse.data.attachmentNames || [];
                                     return {
                                         ...post,

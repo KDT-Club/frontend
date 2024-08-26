@@ -14,7 +14,7 @@ import Modal_post_complain from '../../components/modal/Modal_post_complain.jsx'
 import Modal_comment from '../../components/modal/Modal_comment.jsx';
 
 const apiClient = axios.create({
-    baseURL: '/api',
+    baseURL: 'http://localhost:8080',
     timeout: 10000,
     headers: {
         'Content-Type': 'application/json',
@@ -256,7 +256,7 @@ function CommunityPostDetail() {
                 />
             )}
             {showComplainModal && (
-                <Modal_post_complain onClose={() => setShowComplainModal(false)} />
+                <Modal_post_complain onClose={() => setShowComplainModal(false)} postId={postId} memberId={memberId}/>
             )}
             {showCommentModal && (
                 <Modal_comment

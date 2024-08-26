@@ -10,7 +10,7 @@ import Modal_post_complain from "../../../components/modal/Modal_post_complain.j
 import { FaRegThumbsUp } from "react-icons/fa6";
 
 const apiClient = axios.create({
-    baseURL: '/api',
+    baseURL: 'http://localhost:8080',
     headers: {
         'Content-Type': 'application/json',
     },
@@ -229,7 +229,7 @@ function ActivityDetail() {
                     onClose={closeModal}
                     onEdit={() => navigate(`/clubs/${clubId}/activity/${postId}/edit`)}
                 />}
-                {showComplainModal && <Modal_post_complain onClose={closeModal} />}
+                {showComplainModal && <Modal_post_complain onClose={closeModal} postId={postId} memberId={memberId}/>}
             </ScrollContainer>
         </Whole>
     );

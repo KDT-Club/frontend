@@ -102,7 +102,7 @@ function PostDetail({
                     onClose={closeModal}
                     onEdit={onPostDotClick}
                 />}
-                {showComplainModal && <Modal_post_complain onClose={closeModal} />}
+                {showComplainModal && <Modal_post_complain onClose={closeModal} postId={post.id} memberId={memberId} />}
             </ScrollContainer>
         </Whole>
     );

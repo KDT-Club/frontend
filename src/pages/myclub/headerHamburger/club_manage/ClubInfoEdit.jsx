@@ -9,7 +9,7 @@ axios.defaults.withCredentials = true;
 
 function ClubInfoEdit() {
     const apiClient = axios.create({
-        baseURL: '/api',
+        baseURL: 'http://localhost:8080',
         timeout: 10000,
     });
 
