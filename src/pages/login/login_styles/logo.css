@@ -1,11 +1,14 @@
 .start_logo {
-    width: 390px;
-    height: 844px;
+    width: 100vw; /* 화면의 너비에 맞추기 */
+    height: 100vh; /* 화면의 높이에 맞추기 */
     background-color: #e5f7ff;
     overflow-y: hidden;
+    display: flex;
+    justify-content: center; /* 로고 텍스트를 가로 중앙 정렬 */
+    align-items: center; /* 로고 텍스트를 세로 중앙 정렬 */
 }
 
 .logo_text {
-    margin-top: 400px;
-    margin-left: 70px;
+    font-size: 2em; /* 텍스트 크기 반응형으로 조정 */
+    text-align: center;
 }
