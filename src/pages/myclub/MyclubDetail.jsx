@@ -157,10 +157,7 @@ function MyclubDetail() {
                                 <ActivityBoxItem key={index}>
                                     <h3>{item.title}</h3>
                                     {item.imageUrl ? (
-                                        <img src={item.imageUrl} alt="첨부 이미지" onError={(e) => {
-                                            e.target.onerror = null;
-                                            e.target.src = '/path/to/fallback/image.jpg'; // 에러 시 대체 이미지
-                                        }}/>
+                                        <img src={item.imageUrl} alt="첨부 이미지"/>
                                     ) : (
                                         <p>{item.content}</p>
                                     )}

@@ -229,7 +229,7 @@ function ActivityDetail() {
                     onClose={closeModal}
                     onEdit={() => navigate(`/clubs/${clubId}/activity/${postId}/edit`)}
                 />}
-                {showComplainModal && <Modal_post_complain onClose={closeModal} />}
+                {showComplainModal && <Modal_post_complain onClose={closeModal} postId={postId} memberId={memberId}/>}
             </ScrollContainer>
         </Whole>
     );

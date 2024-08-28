@@ -43,7 +43,7 @@ function Edit_info() {
     });
 
     const [selectedFile, setSelectedFile] = useState(null);
-    const [showOkModal, setShowOkModel] = useState(false);
+    const [showOkModal, setShowOkModal] = useState(false);
     const [modalMessage, setModalMessage] = useState("");
     const [onConfirm, setOnConfirm] = useState(() => () => {});
 
@@ -77,10 +77,10 @@ function Edit_info() {
     const handleOpenOkModal = useCallback((message, confirmCallback) => {
         setModalMessage(message);
         setOnConfirm(() => confirmCallback);
-        setShowOkModel(true);
+        setShowOkModal(true);
     }, []);
 
-    const handleCloseOkModal = () => setShowOkModel(false);
+    const handleCloseOkModal = () => setShowOkModal(false);
 
     const uploadFileToS3 = async (file) => {
         try {

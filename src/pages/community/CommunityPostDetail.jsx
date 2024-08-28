@@ -282,7 +282,7 @@ function CommunityPostDetail() {
                 />
             )}
             {showComplainModal && (
-                <Modal_post_complain onClose={() => setShowComplainModal(false)} />
+                <Modal_post_complain onClose={() => setShowComplainModal(false)} postId={postId} memberId={memberId}/>
             )}
             {showCommentModal && (
                 <Modal_comment
