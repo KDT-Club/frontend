@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {useParams, useNavigate} from 'react-router-dom';
 import {FaArrowLeft, FaRegThumbsUp} from 'react-icons/fa6';
-import {FiMoreVertical, FiSend} from "react-icons/fi";
+import {FiMoreVertical} from "react-icons/fi";
 import axios from "axios";
 import Modal_post from "../../../components/modal/Modal_post.jsx";
-import Modal_comment from "../../../components/modal/Modal_comment.jsx";
 import styled from "styled-components";
-import {MdOutlineCancel} from "react-icons/md";
+import Modal_ok from "../../../components/modal/Modal_ok.jsx";
 axios.defaults.withCredentials = true;
 
 const Whole = styled.div`
@@ -173,19 +172,15 @@ function Written_post_detail() {
     const navigate = useNavigate();
 
     const [memberId, setMemberId] = useState(null);
-    const [showPostModal, setShowPostModal] = useState(false);  // 글 수정or삭제 모달창 띄우기
-    const [showCommentModal, setShowCommentModal] = useState(false);  // 댓글 수정or삭제 모달창 띄우기
-    const [modalPosition, setModalPosition] = useState({ top: '0px', left: '0px' }); // 모달창 위치 설정
+    const [showPostModal, setShowPostModal] = useState(false);  // 글 수정 or 삭제 모달창 띄우기
+    const [showOkModal, setShowOkModal] = useState(false);
+    const [modalMessage, setModalMessage] = useState("");
+    const [onConfirm, setOnConfirm] = useState(() => () => {});
 
     const [post, setPost] = useState('');
     const [attachmentNames, setAttachmentNames] = useState([]);
     const [comments, setComments] = useState([]);
-    const [newComment, setNewComment] = useState('');
-
-    //댓글 수정 상태 변수
-    const [selectedCommentContent, setSelectedCommentContent] = useState('');
-    const [editingCommentId, setEditingCommentId] = useState(null);
-    const [editedCommentContent, setEditedCommentContent] = useState('');
+    const [likes, setLikes] = useState(0);
 
     const apiClient = axios.create({
         baseURL: '/api', // API URL
@@ -213,35 +208,7 @@ function Written_post_detail() {
         }
     };
 
-    const handleBackClick = () => {
-        navigate(`/post_list/${memberId}`);
-    };
-
-    const handlePostDotClick = () => {
-        setShowPostModal(true);
-    };
-
-    //댓글 더보기 아이콘 클릭 -> 수정 or 삭제 모달
-    const handleCommentDotClick = (e, commentId, content) => {
-        // 모달 위치 설정: 클릭한 위치 + 10px 여백
-        setModalPosition({
-            top: e.clientY + 3 + 'px'
-        });
-        setShowCommentModal(true);
-        setEditingCommentId(commentId);
-        setSelectedCommentContent(content);  // 선택된 댓글 내용 저장
-    };
-
-    const closeModal = () => {
-        setShowPostModal(false);
-        setShowCommentModal(false);
-    }
-
-    const handleEditClick = () => { //글 수정
-        navigate(`/posts_edit/${postId}`);
-    };
-
-    //게시글, 댓글 API 조회-----------------------------------------------------------------------------
+    // 게시글, 좋아요 수 API 조회-----------------------------------------------------------------------------
     useEffect(() => {
         const fetchPost = async () => {
             try {
@@ -256,11 +223,23 @@ function Written_post_detail() {
                 }
             }
         };
+
+        const fetchLikes = async () => {
+            try {
+                const response = await apiClient.get(`/posts/${postId}/likes`);
+                setLikes(response.data);
+            } catch (error) {
+                console.error('좋아요 수 조회 중 에러 발생:', error);
+            }
+        };
+
         fetchPost();
         fetchComments();
+        fetchLikes();
         fetchUserId();
     }, [clubId, postId]);
 
+    // 댓글 API 조회
     const fetchComments = async () => {
         try {
             const response = await apiClient.get(`/posts/${postId}/comments`);
@@ -273,52 +252,45 @@ function Written_post_detail() {
         }
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        handleSaveEditedComment(editingCommentId, editedCommentContent);
-    };
-
-    //댓글 수정 상태 관리 함수
-    const handleCommentEdit = async (commentId, content) => {
-        setEditingCommentId(commentId);
-        setEditedCommentContent(content);
-    };
-
-    const handleSaveEditedComment = async (commentId, content) => {
-        if (commentId && content.trim()) {
-            try {
-                const response = await apiClient.put(`/posts/${postId}/${commentId}`, {
-                    content: content
-                });
-                if (response.status === 200) {
-                    await fetchComments();
-                    setEditingCommentId(null);
-                    setEditedCommentContent('');
-                }
-            } catch (error) {
-                console.error('댓글 수정 중 에러 발생', error);
-                alert('댓글 수정 중 오류가 발생했습니다. 다시 시도해주세요.');
-            }
-        }
-    };
-
-    const handleCancelEdit = () => {
-        handleCommentEdit(null, '');
-    };
-
-    const handleDeleteComment = async (commentId) => {
+    const handleLikeClick = async () => {
         try {
-            await apiClient.delete(`/posts/${postId}/${commentId}`);
-            await fetchComments();
-        } catch (error) {
-            console.error('댓글 삭제 중 에러 발생', error);
-            if (error.response) {
-                console.error('Error data:', error.response.data);
-                console.error('Error status:', error.response.status);
+            const response = await apiClient.post(`/posts/${postId}/like`);
+            if (response.status === 200) {
+                setLikes(prevLikes => prevLikes + 1);
+                console.log(response.data)
+            } else {
+                console.error('좋아요 추가 실패:', response.status);
             }
-            alert('댓글 삭제 중 오류가 발생했습니다. 다시 시도해주세요.');
+        } catch (error) {
+            handleOpenOkModal(error.response.data, () => {})
+            console.error(error.response.data);
         }
     };
+
+    const handleOpenOkModal = useCallback((message, confirmCallback) => {
+        setModalMessage(message);
+        setOnConfirm(() => confirmCallback);
+        setShowOkModal(true);
+    }, []);
+
+    const handleCloseOkModal = () => setShowOkModal(false);
+
+    const handleBackClick = () => {
+        navigate(`/post_list/${memberId}`);
+    };
+
+    const handlePostDotClick = () => {
+        setShowPostModal(true);
+    };
+
+    const closeModal = () => {
+        setShowPostModal(false);
+    }
+
+    const handleEditClick = () => { //글 수정
+        navigate(`/posts_edit/${postId}`);
+    };
+
 
     return (
         <Whole>
@@ -337,11 +309,11 @@ function Written_post_detail() {
                         <PostTitle>{post.title}</PostTitle>
                         <PostContent>{post.content}</PostContent>
                         <ImageContainer>
-                            {attachmentNames.length > 0 ? (
-                                attachmentNames.map((url, index) => (
+                            {attachmentNames && attachmentNames.length > 0 ? (
+                                attachmentNames.map((attachment, index) => (
                                     <img
                                         key={index}
-                                        src={url}
+                                        src={attachment.attachmentName}
                                         alt={`첨부 이미지 ${index + 1}`}
                                         onError={(e) => {
                                             console.error(`이미지 로딩 오류 ${index}:`, e);
@@ -353,10 +325,10 @@ function Written_post_detail() {
                                 <p></p>
                             )}
                         </ImageContainer>
-                        <HeartContainer>
+                        <HeartContainer onClick={handleLikeClick}>
                             <FaRegThumbsUp/>
                             &nbsp;
-                            <p>16</p>
+                            <p>{likes}</p>
                         </HeartContainer>
                     </PostContainer>
                 )}
@@ -377,17 +349,7 @@ function Written_post_detail() {
                     )}
                 </CommentContainer>
                 {showPostModal && <Modal_post onClose={closeModal} onEdit={handleEditClick} />}
-                {showCommentModal && (
-                    <Modal_comment
-                        onClose={closeModal}
-                        position={modalPosition}
-                        onEdit={handleCommentEdit}
-                        postId={postId}
-                        commentId={editingCommentId}
-                        onDelete={handleDeleteComment}
-                        content={selectedCommentContent}
-                    />
-                )}
+                {showOkModal && <Modal_ok onClose={handleCloseOkModal} message={modalMessage} onConfirm={onConfirm} />}
             </ScrollContainer>
         </Whole>
     );

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa6';
 import { FiMoreVertical } from "react-icons/fi";
@@ -8,6 +8,7 @@ import { formatDate } from '../component/Date';
 import Modal_post from "../../../components/modal/Modal_post.jsx";
 import Modal_post_complain from "../../../components/modal/Modal_post_complain.jsx";
 import { FaRegThumbsUp } from "react-icons/fa6";
+import Modal_ok from "../../../components/modal/Modal_ok.jsx";
 
 const apiClient = axios.create({
     baseURL: '/api',
@@ -28,9 +29,14 @@ function ActivityDetail() {
     const [error, setError] = useState(null);
     const [showPostModal, setShowPostModal] = useState(false);
     const [showComplainModal, setShowComplainModal] = useState(false);
+    const [likes, setLikes] = useState(0);
+    const [showOkModal, setShowOkModal] = useState(false);
+    const [modalMessage, setModalMessage] = useState("");
+    const [onConfirm, setOnConfirm] = useState(() => () => {});
 
     useEffect(() => {
         fetchPost();
+        fetchLikes();
         fetchUserId();
     }, [clubId, postId]);
 
@@ -48,7 +54,6 @@ function ActivityDetail() {
         try {
             const response = await apiClient.get(`/board/3/clubs/${clubId}/posts/${postId}`);
             setPost(response.data.post);
-            console.log(response.data);
             setPostAuthor(response.data.post.member.id);
             setAttachmentNames(response.data.attachmentNames || []);
         } catch (error) {
@@ -56,6 +61,30 @@ function ActivityDetail() {
             setError('게시글을 불러오는데 실패했습니다.');
         } finally {
             setIsLoading(false);
+        }
+    };
+
+    const fetchLikes = async () => {
+        try {
+            const response = await apiClient.get(`/posts/${postId}/likes`);
+            setLikes(response.data);
+        } catch (error) {
+            console.log('좋아요 수 조회 중 에러 발생:', error);
+        }
+    };
+
+    const handleLikeClick = async () => {
+        try {
+            const response = await apiClient.post(`/posts/${postId}/like`);
+            if (response.status === 200) {
+                setLikes(prevLikes => prevLikes + 1);
+                console.log(response.data)
+            } else {
+                console.error('좋아요 추가 실패:', response.status);
+            }
+        } catch (error) {
+            handleOpenOkModal(error.response.data, () => {})
+            console.error(error.response.data);
         }
     };
 
@@ -75,6 +104,14 @@ function ActivityDetail() {
         setShowPostModal(false);
         setShowComplainModal(false);
     };
+
+    const handleOpenOkModal = useCallback((message, confirmCallback) => {
+        setModalMessage(message);
+        setOnConfirm(() => confirmCallback);
+        setShowOkModal(true);
+    }, []);
+
+    const handleCloseOkModal = () => setShowOkModal(false);
 
     if (isLoading) {
         return <div>로딩 중...</div>;
@@ -118,10 +155,10 @@ function ActivityDetail() {
                             <p></p>
                         )}
                     </ImageContainer>
-                    <HeartContainer>
+                    <HeartContainer onClick={handleLikeClick}>
                         <FaRegThumbsUp/>
                         &nbsp;
-                        <p>16</p>
+                        <p>{likes}</p>
                     </HeartContainer>
                 </PostContainer>
                 {showPostModal && <Modal_post
@@ -129,6 +166,7 @@ function ActivityDetail() {
                     onEdit={() => navigate(`/clubs/${clubId}/activity/${postId}/edit`)}
                 />}
                 {showComplainModal && <Modal_post_complain onClose={closeModal} postId={postId} memberId={memberId}/>}
+                {showOkModal && <Modal_ok onClose={handleCloseOkModal} message={modalMessage} onConfirm={onConfirm} />}
             </ScrollContainer>
         </Whole>
     );

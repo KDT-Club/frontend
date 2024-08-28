@@ -148,27 +148,31 @@ function CommunityMain() {
         try {
             const response = await apiClient.get(`/board/${clubId}/posts`);
             if (response.status === 200) {
-                const postsWithAuthors = await Promise.all(
+                const postsWithAuthorsAndLikes = await Promise.all(
                     response.data.map(async (post) => {
                         try {
                             const memberResponse = await apiClient.get(`/members/${post.memberId}`);
+                            const likesResponse = await apiClient.get(`/posts/${post.postId}/likes`);
                             return {
                                 ...post,
                                 authorName: memberResponse.data.name,
+                                likes: likesResponse.data
                             };
                         } catch (error) {
-                            console.error(`Error fetching author info for post ${post.postId}:`, error);
+                            console.error(`Error fetching additional info for post ${post.postId}:`, error);
                             return {
                                 ...post,
                                 authorName: '알 수 없음',
+                                likes: 0
                             };
                         }
                     })
                 );
-                const sortedPosts = postsWithAuthors.sort((a, b) =>
+                const sortedPosts = postsWithAuthorsAndLikes.sort((a, b) =>
                     new Date(b.createdAt) - new Date(a.createdAt)
                 );
                 setPosts(sortedPosts);
+                console.log(sortedPosts)
             }
         } catch (error) {
             console.error(`Error fetching posts:`, error);
@@ -211,7 +215,7 @@ function CommunityMain() {
                                     <Content>{post.content}</Content>
                                     <CreatedAt>
                                         <FaRegThumbsUp style={{marginTop: "2px", marginRight: "2px" }}/>
-                                        <p>16</p>
+                                        <p>{post.likes}</p>
                                         &nbsp;<Separator>|</Separator>&nbsp;{post.authorName}&nbsp;<Separator>|</Separator>&nbsp;{formatDate(post.createdAt)}
                                     </CreatedAt>
                                 </Post>

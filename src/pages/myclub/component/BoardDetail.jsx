@@ -13,6 +13,7 @@ function BoardDetail() {
     const {
         post,
         postAuthor,
+        likes,
         attachmentNames,
         comments,
         newComment,
@@ -20,6 +21,11 @@ function BoardDetail() {
         editingCommentId,
         editedCommentContent,
         setEditedCommentContent,
+        handleLikeClick,
+        showOkModal,
+        modalMessage,
+        onConfirm,
+        handleCloseOkModal,
         handleBackClick,
         handleCommentSubmit,
         handleCommentEdit,
@@ -44,8 +50,14 @@ function BoardDetail() {
         <PostDetail
             title={title}
             post={post}
+            like={likes}
             comments={comments}
             attachmentNames={attachmentNames}
+            onLikeClick={handleLikeClick}
+            showOkModal={showOkModal}
+            modalMessage={modalMessage}
+            onConfirm={onConfirm}
+            onCloseOkModal={handleCloseOkModal}
             onBackClick={handleBackClick}
             onPostDotClick={handleEditClick}
             onCommentSubmit={handleCommentSubmit}
