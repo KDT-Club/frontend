@@ -39,6 +39,7 @@ function CommunityPostDetail() {
     const [selectedCommentContent, setSelectedCommentContent] = useState('');
     const [commentInputValue, setCommentInputValue] = useState("");
     const [attachmentNames, setAttachmentNames] = useState([]);
+    const [imageUrls, setImageUrls] = useState({});
 
     useEffect(() => {
         fetchPost();
@@ -58,10 +59,35 @@ function CommunityPostDetail() {
     const fetchPost = async () => {
         try {
             const response = await apiClient.get(`/board/1/posts/${postId}`);
-            setPost(response.data.post);
-            setAttachmentNames(response.data.attachmentNames || []);
+            if (response.data && response.data.post) {
+                setPost(response.data.post);
+                setAttachmentNames(response.data.attachmentNames || []);
+
+                const urlPromises = (response.data.attachmentNames || []).map(attachment =>
+                    fetchPresignedUrl(attachment.attachmentName)
+                );
+                const urls = await Promise.all(urlPromises);
+
+                const urlMap = {};
+                response.data.attachmentNames.forEach((attachment, index) => {
+                    urlMap[attachment.attachmentId] = urls[index];
+                });
+                setImageUrls(urlMap);
+            } else {
+                console.error('Invalid post data received');
+            }
         } catch (error) {
             console.error('Error fetching post:', error);
+        }
+    };
+
+    const fetchPresignedUrl = async (filename) => {
+        try {
+            const response = await apiClient.get(`/presigned-url?filename=${encodeURIComponent(filename)}`);
+            return response.data; // 응답이 직접 URL 문자열인 것으로 가정
+        } catch (error) {
+            console.error('Error fetching presigned URL:', error);
+            return null;
         }
     };
 
@@ -174,20 +200,20 @@ function CommunityPostDetail() {
             <ScrollContainer>
                 <PostContainer>
                     <PostAuthorContainer>
-                        <ProfileImage src={post.member.memberImageURL || "/default-profile.png"} alt="" />
+                        <ProfileImage src={post.member.memberImageURL || ""} alt="" />
                         <PostAuthorDate>{post.member.name} | {formatDate(post.createdAt)}</PostAuthorDate>
                     </PostAuthorContainer>
                     <PostTitle>{post.title}</PostTitle>
                     <PostContent>{post.content}</PostContent>
                     <ImageContainer>
-                        {attachmentNames.map((url, index) => (
+                        {attachmentNames.map((attachment, index) => (
                             <StyledImage
-                                key={index}
-                                src={url}
+                                key={attachment.attachmentId}
+                                src={imageUrls[attachment.attachmentId]}
                                 alt={`첨부 이미지 ${index + 1}`}
                                 onError={(e) => {
                                     console.error(`이미지 로딩 오류 ${index}:`, e);
-                                    e.target.style.display = 'none';
+                                    e.target.style.display = 'none'; // 이미지 로드 실패 시 숨김
                                 }}
                             />
                         ))}
@@ -357,6 +383,7 @@ const PostContent = styled.p`
     margin-left: 10px;
     text-align: start;
 `;
+
 
 const ImageContainer = styled.div`
     width: 100%;

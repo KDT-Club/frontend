@@ -1,111 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import Header_center from "../../components/header/Header_center.jsx";
 import styled from 'styled-components';
 import { FaArrowLeft } from "react-icons/fa6";
-
-const ModalOverlay = styled.div`
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-`;
-
-const ModalContent = styled.div`
-    background-color: white;
-    width: 60%;
-    height: 15%;
-    padding: 20px;
-    border-radius: 8%;
-    text-align: center;
-`;
-
-const ModalHeader = styled.div`
-    margin-bottom: 7px;
-`;
-
-const Label = styled.label`
-  display: block;
-  margin-bottom: 5px;
-  font-size: 14px;
-`;
-
-const ModalButton = styled.button`
-    width: 60%;
-    margin-top: 5px;
-    padding: 5px 20px;
-    cursor: pointer;
-`;
-
-const HeaderContainer = styled.div`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 47.5px;
-    background-color: white;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    padding-left: 25px;
-    padding-right: 25px;
-    margin-bottom: 0px;
-`;
-
-const SignupHeaderCenter = styled.div`
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-`;
-
-const SignupTitle = styled.div`
-    font-size: 30px;
-    font-weight: bold;
-    padding-top: 50px;
-    margin-bottom: 50px;
-    margin-top: 1%;
-`;
-
-const SignupContainer = styled.div`
-    width: 100%;
-    height: 75%;
-`;
-
-const InputGroup = styled.div`
-    text-align: left;
-    width: 100%;
-    max-width: 330px;
-    margin: 0 auto 2%;
-`;
-
-const InputWithButton = styled.div`
-    position: relative;
-    display: flex;
-    align-items: center;
-`;
-
-const Input = styled.input`
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    box-sizing: border-box;
-`;
-
-const SignupButton = styled.button`
-    width: 100%;
-    max-width: 330px;
-    padding: 12px;
-    margin: 5% auto 0;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    height: 50px;
-    background-color: #5a7ca5;
-    color: white;
-`;
 
 function Modal({ onClose }) {
     return (
@@ -128,7 +24,6 @@ function Signup() {
     const [department, setDepartment] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [confirmPassword, setConfirmPassword] = React.useState('');
-    const [duplicateId, setDuplicateId] = React.useState(false);
     const navigate = useNavigate();
     const [showModal, setShowModal] = React.useState(false);
     const [phone, setPhone] = React.useState('');
@@ -258,3 +153,100 @@ function Signup() {
 }
 
 export default Signup;
+
+const ModalOverlay = styled.div`
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
+
+const ModalContent = styled.div`
+    background-color: white;
+    width: 60%;
+    height: 15%;
+    padding: 20px;
+    border-radius: 8%;
+    text-align: center;
+`;
+
+const ModalHeader = styled.div`
+    margin-bottom: 7px;
+`;
+
+const Label = styled.label`
+  display: block;
+  margin-bottom: 5px;
+  font-size: 14px;
+`;
+
+const ModalButton = styled.button`
+    width: 60%;
+    margin-top: 5px;
+    padding: 5px 20px;
+    cursor: pointer;
+`;
+
+const HeaderContainer = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 47.5px;
+    background-color: white;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    padding-left: 25px;
+    padding-right: 25px;
+    margin-bottom: 0px;
+`;
+
+const SignupTitle = styled.div`
+    font-size: 30px;
+    font-weight: bold;
+    padding-top: 50px;
+    margin-bottom: 50px;
+    margin-top: 1%;
+`;
+
+const SignupContainer = styled.div`
+    width: 100%;
+    height: 75%;
+`;
+
+const InputGroup = styled.div`
+    text-align: left;
+    width: 100%;
+    max-width: 330px;
+    margin: 0 auto 2%;
+`;
+
+const InputWithButton = styled.div`
+    position: relative;
+    display: flex;
+    align-items: center;
+`;
+
+const Input = styled.input`
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+`;
+
+const SignupButton = styled.button`
+    width: 100%;
+    max-width: 330px;
+    padding: 12px;
+    margin: 5% auto 0;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    height: 50px;
+    background-color: #5a7ca5;
+    color: white;
+`;
