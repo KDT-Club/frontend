@@ -140,7 +140,7 @@ function ActivityDetailPage() {
     const [onConfirm, setOnConfirm] = useState(() => () => {});
 
     const apiClient = axios.create({
-        baseURL: 'http://localhost:8080', // API URL
+        baseURL: '/api', // API URL
         timeout: 10000, // 요청 타임아웃 설정 (10초)
         headers: {
             'Content-Type': 'application/json',
