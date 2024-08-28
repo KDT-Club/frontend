@@ -24,7 +24,7 @@ function BoardEdit() {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const apiClient = axios.create({
-        baseURL: 'http://localhost:8080',
+        baseURL: '/api',
         timeout: 10000,
         headers: {
             'Content-Type': 'application/json',
@@ -49,7 +49,7 @@ function BoardEdit() {
 
     const fetchUserId = async () => {
         try {
-            const response = await axios.get("http://localhost:8080/getUserId", {
+            const response = await axios.get("/api/getUserId", {
                 withCredentials: true,
             });
             setMemberId(response.data.message);

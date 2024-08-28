@@ -11,7 +11,7 @@ import { FaRegThumbsUp } from "react-icons/fa6";
 import Modal_ok from "../../../components/modal/Modal_ok.jsx";
 
 const apiClient = axios.create({
-    baseURL: 'http://localhost:8080',
+    baseURL: '/api',
     headers: {
         'Content-Type': 'application/json',
     },
