@@ -60,7 +60,6 @@ function BoardDetail() {
             showEditButton={isAuthor}
             memberId={memberId}
             onEditClick={handleEditClick}
-            //commentCount={commentCount}
         />
     );
 }
