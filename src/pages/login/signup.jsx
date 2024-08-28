@@ -42,7 +42,7 @@ function Signup() {
             formData.append('department', department);
             formData.append('phone', phone);
 
-            const response = await fetch('http://localhost:8080/signup', {
+            const response = await fetch('/api/signup', {
                 method: 'POST',
                 body: formData
             });
