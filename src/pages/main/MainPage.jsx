@@ -132,7 +132,7 @@ function MainPage() {
 
     const fetchAllClubs = async () => {
         try {
-            const response = await axios.get("http://localhost:8080/clubs");
+            const response = await axios.get("/api/clubs");
             setAllClubs(response.data);
             setFilteredClubs([]);
         } catch (error) {

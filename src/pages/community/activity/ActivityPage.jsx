@@ -17,7 +17,7 @@ function ActivityPage() {
                 const clubs = clubsResponse.data;
 
                 const activitiesPromises = clubs.map(club =>
-                    axios.get(`http://localhost:8080/board/3/clubs/${club.clubId}/posts`)
+                    axios.get(`/api/board/3/clubs/${club.clubId}/posts`)
                 );
 
                 const activitiesResponses = await Promise.all(activitiesPromises);
@@ -42,8 +42,8 @@ function ActivityPage() {
         const fetchData = async () => {
             try {
                 const [postResponse, clubsResponse] = await Promise.all([
-                    axios.get(`http://localhost:8080/board/3/clubs/${clubId}/posts/${postId}`),
-                    axios.get('http://localhost:8080/clubs')
+                    axios.get(`/api/board/3/clubs/${clubId}/posts/${postId}`),
+                    axios.get('/api/clubs')
                 ]);
 
                 const postData = postResponse.data;

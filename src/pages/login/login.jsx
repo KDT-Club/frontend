@@ -17,7 +17,7 @@ function Login() {
         formData.append('password', password);
 
         try {
-            const response = await axios.post('http://localhost:8080/login', formData, {
+            const response = await axios.post('/api/login', formData, {
                 withCredentials: true
             });
 
