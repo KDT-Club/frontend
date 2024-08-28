@@ -18,108 +18,6 @@ const apiClient = axios.create({
     withCredentials: true,
 });
 
-const Whole = styled.div`
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-`;
-
-const HeaderContainer = styled.div`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 47.5px;
-    background-color: white;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    padding-left: 25px;
-    padding-right: 25px;
-    margin-bottom: 0px;
-`;
-
-const ScrollContainer = styled.div`
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: darkgray white;
-`;
-
-const PostContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    margin-top: 20px;
-    margin-left: 20px;
-    margin-right: 10px;
-`;
-
-const PostAuthorContainer = styled.div`
-    display: flex;
-    align-items: center;
-    margin-bottom: 8px;
-`;
-
-const ProfileImage = styled.img`
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    margin-right: 10px;`;
-
-const PostAuthorDate = styled.p`
-    font-size: 16.6px;
-    color: gray;
-    font-weight: bold;
-    margin: 0;
-`;
-
-const PostTitle = styled.p`
-    font-size: 20px;
-    font-weight: bold;
-    padding-bottom: 12px;
-    text-align: start;
-    width: 100%;
-    margin-top: 8px;
-    margin-left: 10px;
-    padding-right: 10px;
-`;
-
-const PostContent = styled.p`
-    font-size: 17.8px;
-    margin-top: 5px;
-    margin-left: 10px;
-    text-align: start;
-`;
-
-const ImageContainer = styled.div`
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 10px;
-    box-sizing: border-box;
-    img {
-        width: 100%;
-        max-width: 200px;
-        min-width: 200px;
-        height: auto;
-        border-radius: 8px;
-        margin-bottom: 10px;
-    }
-`;
-
-const HeartContainer = styled.div`
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    margin-left: 10px;
-    color: #555;
-    cursor: pointer;
-    font-size: 18px;
-`
-
 function ActivityDetail() {
     const { clubId, postId } = useParams();
     const navigate = useNavigate();
@@ -241,11 +139,11 @@ function ActivityDetail() {
                     <PostTitle>{post.title}</PostTitle>
                     <PostContent>{post.content}</PostContent>
                     <ImageContainer>
-                        {attachmentNames.length > 0 ? (
-                            attachmentNames.map((url, index) => (
+                        {attachmentNames && attachmentNames.length > 0 ? (
+                            attachmentNames.map((attachment, index) => (
                                 <img
                                     key={index}
-                                    src={url}
+                                    src={attachment.attachmentName}
                                     alt={`첨부 이미지 ${index + 1}`}
                                     onError={(e) => {
                                         console.error(`이미지 로딩 오류 ${index}:`, e);
@@ -275,3 +173,105 @@ function ActivityDetail() {
 }
 
 export default ActivityDetail;
+
+const Whole = styled.div`
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+`;
+
+const HeaderContainer = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 47.5px;
+    background-color: white;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    padding-left: 25px;
+    padding-right: 25px;
+    margin-bottom: 0px;
+`;
+
+const ScrollContainer = styled.div`
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: darkgray white;
+`;
+
+const PostContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: 20px;
+    margin-left: 20px;
+    margin-right: 10px;
+`;
+
+const PostAuthorContainer = styled.div`
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+`;
+
+const ProfileImage = styled.img`
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    margin-right: 10px;`;
+
+const PostAuthorDate = styled.p`
+    font-size: 16.6px;
+    color: gray;
+    font-weight: bold;
+    margin: 0;
+`;
+
+const PostTitle = styled.p`
+    font-size: 20px;
+    font-weight: bold;
+    padding-bottom: 12px;
+    text-align: start;
+    width: 100%;
+    margin-top: 8px;
+    margin-left: 10px;
+    padding-right: 10px;
+`;
+
+const PostContent = styled.p`
+    font-size: 17.8px;
+    margin-top: 5px;
+    margin-left: 10px;
+    text-align: start;
+`;
+
+const ImageContainer = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    box-sizing: border-box;
+    img {
+        width: 100%;
+        max-width: 200px;
+        min-width: 200px;
+        height: auto;
+        border-radius: 8px;
+        margin-bottom: 10px;
+    }
+`;
+
+const HeartContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-left: 10px;
+    color: #555;
+    cursor: pointer;
+    font-size: 18px;
+`

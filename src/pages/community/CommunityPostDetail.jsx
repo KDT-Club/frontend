@@ -40,6 +40,7 @@ function CommunityPostDetail() {
     const [selectedCommentContent, setSelectedCommentContent] = useState('');
     const [commentInputValue, setCommentInputValue] = useState("");
     const [attachmentNames, setAttachmentNames] = useState([]);
+    const [imageUrls, setImageUrls] = useState({});
     const [likes, setLikes] = useState(0);
     const [showOkModal, setShowOkModal] = useState(false);
     const [modalMessage, setModalMessage] = useState("");
@@ -64,8 +65,12 @@ function CommunityPostDetail() {
     const fetchPost = async () => {
         try {
             const response = await apiClient.get(`/board/1/posts/${postId}`);
-            setPost(response.data.post);
-            setAttachmentNames(response.data.attachmentNames || []);
+            if (response.data && response.data.post) {
+                setPost(response.data.post);
+                setAttachmentNames(response.data.attachmentNames || []);
+            } else {
+                console.error('Invalid post data received');
+            }
         } catch (error) {
             console.error('Error fetching post:', error);
         }
@@ -212,23 +217,27 @@ function CommunityPostDetail() {
             <ScrollContainer>
                 <PostContainer>
                     <PostAuthorContainer>
-                        <ProfileImage src={post.member.memberImageURL || "/default-profile.png"} alt="" />
+                        <ProfileImage src={post.member.memberImageURL || ""} alt="" />
                         <PostAuthorDate>{post.member.name} | {formatDate(post.createdAt)}</PostAuthorDate>
                     </PostAuthorContainer>
                     <PostTitle>{post.title}</PostTitle>
                     <PostContent>{post.content}</PostContent>
                     <ImageContainer>
-                        {attachmentNames.map((url, index) => (
-                            <StyledImage
-                                key={index}
-                                src={url}
-                                alt={`첨부 이미지 ${index + 1}`}
-                                onError={(e) => {
-                                    console.error(`이미지 로딩 오류 ${index}:`, e);
-                                    e.target.style.display = 'none';
-                                }}
-                            />
-                        ))}
+                        {attachmentNames && attachmentNames.length > 0 ? (
+                            attachmentNames.map((attachment, index) => (
+                                <img
+                                    key={index}
+                                    src={attachment.attachmentName}
+                                    alt={`첨부 이미지 ${index + 1}`}
+                                    onError={(e) => {
+                                        console.error(`이미지 로딩 오류 ${index}:`, e);
+                                        e.target.style.display = 'none';
+                                    }}
+                                />
+                            ))
+                        ) : (
+                            <p></p>
+                        )}
                     </ImageContainer>
                     <HeartContainer onClick={handleLikeClick}>
                         <FaRegThumbsUp/>

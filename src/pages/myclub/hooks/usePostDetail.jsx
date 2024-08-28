@@ -27,7 +27,6 @@ function usePostDetail() {
     const [showOkModal, setShowOkModal] = useState(false);
     const [modalMessage, setModalMessage] = useState("");
     const [onConfirm, setOnConfirm] = useState(() => () => {});
-    //const [commentCount, setCommentCount] = useState(0); //댓글 수 count
 
     useEffect(() => {
         fetchPost();
@@ -183,7 +182,6 @@ function usePostDetail() {
         handleSaveEditedComment,
         handleDeleteComment,
         memberId,
-        //commentCount,
     };
 }
 

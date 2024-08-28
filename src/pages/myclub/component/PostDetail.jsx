@@ -68,11 +68,11 @@ function PostDetail({
                         <PostTitle>{post.title}</PostTitle>
                         <PostContent>{post.content}</PostContent>
                         <ImageContainer>
-                            {attachmentNames.length > 0 ? (
-                                attachmentNames.map((url, index) => (
+                            {attachmentNames && attachmentNames.length > 0 ? (
+                                attachmentNames.map((attachment, index) => (
                                     <img
                                         key={index}
-                                        src={url}
+                                        src={attachment.attachmentName}
                                         alt={`첨부 이미지 ${index + 1}`}
                                         onError={(e) => {
                                             console.error(`이미지 로딩 오류 ${index}:`, e);
