@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import '../../styles/App.css';
 import axios from "axios";
@@ -12,6 +12,7 @@ import Modal_delete from '../../components/modal/Modal_delete.jsx';
 import Modal_post from '../../components/modal/Modal_post.jsx';
 import Modal_post_complain from '../../components/modal/Modal_post_complain.jsx';
 import Modal_comment from '../../components/modal/Modal_comment.jsx';
+import Modal_ok from "../../components/modal/Modal_ok.jsx";
 
 const apiClient = axios.create({
     baseURL: 'http://localhost:8080',
@@ -39,9 +40,14 @@ function CommunityPostDetail() {
     const [selectedCommentContent, setSelectedCommentContent] = useState('');
     const [commentInputValue, setCommentInputValue] = useState("");
     const [attachmentNames, setAttachmentNames] = useState([]);
+    const [likes, setLikes] = useState(0);
+    const [showOkModal, setShowOkModal] = useState(false);
+    const [modalMessage, setModalMessage] = useState("");
+    const [onConfirm, setOnConfirm] = useState(() => () => {});
 
     useEffect(() => {
         fetchPost();
+        fetchLikes();
         fetchComments();
         fetchUserId();
     }, [clubId, postId]);
@@ -65,12 +71,44 @@ function CommunityPostDetail() {
         }
     };
 
+    const fetchLikes = async () => {
+        try {
+            const response = await apiClient.get(`/posts/${postId}/likes`);
+            setLikes(response.data);
+        } catch (error) {
+            console.log('좋아요 수 조회 중 에러 발생:', error);
+        }
+    };
+
     const fetchComments = async () => {
         try {
             const response = await apiClient.get(`/posts/${postId}/comments`);
             setComments(response.data);
         } catch (error) {
             console.error('Error fetching comments:', error);
+        }
+    };
+
+    const handleOpenOkModal = useCallback((message, confirmCallback) => {
+        setModalMessage(message);
+        setOnConfirm(() => confirmCallback);
+        setShowOkModal(true);
+    }, []);
+
+    const handleCloseOkModal = () => setShowOkModal(false);
+
+    const handleLikeClick = async () => {
+        try {
+            const response = await apiClient.post(`/posts/${postId}/like`);
+            if (response.status === 200) {
+                setLikes(prevLikes => prevLikes + 1);
+                console.log(response.data)
+            } else {
+                console.error('좋아요 추가 실패:', response.status);
+            }
+        } catch (error) {
+            handleOpenOkModal(error.response.data, () => {})
+            console.error(error.response.data);
         }
     };
 
@@ -115,7 +153,7 @@ function CommunityPostDetail() {
                 }
             } catch (error) {
                 console.error('Error saving edited comment:', error);
-                alert('댓글 수정 중 오류가 발생했습니다. 다시 시도해주세요.');
+                handleOpenOkModal("댓글 수정 중 오류가 발생했습니다. 다시 시도해주세요.", () => {});
             }
         }
     };
@@ -136,7 +174,7 @@ function CommunityPostDetail() {
                 }
             } catch (error) {
                 console.error('Error submitting comment:', error);
-                alert('댓글 작성 중 오류가 발생했습니다. 다시 시도해주세요.');
+                handleOpenOkModal("댓글 작성 중 오류가 발생했습니다. 다시 시도해주세요.", () => {});
             }
         }
     };
@@ -147,7 +185,7 @@ function CommunityPostDetail() {
             await fetchComments();
         } catch (error) {
             console.error('Error deleting comment:', error);
-            alert('댓글 삭제 중 오류가 발생했습니다. 다시 시도해주세요.');
+            handleOpenOkModal("댓글 삭제 중 오류가 발생했습니다. 다시 시도해주세요.", () => {});
         }
     };
 
@@ -192,10 +230,10 @@ function CommunityPostDetail() {
                             />
                         ))}
                     </ImageContainer>
-                    <HeartContainer>
+                    <HeartContainer onClick={handleLikeClick}>
                         <FaRegThumbsUp/>
                         &nbsp;
-                        <p>16</p>
+                        <p>{likes}</p>
                     </HeartContainer>
                 </PostContainer>
                 <Divider />
@@ -273,6 +311,7 @@ function CommunityPostDetail() {
                     content={selectedCommentContent}
                 />
             )}
+            {showOkModal && <Modal_ok onClose={handleCloseOkModal} message={modalMessage} onConfirm={onConfirm} />}
         </Whole>
     );
 }

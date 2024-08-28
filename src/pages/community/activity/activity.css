@@ -40,5 +40,10 @@ h2{
 
 .detail-info {
     display: flex;
-    margin-left: 10px;
+    margin-top: 20px;
+    margin-left: 25px;
+}
+
+.post-content {
+    margin-top: 25px;
 }

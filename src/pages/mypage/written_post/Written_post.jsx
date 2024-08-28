@@ -128,14 +128,30 @@ function Written_post() {
 
     // 작성한 글 목록을 가져오는 API
     useEffect(() => {
-      // 작성한 글 목록을 조회
         apiClient.get(`/posts/${memberId}`)
-             .then(response => {
-                 setList(response.data);
-             })
-             .catch(error => {
-                 console.error('작성한 글 목록 조회 중 오류 발생:', error);
-             });
+            .then(response => {
+                const posts = response.data;
+                const updatedPosts = posts.map(post => ({ ...post, likes: 0 }));
+                setList(updatedPosts);
+
+                // 좋아요 수를 가져오는 API 호출
+                updatedPosts.forEach((post, index) => {
+                    apiClient.get(`/posts/${post.id}/likes`)
+                        .then(likesResponse => {
+                            setList(prevList => {
+                                const newList = [...prevList];
+                                newList[index].likes = likesResponse.data;
+                                return newList;
+                            });
+                        })
+                        .catch(error => {
+                            console.error(`좋아요 수 조회 중 오류 발생 (postId: ${post.id}):`, error);
+                        });
+                 });
+            })
+            .catch(error => {
+                console.error('작성한 글 목록 조회 중 오류 발생:', error);
+            });
     }, [memberId]);
 
     return (
@@ -157,7 +173,7 @@ function Written_post() {
                                     <Content>{post.content}</Content>
                                     <CreatedAt>
                                         <FaRegThumbsUp style={{marginTop: "2px", marginRight: "2px" }}/>
-                                        <p>16</p>
+                                        <p>{post.likes}</p>
                                         &nbsp;<Separator>|</Separator>&nbsp;{formatDate(post.createdAt)}
                                     </CreatedAt>
                                 </Link>

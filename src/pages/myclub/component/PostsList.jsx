@@ -60,9 +60,11 @@ const PostsList = ({ boardType, boardId, title }) => {
                         response.data.map(async (post) => {
                             try {
                                 let authorName;
+                                const likesResponse = await apiClient.get(`/posts/${post.postId}/likes`);
                                 if (boardType === 'activity') {
                                     // activity 게시판의 경우 memberId를 사용하여 작성자 정보 가져오기
                                     const memberResponse = await apiClient.get(`/members/${post.memberId}`);
+
                                     authorName = memberResponse.data.name;
                                 } else {
                                     // 기존 다른 게시판 타입의 경우
@@ -72,6 +74,7 @@ const PostsList = ({ boardType, boardId, title }) => {
                                 return {
                                     ...post,
                                     authorName: authorName,
+                                    likes: likesResponse.data
                                 };
                             } catch (error) {
                                 console.error(`게시글 ${post.postId}의 작성자 정보 조회 중 에러 발생`, error);
@@ -138,7 +141,7 @@ const PostsList = ({ boardType, boardId, title }) => {
                                     <Content>{post.content}</Content>
                                     <CreatedAt>
                                         <FaRegThumbsUp style={{marginTop: "2px", marginRight: "2px" }}/>
-                                        <p>16</p>
+                                        <p>{post.likes}</p>
                                         &nbsp;<Separator>|</Separator>&nbsp;{post.authorName}&nbsp;<Separator>|</Separator>&nbsp;{formatDate(post.createdAt)}
                                     </CreatedAt>
                                 </Link>

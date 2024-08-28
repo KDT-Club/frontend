@@ -1,4 +1,4 @@
-import {React, useState} from 'react';
+import {React, useCallback, useState} from 'react';
 import { FaArrowLeft } from 'react-icons/fa6';
 import { FiMoreVertical } from "react-icons/fi";
 import { formatDate } from "../component/Date";
@@ -7,12 +7,19 @@ import Modal_post_complain from "../../../components/modal/Modal_post_complain.j
 import styled from 'styled-components';
 import CommentSection from "./CommentSection.jsx";
 import { FaRegThumbsUp } from "react-icons/fa6";
+import Modal_ok from "../../../components/modal/Modal_ok.jsx";
 
 function PostDetail({
                         title,
                         post,
+                        like,
                         comments,
                         attachmentNames,
+                        onLikeClick,
+                        showOkModal,
+                        modalMessage,
+                        onConfirm,
+                        onCloseOkModal,
                         onBackClick,
                         onPostDotClick,
                         onCommentSubmit,
@@ -77,10 +84,10 @@ function PostDetail({
                                 <p></p>
                             )}
                         </ImageContainer>
-                        <HeartContainer>
+                        <HeartContainer onClick={onLikeClick}>
                             <FaRegThumbsUp/>
                             &nbsp;
-                            <p>16</p>
+                            <p>{like}</p>
                         </HeartContainer>
                     </PostContainer>
                 )}
@@ -103,6 +110,7 @@ function PostDetail({
                     onEdit={onPostDotClick}
                 />}
                 {showComplainModal && <Modal_post_complain onClose={closeModal} postId={post.id} memberId={memberId} />}
+                {showOkModal && <Modal_ok onClose={onCloseOkModal} message={modalMessage} onConfirm={onConfirm} />}
             </ScrollContainer>
         </Whole>
     );

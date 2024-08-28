@@ -1,5 +1,5 @@
 //글 상세보기 페이지의 데이터 관리, 비즈니스 로직 담당
-import { useState, useEffect } from 'react';
+import {useState, useEffect, useCallback} from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from "axios";
 
@@ -23,10 +23,15 @@ function usePostDetail() {
     const [newComment, setNewComment] = useState('');
     const [editingCommentId, setEditingCommentId] = useState(null);
     const [editedCommentContent, setEditedCommentContent] = useState('');
+    const [likes, setLikes] = useState(0);
+    const [showOkModal, setShowOkModal] = useState(false);
+    const [modalMessage, setModalMessage] = useState("");
+    const [onConfirm, setOnConfirm] = useState(() => () => {});
     //const [commentCount, setCommentCount] = useState(0); //댓글 수 count
 
     useEffect(() => {
         fetchPost();
+        fetchLikes();
         fetchComments();
         fetchUserId();
     }, [clubId, postId]);
@@ -52,6 +57,15 @@ function usePostDetail() {
         }
     };
 
+    const fetchLikes = async () => {
+        try {
+            const response = await apiClient.get(`/posts/${postId}/likes`);
+            setLikes(response.data);
+        } catch (error) {
+            console.log('좋아요 수 조회 중 에러 발생:', error);
+        }
+    };
+
     const fetchComments = async () => {
         try {
             const response = await apiClient.get(`/posts/${postId}/comments`);
@@ -61,6 +75,29 @@ function usePostDetail() {
             console.error('댓글 조회 에러 발생:', error);
         }
     };
+
+    const handleLikeClick = async () => {
+        try {
+            const response = await apiClient.post(`/posts/${postId}/like`);
+            if (response.status === 200) {
+                setLikes(prevLikes => prevLikes + 1);
+                console.log(response.data)
+            } else {
+                console.error('좋아요 추가 실패:', response.status);
+            }
+        } catch (error) {
+            handleOpenOkModal(error.response.data, () => {})
+            console.error(error.response.data);
+        }
+    };
+
+    const handleOpenOkModal = useCallback((message, confirmCallback) => {
+        setModalMessage(message);
+        setOnConfirm(() => confirmCallback);
+        setShowOkModal(true);
+    }, []);
+
+    const handleCloseOkModal = () => setShowOkModal(false);
 
     const handleBackClick = () => {
         navigate(`/clubs/${clubId}/${boardId === '2' ? 'noticelist' : 'freeboardlist'}`);
@@ -127,6 +164,7 @@ function usePostDetail() {
     return {
         post,
         postAuthor,
+        likes,
         attachmentNames,
         comments,
         newComment,
@@ -134,6 +172,11 @@ function usePostDetail() {
         editingCommentId,
         editedCommentContent,
         setEditedCommentContent,
+        handleLikeClick,
+        showOkModal,
+        modalMessage,
+        onConfirm,
+        handleCloseOkModal,
         handleBackClick,
         handleCommentSubmit,
         handleCommentEdit,
