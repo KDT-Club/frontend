@@ -1,20 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import styled from "styled-components";
 
 function ActivityPage() {
     const [clubActivities, setClubActivities] = useState([]);
+    const { clubId, postId } = useParams();
+    const [post, setPost] = useState(null);
+    const [clubImgUrl, setClubImgUrl] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
         const fetchAllClubActivities = async () => {
             try {
-                const clubsResponse = await axios.get('/api/clubs');
+                const clubsResponse = await axios.get('http://localhost:8080/clubs');
                 const clubs = clubsResponse.data;
 
                 const activitiesPromises = clubs.map(club =>
-                    axios.get(`/api/board/3/clubs/${club.clubId}/posts`)
+                    axios.get(`http://localhost:8080/board/3/clubs/${club.clubId}/posts`)
                 );
 
                 const activitiesResponses = await Promise.all(activitiesPromises);
@@ -35,6 +38,35 @@ function ActivityPage() {
         fetchAllClubActivities();
     }, []);
 
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const [postResponse, clubsResponse] = await Promise.all([
+                    axios.get(`http://localhost:8080/board/3/clubs/${clubId}/posts/${postId}`),
+                    axios.get('http://localhost:8080/clubs')
+                ]);
+
+                const postData = postResponse.data;
+                const attachmentNames = postData.attachmentNames || [];
+
+                setPost({
+                    ...postData.post,
+                    attachmentNames: attachmentNames
+                });
+
+                const clubs = clubsResponse.data;
+                const currentClub = clubs.find(club => club.clubId === parseInt(clubId));
+                if (currentClub) {
+                    setClubImgUrl(currentClub.clubImgUrl);
+                }
+            } catch (error) {
+                console.error('Error fetching post detail or club info:', error);
+            }
+        };
+
+        fetchData();
+    }, [clubId, postId]);
+
     const handleInActivity = (clubId, postId) => {
         navigate(`/board/3/clubs/${clubId}/posts/${postId}`);
     };
@@ -50,7 +82,7 @@ function ActivityPage() {
                                 key={post.postId}
                                 onClick={() => handleInActivity(club.clubId, post.postId)}
                             >
-                                <ClubsLogo src={club.clubImgUrl} alt={club.clubName} />
+                                <ClubsLogo src={post.attachmentNames} alt={club.clubName} />
                                 <DetailInfo>
                                     <h3>{post.title}</h3>
                                     <span>
