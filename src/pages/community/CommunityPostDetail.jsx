@@ -62,32 +62,11 @@ function CommunityPostDetail() {
             if (response.data && response.data.post) {
                 setPost(response.data.post);
                 setAttachmentNames(response.data.attachmentNames || []);
-
-                const urlPromises = (response.data.attachmentNames || []).map(attachment =>
-                    fetchPresignedUrl(attachment.attachmentName)
-                );
-                const urls = await Promise.all(urlPromises);
-
-                const urlMap = {};
-                response.data.attachmentNames.forEach((attachment, index) => {
-                    urlMap[attachment.attachmentId] = urls[index];
-                });
-                setImageUrls(urlMap);
             } else {
                 console.error('Invalid post data received');
             }
         } catch (error) {
             console.error('Error fetching post:', error);
-        }
-    };
-
-    const fetchPresignedUrl = async (filename) => {
-        try {
-            const response = await apiClient.get(`/presigned-url?filename=${encodeURIComponent(filename)}`);
-            return response.data; // 응답이 직접 URL 문자열인 것으로 가정
-        } catch (error) {
-            console.error('Error fetching presigned URL:', error);
-            return null;
         }
     };
 
@@ -206,17 +185,21 @@ function CommunityPostDetail() {
                     <PostTitle>{post.title}</PostTitle>
                     <PostContent>{post.content}</PostContent>
                     <ImageContainer>
-                        {attachmentNames.map((attachment, index) => (
-                            <StyledImage
-                                key={attachment.attachmentId}
-                                src={imageUrls[attachment.attachmentId]}
-                                alt={`첨부 이미지 ${index + 1}`}
-                                onError={(e) => {
-                                    console.error(`이미지 로딩 오류 ${index}:`, e);
-                                    e.target.style.display = 'none'; // 이미지 로드 실패 시 숨김
-                                }}
-                            />
-                        ))}
+                        {attachmentNames && attachmentNames.length > 0 ? (
+                            attachmentNames.map((attachment, index) => (
+                                <img
+                                    key={index}
+                                    src={attachment.attachmentName}
+                                    alt={`첨부 이미지 ${index + 1}`}
+                                    onError={(e) => {
+                                        console.error(`이미지 로딩 오류 ${index}:`, e);
+                                        e.target.style.display = 'none';
+                                    }}
+                                />
+                            ))
+                        ) : (
+                            <p></p>
+                        )}
                     </ImageContainer>
                     <HeartContainer>
                         <FaRegThumbsUp/>

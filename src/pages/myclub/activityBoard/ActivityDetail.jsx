@@ -17,6 +17,125 @@ const apiClient = axios.create({
     withCredentials: true,
 });
 
+function ActivityDetail() {
+    const { clubId, postId } = useParams();
+    const navigate = useNavigate();
+    const [memberId, setMemberId] = useState(null);
+    const [post, setPost] = useState('');
+    const [postAuthor, setPostAuthor] = useState('');
+    const [attachmentNames, setAttachmentNames] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [showPostModal, setShowPostModal] = useState(false);
+    const [showComplainModal, setShowComplainModal] = useState(false);
+
+    useEffect(() => {
+        fetchPost();
+        fetchUserId();
+    }, [clubId, postId]);
+
+    const fetchUserId = async () => {
+        try {
+            const response = await apiClient.get("/getUserId", { withCredentials: true });
+            setMemberId(response.data.message);
+        } catch (error) {
+            console.error('유저 아이디를 불러오는 중 에러 발생:', error);
+            alert('유저 아이디를 불러오는 중 에러가 발생했습니다.');
+        }
+    };
+
+    const fetchPost = async () => {
+        try {
+            const response = await apiClient.get(`/board/3/clubs/${clubId}/posts/${postId}`);
+            setPost(response.data.post);
+            console.log(response.data);
+            setPostAuthor(response.data.post.member.id);
+            setAttachmentNames(response.data.attachmentNames || []);
+        } catch (error) {
+            console.error('게시글 조회 에러 발생:', error);
+            setError('게시글을 불러오는데 실패했습니다.');
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handleBackClick = () => {
+        navigate(`/clubs/${clubId}/activityList`);
+    };
+
+    const handlePostDotClick = () => {
+        if (postAuthor === parseInt(memberId)) {
+            setShowPostModal(true);
+        } else {
+            setShowComplainModal(true);
+        }
+    };
+
+    const closeModal = () => {
+        setShowPostModal(false);
+        setShowComplainModal(false);
+    };
+
+    if (isLoading) {
+        return <div>로딩 중...</div>;
+    }
+    if (error) {
+        return <div>{error}</div>;
+    }
+    if (!post) {
+        return <div>게시글을 찾을 수 없습니다.</div>;
+    }
+
+    return (
+        <Whole>
+            <HeaderContainer>
+                <FaArrowLeft style={{fontSize: '24px', cursor: 'pointer'}} onClick={handleBackClick} />
+                <div style={{fontSize: '20px', fontWeight: "bold"}}>동아리 활동</div>
+                <FiMoreVertical style={{fontSize: '24px', cursor: 'pointer'}} onClick={handlePostDotClick}/>
+            </HeaderContainer>
+            <ScrollContainer>
+                <PostContainer>
+                    <PostAuthorContainer>
+                        <ProfileImage src={post.member.memberImageURL} alt="" />
+                        <PostAuthorDate>{post.member.name} | {formatDate(post.createdAt)}</PostAuthorDate>
+                    </PostAuthorContainer>
+                    <PostTitle>{post.title}</PostTitle>
+                    <PostContent>{post.content}</PostContent>
+                    <ImageContainer>
+                        {attachmentNames && attachmentNames.length > 0 ? (
+                            attachmentNames.map((attachment, index) => (
+                                <img
+                                    key={index}
+                                    src={attachment.attachmentName}
+                                    alt={`첨부 이미지 ${index + 1}`}
+                                    onError={(e) => {
+                                        console.error(`이미지 로딩 오류 ${index}:`, e);
+                                        e.target.style.display = 'none';
+                                    }}
+                                />
+                            ))
+                        ) : (
+                            <p></p>
+                        )}
+                    </ImageContainer>
+                    <HeartContainer>
+                        <FaRegThumbsUp/>
+                        &nbsp;
+                        <p>16</p>
+                    </HeartContainer>
+                </PostContainer>
+                {showPostModal && <Modal_post
+                    onClose={closeModal}
+                    onEdit={() => navigate(`/clubs/${clubId}/activity/${postId}/edit`)}
+                />}
+                {showComplainModal && <Modal_post_complain onClose={closeModal} postId={postId} memberId={memberId}/>}
+            </ScrollContainer>
+        </Whole>
+    );
+}
+
+export default ActivityDetail;
+
 const Whole = styled.div`
     width: 100%;
     height: 100vh;
@@ -118,121 +237,3 @@ const HeartContainer = styled.div`
     cursor: pointer;
     font-size: 18px;
 `
-
-function ActivityDetail() {
-    const { clubId, postId } = useParams();
-    const navigate = useNavigate();
-    const [memberId, setMemberId] = useState(null);
-    const [post, setPost] = useState('');
-    const [postAuthor, setPostAuthor] = useState('');
-    const [attachmentNames, setAttachmentNames] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [showPostModal, setShowPostModal] = useState(false);
-    const [showComplainModal, setShowComplainModal] = useState(false);
-
-    useEffect(() => {
-        fetchPost();
-        fetchUserId();
-    }, [clubId, postId]);
-
-    const fetchUserId = async () => {
-        try {
-            const response = await apiClient.get("/getUserId", { withCredentials: true });
-            setMemberId(response.data.message);
-        } catch (error) {
-            console.error('유저 아이디를 불러오는 중 에러 발생:', error);
-            alert('유저 아이디를 불러오는 중 에러가 발생했습니다.');
-        }
-    };
-
-    const fetchPost = async () => {
-        try {
-            const response = await apiClient.get(`/board/3/clubs/${clubId}/posts/${postId}`);
-            setPost(response.data.post);
-            setPostAuthor(response.data.post.member.id);
-            setAttachmentNames(response.data.attachmentNames || []);
-        } catch (error) {
-            console.error('게시글 조회 에러 발생:', error);
-            setError('게시글을 불러오는데 실패했습니다.');
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
-    const handleBackClick = () => {
-        navigate(`/clubs/${clubId}/activityList`);
-    };
-
-    const handlePostDotClick = () => {
-        if (postAuthor === parseInt(memberId)) {
-            setShowPostModal(true);
-        } else {
-            setShowComplainModal(true);
-        }
-    };
-
-    const closeModal = () => {
-        setShowPostModal(false);
-        setShowComplainModal(false);
-    };
-
-    if (isLoading) {
-        return <div>로딩 중...</div>;
-    }
-    if (error) {
-        return <div>{error}</div>;
-    }
-    if (!post) {
-        return <div>게시글을 찾을 수 없습니다.</div>;
-    }
-
-    return (
-        <Whole>
-            <HeaderContainer>
-                <FaArrowLeft style={{fontSize: '24px', cursor: 'pointer'}} onClick={handleBackClick} />
-                <div style={{fontSize: '20px', fontWeight: "bold"}}>동아리 활동</div>
-                <FiMoreVertical style={{fontSize: '24px', cursor: 'pointer'}} onClick={handlePostDotClick}/>
-            </HeaderContainer>
-            <ScrollContainer>
-                <PostContainer>
-                    <PostAuthorContainer>
-                        <ProfileImage src={post.member.memberImageURL} alt="" />
-                        <PostAuthorDate>{post.member.name} | {formatDate(post.createdAt)}</PostAuthorDate>
-                    </PostAuthorContainer>
-                    <PostTitle>{post.title}</PostTitle>
-                    <PostContent>{post.content}</PostContent>
-                    <ImageContainer>
-                        {attachmentNames.length > 0 ? (
-                            attachmentNames.map((url, index) => (
-                                <img
-                                    key={index}
-                                    src={url}
-                                    alt={`첨부 이미지 ${index + 1}`}
-                                    onError={(e) => {
-                                        console.error(`이미지 로딩 오류 ${index}:`, e);
-                                        e.target.style.display = 'none';
-                                    }}
-                                />
-                            ))
-                        ) : (
-                            <p></p>
-                        )}
-                    </ImageContainer>
-                    <HeartContainer>
-                        <FaRegThumbsUp/>
-                        &nbsp;
-                        <p>16</p>
-                    </HeartContainer>
-                </PostContainer>
-                {showPostModal && <Modal_post
-                    onClose={closeModal}
-                    onEdit={() => navigate(`/clubs/${clubId}/activity/${postId}/edit`)}
-                />}
-                {showComplainModal && <Modal_post_complain onClose={closeModal} postId={postId} memberId={memberId}/>}
-            </ScrollContainer>
-        </Whole>
-    );
-}
-
-export default ActivityDetail;

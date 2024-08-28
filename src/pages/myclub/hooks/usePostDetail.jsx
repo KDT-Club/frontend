@@ -23,7 +23,6 @@ function usePostDetail() {
     const [newComment, setNewComment] = useState('');
     const [editingCommentId, setEditingCommentId] = useState(null);
     const [editedCommentContent, setEditedCommentContent] = useState('');
-    //const [commentCount, setCommentCount] = useState(0); //댓글 수 count
 
     useEffect(() => {
         fetchPost();
@@ -45,11 +44,16 @@ function usePostDetail() {
         try {
             const response = await apiClient.get(`/clubs/${clubId}/board/${boardId}/posts/${postId}`);
             setPost(response.data.post);
+            console.log(response.data);
             setPostAuthor(response.data.post.member.id);
             setAttachmentNames(response.data.attachmentNames || []);
         } catch (error) {
             console.error('게시글 조회 에러 발생:', error);
         }
+    };
+
+    const handleBackClick = () => {
+        navigate(`/clubs/${clubId}/${boardId === '2' ? 'noticelist' : 'freeboardlist'}`);
     };
 
     const fetchComments = async () => {
@@ -60,10 +64,6 @@ function usePostDetail() {
         } catch (error) {
             console.error('댓글 조회 에러 발생:', error);
         }
-    };
-
-    const handleBackClick = () => {
-        navigate(`/clubs/${clubId}/${boardId === '2' ? 'noticelist' : 'freeboardlist'}`);
     };
 
     const handleCommentSubmit = async (e) => {
@@ -140,7 +140,6 @@ function usePostDetail() {
         handleSaveEditedComment,
         handleDeleteComment,
         memberId,
-        //commentCount,
     };
 }
 
